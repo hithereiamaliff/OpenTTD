@@ -122,16 +122,16 @@ public:
 
 	/**
 	 * What land is zoned for. Towns only build homes in residential zones,
-	 * only businesses in commercial zones, and nothing in industrial or park
-	 * zones. Public buildings fit in residential and commercial zones.
-	 * Unzoned land works as usual.
+	 * only businesses in commercial zones, and neither buildings nor new roads
+	 * in industrial or park zones. Public buildings fit in residential and
+	 * commercial zones. Unzoned land works as usual.
 	 */
 	enum TownZone {
 		TOWN_ZONE_NONE        = to_underlying(::TownZone::None),        ///< Not zoned.
 		TOWN_ZONE_RESIDENTIAL = to_underlying(::TownZone::Residential), ///< Homes and public buildings only.
 		TOWN_ZONE_COMMERCIAL  = to_underlying(::TownZone::Commercial),  ///< Businesses and public buildings only.
-		TOWN_ZONE_INDUSTRIAL  = to_underlying(::TownZone::Industrial),  ///< No town buildings, for industry.
-		TOWN_ZONE_PARK        = to_underlying(::TownZone::Park),        ///< No town buildings.
+		TOWN_ZONE_INDUSTRIAL  = to_underlying(::TownZone::Industrial),  ///< No town buildings or new town roads, for industry.
+		TOWN_ZONE_PARK        = to_underlying(::TownZone::Park),        ///< No town buildings or new town roads.
 	};
 
 	/**

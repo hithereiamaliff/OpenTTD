@@ -40,6 +40,18 @@ TownZone GetTownZone(TileIndex tile)
 }
 
 /**
+ * Is land zoned to stay free of the town: no town buildings and no new town roads?
+ * That is land zoned for industry or parks.
+ * @param tile The tile.
+ * @return True if towns leave the tile alone.
+ */
+bool IsTownZoneKeptFree(TileIndex tile)
+{
+	TownZone zone = GetTownZone(tile);
+	return zone == TownZone::Industrial || zone == TownZone::Park;
+}
+
+/**
  * What kind of building is one of the original house types?
  * @param name The name of the original house type.
  * @return The kind.

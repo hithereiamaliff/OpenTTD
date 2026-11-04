@@ -175,9 +175,12 @@ times, which is now something players can experiment with.
 - Town growth follows the zones: houses and flats only on residential land;
   businesses (offices, shops, hotels, theatres, cinemas, shopping centres, the
   warehouse) only on commercial land; public buildings (churches, stadiums,
-  statues, fountains, parks) on either; nothing on industrial or park land. A
-  building on several tiles needs all of them zoned for it. Unzoned land works
-  as in regular OpenTTD, and existing buildings are left alone.
+  statues, fountains, parks) on either. Industrial and park land stays free of
+  town buildings and of new town roads (no road, road stub, bridge end or
+  tunnel exit there), so it can be kept for a factory, an airport or a
+  station. A building on several tiles needs all of them zoned for it.
+  Unzoned land works as in regular OpenTTD, and existing buildings and roads
+  are left alone.
 - Commercial land gets businesses anywhere in town, not only in the centre
   ring where OpenTTD normally puts offices. Without that, commercial zones at
   the edge of town stayed almost empty.
@@ -207,17 +210,18 @@ times, which is now something players can experiment with.
 
 Results (test AI, a town of 1,106 people, four quarters of about 24 by 24
 tiles zoned commercial, residential, park or left alone, fast town growth,
-about 3 years):
+about 3 years). Counts are new tiles; a stadium covers 4.
 
-| Quarter | New homes / businesses / public, zoned | Same quarter, no zoning |
+| Quarter | Zoned: home / business / public tiles, new road tiles | No zoning: same |
 |---|---|---|
-| Commercial | 0 / 3 / 1 | 3 / 1 / 0 |
-| Residential | 9 / 0 / 1 | 7 / 1 / 2 |
-| Park | 0 / 0 / 0 | 6 / 7 / 4 |
-| Left alone | 7 / 4 / 0 | 7 / 11 / 0 |
+| Commercial | 0 / 3 / 3, 1 road | 3 / 1 / 0, 1 road |
+| Residential | 5 / 0 / 6, 10 roads | 9 / 1 / 1, 7 roads |
+| Park | 0 / 0 / 0, 0 roads | 3 / 3 / 0, 6 roads |
+| Left alone | 9 / 4 / 0, 13 roads | 5 / 7 / 0, 10 roads |
 
-No building broke its zone. The zoned town reached 2,730 people against 3,178
-without zoning, because the park quarter stayed empty.
+No building broke its zone, and the park quarter got no new road. The zoned
+town reached 2,316 people against 3,094 without zoning, mostly because the
+park quarter stayed empty.
 
 ## Roadmap
 

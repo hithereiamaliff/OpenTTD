@@ -3014,8 +3014,8 @@ STR_ROAD_TOOLBAR_TOOLTIP_BUILD_TRAFFIC_LIGHTS                   :{BLACK}Build tr
 STR_TOWN_ZONING_CAPTION                                         :{WHITE}Zoning
 STR_TOWN_ZONING_RESIDENTIAL_TOOLTIP                             :{BLACK}Zone land for homes: towns only build houses, flats and public buildings such as churches there. Drag to zone an area
 STR_TOWN_ZONING_COMMERCIAL_TOOLTIP                              :{BLACK}Zone land for shops and offices: towns only build businesses (offices, shops, hotels, cinemas) and public buildings there. Drag to zone an area
-STR_TOWN_ZONING_INDUSTRIAL_TOOLTIP                              :{BLACK}Zone land for industry: towns don't build there. Drag to zone an area
-STR_TOWN_ZONING_PARK_TOOLTIP                                    :{BLACK}Zone land for parks: towns don't build there. Drag to zone an area
+STR_TOWN_ZONING_INDUSTRIAL_TOOLTIP                              :{BLACK}Zone land for industry: towns keep it free of their buildings and new roads. Drag to zone an area
+STR_TOWN_ZONING_PARK_TOOLTIP                                    :{BLACK}Zone land for parks: towns keep it free of their buildings and new roads. Drag to zone an area
 STR_TOWN_ZONING_CLEAR_TOOLTIP                                   :{BLACK}Remove zoning: towns build there as usual. Drag to clear an area
 
 # Traffic light window

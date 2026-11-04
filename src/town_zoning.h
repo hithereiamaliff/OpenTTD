@@ -9,9 +9,10 @@
  * @file town_zoning.h Zoning: players plan what towns may build where.
  *
  * Every tile can be zoned for homes, shops and offices, industry or parks.
- * Towns only build matching buildings on zoned tiles, and none on industrial
- * or park zones. Public buildings such as churches fit in both residential and
- * commercial zones. Unzoned land works as in regular OpenTTD.
+ * Towns only build matching buildings on zoned tiles. Industrial and park
+ * zones stay free of town buildings and new town roads. Public buildings such
+ * as churches fit in both residential and commercial zones. Unzoned land works
+ * as in regular OpenTTD.
  */
 
 #ifndef TOWN_ZONING_H
@@ -28,8 +29,8 @@ enum class TownZone : uint8_t {
 	None, ///< Not zoned: towns build as usual.
 	Residential, ///< Homes and public buildings only.
 	Commercial, ///< Businesses and public buildings only.
-	Industrial, ///< Kept free of town buildings, for industry.
-	Park, ///< Kept free of town buildings.
+	Industrial, ///< Kept free of town buildings and roads, for industry.
+	Park, ///< Kept free of town buildings and roads.
 	End, ///< End marker.
 };
 
@@ -44,6 +45,7 @@ enum class HouseKind : uint8_t {
 };
 
 TownZone GetTownZone(TileIndex tile);
+bool IsTownZoneKeptFree(TileIndex tile);
 HouseKind GetHouseKind(const HouseSpec &hs);
 bool TownZoneAllowsHouse(TownZone zone, const HouseSpec &hs);
 bool TownZonesAllowHouse(TileIndex tile, const HouseSpec &hs);

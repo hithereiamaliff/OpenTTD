@@ -1047,6 +1047,9 @@ static bool IsRoadAllowedHere(Town *t, TileIndex tile, DiagDirection dir)
 {
 	if (DistanceFromEdge(tile) == 0) return false;
 
+	/* Land zoned for industry or parks stays free of town roads. */
+	if (IsTownZoneKeptFree(tile)) return false;
+
 	/* Prevent towns from building roads under bridges along the bridge. Looks silly. */
 	if (IsBridgeAbove(tile) && GetBridgeAxis(tile) == DiagDirToAxis(dir)) return false;
 
@@ -1326,6 +1329,9 @@ static bool GrowTownWithBridge(const Town *t, const TileIndex tile, const DiagDi
 	/* Don't allow a bridge where the start and end tiles are adjacent with no span between. */
 	if (bridge_length == 1) return false;
 
+	/* Don't land in land zoned for industry or parks. */
+	if (IsTownZoneKeptFree(bridge_tile)) return false;
+
 	/* Make sure the road can be continued past the bridge. At this point, bridge_tile holds the end tile of the bridge. */
 	if (!CanRoadContinueIntoNextTile(t, bridge_tile, bridge_dir)) return false;
 
@@ -1412,6 +1418,9 @@ static bool GrowTownWithTunnel(const Town *t, const TileIndex tile, const DiagDi
 
 	/* Don't allow a tunnel where the start and end tiles are adjacent. */
 	if (tunnel_length == 1) return false;
+
+	/* Don't come out in land zoned for industry or parks. */
+	if (IsTownZoneKeptFree(tunnel_tile)) return false;
 
 	/* Make sure the road can be continued past the tunnel. At this point, tunnel_tile holds the end tile of the tunnel. */
 	if (!CanRoadContinueIntoNextTile(t, tunnel_tile, tunnel_dir)) return false;
@@ -1516,6 +1525,9 @@ static TownGrowthResult GrowTownInTile(TileIndex *tile_ptr, RoadBits cur_rb, Dia
 
 		if (!TownAllowedToBuildRoads(modes)) return TownGrowthResult::SearchStopped;
 		if (!_settings_game.economy.allow_town_level_crossings && IsTileType(tile, TileType::Railway)) return TownGrowthResult::SearchStopped;
+
+		/* Land zoned for industry or parks stays free of town roads. */
+		if (IsTownZoneKeptFree(tile)) return TownGrowthResult::SearchStopped;
 
 		/* Remove hills etc */
 		if (!_settings_game.construction.build_on_slopes || Chance16(1, 6)) LevelTownLand(tile);
@@ -1636,6 +1648,9 @@ static TownGrowthResult GrowTownInTile(TileIndex *tile_ptr, RoadBits cur_rb, Dia
 		if (HasTileWaterGround(house_tile)) return TownGrowthResult::Continue;
 
 		if (!IsValidTile(house_tile)) return TownGrowthResult::Continue;
+
+		/* Nor into land zoned for industry or parks: no house there, and no road stub towards it. */
+		if (IsTownZoneKeptFree(house_tile)) return TownGrowthResult::Continue;
 
 		TownGrowthResult result = TownGrowthResult::Continue;
 
