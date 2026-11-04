@@ -8,6 +8,7 @@
 /** @file vehicle_gui.cpp The base GUI for all vehicles. */
 
 #include "stdafx.h"
+#include "line.h"
 #include "debug.h"
 #include "company_func.h"
 #include "gui.h"
@@ -1876,6 +1877,15 @@ void BaseVehicleListWindow::DrawVehicleListItems(VehicleID selected_vehicle, int
 				if (show_orderlist) DrawSmallOrderList(vehgroup.vehicles_begin[0]->orders, olr.left, olr.right, ir.top + GetCharacterHeight(FontSize::Small), this->order_arrow_width);
 
 				DrawString(ir.left, ir.right, ir.top + WidgetDimensions::scaled.framerect.top, GetString(STR_JUST_COMMA, vehgroup.NumVehicles()), TextColour::Black);
+
+				/* The line: badge, name and riders. */
+				if (const OrderList *list = vehgroup.vehicles_begin[0]->orders; list != nullptr) {
+					Rect lr{tr.left, ir.top, tr.right, ir.top + GetCharacterHeight(FontSize::Small) - 1};
+					int badge = DrawLineBadge(lr, list, rtl);
+					DrawString(lr.Indent(badge > 0 ? badge + WidgetDimensions::scaled.hsep_normal : 0, rtl),
+							GetString(STR_VEHICLE_LIST_LINE_INFO, list->line.name, list->line.last_month.riders),
+							TextColour::Black, AlignmentH::Start, false, FontSize::Small);
+				}
 				break;
 
 			default:
@@ -2169,12 +2179,14 @@ public:
 							const Vehicle *v = vehgroup.vehicles_begin[0];
 							if (_ctrl_pressed) {
 								ShowOrdersWindow(v);
-							} else {
+							} else if (_shift_pressed) {
 								if (vehgroup.NumVehicles() == 1) {
 									ShowVehicleViewWindow(v);
 								} else {
 									ShowVehicleListWindow(v);
 								}
+							} else {
+								ShowLineWindow(v);
 							}
 						}
 						break;

@@ -8,6 +8,7 @@
 /** @file group_gui.cpp GUI for the group window. */
 
 #include "stdafx.h"
+#include "line.h"
 #include "textbuf_gui.h"
 #include "command_func.h"
 #include "vehicle_gui.h"
@@ -995,7 +996,9 @@ public:
 						if (!VehicleClicked(vehgroup)) {
 							const Vehicle *v = vehgroup.vehicles_begin[0];
 							if (vindex == v->index) {
-								if (vehgroup.NumVehicles() == 1) {
+								if (!_shift_pressed) {
+									ShowLineWindow(v);
+								} else if (vehgroup.NumVehicles() == 1) {
 									ShowVehicleViewWindow(v);
 								} else {
 									ShowVehicleListWindow(v);

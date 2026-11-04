@@ -21,6 +21,10 @@
 #include "../../waypoint_base.h"
 #include "../../order_cmd.h"
 
+#include "../../line.h"
+#include "../../line_cmd.h"
+#include "../../string_func.h"
+
 #include "../../safeguards.h"
 
 /**
@@ -712,4 +716,104 @@ static void _DoCommandReturnSetOrderFlags(class ScriptInstance &instance)
 	} else {
 		return ScriptMap::DistanceManhattan(origin_tile, dest_tile);
 	}
+}
+
+/**
+ * The order list of a script's vehicle, if it is a valid primary vehicle with orders.
+ * @param vehicle_id The vehicle.
+ * @return The order list, or nullptr.
+ */
+static const OrderList *GetScriptLine(VehicleID vehicle_id)
+{
+	if (!ScriptVehicle::IsPrimaryVehicle(vehicle_id)) return nullptr;
+	return ::Vehicle::Get(vehicle_id)->orders;
+}
+
+/* static */ bool ScriptOrder::SetLineNumber(VehicleID vehicle_id, Text *number)
+{
+	ScriptObjectRef counter(number);
+
+	EnforceCompanyModeValid(false);
+	EnforcePrecondition(false, ScriptVehicle::IsPrimaryVehicle(vehicle_id));
+	EnforcePrecondition(false, number != nullptr);
+	const std::string &text = number->GetDecodedText();
+	EnforcePreconditionEncodedText(false, text);
+	EnforcePreconditionCustomError(false, ::Utf8StringLength(text) <= MAX_LENGTH_LINE_NUMBER_CHARS, ScriptError::ERR_PRECONDITION_STRING_TOO_LONG);
+
+	return ScriptObject::Command<Commands::SetLineProperty>::Do(vehicle_id, LineProperty::Number, 0, text);
+}
+
+/* static */ std::optional<std::string> ScriptOrder::GetLineNumber(VehicleID vehicle_id)
+{
+	const OrderList *list = GetScriptLine(vehicle_id);
+	if (list == nullptr) return std::nullopt;
+	return list->line.number;
+}
+
+/* static */ bool ScriptOrder::SetLineName(VehicleID vehicle_id, Text *name)
+{
+	ScriptObjectRef counter(name);
+
+	EnforceCompanyModeValid(false);
+	EnforcePrecondition(false, ScriptVehicle::IsPrimaryVehicle(vehicle_id));
+	EnforcePrecondition(false, name != nullptr);
+	const std::string &text = name->GetDecodedText();
+	EnforcePreconditionEncodedText(false, text);
+	EnforcePreconditionCustomError(false, ::Utf8StringLength(text) <= MAX_LENGTH_LINE_NAME_CHARS, ScriptError::ERR_PRECONDITION_STRING_TOO_LONG);
+
+	return ScriptObject::Command<Commands::SetLineProperty>::Do(vehicle_id, LineProperty::Name, 0, text);
+}
+
+/* static */ bool ScriptOrder::SetLineTargetGap(VehicleID vehicle_id, SQInteger ticks)
+{
+	EnforceCompanyModeValid(false);
+	EnforcePrecondition(false, ScriptVehicle::IsPrimaryVehicle(vehicle_id));
+	EnforcePrecondition(false, ticks >= 0);
+
+	return ScriptObject::Command<Commands::SetLineProperty>::Do(vehicle_id, LineProperty::TargetGap, ClampTo<uint32_t>(ticks), {});
+}
+
+/* static */ bool ScriptOrder::SetLineHoldForSpacing(VehicleID vehicle_id, bool hold)
+{
+	EnforceCompanyModeValid(false);
+	EnforcePrecondition(false, ScriptVehicle::IsPrimaryVehicle(vehicle_id));
+
+	return ScriptObject::Command<Commands::SetLineProperty>::Do(vehicle_id, LineProperty::HoldForSpacing, hold ? 1 : 0, {});
+}
+
+/* static */ SQInteger ScriptOrder::GetLineRiders(VehicleID vehicle_id)
+{
+	const OrderList *list = GetScriptLine(vehicle_id);
+	return list == nullptr ? -1 : list->line.last_month.riders;
+}
+
+/* static */ SQInteger ScriptOrder::GetLineDepartures(VehicleID vehicle_id)
+{
+	const OrderList *list = GetScriptLine(vehicle_id);
+	return list == nullptr ? -1 : list->line.last_month.departures;
+}
+
+/* static */ SQInteger ScriptOrder::GetLineAverageGap(VehicleID vehicle_id)
+{
+	const OrderList *list = GetScriptLine(vehicle_id);
+	return list == nullptr ? -1 : ::GetLineAverageGap(list->line);
+}
+
+/* static */ SQInteger ScriptOrder::GetLineAverageWait(VehicleID vehicle_id)
+{
+	const OrderList *list = GetScriptLine(vehicle_id);
+	return list == nullptr ? -1 : ::GetLineAverageWait(list->line);
+}
+
+/* static */ SQInteger ScriptOrder::GetLineVehiclesNeeded(VehicleID vehicle_id)
+{
+	const OrderList *list = GetScriptLine(vehicle_id);
+	return list == nullptr ? -1 : ::GetLineVehiclesNeeded(list);
+}
+
+/* static */ SQInteger ScriptOrder::GetLineLoad(VehicleID vehicle_id)
+{
+	const OrderList *list = GetScriptLine(vehicle_id);
+	if (list == nullptr || list->line.last_month.load_count == 0) return -1;
+	return list->line.last_month.load_sum / list->line.last_month.load_count;
 }

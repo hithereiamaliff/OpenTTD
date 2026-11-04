@@ -8,6 +8,7 @@
 /** @file economy.cpp Handling of the economy. */
 
 #include "stdafx.h"
+#include "line.h"
 #include <ranges>
 #include "company_func.h"
 #include "command_func.h"
@@ -1225,6 +1226,7 @@ void CargoPayment::PayFinalDelivery(CargoType cargo, const CargoPacket *cp, uint
 	/* Handle end of route payment */
 	Money profit = DeliverGoods(count, cargo, this->current_station, cp->GetDistance(current_tile), cp->GetPeriodsInTransit(), Company::Get(this->front->owner), cp->GetSource());
 	this->route_profit += profit;
+	if (IsCargoInClass(cargo, CargoClass::Passengers)) OnLineRidersDelivered(this->front, count);
 
 	/* The vehicle's profit is whatever route profit there is minus feeder shares. */
 	this->visual_profit += profit - cp->GetFeederShare(count);
@@ -1249,6 +1251,7 @@ Money CargoPayment::PayTransfer(CargoType cargo, const CargoPacket *cp, uint cou
 			cargo);
 
 	profit = profit * _settings_game.economy.feeder_payment_share / 100;
+	if (IsCargoInClass(cargo, CargoClass::Passengers)) OnLineRidersDelivered(this->front, count);
 
 	this->visual_transfer += profit; // accumulate transfer profits for whole vehicle
 	return profit; // account for the (virtual) profit already made for the cargo packet

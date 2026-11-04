@@ -605,6 +605,108 @@ public:
 	 * @see ScriptEngine::GetMaximumOrderDistance and ScriptVehicle::GetMaximumOrderDistance
 	 */
 	static SQInteger GetOrderDistance(ScriptVehicle::VehicleType vehicle_type, TileIndex origin_tile, TileIndex dest_tile);
+
+	/**
+	 * Set the number of a vehicle's line, like "101". A line is the vehicles
+	 * that share one order list.
+	 * @param vehicle_id Any vehicle of the line.
+	 * @param number The number, at most 8 characters; empty removes it.
+	 * @pre ScriptVehicle::IsPrimaryVehicle(vehicle_id).
+	 * @game @pre ScriptCompanyMode::IsValid().
+	 * @exception ScriptError::ERR_PRECONDITION_STRING_TOO_LONG
+	 * @return Whether the number has been/can be set.
+	 */
+	static bool SetLineNumber(VehicleID vehicle_id, Text *number);
+
+	/**
+	 * Get the number of a vehicle's line.
+	 * @param vehicle_id Any vehicle of the line.
+	 * @pre ScriptVehicle::IsPrimaryVehicle(vehicle_id).
+	 * @return The number, empty if it has none.
+	 */
+	static std::optional<std::string> GetLineNumber(VehicleID vehicle_id);
+
+	/**
+	 * Set the name of a vehicle's line.
+	 * @param vehicle_id Any vehicle of the line.
+	 * @param name The name, at most 32 characters; empty removes it.
+	 * @pre ScriptVehicle::IsPrimaryVehicle(vehicle_id).
+	 * @game @pre ScriptCompanyMode::IsValid().
+	 * @exception ScriptError::ERR_PRECONDITION_STRING_TOO_LONG
+	 * @return Whether the name has been/can be set.
+	 */
+	static bool SetLineName(VehicleID vehicle_id, Text *name);
+
+	/**
+	 * Set how often a vehicle's line should leave its first stop.
+	 * @param vehicle_id Any vehicle of the line.
+	 * @param ticks Wanted ticks between departures; 0 for no target.
+	 * @pre ScriptVehicle::IsPrimaryVehicle(vehicle_id).
+	 * @pre ticks >= 0.
+	 * @game @pre ScriptCompanyMode::IsValid().
+	 * @return Whether the target has been/can be set.
+	 */
+	static bool SetLineTargetGap(VehicleID vehicle_id, SQInteger ticks);
+
+	/**
+	 * Set whether a vehicle's line holds vehicles at its first stop to keep
+	 * them its target gap apart.
+	 * @param vehicle_id Any vehicle of the line.
+	 * @param hold Whether to hold.
+	 * @pre ScriptVehicle::IsPrimaryVehicle(vehicle_id).
+	 * @game @pre ScriptCompanyMode::IsValid().
+	 * @return Whether it has been/can be set.
+	 */
+	static bool SetLineHoldForSpacing(VehicleID vehicle_id, bool hold);
+
+	/**
+	 * Get how many passengers got off a vehicle's line last month.
+	 * @param vehicle_id Any vehicle of the line.
+	 * @pre ScriptVehicle::IsPrimaryVehicle(vehicle_id).
+	 * @return The number of riders, or -1 if the vehicle is invalid.
+	 */
+	static SQInteger GetLineRiders(VehicleID vehicle_id);
+
+	/**
+	 * Get how often a vehicle's line left its first stop last month.
+	 * @param vehicle_id Any vehicle of the line.
+	 * @pre ScriptVehicle::IsPrimaryVehicle(vehicle_id).
+	 * @return The number of departures, or -1 if the vehicle is invalid.
+	 */
+	static SQInteger GetLineDepartures(VehicleID vehicle_id);
+
+	/**
+	 * Get the average time between a line's recent departures from its first stop.
+	 * @param vehicle_id Any vehicle of the line.
+	 * @pre ScriptVehicle::IsPrimaryVehicle(vehicle_id).
+	 * @return The gap in ticks, 0 if not known yet, or -1 if the vehicle is invalid.
+	 */
+	static SQInteger GetLineAverageGap(VehicleID vehicle_id);
+
+	/**
+	 * Get how long someone turning up at a line's first stop waits on
+	 * average, over recent departures; with even spacing that's half the gap.
+	 * @param vehicle_id Any vehicle of the line.
+	 * @pre ScriptVehicle::IsPrimaryVehicle(vehicle_id).
+	 * @return The wait in ticks, 0 if not known yet, or -1 if the vehicle is invalid.
+	 */
+	static SQInteger GetLineAverageWait(VehicleID vehicle_id);
+
+	/**
+	 * Get how many vehicles a line needs for its target gap.
+	 * @param vehicle_id Any vehicle of the line.
+	 * @pre ScriptVehicle::IsPrimaryVehicle(vehicle_id).
+	 * @return The number, 0 if there is no target or the round trip isn't known yet, or -1 if the vehicle is invalid.
+	 */
+	static SQInteger GetLineVehiclesNeeded(VehicleID vehicle_id);
+
+	/**
+	 * Get how full a line's vehicles left their stops on average last month.
+	 * @param vehicle_id Any vehicle of the line.
+	 * @pre ScriptVehicle::IsPrimaryVehicle(vehicle_id).
+	 * @return The percentage, or -1 if not known or the vehicle is invalid.
+	 */
+	static SQInteger GetLineLoad(VehicleID vehicle_id);
 };
 DECLARE_ENUM_AS_BIT_SET(ScriptOrder::ScriptOrderFlags)
 

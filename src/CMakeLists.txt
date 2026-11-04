@@ -259,6 +259,11 @@ add_files(
     landscape_cmd.h
     landscape_type.h
     language.h
+    line.cpp
+    line.h
+    line_cmd.h
+    line_gui.cpp
+    line_type.h
     league_base.h
     league_cmd.h
     league_cmd.cpp

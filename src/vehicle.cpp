@@ -8,6 +8,7 @@
 /** @file vehicle.cpp Base implementations of all vehicles. */
 
 #include "stdafx.h"
+#include "line.h"
 #include "error.h"
 #include "roadveh.h"
 #include "ship.h"
@@ -2406,6 +2407,7 @@ void Vehicle::LeaveStation()
 
 	HideFillingPercent(&this->fill_percent_te_id);
 	trip_occupancy = CalcPercentVehicleFilled(this, nullptr);
+	OnLineVehicleDeparts(this, trip_occupancy);
 
 	if (this->type == VehicleType::Train && !this->vehstatus.Test(VehState::Crashed)) {
 		/* Trigger station animation (trains only) */
@@ -2459,6 +2461,9 @@ void Vehicle::HandleLoading(bool mode)
 
 			/* Not the first call for this tick, or still loading */
 			if (mode || !this->vehicle_flags.Test(VehicleFlag::LoadingFinished) || this->current_order_time < wait_time) return;
+
+			/* Lines that keep even spacing hold their vehicles at the first stop. */
+			if (MustHoldForLineSpacing(this)) return;
 
 			this->PlayLeaveStationSound();
 

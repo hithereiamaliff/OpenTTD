@@ -375,7 +375,7 @@ STR_SORT_BY_AVERAGE_PROFIT_THIS_PERIOD                          :Average profit 
 
 # Group by options for vehicle list
 STR_GROUP_BY_NONE                                               :None
-STR_GROUP_BY_SHARED_ORDERS                                      :Shared orders
+STR_GROUP_BY_SHARED_ORDERS                                      :Lines (shared orders)
 
 # Order button in shared orders vehicle list
 STR_GOTO_ORDER_VIEW                                             :{BLACK}Orders

@@ -761,6 +761,12 @@ enum class WindowClass : uint16_t {
 	 */
 	CityServices,
 
+	/**
+	 * Line window; %Window numbers:
+	 *   - #OrderListID = #LineWidgets
+	 */
+	Line,
+
 	Invalid = 0xFFFF, ///< Invalid window.
 };
 

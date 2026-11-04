@@ -283,6 +283,56 @@ services took six tiles right at the centre, where towns would otherwise put
 their biggest office blocks. Services reach 10 tiles, so they do as well a
 few tiles out.
 
+## Done: transit part 1, lines (first two steps)
+
+The transit plan (City Bus Manager style play, Malaysian and Singaporean
+funding models, roads and BRT, buses and depots) is in
+`docs/transit-operator-research.md`. Its first part is lines.
+
+- A line is the vehicles sharing one order list (a single vehicle is a line
+  too). It can have a number like 101, T420 or CAT (up to 8 characters), a
+  name and one of the 16 colours (automatic by default), shown as a badge.
+- Vehicle lists grouped by "Lines (shared orders)" show each line's badge,
+  name and riders last month. Clicking a line opens its window (Shift+click
+  opens the vehicle list as before, Ctrl+click the orders). The timetable has
+  a Line button too.
+- Line window: vehicles and the time of one round trip (measured, or from
+  the timetable), how often vehicles leave the first stop, the average wait
+  there and how much longer that is than with even spacing (Singapore's
+  "excess wait time"), a target frequency with the number of vehicles it
+  needs, riders last month and this month, how full vehicles leave their
+  stops (average and fullest), on-time share of timetabled departures, and
+  profit. Buttons for number, name, colour, frequency, even spacing,
+  vehicles, orders and timetable. Times show with tenths of a day.
+- Even spacing: with a target set, vehicles wait at the first stop until the
+  target time since the last departure has passed (they keep loading).
+- Statistics are counted when vehicles leave stops and when passengers get
+  off, kept per month, and saved with the line in a new chunk `LINE` (by
+  order list). Old saves get lines without numbers and fresh statistics.
+- Script API (AI and game scripts): `ScriptOrder.SetLineNumber`,
+  `GetLineNumber`, `SetLineName`, `SetLineTargetGap`,
+  `SetLineHoldForSpacing`, `GetLineRiders`, `GetLineDepartures`,
+  `GetLineAverageGap`, `GetLineAverageWait`, `GetLineVehiclesNeeded`,
+  `GetLineLoad`.
+- Code: `src/line.{h,cpp}`, `src/line_type.h`, `src/line_cmd.h`,
+  `src/line_gui.cpp`, `src/widgets/line_widget.h`,
+  `src/saveload/line_sl.cpp`, plus hooks in `vehicle.cpp` (leaving a stop,
+  holding), `economy.cpp` (riders), `vehicle_gui.cpp`, `group_gui.cpp` and
+  `timetable_gui.cpp`.
+
+Results (test AI, two town bus lines of 12 buses sharing orders, no
+lights, about 2 years; times in ticks, 74 per day):
+
+| Setup | Average gap | Average wait | Even spacing would be |
+|---|---|---|---|
+| No target | 154-207 | 120-312 | 77-104 |
+| Target 170, no holding | 140-202 | 146-264 | 70-101 |
+| Target 170, even spacing | 171-194 | 86-107 | 85-97 |
+
+With even spacing the average wait is almost exactly half the gap, so the
+buses stop bunching. The line says it needs 11-17 buses for that target,
+against the 12 it has.
+
 ## Roadmap
 
 Sizes are rough: S = one session, M = a few, L = many, XL = a project in itself.

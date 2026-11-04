@@ -11,6 +11,7 @@
 #define ORDER_BASE_H
 
 #include "order_type.h"
+#include "line_type.h"
 #include "core/pool_type.hpp"
 #include "core/bitmath_func.hpp"
 #include "cargo_type.h"
@@ -398,6 +399,8 @@ private:
 	TimerGameTick::Ticks total_duration{}; ///< NOSAVE: Total (timetabled or not) duration of the order list.
 
 public:
+	LineInfo line{}; ///< City fork: the line these orders make up; saved in chunk LINE.
+
 	/**
 	 * Default constructor producing an invalid order list.
 	 * @param index index of the list within the order list pool

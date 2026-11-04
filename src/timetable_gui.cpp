@@ -8,6 +8,7 @@
 /** @file timetable_gui.cpp GUI for time tabling. */
 
 #include "stdafx.h"
+#include "line.h"
 #include "command_func.h"
 #include "gui.h"
 #include "window_gui.h"
@@ -727,6 +728,10 @@ struct TimetableWindow : Window {
 				this->show_expected = !this->show_expected;
 				break;
 
+			case WID_VT_LINE:
+				ShowLineWindow(v);
+				break;
+
 			case WID_VT_SHARED_ORDER_LIST:
 				ShowVehicleListWindow(v);
 				break;
@@ -841,6 +846,10 @@ static constexpr std::initializer_list<NWidgetPart> _nested_timetable_widgets = 
 					NWidget(WWT_PANEL, Colours::Grey), SetResize(1, 0), SetFill(1, 1), EndContainer(),
 				EndContainer(),
 			EndContainer(),
+		EndContainer(),
+		NWidget(NWID_VERTICAL, NWidContainerFlag::EqualSize),
+			NWidget(WWT_PUSHTXTBTN, Colours::Grey, WID_VT_LINE), SetFill(0, 1), SetStringTip(STR_TIMETABLE_LINE_BUTTON, STR_TIMETABLE_LINE_TOOLTIP),
+			NWidget(WWT_PANEL, Colours::Grey), SetFill(0, 1), EndContainer(),
 		EndContainer(),
 		NWidget(NWID_VERTICAL, NWidContainerFlag::EqualSize),
 			NWidget(WWT_PUSHIMGBTN, Colours::Grey, WID_VT_SHARED_ORDER_LIST), SetFill(0, 1), SetSpriteTip(SPR_SHARED_ORDERS_ICON, STR_ORDERS_VEH_WITH_SHARED_ORDERS_LIST_TOOLTIP),

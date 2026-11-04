@@ -384,6 +384,7 @@ enum class Commands : uint8_t {
 	RemoveTrafficLight, ///< remove traffic lights from a road junction
 	ConfigureTrafficLight, ///< change how traffic lights switch
 	SetTownZone, ///< zone land for homes, shops and offices, industry or parks
+	SetLineProperty, ///< change a line's number, name, colour or frequency
 
 	End, ///< @important Must ALWAYS be on the end of this list!! (period)
 };

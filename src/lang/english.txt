@@ -375,7 +375,7 @@ STR_SORT_BY_AVERAGE_PROFIT_THIS_PERIOD                          :Average profit 
 
 # Group by options for vehicle list
 STR_GROUP_BY_NONE                                               :None
-STR_GROUP_BY_SHARED_ORDERS                                      :Shared orders
+STR_GROUP_BY_SHARED_ORDERS                                      :Lines (shared orders)
 
 # Order button in shared orders vehicle list
 STR_GOTO_ORDER_VIEW                                             :{BLACK}Orders
@@ -4247,6 +4247,7 @@ STR_VEHICLE_LIST_REPLACE_VEHICLES                               :Replace vehicle
 STR_VEHICLE_LIST_SEND_FOR_SERVICING                             :Send for servicing
 STR_VEHICLE_LIST_CREATE_GROUP                                   :Create group
 STR_VEHICLE_LIST_PROFIT_THIS_YEAR_LAST_YEAR                     :{TINY_FONT}{BLACK}Profit this year: {CURRENCY_LONG} (last year: {CURRENCY_LONG})
+STR_VEHICLE_LIST_LINE_INFO                                      :{BLACK}{RAW_STRING}{SILVER}{NBSP}{NBSP}{COMMA} rider{P "" s} last month
 STR_VEHICLE_LIST_PROFIT_THIS_PERIOD_LAST_PERIOD                 :{TINY_FONT}{BLACK}Profit this period: {CURRENCY_LONG} (last period: {CURRENCY_LONG})
 STR_VEHICLE_LIST_CARGO                                          :[{CARGO_LIST}]
 STR_VEHICLE_LIST_NAME_AND_CARGO                                 :{STRING1} {STRING1}
@@ -5012,6 +5013,53 @@ STR_TIMETABLE_RESET_LATENESS_TOOLTIP                            :{BLACK}Reset th
 
 STR_TIMETABLE_AUTOFILL                                          :{BLACK}Autofill
 STR_TIMETABLE_AUTOFILL_TOOLTIP                                  :{BLACK}Fill the timetable automatically with the values from the next journey. Ctrl+Click to try to keep waiting times
+STR_TIMETABLE_LINE_BUTTON                                       :{BLACK}Line
+STR_TIMETABLE_LINE_TOOLTIP                                      :{BLACK}Show this vehicle's line: its number, name, colour, frequency and statistics
+
+# Lines
+STR_LINE_CAPTION_NUMBER_NAME                                    :{WHITE}Line {RAW_STRING}: {RAW_STRING}
+STR_LINE_CAPTION_NUMBER                                         :{WHITE}Line {RAW_STRING}
+STR_LINE_CAPTION_NAME                                           :{WHITE}{RAW_STRING}
+STR_LINE_CAPTION_UNNAMED                                        :{WHITE}Line of {VEHICLE}
+STR_LINE_DURATION_DAYS                                          :{DECIMAL}{NBSP}days
+STR_LINE_NAME_LINE                                              :{BLACK}{RAW_STRING}
+STR_LINE_NO_NUMBER_HINT                                         :{SILVER}No line number yet: give it one to see it on badges
+STR_LINE_VEHICLES_ROUND_TRIP                                    :{BLACK}Vehicles: {LTBLUE}{COMMA}{BLACK}, one round trip takes {LTBLUE}{RAW_STRING}
+STR_LINE_VEHICLES_ROUND_TRIP_UNKNOWN                            :{BLACK}Vehicles: {LTBLUE}{COMMA}{BLACK}, round trip not measured yet
+STR_LINE_GAP                                                    :{BLACK}Leaves the first stop every {LTBLUE}{RAW_STRING}{BLACK} on average
+STR_LINE_GAP_UNKNOWN                                            :{BLACK}No departures from the first stop counted yet
+STR_LINE_WAIT                                                   :{BLACK}Average wait there: {LTBLUE}{RAW_STRING}{BLACK}, {LTBLUE}{RAW_STRING}{BLACK} more than with even spacing
+STR_LINE_TARGET                                                 :{BLACK}Target: every {LTBLUE}{RAW_STRING}{BLACK}, which needs {LTBLUE}{COMMA}{BLACK} vehicle{P "" s}
+STR_LINE_TARGET_NEED_UNKNOWN                                    :{BLACK}Target: every {LTBLUE}{RAW_STRING}{BLACK}; vehicles needed known after a round trip
+STR_LINE_NO_TARGET                                              :{BLACK}No target frequency set
+STR_LINE_RIDERS                                                 :{BLACK}Riders: {LTBLUE}{COMMA}{BLACK} last month, {LTBLUE}{COMMA}{BLACK} so far this month
+STR_LINE_LOAD                                                   :{BLACK}Vehicles leave stops {LTBLUE}{COMMA}%{BLACK} full on average, {LTBLUE}{COMMA}%{BLACK} at most (last month)
+STR_LINE_LOAD_UNKNOWN                                           :{BLACK}How full vehicles leave: no departures last month
+STR_LINE_ON_TIME                                                :{BLACK}On time: {LTBLUE}{COMMA}%{BLACK} of {COMMA} timetabled departure{P "" s} last month
+STR_LINE_ON_TIME_UNKNOWN                                        :{BLACK}On time: no running timetable to compare with
+STR_LINE_PROFIT                                                 :{BLACK}Profit this year: {CURRENCY_LONG} (last year: {CURRENCY_LONG})
+STR_LINE_NUMBER_BUTTON                                          :{BLACK}Number
+STR_LINE_NUMBER_TOOLTIP                                         :{BLACK}Give the line a number, like 101, T420 or CAT, shown on its badge in vehicle lists
+STR_LINE_NAME_BUTTON                                            :{BLACK}Name
+STR_LINE_NAME_TOOLTIP                                           :{BLACK}Give the line a name, like the places it links
+STR_LINE_COLOUR_BUTTON                                          :{BLACK}Colour
+STR_LINE_COLOUR_TOOLTIP                                         :{BLACK}Choose the line's colour
+STR_LINE_COLOUR_AUTOMATIC                                       :Automatic
+STR_LINE_TARGET_BUTTON                                          :{BLACK}Frequency
+STR_LINE_TARGET_TOOLTIP                                         :{BLACK}Set how often vehicles should leave the first stop; the line then shows how many vehicles that needs
+STR_LINE_HOLD_BUTTON                                            :{BLACK}Even spacing
+STR_LINE_HOLD_TOOLTIP                                           :{BLACK}Hold vehicles at the first stop until the target time since the last departure has passed, so they stay evenly spaced. Needs a target frequency
+STR_LINE_VEHICLES_BUTTON                                        :{BLACK}Vehicles
+STR_LINE_VEHICLES_TOOLTIP                                       :{BLACK}Show the line's vehicles
+STR_LINE_ORDERS_BUTTON                                          :{BLACK}Orders
+STR_LINE_ORDERS_TOOLTIP                                         :{BLACK}Show the line's orders
+STR_LINE_TIMETABLE_BUTTON                                       :{BLACK}Timetable
+STR_LINE_TIMETABLE_TOOLTIP                                      :{BLACK}Show the line's timetable
+STR_LINE_QUERY_NUMBER                                           :{WHITE}Line number
+STR_LINE_QUERY_NAME                                             :{WHITE}Line name
+STR_LINE_QUERY_TARGET_DAYS                                      :{WHITE}Leave the first stop every how many days? (0 for no target)
+STR_LINE_QUERY_TARGET_SECONDS                                   :{WHITE}Leave the first stop every how many seconds? (0 for no target)
+STR_LINE_QUERY_TARGET_TICKS                                     :{WHITE}Leave the first stop every how many ticks? (0 for no target)
 
 STR_TIMETABLE_EXPECTED                                          :{BLACK}Expected
 STR_TIMETABLE_SCHEDULED                                         :{BLACK}Scheduled
@@ -5433,6 +5481,7 @@ STR_ERROR_NO_TRAFFIC_LIGHTS                                     :there are no tr
 STR_ERROR_CAN_T_CHANGE_TRAFFIC_LIGHTS                           :Can't change these traffic lights...
 STR_ERROR_CAN_T_ZONE_HERE                                       :Can't zone this area...
 STR_ERROR_CAN_T_BUILD_CITY_SERVICE                              :Can't build this here...
+STR_ERROR_CAN_T_CHANGE_LINE                                     :Can't change this line...
 STR_ERROR_ZONE_AREA_TOO_LARGE                                   :... area too large, zone at most 128 by 128 tiles at a time
 
 # Waterway construction errors
