@@ -29,6 +29,7 @@
 #include "linkgraph/linkgraphschedule.h"
 #include "traffic_light.h"
 #include "road_traffic.h"
+#include "street_life.h"
 #include "town_zoning.h"
 #include "city_services.h"
 #include "town.h"
@@ -154,6 +155,7 @@ void InitializeGame(uint size_x, uint size_y, bool reset_date, bool reset_settin
 	InitializeObjects();
 	InitializeTrafficLights();
 	InitializeRoadTraffic();
+	InitializeStreetLife();
 	InitializeTownZones();
 	InitializeCityServices();
 

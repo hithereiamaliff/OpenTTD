@@ -45,6 +45,7 @@
 #include "game/game_config.hpp"
 #include "ship.h"
 #include "smallmap_gui.h"
+#include "street_life.h"
 #include "roadveh.h"
 #include "roadveh_cmd.h"
 #include "spritecache.h"

@@ -15,6 +15,8 @@
 #include "object_map.h"
 #include "road_map.h"
 #include "settings_type.h"
+#include "direction_func.h"
+#include "map_func.h"
 #include "tilearea_type.h"
 #include "timer/timer_game_tick.h"
 #include "town.h"
@@ -219,6 +221,33 @@ uint GetRoadCongestionPenalty(TileIndex tile)
 	static constexpr uint PENALTY[ROAD_CONGESTION_MAX + 1] = {0, 0, 10, 25, 45, 75, 120, 180};
 	if (!IsTileType(tile, TileType::Road) || IsRoadDepot(tile)) return 0;
 	return PENALTY[GetRoadCongestion(tile)] * _settings_game.pf.yapf.road_congestion_penalty / 100;
+}
+
+/**
+ * Does town traffic wait at a junction with smart traffic lights to cross
+ * along an axis? On busy roads (congestion level 1 and up) there is always
+ * someone; on quiet town roads someone turns up at least once the other road
+ * had its longest green. Out of town only real vehicles count.
+ * @param junction The junction tile.
+ * @param axis The road through the junction.
+ * @param longest_green_over Whether the other road had its longest green.
+ * @return True if town traffic waits.
+ */
+bool TownTrafficWaitsAt(TileIndex junction, Axis axis, bool longest_green_over)
+{
+	if (_settings_game.economy.town_traffic == to_underlying(TownTrafficSetting::Off)) return false;
+
+	int level = -1;
+	for (DiagDirection side : {AxisToDiagDir(axis), ReverseDiagDir(AxisToDiagDir(axis))}) {
+		TileIndex tile = TileAddByDiagDir(junction, side);
+		if (!IsValidTile(tile) || !IsTileType(tile, TileType::Road) || IsRoadDepot(tile) || !HasTileRoadType(tile, RoadTramType::Road)) continue;
+		level = std::max<int>(level, GetRoadCongestion(tile));
+	}
+	if (level >= 1) return true;
+	if (level < 0 || !longest_green_over) return false;
+
+	const Town *t = ClosestTownFromTile(junction, UINT_MAX);
+	return t != nullptr && GetTownRadiusGroup(t, junction) != HouseZone::TownEdge;
 }
 
 /**

@@ -64,6 +64,7 @@
 #include "core/backup_type.hpp"
 #include "landscape.h"
 #include "viewport_func.h"
+#include "street_life.h"
 #include "station_base.h"
 #include "station_func.h"
 #include "waypoint_base.h"
@@ -1865,6 +1866,7 @@ void ViewportDoDraw(const Viewport &vp, int left, int top, int right, int bottom
 
 	ViewportAddLandscape();
 	ViewportAddVehicles(&_vd.dpi);
+	ViewportAddStreetLife(&_vd.dpi);
 
 	ViewportAddKdtreeSigns(&_vd.dpi);
 

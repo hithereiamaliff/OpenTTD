@@ -11,9 +11,10 @@
 //   30-34: city service buildings: police, fire, clinic, school, park
 //   35-39: icons: police, fire, clinic, school, park
 //   40:    icon: network map of lines
+//   41-72: street life vehicles: car, van, lorry, motorbike; 8 directions each
 //
    -1 * 0	 0C "City fork graphics"
-   -1 * 3	 05 1C 29
+   -1 * 3	 05 1C 49
    -1 sprites/city.png 8bpp    4    4   4  17   -1  -16 normal
    -1 sprites/city.png 8bpp   12    4   4  17   -1  -16 normal
    -1 sprites/city.png 8bpp   20    4   4  17   -1  -16 normal
@@ -55,3 +56,35 @@
    -1 sprites/city.png 8bpp  408  160  16  15    0    0 normal
    -1 sprites/city.png 8bpp  428  160  14  14    0    0 normal
    -1 sprites/city.png 8bpp  448  160  16  14    0    0 normal
+   -1 sprites/city.png 8bpp    4  226   8  10   -4   -6 normal
+   -1 sprites/city.png 8bpp   30  226  14  10   -7   -6 normal
+   -1 sprites/city.png 8bpp   56  226  14   9   -7   -6 normal
+   -1 sprites/city.png 8bpp   82  226  14  10   -7   -6 normal
+   -1 sprites/city.png 8bpp  108  226   8  10   -4   -6 normal
+   -1 sprites/city.png 8bpp  134  226  14  10   -7   -6 normal
+   -1 sprites/city.png 8bpp  160  226  14   9   -7   -6 normal
+   -1 sprites/city.png 8bpp  186  226  14  10   -7   -6 normal
+   -1 sprites/city.png 8bpp  212  226   8  11   -4   -7 normal
+   -1 sprites/city.png 8bpp  238  226  16  12   -8   -8 normal
+   -1 sprites/city.png 8bpp  264  226  14  10   -7   -7 normal
+   -1 sprites/city.png 8bpp  290  226  16  13   -8   -9 normal
+   -1 sprites/city.png 8bpp  316  226   8  12   -4   -8 normal
+   -1 sprites/city.png 8bpp  342  226  16  13   -8   -9 normal
+   -1 sprites/city.png 8bpp  368  226  14  10   -7   -7 normal
+   -1 sprites/city.png 8bpp  394  226  16  12   -8   -8 normal
+   -1 sprites/city.png 8bpp    4  250  10  14   -5   -9 normal
+   -1 sprites/city.png 8bpp   30  250  19  14  -10   -9 normal
+   -1 sprites/city.png 8bpp   56  250  19  11  -10   -8 normal
+   -1 sprites/city.png 8bpp   82  250  19  15  -10  -10 normal
+   -1 sprites/city.png 8bpp  108  250  10  15   -5  -10 normal
+   -1 sprites/city.png 8bpp  134  250  19  15   -9  -10 normal
+   -1 sprites/city.png 8bpp  160  250  19  11   -9   -8 normal
+   -1 sprites/city.png 8bpp  186  250  19  14   -9   -9 normal
+   -1 sprites/city.png 8bpp  212  250   6   9   -3   -6 normal
+   -1 sprites/city.png 8bpp  238  250  10   9   -5   -6 normal
+   -1 sprites/city.png 8bpp  264  250  10   8   -5   -6 normal
+   -1 sprites/city.png 8bpp  290  250  10   9   -5   -6 normal
+   -1 sprites/city.png 8bpp  316  250   6   9   -3   -6 normal
+   -1 sprites/city.png 8bpp  342  250  10   9   -5   -6 normal
+   -1 sprites/city.png 8bpp  368  250  10   8   -5   -6 normal
+   -1 sprites/city.png 8bpp  394  250  10   9   -5   -6 normal

@@ -12,6 +12,7 @@ Block layout (Action 5 type 0x1C, see SPR_TRAFFIC_LIGHTS_BASE in table/sprites.h
   30-34  city service buildings: police, fire, clinic, school, park
   35-39  icons: police, fire, clinic, school, park
   40     icon: network map of lines
+  41-72  street life vehicles: car, van, lorry, motorbike; 8 directions each (N, NE, E, SE, S, SW, W, NW)
 """
 import math
 import sys
@@ -652,7 +653,46 @@ icon(448, 160, [
     "..WWW.........W.",
 ], {'R': rgb_index((220, 40, 40)), 'B': rgb_index((40, 90, 220)), 'W': WHITE}, "icon network map")
 
-assert len(sprites) == 41, len(sprites)
+# Street life vehicles, bodies in company colours so the game can give each its own colour.
+sys.path.insert(0, SRC)
+import street_life_sprites as SL
+
+GLASS, GLASS_LIT = nearest((60, 75, 100)), nearest((120, 145, 175))
+CARGO, CARGO_DARK, CARGO_TOP = nearest((205, 205, 200)), nearest((150, 150, 145)), nearest((230, 230, 225))
+CHASSIS = nearest((45, 45, 45))
+RIDER, RIDER_DARK = nearest((70, 60, 50)), nearest((40, 35, 30))
+
+
+def vehicle_colour(role, face, light):
+    base = SL.face_colour(role, face, None)
+    if base == 'cc':
+        if face == 'top':
+            return 0xCC
+        return 0xCA if light >= 0.95 else (0xC9 if light >= 0.8 else 0xC7)
+    if base == 'glass':
+        return GLASS_LIT if light >= 0.9 else GLASS
+    if base == 'cargo':
+        return CARGO_TOP if face == 'top' else (CARGO if light >= 0.9 else CARGO_DARK)
+    if base == 'dark':
+        return CHASSIS
+    if base == 'wheel':
+        return BLACK
+    if base == 'rider':
+        return RIDER if light >= 0.9 else RIDER_DARK
+    return 0xCA
+
+
+slot = 0
+for kind in ('car', 'van', 'lorry', 'motorbike'):
+    for d in range(8):
+        img, ox, oy = SL.rasterise(SL.render(kind, d), vehicle_colour, None, None)
+        x0, y0 = 4 + (slot % 16) * 26, 226 + (slot // 16) * 24
+        assert img.width <= 25 and img.height <= 23, (kind, d, img.size)
+        sheet.paste(img, (x0, y0), img.point(lambda c: 255 if c else 0, '1'))
+        sprites.append((x0, y0, img.width, img.height, -ox, -oy, f"{kind} {d}"))
+        slot += 1
+
+assert len(sprites) == 73, len(sprites)
 sheet.save(f"{SRC}/city.png", optimize=True)
 
 header = """// This file is part of OpenTTD.
@@ -668,6 +708,7 @@ header = """// This file is part of OpenTTD.
 //   30-34: city service buildings: police, fire, clinic, school, park
 //   35-39: icons: police, fire, clinic, school, park
 //   40:    icon: network map of lines
+//   41-72: street life vehicles: car, van, lorry, motorbike; 8 directions each
 //
    -1 * 0\t 0C "City fork graphics"
    -1 * 3\t 05 1C %02X

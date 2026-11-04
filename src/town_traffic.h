@@ -21,6 +21,7 @@
 #ifndef TOWN_TRAFFIC_H
 #define TOWN_TRAFFIC_H
 
+#include "direction_type.h"
 #include "tile_type.h"
 #include "town_type.h"
 
@@ -41,6 +42,7 @@ int GetRoadCongestionSpeedLimit(TileIndex tile);
 int GetRoadCongestionSpeedLimitKmh(uint8_t level);
 uint GetRoadCongestionPenalty(TileIndex tile);
 uint GetTownCarReduction(const Town *t);
+bool TownTrafficWaitsAt(TileIndex junction, Axis axis, bool longest_green_over);
 
 /** How busy the roads of a town are. */
 struct TownTrafficSummary {

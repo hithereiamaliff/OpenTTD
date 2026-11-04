@@ -272,6 +272,7 @@ struct GUISettings {
 	TimerGameCalendar::Year semaphore_build_before; ///< build semaphore signals automatically before this year
 	uint8_t news_message_timeout; ///< how much longer than the news message "age" should we keep the message in the history
 	bool show_track_reservation; ///< highlight reserved tracks.
+	uint8_t street_life; ///< what street life to show, @see StreetLifeSetting
 	uint8_t station_numtracks; ///< the number of platforms to default on for rail stations
 	uint8_t station_platlength; ///< the platform length, in tiles, for rail stations
 	bool station_dragdrop; ///< whether drag and drop is enabled for stations

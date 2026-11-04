@@ -641,6 +641,7 @@ SettingsContainer &GetSettingsTree()
 				viewports->Add(new SettingEntry("gui.measure_tooltip"));
 				viewports->Add(new SettingEntry("gui.loading_indicators"));
 				viewports->Add(new SettingEntry("gui.show_track_reservation"));
+				viewports->Add(new SettingEntry("gui.street_life"));
 			}
 
 			SettingsPage *construction = interface->Add(new SettingsPage(STR_CONFIG_SETTING_INTERFACE_CONSTRUCTION));

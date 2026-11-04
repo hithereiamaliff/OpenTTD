@@ -417,6 +417,42 @@ the game loop took about 13% longer (0.06 ms per tick); every-other-visit
 updates and skipping roads that can't congest halved the first version's
 cost.
 
+### Done: street life vehicles (step 2)
+
+Cars, vans, small lorries and motorbikes drive the roads in view, as many as
+the town traffic calls for. They are scenery: every player's game makes its
+own, they are never saved, use no game randomness and never change the game,
+so network games stay in sync. Only views at normal zoom up to 2x out show
+them.
+
+- Up to 1,500 at once, about 0.3 per tile on quiet town streets up to 3.4 on
+  jammed ones (fewer on the outskirts and in the country). When a view opens
+  they fill its roads at once; after that new ones mostly come in from the
+  edges of the view and vanish once they leave it.
+- They drive in lanes on the side the game drives on (left or right), go
+  straight on more often than they turn and prefer busier roads, turn around
+  at dead ends, bridges, tunnels, depots and bay stops, and pass through
+  drive-through stops and level crossings. They keep their distance to
+  street vehicles and real vehicles ahead, queue behind buses, stop at red
+  lights and closed crossings, and drive no faster than the road type and
+  the town traffic allow. Knots at junctions untangle after a moment.
+- Smart traffic lights now also switch for town traffic: on busy roads
+  (congestion 1 and up) someone always waits, on quiet town roads someone
+  turns up once the other road had its longest green. Out of town only real
+  vehicles count, as before.
+- Sprites: 4 kinds in 8 directions, drawn by
+  `media/baseset/openttd/street_life_sprites.py` (boxes in world units,
+  projected like the game, bodies in company colours so each vehicle gets one
+  of 20 colours, mostly white, grey and dark ones).
+- Client setting "Street life" (Interface, Viewports): off, vehicles, or
+  vehicles and people (people come in step 3).
+- Code: `src/street_life.{h,cpp}`, drawn from `viewport.cpp` after the
+  vehicles, reset in `misc.cpp`.
+
+Tests: no street vehicle entered a junction against a red light in 489
+junction entries; in Gredinghall at normal zoom about 115 vehicles cost
+0.07-0.08 ms per tick and drawing went from about 0.5 to 1.2 ms per frame.
+
 ## Roadmap
 
 Sizes are rough: S = one session, M = a few, L = many, XL = a project in itself.

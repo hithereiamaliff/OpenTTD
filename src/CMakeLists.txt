@@ -564,6 +564,8 @@ add_files(
     town_kdtree.h
     town_map.h
     town_type.h
+    street_life.cpp
+    street_life.h
     town_traffic.cpp
     town_traffic.h
     town_zoning.cpp

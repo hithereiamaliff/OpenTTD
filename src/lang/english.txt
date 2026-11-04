@@ -1838,6 +1838,11 @@ STR_CONFIG_SETTING_DEFAULT_RAIL_ROAD_TYPE_MOST_USED             :Most used
 
 STR_CONFIG_SETTING_SHOW_TRACK_RESERVATION                       :Show path reservations for tracks: {STRING2}
 STR_CONFIG_SETTING_SHOW_TRACK_RESERVATION_HELPTEXT              :Give reserved tracks a different colour to assist in problems with trains refusing to enter path-based blocks
+STR_CONFIG_SETTING_STREET_LIFE                                  :Street life: {STRING2}
+STR_CONFIG_SETTING_STREET_LIFE_HELPTEXT                         :Show town traffic on the roads in view: cars, vans, lorries and motorbikes, as many as each road's congestion calls for, and people on the pavements. They are only drawn: they don't slow anything down (the congestion level does) and other players don't see the same ones
+STR_CONFIG_SETTING_STREET_LIFE_OFF                              :Off
+STR_CONFIG_SETTING_STREET_LIFE_VEHICLES                         :Vehicles
+STR_CONFIG_SETTING_STREET_LIFE_ALL                              :Vehicles and people
 
 STR_CONFIG_SETTING_PERSISTENT_BUILDINGTOOLS                     :Keep building tools active after usage: {STRING2}
 STR_CONFIG_SETTING_PERSISTENT_BUILDINGTOOLS_HELPTEXT            :Keep the building tools for bridges, tunnels, etc. open after use

@@ -9,6 +9,7 @@
 
 #include "stdafx.h"
 #include "traffic_light.h"
+#include "town_traffic.h"
 #include "traffic_light_cmd.h"
 #include "command_func.h"
 #include "company_base.h"
@@ -232,7 +233,8 @@ bool TrafficLight::Update()
 
 		/* Switch when someone waits on the other road, the green road had its
 		 * shortest green, and its traffic stopped or it used up its longest green. */
-		bool other_waiting = HasBit(this->demand, to_underlying(other));
+		bool other_waiting = HasBit(this->demand, to_underlying(other)) ||
+				TownTrafficWaitsAt(this->tile, other, this->phase_ticks >= this->GetGreenTime(static_cast<Axis>(this->green_axis)));
 		if (other_waiting && this->phase_ticks >= this->min_green &&
 				(this->gap_ticks >= TRAFFIC_LIGHT_GAP || this->phase_ticks >= this->GetGreenTime(static_cast<Axis>(this->green_axis)))) {
 			this->clearing = true;
