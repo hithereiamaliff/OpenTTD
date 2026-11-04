@@ -25,6 +25,11 @@
 static const SaveLoad _traffic_light_desc[] = {
 	SaveLoad::Variable<VarFileType::U32>("tile", SLE_OBJECT_ADDRESS(TrafficLight, tile)),
 	SaveLoad::Variable<VarFileType::U8>("owner", SLE_OBJECT_ADDRESS(TrafficLight, owner)),
+	SaveLoad::Variable<VarFileType::U8>("mode", SLE_OBJECT_ADDRESS(TrafficLight, mode)),
+	SaveLoad::Variable<VarFileType::U16>("green_x", SLE_OBJECT_ADDRESS(TrafficLight, green_x)),
+	SaveLoad::Variable<VarFileType::U16>("green_y", SLE_OBJECT_ADDRESS(TrafficLight, green_y)),
+	SaveLoad::Variable<VarFileType::U16>("min_green", SLE_OBJECT_ADDRESS(TrafficLight, min_green)),
+	SaveLoad::Variable<VarFileType::U16>("offset", SLE_OBJECT_ADDRESS(TrafficLight, offset)),
 	SaveLoad::Variable<VarFileType::U8>("green_axis", SLE_OBJECT_ADDRESS(TrafficLight, green_axis)),
 	SaveLoad::Variable<VarFileType::Bool>("clearing", SLE_OBJECT_ADDRESS(TrafficLight, clearing)),
 	SaveLoad::Variable<VarFileType::U16>("phase_ticks", SLE_OBJECT_ADDRESS(TrafficLight, phase_ticks)),

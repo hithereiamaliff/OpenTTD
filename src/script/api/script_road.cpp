@@ -693,3 +693,19 @@ static bool NeighbourHasReachableRoad(::RoadType rt, TileIndex start_tile, DiagD
 	/* Traffic coming from 'from' travels towards 'tile'. */
 	return ::TrafficLightShowsGreen(tile, ::DiagDirToAxis(::DiagdirBetweenTiles(from, tile)));
 }
+
+/* static */ bool ScriptRoad::SetTrafficLightTimings(TileIndex tile, bool fixed, SQInteger green_ne_sw, SQInteger green_nw_se, SQInteger offset)
+{
+	EnforceCompanyModeValid(false);
+	EnforcePrecondition(false, HasTrafficLights(tile));
+	EnforcePrecondition(false, green_ne_sw >= TRAFFIC_LIGHT_MIN_TIME && green_ne_sw <= TRAFFIC_LIGHT_MAX_TIME);
+	EnforcePrecondition(false, green_nw_se >= TRAFFIC_LIGHT_MIN_TIME && green_nw_se <= TRAFFIC_LIGHT_MAX_TIME);
+	EnforcePrecondition(false, offset >= 0 && offset < green_ne_sw + green_nw_se + 2 * TRAFFIC_LIGHT_CLEARANCE);
+
+	const ::TrafficLight *tl = ::GetTrafficLight(tile);
+	EnforcePrecondition(false, tl != nullptr);
+	uint16_t min_green = std::min<uint16_t>(tl->min_green, static_cast<uint16_t>(std::min(green_ne_sw, green_nw_se)));
+
+	return ScriptObject::Command<Commands::ConfigureTrafficLight>::Do(tile, fixed ? TrafficLightMode::Fixed : TrafficLightMode::Smart,
+			static_cast<uint16_t>(green_ne_sw), static_cast<uint16_t>(green_nw_se), min_green, static_cast<uint16_t>(offset));
+}

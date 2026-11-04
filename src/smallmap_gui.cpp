@@ -30,6 +30,8 @@
 #include "timer/timer.h"
 #include "timer/timer_window.h"
 #include "smallmap_gui.h"
+#include "road_map.h"
+#include "road_traffic.h"
 #include "core/enum_type.hpp"
 
 #include "widgets/smallmap_widget.h"
@@ -109,6 +111,17 @@ static const LegendAndColour _legend_routes[] = {
 	{.legend = STR_SMALLMAP_LEGENDA_BUS_STATION, .colour = PC_YELLOW},
 	{.legend = STR_SMALLMAP_LEGENDA_AIRPORT_HELIPORT, .colour = PC_RED},
 	{.legend = STR_SMALLMAP_LEGENDA_DOCK, .colour = PC_LIGHT_BLUE},
+	{.end = true},
+};
+
+static const LegendAndColour _legend_traffic[] = {
+	{.legend = STR_SMALLMAP_LEGENDA_TRAFFIC_JAMMED, .colour = PC_RED},
+	{.legend = STR_SMALLMAP_LEGENDA_TRAFFIC_SLOW, .colour = PC_ORANGE},
+	{.legend = STR_SMALLMAP_LEGENDA_TRAFFIC_WAITING, .colour = PC_YELLOW},
+
+	{.legend = STR_SMALLMAP_LEGENDA_TRAFFIC_FLOWING, .colour = PC_GREEN, .col_break = true},
+	{.legend = STR_SMALLMAP_LEGENDA_TRAFFIC_QUIET, .colour = PC_DARK_GREY},
+	{.legend = STR_SMALLMAP_LEGENDA_TRAFFIC_LIGHTS, .colour = PC_LIGHT_BLUE},
 	{.end = true},
 };
 
@@ -230,6 +243,7 @@ enum class SmallMapType : uint8_t {
 	Routes, ///< Routes legend.
 	Vegetation, ///< Vegetation legend.
 	Owners, ///< Owners legend.
+	Traffic, ///< Road traffic legend.
 	End, ///< End marker.
 };
 
@@ -242,6 +256,7 @@ static const EnumIndexArray<std::span<const LegendAndColour>, SmallMapType, Smal
 	_legend_routes,
 	_legend_vegetation,
 	_legend_land_owners,
+	_legend_traffic,
 };
 
 #define MKCOLOUR(x)         TO_LE32(x)
@@ -524,6 +539,44 @@ static inline uint32_t GetSmallMapRoutesPixels(TileIndex tile, TileType t)
 			const SmallMapColourScheme &cs = _heightmap_schemes[_settings_client.gui.smallmap_land_colour];
 			return ApplyMask(cs.default_colour, GetMaskPixelsForTileType(tile, t, _smallmap_contours_andor));
 	}
+}
+
+/**
+ * Return the colour a tile would be displayed with in the small map in mode "Traffic":
+ * roads by how busy they have been lately, everything else as plain land.
+ *
+ * @param tile The tile of which we would like to get the colour.
+ * @param t    Effective tile type of the tile (see #SmallMapWindow::GetTileColours).
+ * @return The colour of tile in the small map in mode "Traffic"
+ */
+static inline uint32_t GetSmallMapTrafficPixels(TileIndex tile, TileType t)
+{
+	bool road = false;
+	switch (t) {
+		case TileType::Road: road = true; break; // Includes road bridges and tunnels.
+		case TileType::Station: road = IsAnyRoadStop(tile); break;
+		default: break;
+	}
+
+	if (road) {
+		RoadTrafficLevel level = GetRoadTrafficLevel(tile);
+		/* Show where traffic lights are, unless traffic is held up there. */
+		/* The effective type of a road bridge or tunnel is road too, so check the tile itself. */
+		if (level <= RoadTrafficLevel::Flowing && IsNormalRoadTile(tile) && HasTrafficLight(tile)) return MKCOLOUR_XXXX(PC_LIGHT_BLUE);
+		switch (level) {
+			case RoadTrafficLevel::Jammed: return MKCOLOUR_XXXX(PC_RED);
+			case RoadTrafficLevel::Slow: return MKCOLOUR_XXXX(PC_ORANGE);
+			case RoadTrafficLevel::Waiting: return MKCOLOUR_XXXX(PC_YELLOW);
+			case RoadTrafficLevel::Flowing: return MKCOLOUR_XXXX(PC_GREEN);
+			default: return MKCOLOUR_XXXX(PC_DARK_GREY);
+		}
+	}
+
+	if (t == TileType::Railway) return GetSmallMapRoutesPixels(tile, t);
+
+	/* Ground colour */
+	const SmallMapColourScheme &cs = _heightmap_schemes[_settings_client.gui.smallmap_land_colour];
+	return ApplyMask(cs.default_colour, GetMaskPixelsForTileType(tile, t, _smallmap_contours_andor));
 }
 
 /**
@@ -1399,6 +1452,9 @@ protected:
 			case SmallMapType::Owners:
 				return GetSmallMapOwnerPixels(tile, et, IncludeHeightmap::IfEnabled);
 
+			case SmallMapType::Traffic:
+				return GetSmallMapTrafficPixels(tile, et);
+
 			default: NOT_REACHED();
 		}
 	}
@@ -1734,6 +1790,7 @@ public:
 			case WID_SM_ROUTES:     // Show transport routes
 			case WID_SM_VEGETATION: // Show vegetation
 			case WID_SM_OWNERS:     // Show land owners
+			case WID_SM_TRAFFIC:    // Show road traffic
 				this->SwitchMapType(static_cast<SmallMapType>(widget - WID_SM_CONTOUR));
 				SndClickBeep();
 				break;
@@ -1921,7 +1978,6 @@ class NWidgetSmallmapButtons : public NWidgetContainer {
 		{WID_SM_CENTERMAP, WWT_PUSHIMGBTN, SPR_IMG_SMALLMAP, STR_SMALLMAP_CENTER_TOOLTIP},
 		{WID_SM_TOGGLETOWNNAME, WWT_IMGBTN, SPR_IMG_TOWN, STR_SMALLMAP_TOOLTIP_TOGGLE_TOWN_NAMES_ON_OFF},
 		{INVALID_WIDGET, WWT_PANEL, SPR_EMPTY, STR_NULL}, // Resizable spacer between top and bottom halves.
-		{WID_SM_BLANK, WWT_IMGBTN, SPR_EMPTY, STR_NULL}, // Optional spacer in 2-column layout only.
 		{WID_SM_LINKSTATS, WWT_IMGBTN, SPR_IMG_CARGOFLOW, STR_SMALLMAP_TOOLTIP_SHOW_LINK_STATS_ON_MAP},
 		{WID_SM_ROUTES, WWT_IMGBTN, SPR_IMG_SHOW_ROUTES, STR_SMALLMAP_TOOLTIP_SHOW_TRANSPORT_ROUTES_ON},
 		{WID_SM_VEGETATION, WWT_IMGBTN, SPR_IMG_PLANTTREES, STR_SMALLMAP_TOOLTIP_SHOW_VEGETATION_ON_MAP},
@@ -1929,6 +1985,7 @@ class NWidgetSmallmapButtons : public NWidgetContainer {
 		{WID_SM_CONTOUR, WWT_IMGBTN, SPR_IMG_SHOW_COUNTOURS, STR_SMALLMAP_TOOLTIP_SHOW_LAND_CONTOURS_ON_MAP},
 		{WID_SM_VEHICLES, WWT_IMGBTN, SPR_IMG_SHOW_VEHICLES, STR_SMALLMAP_TOOLTIP_SHOW_VEHICLES_ON_MAP},
 		{WID_SM_INDUSTRIES, WWT_IMGBTN, SPR_IMG_INDUSTRY, STR_SMALLMAP_TOOLTIP_SHOW_INDUSTRIES_ON_MAP},
+		{WID_SM_TRAFFIC, WWT_IMGBTN, SPR_IMG_SIGNAL_ELECTRIC_NORM, STR_SMALLMAP_TOOLTIP_SHOW_TRAFFIC_ON_MAP},
 	};
 
 	uint num_buttons; ///< The number of buttons excluding spacers.

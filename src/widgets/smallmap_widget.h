@@ -26,6 +26,7 @@ enum SmallMapWidgets : WidgetID {
 	WID_SM_ROUTES,         ///< Button to select the routes view.
 	WID_SM_VEGETATION,     ///< Button to select the vegetation view.
 	WID_SM_OWNERS,         ///< Button to select the owners view.
+	WID_SM_TRAFFIC,        ///< Button to select the road traffic view.
 	WID_SM_CENTERMAP,      ///< Button to move smallmap center to main window center.
 	WID_SM_TOGGLETOWNNAME, ///< Toggle button to display town names.
 	WID_SM_SELECT_BUTTONS, ///< Selection widget for the buttons present in some smallmap modes.

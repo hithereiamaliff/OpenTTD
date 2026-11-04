@@ -743,6 +743,12 @@ enum class WindowClass : uint16_t {
 	 */
 	Help,
 
+	/**
+	 * Traffic light settings; %Window numbers:
+	 *   - #TileIndex = #TrafficLightWidgets
+	 */
+	TrafficLight,
+
 	Invalid = 0xFFFF, ///< Invalid window.
 };
 

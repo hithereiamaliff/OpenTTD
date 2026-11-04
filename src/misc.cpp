@@ -28,6 +28,7 @@
 #include "game/game.hpp"
 #include "linkgraph/linkgraphschedule.h"
 #include "traffic_light.h"
+#include "road_traffic.h"
 #include "town.h"
 #include "viewport_kdtree.h"
 #include "newgrf_profiling.h"
@@ -150,6 +151,7 @@ void InitializeGame(uint size_x, uint size_y, bool reset_date, bool reset_settin
 	InitializeIndustries();
 	InitializeObjects();
 	InitializeTrafficLights();
+	InitializeRoadTraffic();
 
 	InitializeCompanies();
 	AI::Initialize();

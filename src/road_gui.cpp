@@ -47,6 +47,7 @@
 
 #include "widgets/road_widget.h"
 #include "traffic_light_cmd.h"
+#include "traffic_light.h"
 
 #include "table/strings.h"
 
@@ -733,6 +734,10 @@ struct BuildRoadToolbarWindow : Window {
 				break;
 
 			case WID_ROT_TRAFFIC_LIGHTS:
+				if (!_remove_button_clicked && IsNormalRoadTile(tile) && HasTrafficLight(tile)) {
+					ShowTrafficLightWindow(tile);
+					break;
+				}
 				if (_remove_button_clicked) {
 					Command<Commands::RemoveTrafficLight>::Post(STR_ERROR_CAN_T_REMOVE_TRAFFIC_LIGHTS, CcPlaySound_CONSTRUCTION_OTHER, tile);
 				} else {

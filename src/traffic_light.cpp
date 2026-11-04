@@ -20,6 +20,8 @@
 #include "road_map.h"
 #include "track_func.h"
 #include "viewport_func.h"
+#include "window_func.h"
+#include "timer/timer_game_tick.h"
 #include "core/bitmath_func.hpp"
 
 #include "table/strings.h"
@@ -28,15 +30,6 @@
 
 /** All traffic lights in the game, by junction tile. Ordered, so iterating is deterministic. */
 TrafficLightMap _traffic_lights;
-
-/** Shortest green phase, in ticks. A road that just got green keeps it at least this long. */
-static constexpr uint16_t TRAFFIC_LIGHT_MIN_GREEN = 90;
-/** Longest green phase while traffic waits on the other road, in ticks. */
-static constexpr uint16_t TRAFFIC_LIGHT_MAX_GREEN = 450;
-/** Time without traffic on the green road after which the lights may switch, in ticks. */
-static constexpr uint16_t TRAFFIC_LIGHT_GAP = 45;
-/** All-red time between two green phases, so the junction can clear, in ticks. */
-static constexpr uint16_t TRAFFIC_LIGHT_CLEARANCE = 30;
 
 /** The four directions vehicles can travel in, in a fixed order. */
 static constexpr DiagDirection ALL_DIAGDIRS[] = {DiagDirection::NE, DiagDirection::SE, DiagDirection::SW, DiagDirection::NW};
@@ -112,6 +105,7 @@ static void DeleteTrafficLight(TileIndex tile)
 	_traffic_lights.erase(tile);
 	if (IsNormalRoadTile(tile)) SetTrafficLight(tile, false);
 	MarkTileDirtyByTile(tile);
+	CloseWindowById(WindowClass::TrafficLight, tile.base());
 }
 
 /**
@@ -157,6 +151,10 @@ void AfterLoadTrafficLights()
 			continue;
 		}
 		if (tl.green_axis > to_underlying(Axis::Y)) tl.green_axis = to_underlying(Axis::X);
+		if (tl.mode >= TrafficLightMode::End) tl.mode = TrafficLightMode::Smart;
+		tl.green_x = Clamp(tl.green_x, TRAFFIC_LIGHT_MIN_TIME, TRAFFIC_LIGHT_MAX_TIME);
+		tl.green_y = Clamp(tl.green_y, TRAFFIC_LIGHT_MIN_TIME, TRAFFIC_LIGHT_MAX_TIME);
+		tl.min_green = Clamp(tl.min_green, TRAFFIC_LIGHT_MIN_TIME, std::min(tl.green_x, tl.green_y));
 		tl.demand = 0;
 		tl.entered = false;
 		SetTrafficLight(it->first, true);
@@ -164,40 +162,67 @@ void AfterLoadTrafficLights()
 	}
 }
 
+/**
+ * Run the controller of these lights for one tick.
+ * Fixed lights follow the global tick counter, so all of them stay in step,
+ * also after loading a game; smart lights react to the traffic.
+ * @return True if the lights changed colour.
+ */
+bool TrafficLight::Update()
+{
+	const uint8_t old_axis = this->green_axis;
+	const bool old_clearing = this->clearing;
+
+	if (this->mode == TrafficLightMode::Fixed) {
+		/* Cycle: green X, all red, green Y, all red. */
+		uint32_t t = static_cast<uint32_t>((TimerGameTick::counter + this->offset) % this->GetCycleLength());
+		uint32_t phase_start = 0;
+		for (Axis axis : {Axis::X, Axis::Y}) {
+			uint32_t green = this->GetGreenTime(axis);
+			if (t < phase_start + green + TRAFFIC_LIGHT_CLEARANCE) {
+				this->green_axis = to_underlying(axis);
+				this->clearing = t >= phase_start + green;
+				this->phase_ticks = static_cast<uint16_t>(this->clearing ? t - phase_start - green : t - phase_start);
+				break;
+			}
+			phase_start += green + TRAFFIC_LIGHT_CLEARANCE;
+		}
+		return this->green_axis != old_axis || this->clearing != old_clearing;
+	}
+
+	Axis other = OtherAxis(static_cast<Axis>(this->green_axis));
+	if (this->clearing) {
+		if (++this->phase_ticks >= TRAFFIC_LIGHT_CLEARANCE) {
+			this->green_axis = to_underlying(other);
+			this->clearing = false;
+			this->phase_ticks = 0;
+			this->gap_ticks = 0;
+		}
+	} else {
+		if (this->phase_ticks < UINT16_MAX) this->phase_ticks++;
+		if (this->entered) {
+			this->gap_ticks = 0;
+		} else if (this->gap_ticks < UINT16_MAX) {
+			this->gap_ticks++;
+		}
+
+		/* Switch when someone waits on the other road, the green road had its
+		 * shortest green, and its traffic stopped or it used up its longest green. */
+		bool other_waiting = HasBit(this->demand, to_underlying(other));
+		if (other_waiting && this->phase_ticks >= this->min_green &&
+				(this->gap_ticks >= TRAFFIC_LIGHT_GAP || this->phase_ticks >= this->GetGreenTime(static_cast<Axis>(this->green_axis)))) {
+			this->clearing = true;
+			this->phase_ticks = 0;
+		}
+	}
+	return this->green_axis != old_axis || this->clearing != old_clearing;
+}
+
 /** Run the controllers of all traffic lights for one tick. Runs after vehicles have moved. */
 void OnTick_TrafficLights()
 {
 	for (auto &[tile, tl] : _traffic_lights) {
-		Axis green = static_cast<Axis>(tl.green_axis);
-		Axis other = OtherAxis(green);
-		bool changed = false;
-
-		if (tl.clearing) {
-			if (++tl.phase_ticks >= TRAFFIC_LIGHT_CLEARANCE) {
-				tl.green_axis = to_underlying(other);
-				tl.clearing = false;
-				tl.phase_ticks = 0;
-				tl.gap_ticks = 0;
-				changed = true;
-			}
-		} else {
-			if (tl.phase_ticks < UINT16_MAX) tl.phase_ticks++;
-			if (tl.entered) {
-				tl.gap_ticks = 0;
-			} else if (tl.gap_ticks < UINT16_MAX) {
-				tl.gap_ticks++;
-			}
-
-			/* Switch when someone waits on the other road, the green road had its
-			 * minimum time, and its traffic stopped or it used up its maximum time. */
-			bool other_waiting = HasBit(tl.demand, to_underlying(other));
-			if (other_waiting && tl.phase_ticks >= TRAFFIC_LIGHT_MIN_GREEN &&
-					(tl.gap_ticks >= TRAFFIC_LIGHT_GAP || tl.phase_ticks >= TRAFFIC_LIGHT_MAX_GREEN)) {
-				tl.clearing = true;
-				tl.phase_ticks = 0;
-				changed = true;
-			}
-		}
+		bool changed = tl.Update();
 
 		tl.demand = 0;
 		tl.entered = false;
@@ -263,6 +288,57 @@ CommandCost CmdBuildTrafficLight(DoCommandFlags flags, TileIndex tile)
 }
 
 /**
+ * Check whether the current company may change or remove the lights of a junction.
+ * Lights of a company are its own; public lights may be changed by anyone.
+ * @param tl The lights.
+ * @return Success, or the reason why not.
+ */
+static CommandCost CheckTrafficLightOwnership(const TrafficLight &tl)
+{
+	if (tl.owner == OWNER_NONE || tl.owner == OWNER_TOWN) return CommandCost();
+	return CheckOwnership(tl.owner);
+}
+
+/**
+ * Change how the traffic lights of a junction switch.
+ * @param flags Operation to perform.
+ * @param tile The junction tile.
+ * @param mode Smart or fixed time.
+ * @param green_x (Longest) green for the road along the X axis, in ticks.
+ * @param green_y (Longest) green for the road along the Y axis, in ticks.
+ * @param min_green Shortest green of smart lights, in ticks.
+ * @param offset Position in the cycle of fixed lights, in ticks.
+ * @return The cost of this operation or an error.
+ */
+CommandCost CmdConfigureTrafficLight(DoCommandFlags flags, TileIndex tile, TrafficLightMode mode, uint16_t green_x, uint16_t green_y, uint16_t min_green, uint16_t offset)
+{
+	if (!IsValidTile(tile) || !IsNormalRoadTile(tile) || !HasTrafficLight(tile)) return CommandCost(STR_ERROR_NO_TRAFFIC_LIGHTS);
+	TrafficLight *tl = GetTrafficLight(tile);
+	if (tl == nullptr) return CommandCost(STR_ERROR_NO_TRAFFIC_LIGHTS);
+
+	if (mode >= TrafficLightMode::End) return CMD_ERROR;
+	if (!IsInsideMM(green_x, TRAFFIC_LIGHT_MIN_TIME, TRAFFIC_LIGHT_MAX_TIME + 1)) return CMD_ERROR;
+	if (!IsInsideMM(green_y, TRAFFIC_LIGHT_MIN_TIME, TRAFFIC_LIGHT_MAX_TIME + 1)) return CMD_ERROR;
+	if (!IsInsideMM(min_green, TRAFFIC_LIGHT_MIN_TIME, std::min(green_x, green_y) + 1)) return CMD_ERROR;
+	if (offset >= green_x + green_y + 2 * TRAFFIC_LIGHT_CLEARANCE) return CMD_ERROR;
+
+	CommandCost ret = CheckTrafficLightOwnership(*tl);
+	if (ret.Failed()) return ret;
+
+	if (flags.Test(DoCommandFlag::Execute)) {
+		tl->mode = mode;
+		tl->green_x = green_x;
+		tl->green_y = green_y;
+		tl->min_green = min_green;
+		tl->offset = offset;
+		if (tl->Update()) MarkTileDirtyByTile(tile);
+		InvalidateWindowData(WindowClass::TrafficLight, tile.base());
+	}
+
+	return CommandCost();
+}
+
+/**
  * Remove the traffic lights from a road junction.
  * @param flags Operation to perform.
  * @param tile The junction tile.
@@ -273,8 +349,8 @@ CommandCost CmdRemoveTrafficLight(DoCommandFlags flags, TileIndex tile)
 	if (!IsValidTile(tile) || !IsNormalRoadTile(tile) || !HasTrafficLight(tile)) return CommandCost(STR_ERROR_NO_TRAFFIC_LIGHTS);
 
 	const TrafficLight *tl = GetTrafficLight(tile);
-	if (tl != nullptr && tl->owner != OWNER_NONE && tl->owner != OWNER_TOWN) {
-		CommandCost ret = CheckOwnership(tl->owner);
+	if (tl != nullptr) {
+		CommandCost ret = CheckTrafficLightOwnership(*tl);
 		if (ret.Failed()) return ret;
 	}
 

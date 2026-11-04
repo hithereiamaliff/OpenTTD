@@ -581,6 +581,22 @@ public:
 	static bool IsTrafficLightGreen(TileIndex tile, TileIndex from);
 
 	/**
+	 * Change how the traffic lights of a junction switch.
+	 * @param tile The junction tile.
+	 * @param fixed True for a fixed cycle, false for smart lights that react to traffic.
+	 * @param green_ne_sw Green for the north-east/south-west road, in ticks: the longest green for smart lights.
+	 * @param green_nw_se Green for the north-west/south-east road, in ticks: the longest green for smart lights.
+	 * @param offset For fixed lights: how far into the cycle they are when the tick counter is a multiple of the cycle length, in ticks.
+	 * @pre HasTrafficLights(tile).
+	 * @pre green_ne_sw and green_nw_se are between 18 and 1480 ticks.
+	 * @pre offset is less than green_ne_sw + green_nw_se + 60.
+	 * @game @pre ScriptCompanyMode::IsValid().
+	 * @exception ScriptError::ERR_OWNED_BY_ANOTHER_COMPANY
+	 * @return Whether the traffic lights have been/can be changed or not.
+	 */
+	static bool SetTrafficLightTimings(TileIndex tile, bool fixed, SQInteger green_ne_sw, SQInteger green_nw_se, SQInteger offset);
+
+	/**
 	 * Get the baseprice of building a road-related object.
 	 * @param roadtype the roadtype of the object to build
 	 * @param build_type the type of object to build

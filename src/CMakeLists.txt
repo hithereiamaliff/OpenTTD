@@ -397,6 +397,8 @@ add_files(
     road_internal.h
     road_junction.cpp
     road_junction.h
+    road_traffic.cpp
+    road_traffic.h
     road_map.cpp
     road_map.h
     road_type.h
@@ -561,6 +563,7 @@ add_files(
     traffic_light.cpp
     traffic_light.h
     traffic_light_cmd.h
+    traffic_light_gui.cpp
     train.h
     train_cmd.cpp
     train_cmd.h

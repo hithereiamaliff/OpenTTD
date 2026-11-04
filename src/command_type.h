@@ -382,6 +382,7 @@ enum class Commands : uint8_t {
 
 	BuildTrafficLight, ///< build traffic lights at a road junction
 	RemoveTrafficLight, ///< remove traffic lights from a road junction
+	ConfigureTrafficLight, ///< change how traffic lights switch
 
 	End, ///< @important Must ALWAYS be on the end of this list!! (period)
 };

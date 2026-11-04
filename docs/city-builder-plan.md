@@ -106,13 +106,45 @@ With 50 buses nothing deadlocks: the number of moving buses keeps recovering
 (26 of 50 moving on average without lights, 34 with three lights). Lights
 now pay off at busy junctions, and too many lights still cost a little.
 
+## Done: M2 part 2, traffic light settings and the traffic map
+
+- Clicking existing lights with the traffic light tool opens their window:
+  **Smart** (reacts to traffic) or **Fixed time** (a set cycle), green per
+  road, shortest green (smart), and an offset in the cycle (fixed) for green
+  waves. A live line shows which road has green. Only the owner (or anyone,
+  for public lights) can change them; it is a command, so it works in
+  multiplayer and is saved (new TRFL fields `mode`, `green_x`, `green_y`,
+  `min_green`, `offset`; older saves get the defaults).
+- Fixed lights follow the global tick counter, so lights with the same cycle
+  stay in step and offsets are exact, also after loading.
+- Map window: new **Road traffic** view. Roads are coloured by how much traffic
+  was held up there lately (jam, slow, some waiting, flowing, quiet), lit
+  junctions show light blue. The data is sampled every 16 ticks from the road
+  vehicles; it is display-only, not saved and never affects the game.
+- Script API: `ScriptRoad.SetTrafficLightTimings`.
+- Code: `src/traffic_light_gui.cpp`, `src/road_traffic.{h,cpp}`,
+  `src/widgets/traffic_light_widget.h`, plus the map window.
+
+Same test town, 30 buses, give-way on, about 5.5 years:
+
+| Lights | Average profit |
+|---|---|
+| Smart, 3 central junctions | 19,138 |
+| Fixed 4.1 s green, 3 central junctions | 16,927 |
+| Smart, all 13 junctions | 18,329 |
+| Fixed 4.1 s green, all 13, all in step | 25,667 |
+| Fixed, all 13, simple green-wave offsets | 14,093 to 16,008 |
+
+So the timings matter a lot, and good green waves need tuning to real travel
+times, which is now something players can experiment with.
+
 ## Roadmap
 
 Sizes are rough: S = one session, M = a few, L = many, XL = a project in itself.
 
 | # | Feature | What it means in OpenTTD | Size | Notes |
 |---|---|---|---|---|
-| M2 | Traffic realism | ~~Vehicles give way to crossing traffic at unlit junctions~~ (done). Still to do: light settings window (timings, fixed-time mode, green-wave offsets), amber phase, pathfinder penalty for busy junctions, congestion overlay that colours busy roads. | M | |
+| M2 | Traffic realism | ~~Give way at junctions~~, ~~light settings window~~, ~~traffic map~~ (done). Still to do: amber phase (needs a sprite), pathfinder penalty for busy junctions, a traffic overlay in the main view. | S–M | |
 | M3 | Zoning | Paint residential / commercial / industrial / park zones around towns; town growth only builds matching buildings there. Demand bars (RCI) in the town window. | L | Deep change to town growth (`town_cmd.cpp`). Zones live in their own chunk. |
 | M4 | City services and happiness | Player funds police, fire, health, education and parks as buildings with a coverage radius. Coverage drives town happiness, which drives growth and ratings. Monthly upkeep. | L | Builds on objects; needs new graphics or reused object sprites. |
 | M5 | Town car traffic | Towns send private cars between homes and workplaces. Good public transport takes cars off the road. | XL | The most SimCity-like part; performance-sensitive on big maps. |

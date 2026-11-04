@@ -11,11 +11,14 @@
 #define TRAFFIC_LIGHT_CMD_H
 
 #include "command_type.h"
+#include "traffic_light.h"
 
 CommandCost CmdBuildTrafficLight(DoCommandFlags flags, TileIndex tile);
 CommandCost CmdRemoveTrafficLight(DoCommandFlags flags, TileIndex tile);
+CommandCost CmdConfigureTrafficLight(DoCommandFlags flags, TileIndex tile, TrafficLightMode mode, uint16_t green_x, uint16_t green_y, uint16_t min_green, uint16_t offset);
 
 DEF_CMD_TRAIT(Commands::BuildTrafficLight, CmdBuildTrafficLight, {}, CommandType::LandscapeConstruction)
 DEF_CMD_TRAIT(Commands::RemoveTrafficLight, CmdRemoveTrafficLight, {}, CommandType::LandscapeConstruction)
+DEF_CMD_TRAIT(Commands::ConfigureTrafficLight, CmdConfigureTrafficLight, {}, CommandType::OtherManagement)
 
 #endif /* TRAFFIC_LIGHT_CMD_H */
