@@ -24,4 +24,7 @@ enum class RoadTrafficLevel : uint8_t {
 RoadTrafficLevel GetRoadTrafficLevel(TileIndex tile);
 void InitializeRoadTraffic();
 
+bool IsRoadTrafficOverlayShown();
+void ShowRoadTrafficOverlay(bool show);
+
 #endif /* ROAD_TRAFFIC_H */

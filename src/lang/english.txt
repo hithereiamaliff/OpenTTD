@@ -3006,6 +3006,7 @@ STR_ROAD_TOOLBAR_TOOLTIP_BUILD_PASSENGER_TRAM_STATION           :{BLACK}Build pa
 STR_ROAD_TOOLBAR_TOOLTIP_BUILD_TRUCK_LOADING_BAY                :{BLACK}Build lorry station. Ctrl+Click to select another station to join. Also press Shift to show cost estimate only
 STR_ROAD_TOOLBAR_TOOLTIP_BUILD_CARGO_TRAM_STATION               :{BLACK}Build freight tram station. Ctrl+Click to select another station to join. Also press Shift to show cost estimate only
 STR_ROAD_TOOLBAR_TOOLTIP_TOGGLE_ONE_WAY_ROAD                    :{BLACK}Activate/Deactivate one way roads
+STR_ROAD_TOOLBAR_TOOLTIP_TRAFFIC_OVERLAY                        :{BLACK}Show road traffic: colour roads by how much traffic is held up there (green flows, yellow some waiting, orange slow, red jammed)
 STR_ROAD_TOOLBAR_TOOLTIP_BUILD_TRAFFIC_LIGHTS                   :{BLACK}Build traffic lights at a road junction, or click lights to change their timings. Ctrl+Click to remove them. Also press Shift to show cost estimate only
 
 # Traffic light window
@@ -3027,6 +3028,7 @@ STR_TRAFFIC_LIGHT_OFFSET_UNUSED                                 :{SILVER}Offset:
 STR_TRAFFIC_LIGHT_STATUS_GREEN_X                                :{BLACK}Now: {GREEN}north-east/south-west road has green{BLACK} ({DECIMAL}{NBSP}s)
 STR_TRAFFIC_LIGHT_STATUS_GREEN_Y                                :{BLACK}Now: {GREEN}north-west/south-east road has green{BLACK} ({DECIMAL}{NBSP}s)
 STR_TRAFFIC_LIGHT_STATUS_CLEARING                               :{BLACK}Now: {RED}all red{BLACK} while the junction clears
+STR_TRAFFIC_LIGHT_STATUS_AMBER                                  :{BLACK}Now: {ORANGE}amber{BLACK}, switching to the other road
 STR_TRAFFIC_LIGHT_DECREASE_TOOLTIP                              :{BLACK}Shorter. Ctrl+Click for a bigger step
 STR_TRAFFIC_LIGHT_INCREASE_TOOLTIP                              :{BLACK}Longer. Ctrl+Click for a bigger step
 STR_TRAFFIC_LIGHT_OFFSET_DECREASE_TOOLTIP                       :{BLACK}Earlier in the cycle. Ctrl+Click for a bigger step

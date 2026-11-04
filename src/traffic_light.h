@@ -33,8 +33,16 @@ enum class TrafficLightMode : uint8_t {
 	End, ///< End marker.
 };
 
+/** What a traffic light shows to the traffic of one road. */
+enum class TrafficLightLamp : uint8_t {
+	Red, ///< Stop.
+	Amber, ///< Stop; the light just was green.
+	Green, ///< Go.
+};
+
 /* Timings of traffic lights, in ticks. */
-static constexpr uint16_t TRAFFIC_LIGHT_CLEARANCE = 30; ///< All-red time between two green phases, so the junction can clear.
+static constexpr uint16_t TRAFFIC_LIGHT_CLEARANCE = 30; ///< Time between two green phases, so the junction can clear. Nobody may enter.
+static constexpr uint16_t TRAFFIC_LIGHT_AMBER = 20; ///< First part of #TRAFFIC_LIGHT_CLEARANCE, in which the road that had green sees amber.
 static constexpr uint16_t TRAFFIC_LIGHT_GAP = 45; ///< Smart lights: time without traffic on the green road after which they may switch.
 static constexpr uint16_t TRAFFIC_LIGHT_MIN_TIME = 18; ///< Shortest green that can be set.
 static constexpr uint16_t TRAFFIC_LIGHT_MAX_TIME = 1480; ///< Longest green that can be set (20 days).
@@ -61,6 +69,7 @@ struct TrafficLight {
 	bool entered = false; ///< A vehicle entered the junction on green this tick.
 
 	bool IsGreenFor(Axis axis) const;
+	TrafficLightLamp GetLamp(Axis axis) const;
 
 	/**
 	 * Get the (longest) green time of one road.
@@ -85,6 +94,7 @@ bool CanHaveTrafficLight(TileIndex tile);
 TrafficLight *GetTrafficLight(TileIndex tile);
 TrackdirBits GetTrafficLightRedTrackdirs(TileIndex tile);
 bool TrafficLightShowsGreen(TileIndex tile, Axis axis);
+TrafficLightLamp GetTrafficLightLamp(TileIndex tile, Axis axis);
 
 void TrafficLightsOnRoadChanged(TileIndex tile);
 void ChangeTrafficLightOwner(Owner old_owner, Owner new_owner);

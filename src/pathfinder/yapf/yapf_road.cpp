@@ -11,6 +11,8 @@
 #include "yapf.hpp"
 #include "yapf_node_road.hpp"
 #include "../../roadstop_base.h"
+#include "../../road_junction.h"
+#include "../../road_map.h"
 
 #include "../../safeguards.h"
 
@@ -100,6 +102,13 @@ protected:
 		} else {
 			/* non-diagonal trackdir */
 			cost = YAPF_TILE_CORNER_LENGTH + Yapf().PfGetSettings().road_curve_penalty;
+		}
+
+		/* Junctions with traffic lights, and junctions where traffic is held up, take time. */
+		if (IsRoadJunctionTile(tile)) {
+			if (HasTrafficLight(tile)) cost += Yapf().PfGetSettings().road_traffic_light_penalty;
+			uint queue_penalty = Yapf().PfGetSettings().road_junction_queue_penalty;
+			if (queue_penalty > 0) cost += CountVehiclesHeldUpAt(tile) * queue_penalty;
 		}
 		return cost;
 	}

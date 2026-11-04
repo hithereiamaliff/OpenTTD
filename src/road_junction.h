@@ -16,5 +16,7 @@
 struct RoadVehicle;
 
 bool RoadVehicleMayEnterTile(RoadVehicle *v, TileIndex tile, DiagDirection enterdir);
+bool IsRoadJunctionTile(TileIndex tile);
+uint CountVehiclesHeldUpAt(TileIndex junction);
 
 #endif /* ROAD_JUNCTION_H */

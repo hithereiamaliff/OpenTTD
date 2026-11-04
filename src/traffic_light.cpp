@@ -45,6 +45,18 @@ bool TrafficLight::IsGreenFor(Axis axis) const
 }
 
 /**
+ * What does the light facing traffic along an axis show?
+ * @param axis The axis vehicles are travelling along.
+ * @return The lamp that is lit.
+ */
+TrafficLightLamp TrafficLight::GetLamp(Axis axis) const
+{
+	if (this->IsGreenFor(axis)) return TrafficLightLamp::Green;
+	if (this->clearing && this->green_axis == to_underlying(axis) && this->phase_ticks < TRAFFIC_LIGHT_AMBER) return TrafficLightLamp::Amber;
+	return TrafficLightLamp::Red;
+}
+
+/**
  * Can traffic lights be placed on this tile?
  * Only plain road tiles with a junction (three or more road pieces) qualify.
  * @param tile The tile to check.
@@ -82,6 +94,18 @@ TrackdirBits GetTrafficLightRedTrackdirs(TileIndex tile)
 		if (!tl->IsGreenFor(DiagDirToAxis(dir))) red |= DiagdirReachesTrackdirs(dir);
 	}
 	return red;
+}
+
+/**
+ * What do the lights facing traffic on this axis show?
+ * @param tile The junction tile.
+ * @param axis The axis of the traffic the light faces.
+ * @return The lamp that is lit; red if the junction has no lights.
+ */
+TrafficLightLamp GetTrafficLightLamp(TileIndex tile, Axis axis)
+{
+	const TrafficLight *tl = GetTrafficLight(tile);
+	return tl == nullptr ? TrafficLightLamp::Red : tl->GetLamp(axis);
 }
 
 /**
@@ -222,14 +246,15 @@ bool TrafficLight::Update()
 void OnTick_TrafficLights()
 {
 	for (auto &[tile, tl] : _traffic_lights) {
+		const TrafficLightLamp lamp_x = tl.GetLamp(Axis::X);
+		const TrafficLightLamp lamp_y = tl.GetLamp(Axis::Y);
 		bool changed = tl.Update();
 
 		tl.demand = 0;
 		tl.entered = false;
-		if (changed) {
-			Debug(Facility::Misc, Severity::Debug2, "Traffic light {}x{}: {}", TileX(tile), TileY(tile), tl.clearing ? "all red" : (tl.green_axis == to_underlying(Axis::X) ? "green X" : "green Y"));
-			MarkTileDirtyByTile(tile);
-		}
+		if (changed) Debug(Facility::Misc, Severity::Debug2, "Traffic light {}x{}: {}", TileX(tile), TileY(tile), tl.clearing ? "all red" : (tl.green_axis == to_underlying(Axis::X) ? "green X" : "green Y"));
+		/* Redraw for every change of colour, also from amber to red. */
+		if (changed || tl.GetLamp(Axis::X) != lamp_x || tl.GetLamp(Axis::Y) != lamp_y) MarkTileDirtyByTile(tile);
 	}
 }
 

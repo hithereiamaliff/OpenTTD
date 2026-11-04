@@ -138,13 +138,37 @@ Same test town, 30 buses, give-way on, about 5.5 years:
 So the timings matter a lot, and good green waves need tuning to real travel
 times, which is now something players can experiment with.
 
+## Done: M2 part 3, traffic polish
+
+- Own traffic light graphics: a post with red, amber and green lamps (posts
+  facing away show their back, unless no other post of that road faces the
+  viewer). The light that had green shows amber for the first 20 of the 30
+  all-red ticks. New toolbar icons for the light tool and the overlay.
+- Graphics live in OpenTTD's own extra graphics file: `media/baseset/openttd/`
+  `traffic_lights.png` + `traffic_lights.nfo` as Action 5 type 0x1C
+  (`SPR_TRAFFIC_LIGHTS_BASE`). With grfcodec installed the build regenerates
+  `openttd.grf`; the regenerated file is committed, so other builds (the
+  Windows CI) don't need grfcodec. Base sets don't know this block, so the game
+  always uses ours. If upstream ever takes type 0x1C, renumber ours.
+- Road traffic overlay in the main view: road toolbar toggle (hotkey O), roads
+  tinted green/yellow/orange/red by recent traffic (company-colour overlay
+  sprites recoloured per level). It switches off with the road toolbar.
+- Routing around jams: the road pathfinder adds `pf.yapf.road_junction_queue_penalty`
+  (2 tiles) per vehicle held up on or right in front of a junction, and
+  `pf.yapf.road_traffic_light_penalty` (half a tile) for lights. Both are
+  expert settings saved from 368 on. Without lights, routing around jams
+  raised the test town's average profit by 30% (13,215 to 17,229) and kept
+  more buses moving in the worst moment (17 instead of 11 of 30). A bigger
+  light penalty made buses avoid the lit junctions and did worse, hence the
+  small default.
+
 ## Roadmap
 
 Sizes are rough: S = one session, M = a few, L = many, XL = a project in itself.
 
 | # | Feature | What it means in OpenTTD | Size | Notes |
 |---|---|---|---|---|
-| M2 | Traffic realism | ~~Give way at junctions~~, ~~light settings window~~, ~~traffic map~~ (done). Still to do: amber phase (needs a sprite), pathfinder penalty for busy junctions, a traffic overlay in the main view. | S–M | |
+| M2 | Traffic realism | Done: give way, light settings, traffic map and overlay, amber, routing around jams. | — | |
 | M3 | Zoning | Paint residential / commercial / industrial / park zones around towns; town growth only builds matching buildings there. Demand bars (RCI) in the town window. | L | Deep change to town growth (`town_cmd.cpp`). Zones live in their own chunk. |
 | M4 | City services and happiness | Player funds police, fire, health, education and parks as buildings with a coverage radius. Coverage drives town happiness, which drives growth and ratings. Monthly upkeep. | L | Builds on objects; needs new graphics or reused object sprites. |
 | M5 | Town car traffic | Towns send private cars between homes and workplaces. Good public transport takes cars off the road. | XL | The most SimCity-like part; performance-sensitive on big maps. |

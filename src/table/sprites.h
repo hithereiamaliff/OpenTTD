@@ -378,7 +378,18 @@ static const SpriteID SPR_BRIDGE_DECKS_ROAD = SPR_BRIDGE_DECKS_BASE + 18;
 /** @} */
 
 /** From where can we start putting NewGRFs. */
-static const SpriteID SPR_NEWGRFS_BASE = SPR_BRIDGE_DECKS_BASE + BRIDGE_DECKS_SPRITE_COUNT;
+/* Traffic lights and the road traffic overlay. */
+static constexpr SpriteID SPR_TRAFFIC_LIGHTS_BASE = SPR_BRIDGE_DECKS_BASE + BRIDGE_DECKS_SPRITE_COUNT;
+static constexpr SpriteID SPR_TRAFFIC_LIGHT_FRONT_RED = SPR_TRAFFIC_LIGHTS_BASE + 0; ///< Traffic light post seen from the front, red lit.
+static constexpr SpriteID SPR_TRAFFIC_LIGHT_FRONT_AMBER = SPR_TRAFFIC_LIGHTS_BASE + 1; ///< Traffic light post seen from the front, amber lit.
+static constexpr SpriteID SPR_TRAFFIC_LIGHT_FRONT_GREEN = SPR_TRAFFIC_LIGHTS_BASE + 2; ///< Traffic light post seen from the front, green lit.
+static constexpr SpriteID SPR_TRAFFIC_LIGHT_BACK = SPR_TRAFFIC_LIGHTS_BASE + 3; ///< Traffic light post seen from the back.
+static constexpr SpriteID SPR_TRAFFIC_OVERLAY_BASE = SPR_TRAFFIC_LIGHTS_BASE + 4; ///< Traffic overlay on flat, SLOPE_SW, SLOPE_SE, SLOPE_NE and SLOPE_NW road, in company colours.
+static constexpr SpriteID SPR_IMG_TRAFFIC_LIGHTS = SPR_TRAFFIC_LIGHTS_BASE + 9; ///< Icon of the traffic light tool.
+static constexpr SpriteID SPR_IMG_TRAFFIC_OVERLAY = SPR_TRAFFIC_LIGHTS_BASE + 10; ///< Icon of the road traffic overlay.
+static constexpr uint16_t TRAFFIC_LIGHTS_SPRITE_COUNT = 11;
+
+static const SpriteID SPR_NEWGRFS_BASE = SPR_TRAFFIC_LIGHTS_BASE + TRAFFIC_LIGHTS_SPRITE_COUNT;
 
 /** Manager face sprites.
  * @{ */

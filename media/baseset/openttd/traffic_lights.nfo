@@ -1,0 +1,23 @@
+// This file is part of OpenTTD.
+// OpenTTD is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, version 2.
+// OpenTTD is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+// See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with OpenTTD. If not, see <https://www.gnu.org/licenses/old-licenses/gpl-2.0>.
+//
+// Traffic lights and road traffic overlay (city fork).
+//   0-3:  traffic light post, front red/amber/green, back
+//   4-8:  traffic overlay on flat, SLOPE_SW, SLOPE_SE, SLOPE_NE and SLOPE_NW road (company colours)
+//   9-10: GUI icons: traffic lights, traffic overlay
+//
+   -1 * 0	 0C "Traffic light graphics"
+   -1 * 3	 05 1C 0B
+   -1 sprites/traffic_lights.png 8bpp    4    4   4  17   -1  -16 normal
+   -1 sprites/traffic_lights.png 8bpp   12    4   4  17   -1  -16 normal
+   -1 sprites/traffic_lights.png 8bpp   20    4   4  17   -1  -16 normal
+   -1 sprites/traffic_lights.png 8bpp   28    4   4  17   -1  -16 normal
+   -1 sprites/traffic_lights.png 8bpp   36   10  64  31  -31    0 normal
+   -1 sprites/traffic_lights.png 8bpp  102    2  64  23  -31    0 normal
+   -1 sprites/traffic_lights.png 8bpp  168    2  64  23  -31    0 normal
+   -1 sprites/traffic_lights.png 8bpp   36   56  64  39  -31   -8 normal
+   -1 sprites/traffic_lights.png 8bpp  102   56  64  39  -31   -8 normal
+   -1 sprites/traffic_lights.png 8bpp  176   60  10  19    0    0 normal
+   -1 sprites/traffic_lights.png 8bpp  200   60  20  13    0    0 normal

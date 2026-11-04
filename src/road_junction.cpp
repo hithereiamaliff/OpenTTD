@@ -33,6 +33,7 @@
 #include "road_junction.h"
 #include "direction_func.h"
 #include "map_func.h"
+#include "order_type.h"
 #include "road_map.h"
 #include "roadveh.h"
 #include "settings_type.h"
@@ -108,6 +109,46 @@ static DiagDirection GetHeading(const RoadVehicle *rv)
 	Trackdir td = static_cast<Trackdir>(state);
 	if (IsReversingRoadTrackdir(td)) return DiagDirection::Invalid;
 	return TrackdirToExitdir(td);
+}
+
+/**
+ * Is the tile a plain road junction (three or four road pieces)?
+ * @param tile The tile.
+ * @return True for a junction.
+ */
+bool IsRoadJunctionTile(TileIndex tile)
+{
+	return IsNormalRoadTile(tile) && IsRoadJunction(tile);
+}
+
+/**
+ * How many vehicles are held up on and right in front of a junction? The
+ * pathfinder uses this to let vehicles drive around jams. Vehicles loading
+ * at a stop next to the junction don't count.
+ * @param junction The junction tile.
+ * @return The number of held up vehicles.
+ */
+uint CountVehiclesHeldUpAt(TileIndex junction)
+{
+	auto held_up = [](const Vehicle *u) {
+		if (u->type != VehicleType::Road || !u->IsFrontEngine() || u->vehstatus.Test(VehState::Crashed)) return false;
+		const RoadVehicle *rv = RoadVehicle::From(u);
+		if (rv->current_order.IsType(OT_LOADING)) return false;
+		return rv->blocked_ctr > 0 || rv->cur_speed * 4 < rv->vcache.cached_max_speed;
+	};
+
+	uint count = 0;
+	for (const Vehicle *u : VehiclesOnTile(junction)) {
+		if (held_up(u)) count++;
+	}
+	for (DiagDirection side : {DiagDirection::NE, DiagDirection::SE, DiagDirection::SW, DiagDirection::NW}) {
+		TileIndex approach = TileAddByDiagDir(junction, side);
+		if (!IsValidTile(approach)) continue;
+		for (const Vehicle *u : VehiclesOnTile(approach)) {
+			if (held_up(u) && GetHeading(RoadVehicle::From(u)) == ReverseDiagDir(side)) count++;
+		}
+	}
+	return count;
 }
 
 /**

@@ -534,6 +534,8 @@ struct YAPFSettings {
 	uint32_t road_stop_penalty; ///< penalty for going through a drive-through road stop
 	uint32_t road_stop_occupied_penalty; ///< penalty multiplied by the fill percentage of a drive-through road stop
 	uint32_t road_stop_bay_occupied_penalty; ///< penalty multiplied by the fill percentage of a road bay
+	uint32_t road_traffic_light_penalty; ///< penalty for a junction with traffic lights
+	uint32_t road_junction_queue_penalty; ///< penalty per vehicle held up in front of a junction
 	bool rail_firstred_twoway_eol; ///< treat first red two-way signal as dead end
 	uint32_t rail_firstred_penalty; ///< penalty for first red signal
 	uint32_t rail_firstred_exit_penalty; ///< penalty for first red exit signal

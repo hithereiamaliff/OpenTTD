@@ -44,6 +44,7 @@
 #include "landscape_cmd.h"
 #include "rail_cmd.h"
 #include "traffic_light.h"
+#include "road_traffic.h"
 
 #include "table/strings.h"
 #include "table/roadtypes.h"
@@ -1633,19 +1634,13 @@ void DrawRoadGroundSprites(const TileInfo *ti, RoadBits road, RoadBits tram, con
 /**
  * Draw the traffic lights of a junction: one light for every road leading into
  * it, standing where the traffic of that road waits, on its driving side.
- * The lights reuse the base set's electric rail signal sprites.
+ * Lights facing away from the viewer show their back, unless that would hide
+ * what the lights show for that road.
  * @param ti The junction tile.
  * @param bits All road and tram pieces on the tile.
  */
 static void DrawTrafficLights(const TileInfo *ti, RoadBits bits)
 {
-	/* Offset of the electric signal sprite, by the direction the traffic travels in; same as rail signals. */
-	static const uint8_t travel_to_sprite_offset[] = {
-		0, // DiagDirection::NE
-		2, // DiagDirection::SE
-		1, // DiagDirection::SW
-		3, // DiagDirection::NW
-	};
 	/* Where on the tile to stand, by tile edge: x and y within the tile, or -1 for "unchanged". */
 	static const int8_t edge_x[] = {1, -1, 14, -1};
 	static const int8_t edge_y[] = {-1, 14, -1, 1};
@@ -1666,14 +1661,52 @@ static void DrawTrafficLights(const TileInfo *ti, RoadBits bits)
 			if (edge_y[to_underlying(d)] >= 0) y = edge_y[to_underlying(d)];
 		}
 
-		bool green = TrafficLightShowsGreen(ti->tile, DiagDirToAxis(travel));
-		SpriteID sprite = SPR_ORIGINAL_SIGNALS_BASE + travel_to_sprite_offset[to_underlying(travel)] * 2 + (green ? 1 : 0);
+		/* The light faces the traffic it is for. Lights facing north-east or north-west are seen
+		 * from the back, unless no other light on this road faces the viewer. */
+		bool faces_away = (edge == DiagDirection::NE || edge == DiagDirection::NW) && bits.Any(DiagDirToRoadBits(ReverseDiagDir(edge)));
+		SpriteID sprite = SPR_TRAFFIC_LIGHT_BACK;
+		if (!faces_away) {
+			switch (GetTrafficLightLamp(ti->tile, DiagDirToAxis(travel))) {
+				case TrafficLightLamp::Green: sprite = SPR_TRAFFIC_LIGHT_FRONT_GREEN; break;
+				case TrafficLightLamp::Amber: sprite = SPR_TRAFFIC_LIGHT_FRONT_AMBER; break;
+				default: sprite = SPR_TRAFFIC_LIGHT_FRONT_RED; break;
+			}
+		}
 
 		int px = ti->x + x;
 		int py = ti->y + y;
 		int z = (ti->tileh == SLOPE_FLAT) ? ti->z : GetSlopePixelZ(px, py);
 		AddSortableSpriteToDraw(sprite, PAL_NONE, px, py, z, {{}, {1, 1, BB_HEIGHT_UNDER_BRIDGE}, {}});
 	}
+}
+
+/**
+ * Colour a road tile by how busy it has been lately, when the traffic overlay is on.
+ * @param ti The road tile, after drawing its foundation and ground.
+ */
+static void DrawRoadTrafficOverlay(const TileInfo *ti)
+{
+	if (!IsRoadTrafficOverlayShown()) return;
+
+	PaletteID pal;
+	switch (GetRoadTrafficLevel(ti->tile)) {
+		case RoadTrafficLevel::Flowing: pal = PALETTE_TO_GREEN; break;
+		case RoadTrafficLevel::Waiting: pal = PALETTE_TO_YELLOW; break;
+		case RoadTrafficLevel::Slow: pal = PALETTE_TO_ORANGE; break;
+		case RoadTrafficLevel::Jammed: pal = PALETTE_TO_RED; break;
+		default: return;
+	}
+
+	uint offset;
+	switch (ti->tileh) {
+		case SLOPE_FLAT: offset = 0; break;
+		case SLOPE_SW: offset = 1; break;
+		case SLOPE_SE: offset = 2; break;
+		case SLOPE_NE: offset = 3; break;
+		case SLOPE_NW: offset = 4; break;
+		default: return; // Roads only lie flat or on these slopes after drawing their foundation.
+	}
+	DrawGroundSprite(SPR_TRAFFIC_OVERLAY_BASE + offset, pal);
 }
 
 /**
@@ -1714,6 +1747,8 @@ static void DrawRoadBits(TileInfo *ti)
 			DrawGroundSpriteAt(oneway + drd.base() - 1 + ((road == ROAD_X) ? 0 : 3), PAL_NONE, 8, 8, GetPartialPixelZ(8, 8, ti->tileh));
 		}
 	}
+
+	DrawRoadTrafficOverlay(ti);
 
 	if (HasRoadWorks(ti->tile)) {
 		/* Road works */
@@ -1842,6 +1877,7 @@ static void DrawTile_Road(TileInfo *ti)
 			}
 
 			DrawRoadOverlays(ti, pal, road_rti, tram_rti, to_underlying(axis), to_underlying(axis));
+			DrawRoadTrafficOverlay(ti);
 
 			/* Draw rail/PBS overlay */
 			bool draw_pbs = _game_mode != GameMode::Menu && _settings_client.gui.show_track_reservation && HasCrossingReservation(ti->tile);

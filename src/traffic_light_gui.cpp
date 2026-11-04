@@ -125,6 +125,7 @@ struct TrafficLightWindow : Window {
 				return GetString(STR_TRAFFIC_LIGHT_OFFSET, TicksToDeciSeconds(tl->offset), 1, TicksToDeciSeconds(tl->GetCycleLength()), 1);
 
 			case WID_TL_STATUS:
+				if (tl->clearing && tl->phase_ticks < TRAFFIC_LIGHT_AMBER) return GetString(STR_TRAFFIC_LIGHT_STATUS_AMBER);
 				if (tl->clearing) return GetString(STR_TRAFFIC_LIGHT_STATUS_CLEARING);
 				return GetString(tl->green_axis == to_underlying(Axis::X) ? STR_TRAFFIC_LIGHT_STATUS_GREEN_X : STR_TRAFFIC_LIGHT_STATUS_GREEN_Y, TicksToDeciSeconds(tl->phase_ticks), 1);
 
@@ -163,6 +164,7 @@ struct TrafficLightWindow : Window {
 				fit(GetString(STR_TRAFFIC_LIGHT_STATUS_GREEN_X, max_time, 1));
 				fit(GetString(STR_TRAFFIC_LIGHT_STATUS_GREEN_Y, max_time, 1));
 				fit(GetString(STR_TRAFFIC_LIGHT_STATUS_CLEARING));
+				fit(GetString(STR_TRAFFIC_LIGHT_STATUS_AMBER));
 				break;
 		}
 	}

@@ -21,6 +21,8 @@
 #include "roadveh.h"
 #include "timer/timer.h"
 #include "timer/timer_game_tick.h"
+#include "timer/timer_window.h"
+#include "gfx_func.h"
 
 #include "safeguards.h"
 
@@ -101,6 +103,34 @@ RoadTrafficLevel GetRoadTrafficLevel(TileIndex tile)
 	if (score.passing >= 16 || score.held_up > 0) return RoadTrafficLevel::Flowing;
 	return RoadTrafficLevel::Quiet;
 }
+
+/** Whether road tiles in the main view are coloured by traffic. */
+static bool _show_road_traffic_overlay = false;
+
+/**
+ * Are road tiles in the main view coloured by traffic?
+ * @return True if the overlay is shown.
+ */
+bool IsRoadTrafficOverlayShown()
+{
+	return _show_road_traffic_overlay;
+}
+
+/**
+ * Colour road tiles in the main view by traffic, or stop doing so.
+ * @param show Whether to show the overlay.
+ */
+void ShowRoadTrafficOverlay(bool show)
+{
+	if (_show_road_traffic_overlay == show) return;
+	_show_road_traffic_overlay = show;
+	MarkWholeScreenDirty();
+}
+
+/** While the overlay is shown, redraw now and then so it follows the traffic. */
+static const IntervalTimer<TimerWindow> _road_traffic_overlay_refresh(std::chrono::seconds(1), [](auto) {
+	if (_show_road_traffic_overlay) MarkWholeScreenDirty();
+});
 
 /** Forget all traffic; used when starting or loading a game. */
 void InitializeRoadTraffic()

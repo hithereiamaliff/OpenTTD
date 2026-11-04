@@ -48,6 +48,7 @@
 #include "widgets/road_widget.h"
 #include "traffic_light_cmd.h"
 #include "traffic_light.h"
+#include "road_traffic.h"
 
 #include "table/strings.h"
 
@@ -364,6 +365,7 @@ struct BuildRoadToolbarWindow : Window {
 		if (RoadTypeIsRoad(this->roadtype)) {
 			this->SetWidgetDisabledState(WID_ROT_ONE_WAY, true);
 		}
+		this->UpdateTrafficOverlayButton();
 
 		this->OnInvalidateData();
 
@@ -374,6 +376,7 @@ struct BuildRoadToolbarWindow : Window {
 	{
 		if (_game_mode == GameMode::Normal && (this->IsWidgetLowered(WID_ROT_BUS_STATION) || this->IsWidgetLowered(WID_ROT_TRUCK_STATION))) SetViewportCatchmentStation(nullptr, true);
 		if (_settings_client.gui.link_terraform_toolbar) CloseWindowById(WindowClass::ScenarioGenerateLandscape, 0, false);
+		if (this->GetWidget<NWidgetCore>(WID_ROT_TRAFFIC_OVERLAY) != nullptr) ShowRoadTrafficOverlay(false);
 		this->Window::Close();
 	}
 
@@ -584,8 +587,24 @@ struct BuildRoadToolbarWindow : Window {
 		}
 	}
 
+	/** Show whether the traffic overlay is on; only the road toolbar has this button. */
+	void UpdateTrafficOverlayButton()
+	{
+		if (this->GetWidget<NWidgetCore>(WID_ROT_TRAFFIC_OVERLAY) == nullptr) return;
+		this->SetWidgetLoweredState(WID_ROT_TRAFFIC_OVERLAY, IsRoadTrafficOverlayShown());
+		this->SetWidgetDirty(WID_ROT_TRAFFIC_OVERLAY);
+	}
+
 	void OnClick([[maybe_unused]] Point pt, WidgetID widget, [[maybe_unused]] int click_count) override
 	{
+		if (widget == WID_ROT_TRAFFIC_OVERLAY) {
+			/* A switch, not a building tool: leave the current tool alone. */
+			ShowRoadTrafficOverlay(!IsRoadTrafficOverlayShown());
+			this->UpdateTrafficOverlayButton();
+			SndClickBeep();
+			return;
+		}
+
 		bool started;
 		_remove_button_clicked = false;
 		_one_way_button_clicked = false;
@@ -754,6 +773,7 @@ struct BuildRoadToolbarWindow : Window {
 		if (_game_mode != GameMode::Editor && (this->IsWidgetLowered(WID_ROT_BUS_STATION) || this->IsWidgetLowered(WID_ROT_TRUCK_STATION))) SetViewportCatchmentStation(nullptr, true);
 
 		this->RaiseButtons();
+		this->UpdateTrafficOverlayButton();
 		this->SetWidgetDisabledState(WID_ROT_REMOVE, true);
 		this->SetWidgetDirty(WID_ROT_REMOVE);
 
@@ -971,6 +991,7 @@ struct BuildRoadToolbarWindow : Window {
 		Hotkey('R', "remove", WID_ROT_REMOVE),
 		Hotkey('C', "convert", WID_ROT_CONVERT_ROAD),
 		Hotkey('L', "traffic_lights", WID_ROT_TRAFFIC_LIGHTS),
+		Hotkey('O', "traffic_overlay", WID_ROT_TRAFFIC_OVERLAY),
 		Hotkey(WKC_L_BRACKET, "prev_roadtype", to_underlying(SpecialListHotkeys::PreviousItem)),
 		Hotkey(WKC_R_BRACKET, "next_roadtype", to_underlying(SpecialListHotkeys::NextItem)),
 		Hotkey(WKC_L_BRACKET | WKC_CTRL, "first_roadtype", to_underlying(SpecialListHotkeys::FirstItem)),
@@ -1026,7 +1047,9 @@ static constexpr std::initializer_list<NWidgetPart> _nested_build_road_widgets =
 		NWidget(WWT_IMGBTN, Colours::DarkGreen, WID_ROT_ONE_WAY),
 						SetFill(0, 1), SetToolbarMinimalSize(1), SetSpriteTip(SPR_IMG_ROAD_ONE_WAY, STR_ROAD_TOOLBAR_TOOLTIP_TOGGLE_ONE_WAY_ROAD),
 		NWidget(WWT_IMGBTN, Colours::DarkGreen, WID_ROT_TRAFFIC_LIGHTS),
-						SetFill(0, 1), SetToolbarMinimalSize(1), SetSpriteTip(SPR_IMG_SIGNAL_ELECTRIC_NORM, STR_ROAD_TOOLBAR_TOOLTIP_BUILD_TRAFFIC_LIGHTS),
+						SetFill(0, 1), SetToolbarMinimalSize(1), SetSpriteTip(SPR_IMG_TRAFFIC_LIGHTS, STR_ROAD_TOOLBAR_TOOLTIP_BUILD_TRAFFIC_LIGHTS),
+		NWidget(WWT_IMGBTN, Colours::DarkGreen, WID_ROT_TRAFFIC_OVERLAY),
+						SetFill(0, 1), SetToolbarMinimalSize(1), SetSpriteTip(SPR_IMG_TRAFFIC_OVERLAY, STR_ROAD_TOOLBAR_TOOLTIP_TRAFFIC_OVERLAY),
 		NWidget(WWT_IMGBTN, Colours::DarkGreen, WID_ROT_BUILD_BRIDGE),
 						SetFill(0, 1), SetToolbarMinimalSize(2), SetSpriteTip(SPR_IMG_BRIDGE, STR_ROAD_TOOLBAR_TOOLTIP_BUILD_ROAD_BRIDGE),
 		NWidget(WWT_IMGBTN, Colours::DarkGreen, WID_ROT_BUILD_TUNNEL),
@@ -1142,7 +1165,9 @@ static constexpr std::initializer_list<NWidgetPart> _nested_build_road_scen_widg
 		NWidget(WWT_IMGBTN, Colours::DarkGreen, WID_ROT_ONE_WAY),
 						SetFill(0, 1), SetToolbarMinimalSize(1), SetSpriteTip(SPR_IMG_ROAD_ONE_WAY, STR_ROAD_TOOLBAR_TOOLTIP_TOGGLE_ONE_WAY_ROAD),
 		NWidget(WWT_IMGBTN, Colours::DarkGreen, WID_ROT_TRAFFIC_LIGHTS),
-						SetFill(0, 1), SetToolbarMinimalSize(1), SetSpriteTip(SPR_IMG_SIGNAL_ELECTRIC_NORM, STR_ROAD_TOOLBAR_TOOLTIP_BUILD_TRAFFIC_LIGHTS),
+						SetFill(0, 1), SetToolbarMinimalSize(1), SetSpriteTip(SPR_IMG_TRAFFIC_LIGHTS, STR_ROAD_TOOLBAR_TOOLTIP_BUILD_TRAFFIC_LIGHTS),
+		NWidget(WWT_IMGBTN, Colours::DarkGreen, WID_ROT_TRAFFIC_OVERLAY),
+						SetFill(0, 1), SetToolbarMinimalSize(1), SetSpriteTip(SPR_IMG_TRAFFIC_OVERLAY, STR_ROAD_TOOLBAR_TOOLTIP_TRAFFIC_OVERLAY),
 		NWidget(WWT_IMGBTN, Colours::DarkGreen, WID_ROT_BUILD_BRIDGE),
 						SetFill(0, 1), SetToolbarMinimalSize(2), SetSpriteTip(SPR_IMG_BRIDGE, STR_ROAD_TOOLBAR_TOOLTIP_BUILD_ROAD_BRIDGE),
 		NWidget(WWT_IMGBTN, Colours::DarkGreen, WID_ROT_BUILD_TUNNEL),
