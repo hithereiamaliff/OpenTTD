@@ -223,6 +223,66 @@ No building broke its zone, and the park quarter got no new road. The zoned
 town reached 2,316 people against 3,094 without zoning, mostly because the
 park quarter stayed empty.
 
+## Done: M4 part 1, city services and happiness
+
+- Towns menu, **City services** (hotkey Shift+C) opens a toolbar: police
+  station, fire station, clinic, school and park. While a tool is picked, the
+  main view tints the land that service already reaches, and a dotted square
+  around the cursor shows what the new building would reach.
+- Each service covers the houses within 10 tiles (parks 5), in a square.
+  Building costs about £22,500 (clinic £27,000, park £3,750) at the default
+  construction costs, and upkeep is a fifth of that a year, charged monthly
+  as property maintenance; both follow inflation. Only the owner can remove them, towns never do.
+- Once a month every town works out what share of its people each service
+  reaches. Happiness is 40% without services and 100% when every service
+  reaches everybody. Happy towns grow up to a third faster (the time between
+  new houses shrinks by up to 33%). Towns without services work as in
+  regular OpenTTD.
+- Running services for a town raises the owner's rating there every month,
+  12 points per kind of service, up to "Very good". A row of parks counts as
+  one kind, so it buys no extra favour.
+- Town window: "Happiness: 98%. City services reach:" and an icon with a
+  percentage per service. Land info on a service shows its reach and upkeep;
+  on any tile it lists the services that reach it.
+- Own graphics: five small buildings (police with a blue chequered band and a
+  roof lamp, fire station with a hose tower and red doors, white clinic with a
+  red cross sign, school with a clock tower and a playground, park with
+  trees, a pond and paths), flags in the owner's colours, and five tool icons.
+  `media/baseset/openttd/make_city_sprites.py` draws all of the fork's
+  sprites (renamed from `traffic_lights.*` to `city.*`).
+- Script API: `ScriptTown.BuildCityService`, `GetCityService`,
+  `GetCityServiceCoverage`, `GetHappiness`, `GetCityServiceRadius`,
+  `GetCityServiceCost`.
+- How it is stored: the buildings are objects with five object types
+  reserved at the top of the object type range (63984 and up), which NewGRF
+  objects never get. Old savegames store the full NewGRF object table, empty
+  slots included, so the table keeps its size; only handing out those types
+  is blocked. Each town's coverage (as of the last monthly update, because
+  growth uses it until the next one) is saved in a new chunk `CSVC`.
+- Code: `src/city_services.{h,cpp}`, `src/city_services_type.h`,
+  `src/city_services_gui.cpp`, `src/widgets/city_services_widget.h`,
+  `src/saveload/city_services_sl.cpp`, plus hooks in `object_cmd.cpp`,
+  `newgrf_object.cpp`, `newgrf_commons.cpp`, `town_cmd.cpp`, `town_gui.cpp`,
+  `viewport.cpp`, `misc_gui.cpp` and `toolbar_gui.cpp`.
+
+Results (test AI `SvcTest`, the zoning test town of 1,106 people, one of each
+service plus a second park within 3 tiles of the centre):
+
+| | With services | Without |
+|---|---|---|
+| Happiness after a month | 97% | 40% |
+| Coverage police/fire/health/school/park | 100/100/100/100/78% | 0 |
+| Days between new houses (funded / not funded) | 40 / 103 | 58 / 152 |
+| Rating of the owner | Very good | none |
+| Houses after 5.5 years, funding all the time | 55 | 45 |
+| People after 5.5 years, same | 2,901 | 3,254 |
+| Upkeep per year | £20,388 | — |
+
+The services town built 22% more houses but ended with fewer people: the
+services took six tiles right at the centre, where towns would otherwise put
+their biggest office blocks. Services reach 10 tiles, so they do as well a
+few tiles out.
+
 ## Roadmap
 
 Sizes are rough: S = one session, M = a few, L = many, XL = a project in itself.
@@ -231,14 +291,14 @@ Sizes are rough: S = one session, M = a few, L = many, XL = a project in itself.
 |---|---|---|---|---|
 | M2 | Traffic realism | Done: give way, light settings, traffic map and overlay, amber, routing around jams. | — | |
 | M3 | Zoning | Done: zones, town growth follows them, homes/jobs line in the town window, zones in land info. | — | |
-| M4 | City services and happiness | Player funds police, fire, health, education and parks as buildings with a coverage radius. Coverage drives town happiness, which drives growth and ratings. Monthly upkeep. | L | Builds on objects; needs new graphics or reused object sprites. |
+| M4 | City services and happiness | Part 1 done: police, fire, clinic, school and park with coverage, happiness, growth, ratings and upkeep. Later: bigger buildings (hospital, university), services that also make passengers. | L | |
 | M5 | Town car traffic | Towns send private cars between homes and workplaces. Good public transport takes cars off the road. | XL | The most SimCity-like part; performance-sensitive on big maps. |
 | M6 | City budget and ordinances | Per-town budget (taxes from population, spending on services and roads) and ordinances (transit subsidy, parking limits and so on). | L | Needs a design call: the player stays a transport company, or also acts as mayor. |
 | M7 | Land value and pollution | Industries, stations and traffic pollute; parks and services raise land value; overlays show both. Affects which buildings appear. | M–L | Pairs well with M3 and M4. |
 | M8 | Utilities | Power and water networks. | XL | Probably skip, or keep it light (arctic/tropic towns already need food/water). |
 
-Recommended order: M4 and M7 together next (they build on zones, share
-overlays and town growth), then M6 and M5.
+Recommended order: M7 next (pollution lowers happiness, parks and services
+raise land value), then M6 and M5.
 
 ## Getting it onto the owner's computer (Windows)
 
@@ -264,6 +324,6 @@ Savegame locations (files end in `.sav`; autosaves are in `save/autosave`):
 ## Open questions for the owner
 
 1. Can you share one of your saves, so it can be tested before you play it?
-2. Which milestone next? Recommendation: M4 (city services) with M7 (land
-   value and pollution).
+2. Which milestone next? Recommendation: M7 (land value and pollution),
+   which ties into happiness and zoning.
 3. A name for the fork.

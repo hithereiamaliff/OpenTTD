@@ -37,6 +37,8 @@
 #include "timer/timer_window.h"
 #include "pathfinder/water_regions.h"
 #include "town_zoning.h"
+#include "city_services.h"
+#include "object_map.h"
 
 #include "widgets/misc_widget.h"
 
@@ -207,6 +209,21 @@ public:
 			};
 			HouseKind kind = GetHouseKind(*HouseSpec::Get(GetHouseType(this->tile)));
 			this->landinfo_data.push_back(GetString(STR_LAND_AREA_INFORMATION_HOUSE_KIND, kind_names[to_underlying(kind)]));
+		}
+
+		/* City services */
+		if (IsTileType(this->tile, TileType::Object) && IsCityServiceObjectType(GetObjectType(this->tile))) {
+			CityService service = GetCityServiceOfObjectType(GetObjectType(this->tile));
+			this->landinfo_data.push_back(GetString(STR_LAND_AREA_INFORMATION_CITY_SERVICE, GetCityServiceRadius(service), GetCityServiceYearlyUpkeep(service)));
+		}
+		if (uint8_t services = GetCityServicesCoveringTile(this->tile); services != 0) {
+			std::string list;
+			for (uint s = 0; s < CITY_SERVICE_COUNT; s++) {
+				if (!HasBit(services, s)) continue;
+				if (!list.empty()) list += ", ";
+				list += GetString(GetCityServiceShortName(static_cast<CityService>(s)));
+			}
+			this->landinfo_data.push_back(GetString(STR_LAND_AREA_INFORMATION_CITY_SERVICES_HERE, list));
 		}
 
 		/* Build date */

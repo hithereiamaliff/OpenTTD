@@ -67,6 +67,7 @@
 #include "timer/timer_game_economy.h"
 #include "timer/timer_game_tick.h"
 #include "town_zoning.h"
+#include "city_services.h"
 
 #include "table/strings.h"
 #include "table/town_land.h"
@@ -3941,6 +3942,9 @@ static uint GetNormalGrowthRate(Town *t)
 	m >>= growth_multiplier;
 	if (t->larger_town) m /= 2;
 
+	/* City services make towns happier, and happy towns grow faster. */
+	m = m * (100 - GetTownServiceGrowthBonus(t)) / 100;
+
 	return TownTicksToGameTicks(m / (t->cache.num_houses / 50 + 1));
 }
 
@@ -4222,6 +4226,9 @@ Town::AcceptedHistory SumHistory(std::span<const Town::AcceptedHistory> history)
 /** Economy monthly timer for towns. */
 static const IntervalTimer<TimerGameEconomy> _economy_towns_monthly({TimerGameEconomy::Trigger::Month, TimerGameEconomy::Priority::Town}, [](auto)
 {
+	/* Coverage by city services first, the growth rates below depend on it. */
+	UpdateCityServicesMonthly();
+
 	for (Town *t : Town::Iterate()) {
 		/* Check for active town actions and decrement their counters. */
 		if (t->road_build_months != 0) t->road_build_months--;

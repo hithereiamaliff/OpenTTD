@@ -97,6 +97,7 @@
 
 #include "widgets/vehicle_widget.h"
 #include "town_zoning.h"
+#include "city_services.h"
 
 #include "table/strings.h"
 #include "table/string_colours.h"
@@ -951,6 +952,19 @@ static void DrawTownZoneOverlay(const TileInfo *ti)
 	DrawSelectionSprite(SPR_TILE_OVERLAY_BASE + SlopeToSpriteOffset(ti->tileh), GetTownZonePalette(zone), ti, 0, FoundationPart::Normal);
 }
 
+/**
+ * Tint a tile reached by the city service whose coverage is shown.
+ * @param ti The tile, after drawing it.
+ */
+static void DrawCityServiceOverlay(const TileInfo *ti)
+{
+	CityService service = GetCityServiceOverlay();
+	if (service == CityService::End || !IsValidTile(ti->tile) || IsHalftileSlope(ti->tileh)) return;
+	if (!HasBit(GetCityServicesCoveringTile(ti->tile), to_underlying(service))) return;
+
+	DrawSelectionSprite(SPR_TILE_OVERLAY_BASE + SlopeToSpriteOffset(ti->tileh), GetCityServicePalette(service), ti, 0, FoundationPart::Normal);
+}
+
 static bool IsPartOfAutoLine(int px, int py)
 {
 	px -= _thd.selstart.x;
@@ -1330,6 +1344,7 @@ static void ViewportAddLandscape()
 				if (_cur_ti.tile != INVALID_TILE) {
 					DrawTileSelection(&_cur_ti);
 					DrawTownZoneOverlay(&_cur_ti);
+					DrawCityServiceOverlay(&_cur_ti);
 				}
 			}
 		}

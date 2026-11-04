@@ -9,6 +9,7 @@ add_files(
     cargomonitor_sl.cpp
     cargopacket_sl.cpp
     cheat_sl.cpp
+    city_services_sl.cpp
     company_sl.cpp
     depot_sl.cpp
     economy_sl.cpp

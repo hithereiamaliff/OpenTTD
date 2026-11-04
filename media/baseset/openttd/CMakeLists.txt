@@ -26,7 +26,7 @@ if(GRFCODEC_FOUND)
                          ${CMAKE_CURRENT_SOURCE_DIR}/signals.nfo
                          ${CMAKE_CURRENT_SOURCE_DIR}/sloped_tracks.nfo
                          ${CMAKE_CURRENT_SOURCE_DIR}/tramtracks.nfo
-                         ${CMAKE_CURRENT_SOURCE_DIR}/traffic_lights.nfo
+                         ${CMAKE_CURRENT_SOURCE_DIR}/city.nfo
                          ${CMAKE_CURRENT_SOURCE_DIR}/tunnel_portals.nfo
                          ${CMAKE_CURRENT_SOURCE_DIR}/2ccmap.nfo
         PNG_SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/airports.png
@@ -61,7 +61,7 @@ if(GRFCODEC_FOUND)
                          ${CMAKE_CURRENT_SOURCE_DIR}/sloped_tracks.png
                          ${CMAKE_CURRENT_SOURCE_DIR}/tramtracks.png
                          ${CMAKE_CURRENT_SOURCE_DIR}/tramtracks_bare_depot.png
-                         ${CMAKE_CURRENT_SOURCE_DIR}/traffic_lights.png
+                         ${CMAKE_CURRENT_SOURCE_DIR}/city.png
                          ${CMAKE_CURRENT_SOURCE_DIR}/tunnel_portals.png
     )
 endif()

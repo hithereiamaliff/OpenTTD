@@ -8,6 +8,7 @@
 /** @file newgrf_object.cpp Handling of object NewGRFs. */
 
 #include "stdafx.h"
+#include "city_services.h"
 #include "company_base.h"
 #include "company_func.h"
 #include "debug.h"
@@ -28,7 +29,11 @@
 
 #include "safeguards.h"
 
-/** The override manager for our objects. */
+/**
+ * The override manager for our objects. Its table keeps the full size, as old
+ * savegames store all of it, but NewGRF objects never get the city service
+ * types at the top (see ObjectOverrideManager::SetEntitySpec).
+ */
 ObjectOverrideManager _object_mngr(NEW_OBJECT_OFFSET, NUM_OBJECTS, INVALID_OBJECT_TYPE);
 
 extern const ObjectSpec _original_objects[NEW_OBJECT_OFFSET];
@@ -56,6 +61,7 @@ size_t ObjectSpec::Count()
 	static ObjectSpec empty = {};
 
 	assert(index < NUM_OBJECTS);
+	if (IsCityServiceObjectType(index)) return GetCityServiceObjectSpec(index);
 	if (index >= _object_specs.size()) return &empty;
 	return &_object_specs[index];
 }
@@ -105,6 +111,7 @@ bool ObjectSpec::IsAvailable() const
  */
 uint ObjectSpec::Index() const
 {
+	if (IsCityServiceObjectSpec(this)) return GetCityServiceObjectSpecIndex(this);
 	return this - _object_specs.data();
 }
 

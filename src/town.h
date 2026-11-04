@@ -17,6 +17,7 @@
 #include "subsidy_type.h"
 #include "newgrf_storage.h"
 #include "cargo_type.h"
+#include "city_services_type.h"
 
 template <typename T>
 struct BuildingCounts {
@@ -192,6 +193,8 @@ struct Town : TownPool::PoolItem<&_town_pool> {
 
 	uint16_t grow_counter = 0; ///< counter to count when to grow, value is smaller than or equal to growth_rate
 	uint16_t growth_rate = 0; ///< town growth rate
+
+	CityServiceCoverage service_coverage{}; ///< City fork: share of the population near each city service, updated monthly.
 
 	uint8_t fund_buildings_months = 0; ///< fund buildings program in action?
 	uint8_t road_build_months = 0; ///< fund road reconstruction in action?

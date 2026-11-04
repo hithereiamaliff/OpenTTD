@@ -8,6 +8,7 @@
 /** @file object_cmd.cpp Handling of object tiles. */
 
 #include "stdafx.h"
+#include "city_services.h"
 #include "bridge.h"
 #include "landscape.h"
 #include "command_func.h"
@@ -133,6 +134,7 @@ void BuildObject(ObjectType type, TileIndex tile, CompanyID owner, Town *town, u
 
 	Object::IncTypeCount(type);
 	if (spec->flags.Test(ObjectFlag::Animation)) TriggerObjectAnimation(o, ObjectAnimationTrigger::Built, spec);
+	if (IsCityServiceObjectType(type)) OnCityServicesChanged();
 }
 
 /**
@@ -214,7 +216,7 @@ CommandCost CmdBuildObject(DoCommandFlags flags, TileIndex tile, ObjectType type
 {
 	CommandCost cost(ExpensesType::Construction);
 
-	if (type >= ObjectSpec::Count()) return CMD_ERROR;
+	if (type >= ObjectSpec::Count() && !IsCityServiceObjectType(type)) return CMD_ERROR;
 	const ObjectSpec *spec = ObjectSpec::Get(type);
 	if (_game_mode == GameMode::Normal && !spec->IsAvailable() && !_generating_world) return CMD_ERROR;
 	if ((_game_mode == GameMode::Editor || _generating_world) && !spec->WasEverAvailable()) return CMD_ERROR;
@@ -385,6 +387,7 @@ CommandCost CmdBuildObject(DoCommandFlags flags, TileIndex tile, ObjectType type
 	}
 
 	cost.AddCost(spec->GetBuildCost() * build_object_size);
+	if (IsCityServiceObjectType(type)) cost.AddCost(GetCityServiceBuildCost(GetCityServiceOfObjectType(type)));
 	return cost;
 }
 
@@ -459,7 +462,9 @@ static void DrawTile_Object(TileInfo *ti)
 
 	DrawFoundation(ti, GetFoundation_Object(ti->tile, ti->tileh));
 
-	if (type < NEW_OBJECT_OFFSET) {
+	if (IsCityServiceObjectType(type)) {
+		DrawCityServiceTile(ti, type);
+	} else if (type < NEW_OBJECT_OFFSET) {
 		const DrawTileSprites *dts = nullptr;
 		Owner to = GetTileOwner(ti->tile);
 		PaletteID palette = to == OWNER_NONE ? PAL_NONE : GetCompanyPalette(to);
@@ -516,6 +521,7 @@ static int GetSlopePixelZ_Object(TileIndex tile, uint x, uint y, [[maybe_unused]
 static void ReallyClearObjectTile(Object *o)
 {
 	Object::DecTypeCount(o->type);
+	if (IsCityServiceObjectType(o->type)) OnCityServicesChanged();
 	for (TileIndex tile_cur : o->location) {
 		DeleteNewGRFInspectWindow(GrfSpecFeature::Objects, tile_cur.base());
 

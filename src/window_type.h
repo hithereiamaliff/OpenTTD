@@ -755,6 +755,12 @@ enum class WindowClass : uint16_t {
 	 */
 	TownZoning,
 
+	/**
+	 * City services toolbar; %Window numbers:
+	 *   - 0 = #CityServicesWidgets
+	 */
+	CityServices,
+
 	Invalid = 0xFFFF, ///< Invalid window.
 };
 

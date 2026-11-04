@@ -49,6 +49,7 @@
 #include "newgrf_debug.h"
 #include "hotkeys.h"
 #include "town_zoning.h"
+#include "city_services.h"
 #include "highscore.h"
 #include "goal_base.h"
 #include "goal_gui.h"
@@ -488,6 +489,7 @@ enum class TownMenuEntries {
 	ShowFoundTown, ///< Open town generation window.
 	ShowPlaceHouses, ///< Open house selection window.
 	ShowZoning, ///< Open the zoning toolbar.
+	ShowCityServices, ///< Open the city services toolbar.
 };
 
 static CallBackFunction ToolbarTownClick(Window *w)
@@ -497,6 +499,7 @@ static CallBackFunction ToolbarTownClick(Window *w)
 	if (_settings_game.economy.found_town != TownFounding::Forbidden) list.push_back(MakeDropDownListStringItem(STR_TOWN_MENU_FOUND_TOWN, TownMenuEntries::ShowFoundTown));
 	if (_settings_game.economy.place_houses != PlaceHouses::Forbidden) list.push_back(MakeDropDownListStringItem(STR_SCENEDIT_TOWN_MENU_PACE_HOUSE, TownMenuEntries::ShowPlaceHouses));
 	list.push_back(MakeDropDownListStringItem(STR_TOWN_MENU_ZONING, TownMenuEntries::ShowZoning));
+	list.push_back(MakeDropDownListStringItem(STR_TOWN_MENU_CITY_SERVICES, TownMenuEntries::ShowCityServices));
 
 	PopupMainToolbarMenu(w, WID_TN_TOWNS, std::move(list), 0);
 
@@ -520,6 +523,7 @@ static CallBackFunction MenuClickTown(int index)
 			if (_settings_game.economy.place_houses != PlaceHouses::Forbidden) ShowBuildHousePicker(nullptr);
 			break;
 		case TownMenuEntries::ShowZoning: ShowTownZoningToolbar(); break;
+		case TownMenuEntries::ShowCityServices: ShowCityServicesToolbar(); break;
 	}
 	return CallBackFunction::None;
 }
@@ -2092,6 +2096,7 @@ struct MainToolbarWindow : Window {
 			case MTHK_CHEATS: if (!_networking) ShowCheatWindow(); break;
 			case MTHK_TERRAFORM: ShowTerraformToolbar(); break;
 			case MTHK_ZONING: ShowTownZoningToolbar(); break;
+			case MTHK_CITY_SERVICES: ShowCityServicesToolbar(); break;
 			case MTHK_EXTRA_VIEWPORT: ShowExtraViewportWindowForTileUnderCursor(); break;
 			case MTHK_CLIENT_LIST: if (_networking) ShowClientList(); break;
 			case MTHK_SIGN_LIST: ShowSignList(); break;
@@ -2184,6 +2189,7 @@ struct MainToolbarWindow : Window {
 		Hotkey(WKC_CTRL | WKC_ALT | 'C', "cheats", MTHK_CHEATS),
 		Hotkey('L', "terraform", MTHK_TERRAFORM),
 		Hotkey(WKC_SHIFT | 'Z', "zoning", MTHK_ZONING),
+		Hotkey(WKC_SHIFT | 'C', "city_services", MTHK_CITY_SERVICES),
 		Hotkey('V', "extra_viewport", MTHK_EXTRA_VIEWPORT),
 		Hotkey(0, "client_list", MTHK_CLIENT_LIST),
 		Hotkey(0, "sign_list", MTHK_SIGN_LIST),

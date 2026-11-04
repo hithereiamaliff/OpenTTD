@@ -111,6 +111,10 @@ add_files(
     cheat_func.h
     cheat_gui.cpp
     cheat_type.h
+    city_services.cpp
+    city_services.h
+    city_services_gui.cpp
+    city_services_type.h
     clear_cmd.cpp
     clear_func.h
     clear_map.h

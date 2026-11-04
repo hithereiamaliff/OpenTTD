@@ -484,6 +484,7 @@ STR_MAP_MENU_SIGN_LIST                                          :Sign list
 STR_TOWN_MENU_TOWN_DIRECTORY                                    :Town directory
 STR_TOWN_MENU_FOUND_TOWN                                        :Found town
 STR_TOWN_MENU_ZONING                                            :Zoning
+STR_TOWN_MENU_CITY_SERVICES                                     :City services
 
 # Subsidies menu
 STR_SUBSIDIES_MENU_SUBSIDIES                                    :Subsidies
@@ -3018,6 +3019,24 @@ STR_TOWN_ZONING_INDUSTRIAL_TOOLTIP                              :{BLACK}Zone lan
 STR_TOWN_ZONING_PARK_TOOLTIP                                    :{BLACK}Zone land for parks: towns keep it free of their buildings and new roads. Drag to zone an area
 STR_TOWN_ZONING_CLEAR_TOOLTIP                                   :{BLACK}Remove zoning: towns build there as usual. Drag to clear an area
 
+# City services
+STR_CITY_SERVICES_CAPTION                                       :{WHITE}City Services
+STR_CITY_SERVICES_POLICE_TOOLTIP                                :{BLACK}Build a police station: people living within 10 tiles feel safer. City services make towns happier, and happy towns grow faster. Costs upkeep every month
+STR_CITY_SERVICES_FIRE_TOOLTIP                                  :{BLACK}Build a fire station: protects people living within 10 tiles. City services make towns happier, and happy towns grow faster. Costs upkeep every month
+STR_CITY_SERVICES_HEALTH_TOOLTIP                                :{BLACK}Build a clinic: health care for people living within 10 tiles. City services make towns happier, and happy towns grow faster. Costs upkeep every month
+STR_CITY_SERVICES_EDUCATION_TOOLTIP                             :{BLACK}Build a school: education for people living within 10 tiles. City services make towns happier, and happy towns grow faster. Costs upkeep every month
+STR_CITY_SERVICES_PARK_TOOLTIP                                  :{BLACK}Build a park: green space for people living within 5 tiles. City services make towns happier, and happy towns grow faster. Costs upkeep every month
+STR_CITY_SERVICE_POLICE                                         :Police station
+STR_CITY_SERVICE_FIRE                                           :Fire station
+STR_CITY_SERVICE_HEALTH                                         :Clinic
+STR_CITY_SERVICE_EDUCATION                                      :School
+STR_CITY_SERVICE_PARK                                           :Park
+STR_CITY_SERVICE_POLICE_SHORT                                   :police
+STR_CITY_SERVICE_FIRE_SHORT                                     :fire
+STR_CITY_SERVICE_HEALTH_SHORT                                   :health
+STR_CITY_SERVICE_EDUCATION_SHORT                                :school
+STR_CITY_SERVICE_PARK_SHORT                                     :park
+
 # Traffic light window
 STR_TRAFFIC_LIGHT_CAPTION                                       :{WHITE}Traffic lights in {TOWN}
 STR_TRAFFIC_LIGHT_CAPTION_NO_TOWN                               :{WHITE}Traffic lights
@@ -3259,6 +3278,8 @@ STR_LAND_AREA_INFORMATION_HOUSE_KIND                            :{BLACK}Zoning c
 STR_LAND_AREA_INFORMATION_HOUSE_KIND_HOME                       :a home
 STR_LAND_AREA_INFORMATION_HOUSE_KIND_BUSINESS                   :a business
 STR_LAND_AREA_INFORMATION_HOUSE_KIND_PUBLIC                     :a public building
+STR_LAND_AREA_INFORMATION_CITY_SERVICE                          :{BLACK}Reaches: {LTBLUE}{NUM} tiles around{BLACK}, upkeep: {LTBLUE}{CURRENCY_LONG}{BLACK} a year
+STR_LAND_AREA_INFORMATION_CITY_SERVICES_HERE                    :{BLACK}City services here: {LTBLUE}{RAW_STRING}
 STR_LAND_AREA_INFORMATION_LANDINFO_COORDS                       :{BLACK}Coordinates: {LTBLUE}{NUM} x {NUM} x {NUM}
 STR_LAND_AREA_INFORMATION_LANDINFO_INDEX                        :{BLACK}Tile index: {LTBLUE}{NUM} ({HEX})
 STR_LAND_AREA_INFORMATION_BUILD_DATE                            :{BLACK}Built/renovated: {LTBLUE}{DATE_LONG}
@@ -3830,6 +3851,8 @@ STR_TOWN_VIEW_POPULATION_HOUSES                                 :{BLACK}Populati
 STR_TOWN_VIEW_ZONING_BALANCED                                   :{BLACK}Homes for {ORANGE}{COMMA}{BLACK}, jobs for {ORANGE}{COMMA}{BLACK}: balanced
 STR_TOWN_VIEW_ZONING_WANTS_COMMERCIAL                           :{BLACK}Homes for {ORANGE}{COMMA}{BLACK}, jobs for {ORANGE}{COMMA}{BLACK}: wants more shops and offices
 STR_TOWN_VIEW_ZONING_WANTS_RESIDENTIAL                          :{BLACK}Homes for {ORANGE}{COMMA}{BLACK}, jobs for {ORANGE}{COMMA}{BLACK}: wants more homes
+STR_TOWN_VIEW_HAPPINESS                                         :{BLACK}Happiness: {ORANGE}{NUM}%{BLACK}. City services reach:
+STR_TOWN_VIEW_SERVICE_PERCENT                                   :{BLACK}{NUM}%
 STR_TOWN_VIEW_CARGO_LAST_MONTH_MAX                              :{BLACK}{CARGO_LIST} last month: {ORANGE}{COMMA}{BLACK}  max: {ORANGE}{COMMA}
 STR_TOWN_VIEW_CARGO_LAST_MINUTE_MAX                             :{BLACK}{CARGO_LIST} last minute: {ORANGE}{COMMA}{BLACK}  max: {ORANGE}{COMMA}
 STR_TOWN_VIEW_CARGO_FOR_TOWNGROWTH                              :{BLACK}Cargo needed for town growth:
@@ -5409,6 +5432,7 @@ STR_ERROR_ALREADY_HAS_TRAFFIC_LIGHTS                            :... junction al
 STR_ERROR_NO_TRAFFIC_LIGHTS                                     :there are no traffic lights here
 STR_ERROR_CAN_T_CHANGE_TRAFFIC_LIGHTS                           :Can't change these traffic lights...
 STR_ERROR_CAN_T_ZONE_HERE                                       :Can't zone this area...
+STR_ERROR_CAN_T_BUILD_CITY_SERVICE                              :Can't build this here...
 STR_ERROR_ZONE_AREA_TOO_LARGE                                   :... area too large, zone at most 128 by 128 tiles at a time
 
 # Waterway construction errors

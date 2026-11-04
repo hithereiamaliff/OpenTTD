@@ -49,6 +49,9 @@ static constexpr int RATING_TREE_MINIMUM = RATING_MINIMUM;
 static constexpr int RATING_TREE_UP_STEP = 7;
 static constexpr int RATING_TREE_MAXIMUM = 220;
 
+static constexpr int RATING_SERVICE_UP_STEP = 12; ///< City fork: every month, each kind of city service a company runs for a town raises its rating ...
+static constexpr int RATING_SERVICE_MAXIMUM = RATING_VERYGOOD; ///< ... up to RATING_VERYGOOD
+
 static constexpr int RATING_GROWTH_UP_STEP =  5; ///< when a town grows, all companies have rating increased a bit ...
 static constexpr int RATING_GROWTH_MAXIMUM = RATING_MEDIOCRE; ///< ... up to RATING_MEDIOCRE
 static constexpr int RATING_STATION_UP_STEP = 12; ///< when a town grows, company gains reputation for all well serviced stations ...

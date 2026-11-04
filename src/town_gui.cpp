@@ -51,6 +51,7 @@
 
 #include "widgets/town_widget.h"
 #include "town_zoning.h"
+#include "city_services.h"
 
 #include "table/strings.h"
 
@@ -402,6 +403,21 @@ public:
 		DrawString(tr, GetString(demand_str, demand.residents, demand.jobs));
 		tr.top += GetCharacterHeight(FontSize::Normal);
 
+		/* Happiness, and how much of the town each city service reaches: an icon and a percentage each. */
+		DrawString(tr, GetString(STR_TOWN_VIEW_HAPPINESS, GetTownHappiness(this->town)));
+		tr.top += GetCharacterHeight(FontSize::Normal);
+		int row_height = GetServiceRowHeight();
+		int text_top = tr.top + (row_height - GetCharacterHeight(FontSize::Normal)) / 2;
+		int x = tr.left;
+		for (uint s = 0; s < CITY_SERVICE_COUNT; s++) {
+			SpriteID icon = GetCityServiceIcon(static_cast<CityService>(s));
+			Dimension d = GetSpriteSize(icon);
+			DrawSprite(icon, PAL_NONE, x, tr.top + (row_height - static_cast<int>(d.height)) / 2);
+			x += d.width + WidgetDimensions::scaled.hsep_normal;
+			x = DrawString(x, tr.right, text_top, GetString(STR_TOWN_VIEW_SERVICE_PERCENT, this->town->service_coverage.percent[s])) + WidgetDimensions::scaled.hsep_wide;
+		}
+		tr.top += row_height;
+
 		StringID str_last_period = TimerGameEconomy::UsingWallclockUnits() ? STR_TOWN_VIEW_CARGO_LAST_MINUTE_MAX : STR_TOWN_VIEW_CARGO_LAST_MONTH_MAX;
 
 		for (auto tpe : {TownProductionEffect::Passengers, TownProductionEffect::Mail}) {
@@ -537,9 +553,23 @@ public:
 	 * @param width The width of the panel in pixels.
 	 * @return the desired height in pixels.
 	 */
+	/**
+	 * Height of the row with an icon and percentage per city service.
+	 * @return The height.
+	 */
+	static int GetServiceRowHeight()
+	{
+		int height = GetCharacterHeight(FontSize::Normal);
+		for (uint s = 0; s < CITY_SERVICE_COUNT; s++) {
+			height = std::max<int>(height, GetSpriteSize(GetCityServiceIcon(static_cast<CityService>(s))).height);
+		}
+		return height;
+	}
+
 	uint GetDesiredInfoHeight(int width) const
 	{
-		uint aimed_height = static_cast<uint>(2 + CargoSpec::town_production_cargoes[TownProductionEffect::Passengers].size() + CargoSpec::town_production_cargoes[TownProductionEffect::Mail].size()) * GetCharacterHeight(FontSize::Normal);
+		uint aimed_height = static_cast<uint>(3 + CargoSpec::town_production_cargoes[TownProductionEffect::Passengers].size() + CargoSpec::town_production_cargoes[TownProductionEffect::Mail].size()) * GetCharacterHeight(FontSize::Normal);
+		aimed_height += GetServiceRowHeight();
 
 		bool first = true;
 		for (TownAcceptanceEffect i : EnumRange(TownAcceptanceEffect::End)) {

@@ -1,0 +1,358 @@
+/*
+ * This file is part of OpenTTD.
+ * OpenTTD is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, version 2.
+ * OpenTTD is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with OpenTTD. If not, see <https://www.gnu.org/licenses/old-licenses/gpl-2.0>.
+ */
+
+/** @file city_services.cpp City services: police, fire, health, schools and parks. */
+
+#include "stdafx.h"
+#include "city_services.h"
+#include "company_base.h"
+#include "company_func.h"
+#include "core/backup_type.hpp"
+#include "economy_func.h"
+#include "gfx_func.h"
+#include "house.h"
+#include "tile_cmd.h"
+#include "map_func.h"
+#include "newgrf_object.h"
+#include "object_base.h"
+#include "tilearea_type.h"
+#include "town.h"
+#include "transparency.h"
+#include "viewport_func.h"
+#include "window_func.h"
+
+#include "table/sprites.h"
+#include "table/strings.h"
+
+#include "safeguards.h"
+
+/** What makes one kind of city service. */
+struct CityServiceInfo {
+	StringID name; ///< Name of the building.
+	StringID short_name; ///< Name of the service in lists, like "police".
+	uint radius; ///< Houses within this many tiles are covered.
+	uint build_cost; ///< Build cost, as a multiple of the base object price.
+	uint yearly_upkeep; ///< Upkeep per year, as a multiple of the base object price.
+	uint8_t height; ///< Height of the sprite's bounding box, in pixels.
+	PaletteID overlay; ///< Colour of its coverage in the main view.
+};
+
+/** The city services; costs are multiples of the base object price (about one pound at the start). */
+static const CityServiceInfo _city_service_info[CITY_SERVICE_COUNT] = {
+	{STR_CITY_SERVICE_POLICE, STR_CITY_SERVICE_POLICE_SHORT,       10, 750, 150, 30, PALETTE_TO_BLUE},
+	{STR_CITY_SERVICE_FIRE, STR_CITY_SERVICE_FIRE_SHORT,           10, 750, 150, 42, PALETTE_TO_RED},
+	{STR_CITY_SERVICE_HEALTH, STR_CITY_SERVICE_HEALTH_SHORT,       10, 900, 180, 30, PALETTE_TO_WHITE},
+	{STR_CITY_SERVICE_EDUCATION, STR_CITY_SERVICE_EDUCATION_SHORT, 10, 750, 150, 24, PALETTE_TO_ORANGE},
+	{STR_CITY_SERVICE_PARK, STR_CITY_SERVICE_PARK_SHORT,            5, 125,  25, 16, PALETTE_TO_GREEN},
+};
+
+/** Climate all. */
+#define ALL LandscapeTypes({LandscapeType::Temperate, LandscapeType::Arctic, LandscapeType::Tropic, LandscapeType::Toyland})
+/** Object spec of a city service; like _original_objects, see table/object_land.h. */
+#define M(name, height) {{ObjectClassID::Invalid(), 0}, StandardGRFFileProps{}, AnimationInfo<ObjectAnimationTriggers>{}, name, ALL, 0x11, 0, 50, TimerGameCalendar::Date{}, CalendarTime::MAX_DATE + 1, ObjectFlags{}, ObjectCallbackMasks{}, height, 1, 0, {}}
+/** The object specs of the city services, in CityService order. */
+static const ObjectSpec _city_service_specs[CITY_SERVICE_COUNT] = {
+	M(STR_CITY_SERVICE_POLICE, 4),
+	M(STR_CITY_SERVICE_FIRE, 6),
+	M(STR_CITY_SERVICE_HEALTH, 4),
+	M(STR_CITY_SERVICE_EDUCATION, 3),
+	M(STR_CITY_SERVICE_PARK, 2),
+};
+#undef M
+#undef ALL
+
+/**
+ * Coverage of the map: per tile, one bit per city service that reaches it.
+ * Empty while there are no city services. Derived from the objects on the
+ * map only, so rebuilding it gives the same result on every client.
+ */
+static std::vector<uint8_t> _service_cover;
+static bool _service_cover_dirty = true; ///< Does #_service_cover need rebuilding?
+
+/** The city service whose coverage the main view shows, or CityService::End for none. */
+static CityService _service_overlay = CityService::End;
+
+/**
+ * How far does a city service reach?
+ * @param service The service.
+ * @return Houses within this many tiles (in a square around it) are covered.
+ */
+uint GetCityServiceRadius(CityService service)
+{
+	return _city_service_info[to_underlying(service)].radius;
+}
+
+/**
+ * What does building a city service cost?
+ * @param service The service.
+ * @return The cost.
+ */
+Money GetCityServiceBuildCost(CityService service)
+{
+	return GetPrice(Price::BuildObject, _city_service_info[to_underlying(service)].build_cost, nullptr);
+}
+
+/**
+ * What does a city service cost to run for a year? It is charged monthly.
+ * @param service The service.
+ * @return The yearly upkeep.
+ */
+Money GetCityServiceYearlyUpkeep(CityService service)
+{
+	return GetPrice(Price::BuildObject, _city_service_info[to_underlying(service)].yearly_upkeep, nullptr);
+}
+
+/**
+ * Name of the building of a city service, like "Police station".
+ * @param service The service.
+ * @return The name.
+ */
+StringID GetCityServiceName(CityService service)
+{
+	return _city_service_info[to_underlying(service)].name;
+}
+
+/**
+ * Name of a city service in lists, like "police".
+ * @param service The service.
+ * @return The name.
+ */
+StringID GetCityServiceShortName(CityService service)
+{
+	return _city_service_info[to_underlying(service)].short_name;
+}
+
+/**
+ * Icon of a city service.
+ * @param service The service.
+ * @return The sprite.
+ */
+SpriteID GetCityServiceIcon(CityService service)
+{
+	return SPR_IMG_CITY_SERVICE_BASE + to_underlying(service);
+}
+
+/**
+ * Colour of a city service's coverage in the main view.
+ * @param service The service.
+ * @return The recolour palette for the tile overlay.
+ */
+PaletteID GetCityServicePalette(CityService service)
+{
+	return _city_service_info[to_underlying(service)].overlay;
+}
+
+/**
+ * Object spec of a city service object type.
+ * @param type The object type.
+ * @pre IsCityServiceObjectType(type)
+ * @return The spec.
+ */
+const ObjectSpec *GetCityServiceObjectSpec(ObjectType type)
+{
+	return &_city_service_specs[to_underlying(GetCityServiceOfObjectType(type))];
+}
+
+/**
+ * Is an object spec one of the city services?
+ * @param spec The spec.
+ * @return True if it is.
+ */
+bool IsCityServiceObjectSpec(const ObjectSpec *spec)
+{
+	return spec >= std::begin(_city_service_specs) && spec < std::end(_city_service_specs);
+}
+
+/**
+ * Object type of a city service's object spec.
+ * @param spec The spec.
+ * @pre IsCityServiceObjectSpec(spec)
+ * @return The object type.
+ */
+uint GetCityServiceObjectSpecIndex(const ObjectSpec *spec)
+{
+	return OBJECT_CITY_SERVICE_FIRST + static_cast<uint>(spec - std::begin(_city_service_specs));
+}
+
+/**
+ * How happy is a town? Without city services it is #TOWN_HAPPINESS_BASE;
+ * full coverage by all of them makes it 100.
+ * @param t The town.
+ * @return Happiness in percent.
+ */
+uint GetTownHappiness(const Town *t)
+{
+	uint sum = 0;
+	for (uint8_t percent : t->service_coverage.percent) sum += percent;
+	return TOWN_HAPPINESS_BASE + sum * (100 - TOWN_HAPPINESS_BASE) / (100 * CITY_SERVICE_COUNT);
+}
+
+/**
+ * How much faster does a town grow thanks to its city services?
+ * @param t The town.
+ * @return Percentage to take off the time between new houses, 0 to 33.
+ */
+uint GetTownServiceGrowthBonus(const Town *t)
+{
+	uint sum = 0;
+	for (uint8_t percent : t->service_coverage.percent) sum += percent;
+	return sum / 15;
+}
+
+/** Rebuild the coverage of the map from the city service objects on it. */
+static void RebuildServiceCoverage()
+{
+	_service_cover_dirty = false;
+	_service_cover.clear();
+
+	for (const Object *o : Object::Iterate()) {
+		if (!IsCityServiceObjectType(o->type)) continue;
+		if (_service_cover.empty()) _service_cover.assign(Map::Size(), 0);
+
+		CityService service = GetCityServiceOfObjectType(o->type);
+		TileArea area = o->location;
+		area.Expand(GetCityServiceRadius(service));
+		for (TileIndex tile : area) SetBit(_service_cover[tile.base()], to_underlying(service));
+	}
+
+	if (_service_cover.empty()) _service_cover.shrink_to_fit();
+}
+
+/**
+ * Which city services reach a tile?
+ * @param tile The tile.
+ * @return Bit mask with a bit per #CityService.
+ */
+uint8_t GetCityServicesCoveringTile(TileIndex tile)
+{
+	if (_service_cover_dirty) RebuildServiceCoverage();
+	return _service_cover.empty() ? 0 : _service_cover[tile.base()];
+}
+
+/** A city service was built or removed. */
+void OnCityServicesChanged()
+{
+	_service_cover_dirty = true;
+	if (_service_overlay != CityService::End) MarkWholeScreenDirty();
+}
+
+/**
+ * Monthly update, before the towns' own monthly update: work out each town's
+ * coverage, give owners standing with their towns, and charge the upkeep.
+ */
+void UpdateCityServicesMonthly()
+{
+	RebuildServiceCoverage();
+
+	/* People per town, and how many of them each service reaches. */
+	struct Count {
+		uint32_t total = 0;
+		std::array<uint32_t, CITY_SERVICE_COUNT> covered{};
+	};
+	std::vector<Count> counts(Town::GetPoolSize());
+	if (!_service_cover.empty()) {
+		for (uint index = 0; index < Map::Size(); index++) {
+			TileIndex tile{index};
+			if (!IsTileType(tile, TileType::House)) continue;
+			uint population = HouseSpec::Get(GetHouseType(tile))->population;
+			if (population == 0) continue;
+
+			Count &count = counts[GetTownIndex(tile).base()];
+			count.total += population;
+			uint8_t cover = _service_cover[tile.base()];
+			for (uint s = 0; s < CITY_SERVICE_COUNT; s++) {
+				if (HasBit(cover, s)) count.covered[s] += population;
+			}
+		}
+	}
+	for (Town *t : Town::Iterate()) {
+		const Count &count = counts[t->index.base()];
+		for (uint s = 0; s < CITY_SERVICE_COUNT; s++) {
+			t->service_coverage.percent[s] = count.total == 0 ? 0 : static_cast<uint8_t>(count.covered[s] * 100 / count.total);
+		}
+	}
+
+	/* Upkeep per owner, and which kinds of service each company runs for each town. */
+	std::array<Money, MAX_COMPANIES> upkeep{};
+	std::vector<std::array<uint8_t, MAX_COMPANIES>> kinds(Town::GetPoolSize());
+	for (const Object *o : Object::Iterate()) {
+		if (!IsCityServiceObjectType(o->type)) continue;
+		Owner owner = GetTileOwner(o->location.tile);
+		if (!Company::IsValidID(owner)) continue;
+
+		CityService service = GetCityServiceOfObjectType(o->type);
+		upkeep[owner.base()] += GetCityServiceYearlyUpkeep(service) / 12;
+		SetBit(kinds[o->town->index.base()][owner.base()], to_underlying(service));
+	}
+
+	/* Standing with the town grows with each kind of service a company runs for it;
+	 * more of the same kind doesn't count, so a row of parks buys no favours. */
+	Backup<CompanyID> cur_company(_current_company);
+	for (Town *t : Town::Iterate()) {
+		for (const Company *c : Company::Iterate()) {
+			uint8_t mask = kinds[t->index.base()][c->index.base()];
+			if (mask == 0) continue;
+			cur_company.Change(c->index);
+			ChangeTownRating(t, CountBits(mask) * RATING_SERVICE_UP_STEP, RATING_SERVICE_MAXIMUM, DoCommandFlag::Execute);
+		}
+	}
+	cur_company.Restore();
+
+	for (const Company *c : Company::Iterate()) {
+		if (upkeep[c->index.base()] == 0) continue;
+		SubtractMoneyFromCompany(c->index, CommandCost(ExpensesType::Property, upkeep[c->index.base()]));
+	}
+}
+
+/**
+ * Draw a city service tile, after its foundation.
+ * @param ti The tile.
+ * @param type Its object type.
+ */
+void DrawCityServiceTile(TileInfo *ti, ObjectType type)
+{
+	CityService service = GetCityServiceOfObjectType(type);
+	Owner owner = GetTileOwner(ti->tile);
+	PaletteID palette = owner == OWNER_NONE ? PAL_NONE : GetCompanyPalette(owner);
+
+	DrawGroundSprite(service == CityService::Park ? SPR_FLAT_GRASS_TILE : SPR_CONCRETE_GROUND, PAL_NONE);
+	if (IsInvisibilitySet(TransparencyOption::Structures)) return;
+
+	SpriteBounds bounds({0, 0, 0}, {TILE_SIZE, TILE_SIZE, _city_service_info[to_underlying(service)].height}, {0, 0, 0});
+	SpriteID image = SPR_CITY_SERVICE_BASE + to_underlying(service);
+	SetBit(image, PALETTE_MODIFIER_COLOUR);
+	AddSortableSpriteToDraw(image, palette, *ti, bounds, IsTransparencySet(TransparencyOption::Structures));
+}
+
+/**
+ * Show a city service's coverage in the main view.
+ * @param service The service, or CityService::End to show none.
+ */
+void ShowCityServiceOverlay(CityService service)
+{
+	if (_service_overlay == service) return;
+	_service_overlay = service;
+	MarkWholeScreenDirty();
+}
+
+/**
+ * Which city service's coverage does the main view show?
+ * @return The service, or CityService::End for none.
+ */
+CityService GetCityServiceOverlay()
+{
+	return _service_overlay;
+}
+
+/** Forget the coverage; used when starting or loading a game. */
+void InitializeCityServices()
+{
+	_service_cover.clear();
+	_service_cover.shrink_to_fit();
+	_service_cover_dirty = true;
+	_service_overlay = CityService::End;
+}

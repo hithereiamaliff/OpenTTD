@@ -23,6 +23,9 @@
 
 #include "../../town_zoning.h"
 #include "../../town_zoning_cmd.h"
+#include "../../city_services.h"
+#include "../../object_cmd.h"
+#include "../../object_map.h"
 
 #include "../../safeguards.h"
 
@@ -422,4 +425,60 @@
 	if (!::IsValidTile(tile) || !::IsTileType(tile, TileType::House)) return TOWN_BUILDING_INVALID;
 
 	return static_cast<TownBuildingKind>(::GetHouseKind(*::HouseSpec::Get(::GetHouseType(tile))));
+}
+
+/**
+ * Is a script's city service value valid?
+ * @param service The value.
+ * @return True if it is a city service.
+ */
+static bool IsValidCityService(ScriptTown::CityService service)
+{
+	return service >= ScriptTown::CITY_SERVICE_POLICE && service <= ScriptTown::CITY_SERVICE_PARK;
+}
+
+/* static */ bool ScriptTown::BuildCityService(TileIndex tile, CityService service)
+{
+	EnforceCompanyModeValid(false);
+	EnforcePrecondition(false, ::IsValidTile(tile));
+	EnforcePrecondition(false, IsValidCityService(service));
+
+	return ScriptObject::Command<Commands::BuildObject>::Do(tile, ::GetObjectTypeOfCityService(static_cast<::CityService>(service)), 0);
+}
+
+/* static */ ScriptTown::CityService ScriptTown::GetCityService(TileIndex tile)
+{
+	if (!::IsValidTile(tile) || !::IsTileType(tile, TileType::Object)) return CITY_SERVICE_INVALID;
+	ObjectType type = ::GetObjectType(tile);
+	if (!::IsCityServiceObjectType(type)) return CITY_SERVICE_INVALID;
+
+	return static_cast<CityService>(::GetCityServiceOfObjectType(type));
+}
+
+/* static */ SQInteger ScriptTown::GetCityServiceCoverage(TownID town_id, CityService service)
+{
+	if (!IsValidTown(town_id) || !IsValidCityService(service)) return -1;
+
+	return ::Town::Get(town_id)->service_coverage.percent[service];
+}
+
+/* static */ SQInteger ScriptTown::GetHappiness(TownID town_id)
+{
+	if (!IsValidTown(town_id)) return -1;
+
+	return ::GetTownHappiness(::Town::Get(town_id));
+}
+
+/* static */ SQInteger ScriptTown::GetCityServiceRadius(CityService service)
+{
+	if (!IsValidCityService(service)) return -1;
+
+	return ::GetCityServiceRadius(static_cast<::CityService>(service));
+}
+
+/* static */ Money ScriptTown::GetCityServiceCost(CityService service)
+{
+	if (!IsValidCityService(service)) return -1;
+
+	return ::GetCityServiceBuildCost(static_cast<::CityService>(service));
 }

@@ -15,6 +15,7 @@
 #include "../../town.h"
 #include "../../town_type.h"
 #include "../../town_zoning.h"
+#include "../../city_services_type.h"
 
 /**
  * Class that handles all town related functions.
@@ -142,6 +143,21 @@ public:
 		TOWN_BUILDING_BUSINESS = to_underlying(::HouseKind::Business), ///< Offices, shops, hotels, theatres, cinemas and the like.
 		TOWN_BUILDING_PUBLIC   = to_underlying(::HouseKind::Public),   ///< Churches, stadiums, statues, fountains and parks.
 		TOWN_BUILDING_INVALID  = -1, ///< Not a town building.
+	};
+
+	/**
+	 * City services a company can build for towns. Each reaches the houses
+	 * within its radius; the share of a town's people reached by each
+	 * service makes the town happier, and happy towns grow faster. The owner
+	 * pays upkeep every month and gains rating with the nearest town.
+	 */
+	enum CityService {
+		CITY_SERVICE_POLICE    = to_underlying(::CityService::Police),    ///< Police station.
+		CITY_SERVICE_FIRE      = to_underlying(::CityService::Fire),      ///< Fire station.
+		CITY_SERVICE_HEALTH    = to_underlying(::CityService::Health),    ///< Clinic.
+		CITY_SERVICE_EDUCATION = to_underlying(::CityService::Education), ///< School.
+		CITY_SERVICE_PARK      = to_underlying(::CityService::Park),      ///< Park.
+		CITY_SERVICE_INVALID   = -1, ///< Not a city service.
 	};
 
 	/**
@@ -534,6 +550,59 @@ public:
 	 * @return The kind, TOWN_BUILDING_INVALID if there is no town building on the tile.
 	 */
 	static TownBuildingKind GetBuildingKind(TileIndex tile);
+
+	/**
+	 * Build a city service on a tile.
+	 * @param tile The tile to build it on.
+	 * @param service The service to build.
+	 * @pre ScriptMap::IsValidTile(tile).
+	 * @pre service is a city service other than CITY_SERVICE_INVALID.
+	 * @game @pre ScriptCompanyMode::IsValid().
+	 * @exception ScriptError::ERR_AREA_NOT_CLEAR
+	 * @exception ScriptError::ERR_FLAT_LAND_REQUIRED
+	 * @exception ScriptError::ERR_NOT_ENOUGH_CASH
+	 * @return Whether the city service has been/can be built.
+	 */
+	static bool BuildCityService(TileIndex tile, CityService service);
+
+	/**
+	 * Get the city service on a tile.
+	 * @param tile The tile.
+	 * @return The service, CITY_SERVICE_INVALID if there is none.
+	 */
+	static CityService GetCityService(TileIndex tile);
+
+	/**
+	 * Get the share of a town's people that a city service reached at the last monthly update.
+	 * @param town_id The town.
+	 * @param service The service.
+	 * @pre IsValidTown(town_id).
+	 * @return The share in percent, or -1 if the service is invalid.
+	 */
+	static SQInteger GetCityServiceCoverage(TownID town_id, CityService service);
+
+	/**
+	 * Get how happy a town is. Without city services towns are 40% happy,
+	 * reaching everybody with every service makes them 100% happy.
+	 * @param town_id The town.
+	 * @pre IsValidTown(town_id).
+	 * @return The happiness in percent, or -1 for an invalid town.
+	 */
+	static SQInteger GetHappiness(TownID town_id);
+
+	/**
+	 * Get how far a city service reaches: houses within this many tiles, in a square around it.
+	 * @param service The service.
+	 * @return The radius, or -1 if the service is invalid.
+	 */
+	static SQInteger GetCityServiceRadius(CityService service);
+
+	/**
+	 * Get what building a city service costs, not counting clearing the land.
+	 * @param service The service.
+	 * @return The cost, or -1 if the service is invalid.
+	 */
+	static Money GetCityServiceCost(CityService service);
 };
 
 #endif /* SCRIPT_TOWN_HPP */

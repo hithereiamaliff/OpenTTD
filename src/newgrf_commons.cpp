@@ -8,6 +8,7 @@
 /** @file newgrf_commons.cpp Implementation of the class %OverrideManagerBase and its descendance, present and future. */
 
 #include "stdafx.h"
+#include "city_services_type.h"
 #include "debug.h"
 #include "landscape.h"
 #include "house.h"
@@ -306,7 +307,8 @@ void ObjectOverrideManager::SetEntitySpec(ObjectSpec &&spec)
 		type = this->AddEntityID(spec.grf_prop.local_id, spec.grf_prop.grfid, OBJECT_TRANSMITTER);
 	}
 
-	if (type == this->invalid_id) {
+	/* The top of the range is for the city services; NewGRF objects never get those. */
+	if (type == this->invalid_id || type >= OBJECT_CITY_SERVICE_FIRST) {
 		GrfMsg(Severity::Error, "Object.SetEntitySpec: Too many objects allocated. Ignoring.");
 		return;
 	}

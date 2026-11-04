@@ -30,6 +30,7 @@
 #include "traffic_light.h"
 #include "road_traffic.h"
 #include "town_zoning.h"
+#include "city_services.h"
 #include "town.h"
 #include "viewport_kdtree.h"
 #include "newgrf_profiling.h"
@@ -154,6 +155,7 @@ void InitializeGame(uint size_x, uint size_y, bool reset_date, bool reset_settin
 	InitializeTrafficLights();
 	InitializeRoadTraffic();
 	InitializeTownZones();
+	InitializeCityServices();
 
 	InitializeCompanies();
 	AI::Initialize();

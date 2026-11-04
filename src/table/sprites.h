@@ -378,7 +378,7 @@ static const SpriteID SPR_BRIDGE_DECKS_ROAD = SPR_BRIDGE_DECKS_BASE + 18;
 /** @} */
 
 /** From where can we start putting NewGRFs. */
-/* City fork: traffic lights, tile overlays (road traffic, zoning) and their icons. */
+/* City fork graphics (media/baseset/openttd/city.png): traffic lights, tile overlays, city services, icons. */
 static constexpr SpriteID SPR_TRAFFIC_LIGHTS_BASE = SPR_BRIDGE_DECKS_BASE + BRIDGE_DECKS_SPRITE_COUNT;
 static constexpr SpriteID SPR_TRAFFIC_LIGHT_FRONT_RED = SPR_TRAFFIC_LIGHTS_BASE + 0; ///< Traffic light post seen from the front, red lit.
 static constexpr SpriteID SPR_TRAFFIC_LIGHT_FRONT_AMBER = SPR_TRAFFIC_LIGHTS_BASE + 1; ///< Traffic light post seen from the front, amber lit.
@@ -392,7 +392,9 @@ static constexpr SpriteID SPR_IMG_ZONE_COMMERCIAL = SPR_TRAFFIC_LIGHTS_BASE + 26
 static constexpr SpriteID SPR_IMG_ZONE_INDUSTRIAL = SPR_TRAFFIC_LIGHTS_BASE + 27; ///< Icon of the industrial zone tool.
 static constexpr SpriteID SPR_IMG_ZONE_PARK = SPR_TRAFFIC_LIGHTS_BASE + 28; ///< Icon of the park zone tool.
 static constexpr SpriteID SPR_IMG_ZONE_CLEAR = SPR_TRAFFIC_LIGHTS_BASE + 29; ///< Icon of the remove-zoning tool.
-static constexpr uint16_t TRAFFIC_LIGHTS_SPRITE_COUNT = 30;
+static constexpr SpriteID SPR_CITY_SERVICE_BASE = SPR_TRAFFIC_LIGHTS_BASE + 30; ///< City service buildings, in #CityService order.
+static constexpr SpriteID SPR_IMG_CITY_SERVICE_BASE = SPR_TRAFFIC_LIGHTS_BASE + 35; ///< Icons of the city service tools, in #CityService order.
+static constexpr uint16_t TRAFFIC_LIGHTS_SPRITE_COUNT = 40;
 
 static const SpriteID SPR_NEWGRFS_BASE = SPR_TRAFFIC_LIGHTS_BASE + TRAFFIC_LIGHTS_SPRITE_COUNT;
 
