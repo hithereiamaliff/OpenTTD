@@ -40,7 +40,7 @@
 #include "roadveh_cmd.h"
 #include "road_cmd.h"
 #include "newgrf_roadstop.h"
-#include "traffic_light.h"
+#include "road_junction.h"
 
 #include "table/strings.h"
 
@@ -957,9 +957,9 @@ static Trackdir RoadFindPathToDest(RoadVehicle *v, TileIndex tile, DiagDirection
 		}
 	}
 
-	/* Traffic lights: wait for green before entering the junction. This happens before the
-	 * cached path is consulted, so a waiting vehicle doesn't pathfind again every tick. */
-	if (v->tile != tile && IsNormalRoadTile(tile) && HasTrafficLight(tile) && !TrafficLightLetsVehicleEnter(tile, enterdir)) {
+	/* Traffic lights and giving way at junctions. This happens before the cached
+	 * path is consulted, so a waiting vehicle doesn't pathfind again every tick. */
+	if (v->tile != tile && IsNormalRoadTile(tile) && !RoadVehicleMayEnterTile(v, tile, enterdir)) {
 		return Trackdir::Invalid;
 	}
 

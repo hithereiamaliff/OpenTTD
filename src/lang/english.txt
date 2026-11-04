@@ -1669,6 +1669,8 @@ STR_CONFIG_SETTING_TREE_PLACER_IMPROVED                         :Improved
 
 STR_CONFIG_SETTING_ROAD_SIDE                                    :Road vehicle driving side: {STRING2}
 STR_CONFIG_SETTING_ROAD_SIDE_HELPTEXT                           :Choose the road vehicle driving side.{}This can also affect signal side and semaphore graphics.{}It may require reloading the game for a change to take full effect
+STR_CONFIG_SETTING_ROAD_GIVE_WAY                                :Road vehicles give way at junctions: {STRING2}
+STR_CONFIG_SETTING_ROAD_GIVE_WAY_HELPTEXT                       :A road vehicle only drives onto a junction when no vehicle from the crossing road is on it, and at a busy junction vehicles take turns, longest waiting first. Busy junctions without traffic lights then slow traffic down, while traffic lights let whole queues through on green.{}When disabled, vehicles drive through each other at junctions, as in regular OpenTTD
 
 ###length 2
 STR_CONFIG_SETTING_ROAD_SIDE_LEFT                               :Left

@@ -395,6 +395,8 @@ add_files(
     road_gui.cpp
     road_gui.h
     road_internal.h
+    road_junction.cpp
+    road_junction.h
     road_map.cpp
     road_map.h
     road_type.h

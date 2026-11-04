@@ -614,6 +614,7 @@ struct VehicleSettings {
 	bool never_expire_vehicles; ///< never expire vehicles
 	uint8_t extend_vehicle_life; ///< extend vehicle life by this many years
 	RoadVehicleDrivingSide road_side; ///< the side of the road vehicles drive on
+	bool road_give_way; ///< road vehicles give way to crossing traffic at junctions
 	uint8_t plane_crashes; ///< number of plane crashes, 0 = none, 1 = reduced, 2 = normal
 	bool aircraft_range; ///< enable range limits for aircraft
 };

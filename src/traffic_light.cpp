@@ -92,28 +92,6 @@ TrackdirBits GetTrafficLightRedTrackdirs(TileIndex tile)
 }
 
 /**
- * A vehicle is about to enter a junction: may it go?
- * A vehicle that has to wait tells the lights it is there, so they can switch.
- * @param tile The junction tile.
- * @param enterdir The direction the vehicle is travelling in.
- * @return true if the vehicle has green.
- */
-bool TrafficLightLetsVehicleEnter(TileIndex tile, DiagDirection enterdir)
-{
-	TrafficLight *tl = GetTrafficLight(tile);
-	if (tl == nullptr) return true;
-
-	Axis axis = DiagDirToAxis(enterdir);
-	if (tl->IsGreenFor(axis)) {
-		tl->entered = true;
-		return true;
-	}
-
-	SetBit(tl->demand, to_underlying(axis));
-	return false;
-}
-
-/**
  * Should the lights facing traffic on this axis be drawn green?
  * @param tile The junction tile.
  * @param axis The axis of the traffic the light faces.

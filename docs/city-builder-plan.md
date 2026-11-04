@@ -77,13 +77,42 @@ with 16 buses the effect was negligible, with 30 buses on a fully lit grid the
 throughput dropped by about 28%. Traffic control only becomes worth building
 once unlit junctions have a cost of their own, which is why M2 comes next.
 
+## Done: M2 part 1, giving way at junctions
+
+- Setting "Road vehicles give way at junctions" (Settings, Vehicles, Routing;
+  `vehicle.road_give_way`, on by default, saved in the savegame).
+- A road vehicle only drives onto a junction when no vehicle that came in over
+  the crossing road is on it. At an unlit junction, vehicles waiting on both
+  roads take turns, longest waiting first (the vehicle's existing, saved
+  blocked counter; ties by vehicle number).
+- "Don't block the box": a vehicle stays out of a junction (lit or not) when the
+  road it leaves by is backed up right behind it (from its cached route).
+- Safety valves: a vehicle stuck on a junction for 32 tries stops holding up
+  crossing traffic, and one that waited 400 tries goes anyway. No deadlock
+  can last.
+- Nothing new is saved per vehicle or junction. Code: `src/road_junction.{h,cpp}`,
+  one hook in `RoadFindPathToDest`.
+
+Results (test AI, grid town, two crossing bus lines, about 5.5 game years):
+
+| Setup, 30 buses | Average profit | vs regular OpenTTD |
+|---|---|---|
+| Regular OpenTTD | 18,183 | — |
+| Give-way, no lights | 13,215 | −27% |
+| Give-way + lights on the 3 central junctions | 19,138 | +5% |
+| Give-way + lights on all 13 junctions | 18,329 | +1% |
+
+With 50 buses nothing deadlocks: the number of moving buses keeps recovering
+(26 of 50 moving on average without lights, 34 with three lights). Lights
+now pay off at busy junctions, and too many lights still cost a little.
+
 ## Roadmap
 
 Sizes are rough: S = one session, M = a few, L = many, XL = a project in itself.
 
 | # | Feature | What it means in OpenTTD | Size | Notes |
 |---|---|---|---|---|
-| M2 | Traffic realism | Vehicles give way to crossing traffic at unlit junctions, so busy crossings jam and lights pay off. Light settings window (timings, fixed-time mode, green-wave offsets), amber phase, pathfinder penalty for lights, congestion overlay that colours busy roads. | M–L | Touches road vehicle movement; must stay deadlock-free and fast. |
+| M2 | Traffic realism | ~~Vehicles give way to crossing traffic at unlit junctions~~ (done). Still to do: light settings window (timings, fixed-time mode, green-wave offsets), amber phase, pathfinder penalty for busy junctions, congestion overlay that colours busy roads. | M | |
 | M3 | Zoning | Paint residential / commercial / industrial / park zones around towns; town growth only builds matching buildings there. Demand bars (RCI) in the town window. | L | Deep change to town growth (`town_cmd.cpp`). Zones live in their own chunk. |
 | M4 | City services and happiness | Player funds police, fire, health, education and parks as buildings with a coverage radius. Coverage drives town happiness, which drives growth and ratings. Monthly upkeep. | L | Builds on objects; needs new graphics or reused object sprites. |
 | M5 | Town car traffic | Towns send private cars between homes and workplaces. Good public transport takes cars off the road. | XL | The most SimCity-like part; performance-sensitive on big maps. |

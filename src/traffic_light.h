@@ -48,7 +48,6 @@ extern TrafficLightMap _traffic_lights;
 bool CanHaveTrafficLight(TileIndex tile);
 TrafficLight *GetTrafficLight(TileIndex tile);
 TrackdirBits GetTrafficLightRedTrackdirs(TileIndex tile);
-bool TrafficLightLetsVehicleEnter(TileIndex tile, DiagDirection enterdir);
 bool TrafficLightShowsGreen(TileIndex tile, Axis axis);
 
 void TrafficLightsOnRoadChanged(TileIndex tile);
