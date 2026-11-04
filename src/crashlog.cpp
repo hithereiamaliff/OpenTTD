@@ -22,6 +22,7 @@
 #include "news_gui.h"
 #include "fileio_func.h"
 #include "fileio_type.h"
+#include "fios.h"
 
 #include "company_func.h"
 #include "3rdparty/fmt/chrono.h"
@@ -229,7 +230,7 @@ bool CrashLog::WriteSavegame()
 	try {
 		_gamelog.Emergency();
 
-		this->savegame_filename = this->CreateFileName(".sav");
+		this->savegame_filename = this->CreateFileName(SAVEGAME_EXTENSION);
 
 		/* Don't do a threaded saveload. */
 		return SaveOrLoad(this->savegame_filename, SaveLoadOperation::Save, DetailedFileType::GameFile, Subdirectory::None, false) == SaveLoadResult::Ok;

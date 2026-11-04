@@ -122,6 +122,16 @@ void ScanScenarios();
 std::optional<std::string_view> FindScenario(const ContentInfo &ci, bool md5sum);
 
 /**
+ * Extension of the savegames this game writes. Savegames of regular OpenTTD
+ * (".sav") still load, but are never overwritten: saves made here can't be
+ * loaded by regular OpenTTD, and regular OpenTTD doesn't list this extension.
+ */
+static constexpr std::string_view SAVEGAME_EXTENSION = ".csav";
+
+/** Extension of savegames written by regular OpenTTD; these can be loaded too. */
+static constexpr std::string_view REGULAR_SAVEGAME_EXTENSION = ".sav";
+
+/**
  * A savegame name automatically numbered.
  */
 struct FiosNumberedSaveName {

@@ -423,7 +423,7 @@ static bool ConSave(std::span<std::string_view> argv)
 	}
 
 	if (argv.size() == 2) {
-		std::string filename = fmt::format("{}.sav", argv[1]);
+		std::string filename = fmt::format("{}{}", argv[1], SAVEGAME_EXTENSION);
 		IConsolePrint(CC_DEFAULT, "Saving map...");
 
 		if (SaveOrLoad(filename, SaveLoadOperation::Save, DetailedFileType::GameFile, Subdirectory::Save) != SaveLoadResult::Ok) {

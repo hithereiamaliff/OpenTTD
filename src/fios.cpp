@@ -104,13 +104,14 @@ const FiosItem *FileList::FindItem(std::string_view file)
 	if (number.has_value() && !consumer.AnyBytesLeft() && IsInsideMM(*number, 0, this->size())) return &this->at(*number);
 
 	/* As a last effort assume it is an OpenTTD savegame and
-	 * that the ".sav" part was not given. */
-	std::string long_file(file);
-	long_file += ".sav";
-	for (const auto &it : *this) {
-		const FiosItem *item = &it;
-		if (long_file == item->name) return item;
-		if (long_file == item->title.GetDecodedString()) return item;
+	 * that the extension part was not given. */
+	for (std::string_view extension : {SAVEGAME_EXTENSION, REGULAR_SAVEGAME_EXTENSION}) {
+		std::string long_file = fmt::format("{}{}", file, extension);
+		for (const auto &it : *this) {
+			const FiosItem *item = &it;
+			if (long_file == item->name) return item;
+			if (long_file == item->title.GetDecodedString()) return item;
+		}
 	}
 
 	return nullptr;
@@ -238,7 +239,7 @@ static std::string FiosMakeFilename(const std::string *path, std::string_view na
  */
 std::string FiosMakeSavegameName(std::string_view name)
 {
-	std::string_view extension = (_game_mode == GameMode::Editor) ? ".scn" : ".sav";
+	std::string_view extension = (_game_mode == GameMode::Editor) ? ".scn" : SAVEGAME_EXTENSION;
 
 	return FiosMakeFilename(_fios_path, name, extension);
 }
@@ -412,12 +413,13 @@ static std::string GetFileTitle(std::string_view file, Subdirectory subdir)
 std::tuple<FiosType, std::string> FiosGetSavegameListCallback(SaveLoadOperation fop, std::string_view file, std::string_view ext)
 {
 	/* Show savegame files
+	 * .CSAV saved game of this game
 	 * .SAV OpenTTD saved game
 	 * .SS1 Transport Tycoon Deluxe preset game
 	 * .SV1 Transport Tycoon Deluxe (Patch) saved game
 	 * .SV2 Transport Tycoon Deluxe (Patch) saved 2-player game */
 
-	if (StrEqualsIgnoreCase(ext, ".sav")) {
+	if (StrEqualsIgnoreCase(ext, SAVEGAME_EXTENSION) || StrEqualsIgnoreCase(ext, REGULAR_SAVEGAME_EXTENSION)) {
 		return { FIOS_TYPE_FILE, GetFileTitle(file, Subdirectory::Save) };
 	}
 
@@ -728,7 +730,7 @@ FiosNumberedSaveName::FiosNumberedSaveName(const std::string &prefix) : prefix(p
 
 	/* Callback for FiosFileScanner. */
 	static FiosGetTypeAndNameProc *const proc = [](SaveLoadOperation, std::string_view file, std::string_view ext) {
-		if (StrEqualsIgnoreCase(ext, ".sav") && file.starts_with(_prefix)) return std::tuple(FIOS_TYPE_FILE, std::string{});
+		if (StrEqualsIgnoreCase(ext, SAVEGAME_EXTENSION) && file.starts_with(_prefix)) return std::tuple(FIOS_TYPE_FILE, std::string{});
 		return std::tuple(FIOS_TYPE_INVALID, std::string{});
 	};
 
@@ -738,7 +740,7 @@ FiosNumberedSaveName::FiosNumberedSaveName(const std::string &prefix) : prefix(p
 	/* Get the save list. */
 	FileList list;
 	FiosFileScanner scanner(SaveLoadOperation::Save, proc, list);
-	scanner.Scan(".sav", *_autosave_path, false);
+	scanner.Scan(SAVEGAME_EXTENSION, *_autosave_path, false);
 
 	/* Find the number for the most recent save, if any. */
 	if (!list.empty()) {
@@ -750,19 +752,19 @@ FiosNumberedSaveName::FiosNumberedSaveName(const std::string &prefix) : prefix(p
 
 /**
  * Generate a savegame name and number according to _settings_client.gui.max_num_autosaves.
- * @return A filename in format "<prefix><number>.sav".
+ * @return A filename in format "<prefix><number><extension>".
  */
 std::string FiosNumberedSaveName::Filename()
 {
 	if (++this->number >= _settings_client.gui.max_num_autosaves) this->number = 0;
-	return fmt::format("{}{}.sav", this->prefix, this->number);
+	return fmt::format("{}{}{}", this->prefix, this->number, SAVEGAME_EXTENSION);
 }
 
 /**
  * Generate an extension for a savegame name.
- * @return An extension in format "-<prefix>.sav".
+ * @return An extension in format "-<prefix><extension>".
  */
 std::string FiosNumberedSaveName::Extension()
 {
-	return fmt::format("-{}.sav", this->prefix);
+	return fmt::format("-{}{}", this->prefix, SAVEGAME_EXTENSION);
 }
