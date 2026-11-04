@@ -378,16 +378,21 @@ static const SpriteID SPR_BRIDGE_DECKS_ROAD = SPR_BRIDGE_DECKS_BASE + 18;
 /** @} */
 
 /** From where can we start putting NewGRFs. */
-/* Traffic lights and the road traffic overlay. */
+/* City fork: traffic lights, tile overlays (road traffic, zoning) and their icons. */
 static constexpr SpriteID SPR_TRAFFIC_LIGHTS_BASE = SPR_BRIDGE_DECKS_BASE + BRIDGE_DECKS_SPRITE_COUNT;
 static constexpr SpriteID SPR_TRAFFIC_LIGHT_FRONT_RED = SPR_TRAFFIC_LIGHTS_BASE + 0; ///< Traffic light post seen from the front, red lit.
 static constexpr SpriteID SPR_TRAFFIC_LIGHT_FRONT_AMBER = SPR_TRAFFIC_LIGHTS_BASE + 1; ///< Traffic light post seen from the front, amber lit.
 static constexpr SpriteID SPR_TRAFFIC_LIGHT_FRONT_GREEN = SPR_TRAFFIC_LIGHTS_BASE + 2; ///< Traffic light post seen from the front, green lit.
 static constexpr SpriteID SPR_TRAFFIC_LIGHT_BACK = SPR_TRAFFIC_LIGHTS_BASE + 3; ///< Traffic light post seen from the back.
-static constexpr SpriteID SPR_TRAFFIC_OVERLAY_BASE = SPR_TRAFFIC_LIGHTS_BASE + 4; ///< Traffic overlay on flat, SLOPE_SW, SLOPE_SE, SLOPE_NE and SLOPE_NW road, in company colours.
-static constexpr SpriteID SPR_IMG_TRAFFIC_LIGHTS = SPR_TRAFFIC_LIGHTS_BASE + 9; ///< Icon of the traffic light tool.
-static constexpr SpriteID SPR_IMG_TRAFFIC_OVERLAY = SPR_TRAFFIC_LIGHTS_BASE + 10; ///< Icon of the road traffic overlay.
-static constexpr uint16_t TRAFFIC_LIGHTS_SPRITE_COUNT = 11;
+static constexpr SpriteID SPR_TILE_OVERLAY_BASE = SPR_TRAFFIC_LIGHTS_BASE + 4; ///< Tile overlay in company colours, by #SlopeToSpriteOffset (19 sprites).
+static constexpr SpriteID SPR_IMG_TRAFFIC_LIGHTS = SPR_TRAFFIC_LIGHTS_BASE + 23; ///< Icon of the traffic light tool.
+static constexpr SpriteID SPR_IMG_TRAFFIC_OVERLAY = SPR_TRAFFIC_LIGHTS_BASE + 24; ///< Icon of the road traffic overlay.
+static constexpr SpriteID SPR_IMG_ZONE_RESIDENTIAL = SPR_TRAFFIC_LIGHTS_BASE + 25; ///< Icon of the residential zone tool.
+static constexpr SpriteID SPR_IMG_ZONE_COMMERCIAL = SPR_TRAFFIC_LIGHTS_BASE + 26; ///< Icon of the commercial zone tool.
+static constexpr SpriteID SPR_IMG_ZONE_INDUSTRIAL = SPR_TRAFFIC_LIGHTS_BASE + 27; ///< Icon of the industrial zone tool.
+static constexpr SpriteID SPR_IMG_ZONE_PARK = SPR_TRAFFIC_LIGHTS_BASE + 28; ///< Icon of the park zone tool.
+static constexpr SpriteID SPR_IMG_ZONE_CLEAR = SPR_TRAFFIC_LIGHTS_BASE + 29; ///< Icon of the remove-zoning tool.
+static constexpr uint16_t TRAFFIC_LIGHTS_SPRITE_COUNT = 30;
 
 static const SpriteID SPR_NEWGRFS_BASE = SPR_TRAFFIC_LIGHTS_BASE + TRAFFIC_LIGHTS_SPRITE_COUNT;
 

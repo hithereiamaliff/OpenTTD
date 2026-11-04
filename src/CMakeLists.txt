@@ -555,6 +555,10 @@ add_files(
     town_kdtree.h
     town_map.h
     town_type.h
+    town_zoning.cpp
+    town_zoning.h
+    town_zoning_cmd.h
+    town_zoning_gui.cpp
     townname.cpp
     townname_func.h
     townname_type.h

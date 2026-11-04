@@ -749,6 +749,12 @@ enum class WindowClass : uint16_t {
 	 */
 	TrafficLight,
 
+	/**
+	 * Zoning toolbar; %Window numbers:
+	 *   - 0 = #TownZoningWidgets
+	 */
+	TownZoning,
+
 	Invalid = 0xFFFF, ///< Invalid window.
 };
 

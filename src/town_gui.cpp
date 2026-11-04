@@ -50,6 +50,7 @@
 #include "graph_gui.h"
 
 #include "widgets/town_widget.h"
+#include "town_zoning.h"
 
 #include "table/strings.h"
 
@@ -396,6 +397,11 @@ public:
 		DrawString(tr, GetString(STR_TOWN_VIEW_POPULATION_HOUSES, this->town->cache.population, this->town->cache.num_houses));
 		tr.top += GetCharacterHeight(FontSize::Normal);
 
+		TownZoneDemand demand = GetTownZoneDemand(this->town);
+		StringID demand_str = demand.commercial > 20 ? STR_TOWN_VIEW_ZONING_WANTS_COMMERCIAL : (demand.commercial < -20 ? STR_TOWN_VIEW_ZONING_WANTS_RESIDENTIAL : STR_TOWN_VIEW_ZONING_BALANCED);
+		DrawString(tr, GetString(demand_str, demand.residents, demand.jobs));
+		tr.top += GetCharacterHeight(FontSize::Normal);
+
 		StringID str_last_period = TimerGameEconomy::UsingWallclockUnits() ? STR_TOWN_VIEW_CARGO_LAST_MINUTE_MAX : STR_TOWN_VIEW_CARGO_LAST_MONTH_MAX;
 
 		for (auto tpe : {TownProductionEffect::Passengers, TownProductionEffect::Mail}) {
@@ -533,7 +539,7 @@ public:
 	 */
 	uint GetDesiredInfoHeight(int width) const
 	{
-		uint aimed_height = static_cast<uint>(1 + CargoSpec::town_production_cargoes[TownProductionEffect::Passengers].size() + CargoSpec::town_production_cargoes[TownProductionEffect::Mail].size()) * GetCharacterHeight(FontSize::Normal);
+		uint aimed_height = static_cast<uint>(2 + CargoSpec::town_production_cargoes[TownProductionEffect::Passengers].size() + CargoSpec::town_production_cargoes[TownProductionEffect::Mail].size()) * GetCharacterHeight(FontSize::Normal);
 
 		bool first = true;
 		for (TownAcceptanceEffect i : EnumRange(TownAcceptanceEffect::End)) {

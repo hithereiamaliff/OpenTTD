@@ -990,7 +990,7 @@ struct BuildRoadToolbarWindow : Window {
 		Hotkey('T', "tunnel", WID_ROT_BUILD_TUNNEL),
 		Hotkey('R', "remove", WID_ROT_REMOVE),
 		Hotkey('C', "convert", WID_ROT_CONVERT_ROAD),
-		Hotkey('L', "traffic_lights", WID_ROT_TRAFFIC_LIGHTS),
+		Hotkey('S', "build_traffic_lights", WID_ROT_TRAFFIC_LIGHTS),
 		Hotkey('O', "traffic_overlay", WID_ROT_TRAFFIC_OVERLAY),
 		Hotkey(WKC_L_BRACKET, "prev_roadtype", to_underlying(SpecialListHotkeys::PreviousItem)),
 		Hotkey(WKC_R_BRACKET, "next_roadtype", to_underlying(SpecialListHotkeys::NextItem)),

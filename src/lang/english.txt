@@ -483,6 +483,7 @@ STR_MAP_MENU_SIGN_LIST                                          :Sign list
 # Town menu
 STR_TOWN_MENU_TOWN_DIRECTORY                                    :Town directory
 STR_TOWN_MENU_FOUND_TOWN                                        :Found town
+STR_TOWN_MENU_ZONING                                            :Zoning
 
 # Subsidies menu
 STR_SUBSIDIES_MENU_SUBSIDIES                                    :Subsidies
@@ -3009,6 +3010,14 @@ STR_ROAD_TOOLBAR_TOOLTIP_TOGGLE_ONE_WAY_ROAD                    :{BLACK}Activate
 STR_ROAD_TOOLBAR_TOOLTIP_TRAFFIC_OVERLAY                        :{BLACK}Show road traffic: colour roads by how much traffic is held up there (green flows, yellow some waiting, orange slow, red jammed)
 STR_ROAD_TOOLBAR_TOOLTIP_BUILD_TRAFFIC_LIGHTS                   :{BLACK}Build traffic lights at a road junction, or click lights to change their timings. Ctrl+Click to remove them. Also press Shift to show cost estimate only
 
+# Zoning toolbar
+STR_TOWN_ZONING_CAPTION                                         :{WHITE}Zoning
+STR_TOWN_ZONING_RESIDENTIAL_TOOLTIP                             :{BLACK}Zone land for homes: towns only build houses, flats and public buildings such as churches there. Drag to zone an area
+STR_TOWN_ZONING_COMMERCIAL_TOOLTIP                              :{BLACK}Zone land for shops and offices: towns only build businesses (offices, shops, hotels, cinemas) and public buildings there. Drag to zone an area
+STR_TOWN_ZONING_INDUSTRIAL_TOOLTIP                              :{BLACK}Zone land for industry: towns don't build there. Drag to zone an area
+STR_TOWN_ZONING_PARK_TOOLTIP                                    :{BLACK}Zone land for parks: towns don't build there. Drag to zone an area
+STR_TOWN_ZONING_CLEAR_TOOLTIP                                   :{BLACK}Remove zoning: towns build there as usual. Drag to clear an area
+
 # Traffic light window
 STR_TRAFFIC_LIGHT_CAPTION                                       :{WHITE}Traffic lights in {TOWN}
 STR_TRAFFIC_LIGHT_CAPTION_NO_TOWN                               :{WHITE}Traffic lights
@@ -3241,6 +3250,15 @@ STR_LAND_AREA_INFORMATION_TRAM_OWNER                            :{BLACK}Tramway 
 STR_LAND_AREA_INFORMATION_RAIL_OWNER                            :{BLACK}Railway owner: {LTBLUE}{STRING1}
 STR_LAND_AREA_INFORMATION_LOCAL_AUTHORITY                       :{BLACK}Local authority: {LTBLUE}{STRING1}
 STR_LAND_AREA_INFORMATION_LOCAL_AUTHORITY_NONE                  :None
+STR_LAND_AREA_INFORMATION_ZONE                                  :{BLACK}Zoned for: {LTBLUE}{STRING}
+STR_LAND_AREA_INFORMATION_ZONE_RESIDENTIAL                      :homes
+STR_LAND_AREA_INFORMATION_ZONE_COMMERCIAL                       :shops and offices
+STR_LAND_AREA_INFORMATION_ZONE_INDUSTRIAL                       :industry
+STR_LAND_AREA_INFORMATION_ZONE_PARK                             :parks
+STR_LAND_AREA_INFORMATION_HOUSE_KIND                            :{BLACK}Zoning counts it as: {LTBLUE}{STRING}
+STR_LAND_AREA_INFORMATION_HOUSE_KIND_HOME                       :a home
+STR_LAND_AREA_INFORMATION_HOUSE_KIND_BUSINESS                   :a business
+STR_LAND_AREA_INFORMATION_HOUSE_KIND_PUBLIC                     :a public building
 STR_LAND_AREA_INFORMATION_LANDINFO_COORDS                       :{BLACK}Coordinates: {LTBLUE}{NUM} x {NUM} x {NUM}
 STR_LAND_AREA_INFORMATION_LANDINFO_INDEX                        :{BLACK}Tile index: {LTBLUE}{NUM} ({HEX})
 STR_LAND_AREA_INFORMATION_BUILD_DATE                            :{BLACK}Built/renovated: {LTBLUE}{DATE_LONG}
@@ -3809,6 +3827,9 @@ STR_TOWN_POPULATION                                             :{BLACK}World po
 STR_TOWN_VIEW_TOWN_CAPTION                                      :{WHITE}{TOWN}
 STR_TOWN_VIEW_CITY_CAPTION                                      :{WHITE}{TOWN} (City)
 STR_TOWN_VIEW_POPULATION_HOUSES                                 :{BLACK}Population: {ORANGE}{COMMA}{BLACK}  Houses: {ORANGE}{COMMA}
+STR_TOWN_VIEW_ZONING_BALANCED                                   :{BLACK}Homes for {ORANGE}{COMMA}{BLACK}, jobs for {ORANGE}{COMMA}{BLACK}: balanced
+STR_TOWN_VIEW_ZONING_WANTS_COMMERCIAL                           :{BLACK}Homes for {ORANGE}{COMMA}{BLACK}, jobs for {ORANGE}{COMMA}{BLACK}: wants more shops and offices
+STR_TOWN_VIEW_ZONING_WANTS_RESIDENTIAL                          :{BLACK}Homes for {ORANGE}{COMMA}{BLACK}, jobs for {ORANGE}{COMMA}{BLACK}: wants more homes
 STR_TOWN_VIEW_CARGO_LAST_MONTH_MAX                              :{BLACK}{CARGO_LIST} last month: {ORANGE}{COMMA}{BLACK}  max: {ORANGE}{COMMA}
 STR_TOWN_VIEW_CARGO_LAST_MINUTE_MAX                             :{BLACK}{CARGO_LIST} last minute: {ORANGE}{COMMA}{BLACK}  max: {ORANGE}{COMMA}
 STR_TOWN_VIEW_CARGO_FOR_TOWNGROWTH                              :{BLACK}Cargo needed for town growth:
@@ -5387,6 +5408,8 @@ STR_ERROR_TRAFFIC_LIGHTS_NEED_JUNCTION                          :traffic lights 
 STR_ERROR_ALREADY_HAS_TRAFFIC_LIGHTS                            :... junction already has traffic lights
 STR_ERROR_NO_TRAFFIC_LIGHTS                                     :there are no traffic lights here
 STR_ERROR_CAN_T_CHANGE_TRAFFIC_LIGHTS                           :Can't change these traffic lights...
+STR_ERROR_CAN_T_ZONE_HERE                                       :Can't zone this area...
+STR_ERROR_ZONE_AREA_TOO_LARGE                                   :... area too large, zone at most 128 by 128 tiles at a time
 
 # Waterway construction errors
 STR_ERROR_CAN_T_BUILD_CANALS                                    :Can't build canals here...

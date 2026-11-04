@@ -14,6 +14,7 @@
 #include "script_company.hpp"
 #include "../../town.h"
 #include "../../town_type.h"
+#include "../../town_zoning.h"
 
 /**
  * Class that handles all town related functions.
@@ -117,6 +118,30 @@ public:
 		TOWN_SIZE_LARGE = to_underlying(::TownSize::Large), ///< Large town.
 
 		TOWN_SIZE_INVALID = -1, ///< Invalid town size.
+	};
+
+	/**
+	 * What land is zoned for. Towns only build homes in residential zones,
+	 * only businesses in commercial zones, and nothing in industrial or park
+	 * zones. Public buildings fit in residential and commercial zones.
+	 * Unzoned land works as usual.
+	 */
+	enum TownZone {
+		TOWN_ZONE_NONE        = to_underlying(::TownZone::None),        ///< Not zoned.
+		TOWN_ZONE_RESIDENTIAL = to_underlying(::TownZone::Residential), ///< Homes and public buildings only.
+		TOWN_ZONE_COMMERCIAL  = to_underlying(::TownZone::Commercial),  ///< Businesses and public buildings only.
+		TOWN_ZONE_INDUSTRIAL  = to_underlying(::TownZone::Industrial),  ///< No town buildings, for industry.
+		TOWN_ZONE_PARK        = to_underlying(::TownZone::Park),        ///< No town buildings.
+	};
+
+	/**
+	 * Kinds of town buildings, as zoning sees them.
+	 */
+	enum TownBuildingKind {
+		TOWN_BUILDING_HOME     = to_underlying(::HouseKind::Home),     ///< Houses and flats.
+		TOWN_BUILDING_BUSINESS = to_underlying(::HouseKind::Business), ///< Offices, shops, hotels, theatres, cinemas and the like.
+		TOWN_BUILDING_PUBLIC   = to_underlying(::HouseKind::Public),   ///< Churches, stadiums, statues, fountains and parks.
+		TOWN_BUILDING_INVALID  = -1, ///< Not a town building.
 	};
 
 	/**
@@ -483,6 +508,32 @@ public:
 	 * @return The RoadLayout for the town.
 	 */
 	static RoadLayout GetRoadLayout(TownID town_id);
+
+	/**
+	 * Zone an area, or remove its zoning.
+	 * @param tile One corner of the area.
+	 * @param other_corner The opposite corner of the area.
+	 * @param zone The zone; TOWN_ZONE_NONE removes zoning.
+	 * @pre ScriptMap::IsValidTile(tile) && ScriptMap::IsValidTile(other_corner).
+	 * @pre The area is at most 128 by 128 tiles.
+	 * @return Whether the area has been/can be zoned.
+	 */
+	static bool SetZone(TileIndex tile, TileIndex other_corner, TownZone zone);
+
+	/**
+	 * Get what a tile is zoned for.
+	 * @param tile The tile.
+	 * @pre ScriptMap::IsValidTile(tile).
+	 * @return The zone, TOWN_ZONE_NONE if the tile is not zoned.
+	 */
+	static TownZone GetZone(TileIndex tile);
+
+	/**
+	 * Get what kind of town building stands on a tile, as zoning sees it.
+	 * @param tile The tile.
+	 * @return The kind, TOWN_BUILDING_INVALID if there is no town building on the tile.
+	 */
+	static TownBuildingKind GetBuildingKind(TileIndex tile);
 };
 
 #endif /* SCRIPT_TOWN_HPP */

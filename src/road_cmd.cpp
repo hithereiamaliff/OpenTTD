@@ -1697,16 +1697,8 @@ static void DrawRoadTrafficOverlay(const TileInfo *ti)
 		default: return;
 	}
 
-	uint offset;
-	switch (ti->tileh) {
-		case SLOPE_FLAT: offset = 0; break;
-		case SLOPE_SW: offset = 1; break;
-		case SLOPE_SE: offset = 2; break;
-		case SLOPE_NE: offset = 3; break;
-		case SLOPE_NW: offset = 4; break;
-		default: return; // Roads only lie flat or on these slopes after drawing their foundation.
-	}
-	DrawGroundSprite(SPR_TRAFFIC_OVERLAY_BASE + offset, pal);
+	if (IsHalftileSlope(ti->tileh)) return;
+	DrawGroundSprite(SPR_TILE_OVERLAY_BASE + SlopeToSpriteOffset(ti->tileh), pal);
 }
 
 /**

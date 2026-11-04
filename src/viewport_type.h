@@ -151,6 +151,7 @@ enum ViewportDragDropSelectionProcess : uint8_t {
 	DDSP_REMOVE_BUSSTOP,       ///< Road stop removal (buses)
 	DDSP_REMOVE_TRUCKSTOP,     ///< Road stop removal (trucks)
 	DDSP_CONVERT_ROAD,         ///< Road conversion
+	DDSP_SET_TOWN_ZONE,        ///< Zoning an area
 };
 
 

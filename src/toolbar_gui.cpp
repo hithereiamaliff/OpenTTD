@@ -48,6 +48,7 @@
 #include "linkgraph/linkgraphschedule.h"
 #include "newgrf_debug.h"
 #include "hotkeys.h"
+#include "town_zoning.h"
 #include "highscore.h"
 #include "goal_base.h"
 #include "goal_gui.h"
@@ -486,6 +487,7 @@ enum class TownMenuEntries {
 	ShowDirectory = 0, ///< Open window with list of towns.
 	ShowFoundTown, ///< Open town generation window.
 	ShowPlaceHouses, ///< Open house selection window.
+	ShowZoning, ///< Open the zoning toolbar.
 };
 
 static CallBackFunction ToolbarTownClick(Window *w)
@@ -494,6 +496,7 @@ static CallBackFunction ToolbarTownClick(Window *w)
 	list.push_back(MakeDropDownListStringItem(STR_TOWN_MENU_TOWN_DIRECTORY, TownMenuEntries::ShowDirectory));
 	if (_settings_game.economy.found_town != TownFounding::Forbidden) list.push_back(MakeDropDownListStringItem(STR_TOWN_MENU_FOUND_TOWN, TownMenuEntries::ShowFoundTown));
 	if (_settings_game.economy.place_houses != PlaceHouses::Forbidden) list.push_back(MakeDropDownListStringItem(STR_SCENEDIT_TOWN_MENU_PACE_HOUSE, TownMenuEntries::ShowPlaceHouses));
+	list.push_back(MakeDropDownListStringItem(STR_TOWN_MENU_ZONING, TownMenuEntries::ShowZoning));
 
 	PopupMainToolbarMenu(w, WID_TN_TOWNS, std::move(list), 0);
 
@@ -516,6 +519,7 @@ static CallBackFunction MenuClickTown(int index)
 		case TownMenuEntries::ShowPlaceHouses: // Setting could be changed when the dropdown was open
 			if (_settings_game.economy.place_houses != PlaceHouses::Forbidden) ShowBuildHousePicker(nullptr);
 			break;
+		case TownMenuEntries::ShowZoning: ShowTownZoningToolbar(); break;
 	}
 	return CallBackFunction::None;
 }
@@ -2087,6 +2091,7 @@ struct MainToolbarWindow : Window {
 			case MTHK_GIANT_SCREENSHOT: MakeScreenshotWithConfirm(SC_WORLD); break;
 			case MTHK_CHEATS: if (!_networking) ShowCheatWindow(); break;
 			case MTHK_TERRAFORM: ShowTerraformToolbar(); break;
+			case MTHK_ZONING: ShowTownZoningToolbar(); break;
 			case MTHK_EXTRA_VIEWPORT: ShowExtraViewportWindowForTileUnderCursor(); break;
 			case MTHK_CLIENT_LIST: if (_networking) ShowClientList(); break;
 			case MTHK_SIGN_LIST: ShowSignList(); break;
@@ -2178,6 +2183,7 @@ struct MainToolbarWindow : Window {
 		Hotkey(0, "giant_screenshot", MTHK_GIANT_SCREENSHOT),
 		Hotkey(WKC_CTRL | WKC_ALT | 'C', "cheats", MTHK_CHEATS),
 		Hotkey('L', "terraform", MTHK_TERRAFORM),
+		Hotkey(WKC_SHIFT | 'Z', "zoning", MTHK_ZONING),
 		Hotkey('V', "extra_viewport", MTHK_EXTRA_VIEWPORT),
 		Hotkey(0, "client_list", MTHK_CLIENT_LIST),
 		Hotkey(0, "sign_list", MTHK_SIGN_LIST),

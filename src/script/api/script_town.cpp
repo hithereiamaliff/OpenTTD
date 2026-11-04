@@ -21,6 +21,9 @@
 
 #include "table/strings.h"
 
+#include "../../town_zoning.h"
+#include "../../town_zoning_cmd.h"
+
 #include "../../safeguards.h"
 
 /* static */ SQInteger ScriptTown::GetTownCount()
@@ -396,4 +399,27 @@
 	if (!IsValidTown(town_id)) return ROAD_LAYOUT_INVALID;
 
 	return (ScriptTown::RoadLayout)((TownLayout)::Town::Get(town_id)->layout);
+}
+
+/* static */ bool ScriptTown::SetZone(TileIndex tile, TileIndex other_corner, TownZone zone)
+{
+	EnforcePrecondition(false, ::IsValidTile(tile));
+	EnforcePrecondition(false, ::IsValidTile(other_corner));
+	EnforcePrecondition(false, zone >= TOWN_ZONE_NONE && zone <= TOWN_ZONE_PARK);
+
+	return ScriptObject::Command<Commands::SetTownZone>::Do(other_corner, tile, static_cast<::TownZone>(zone));
+}
+
+/* static */ ScriptTown::TownZone ScriptTown::GetZone(TileIndex tile)
+{
+	if (!::IsValidTile(tile)) return TOWN_ZONE_NONE;
+
+	return static_cast<TownZone>(::GetTownZone(tile));
+}
+
+/* static */ ScriptTown::TownBuildingKind ScriptTown::GetBuildingKind(TileIndex tile)
+{
+	if (!::IsValidTile(tile) || !::IsTileType(tile, TileType::House)) return TOWN_BUILDING_INVALID;
+
+	return static_cast<TownBuildingKind>(::GetHouseKind(*::HouseSpec::Get(::GetHouseType(tile))));
 }

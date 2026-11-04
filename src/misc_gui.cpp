@@ -36,6 +36,7 @@
 #include "timer/timer.h"
 #include "timer/timer_window.h"
 #include "pathfinder/water_regions.h"
+#include "town_zoning.h"
 
 #include "widgets/misc_widget.h"
 
@@ -189,6 +190,23 @@ public:
 			this->landinfo_data.push_back(GetString(STR_LAND_AREA_INFORMATION_LOCAL_AUTHORITY, STR_LAND_AREA_INFORMATION_LOCAL_AUTHORITY_NONE, std::monostate{}));
 		} else {
 			this->landinfo_data.push_back(GetString(STR_LAND_AREA_INFORMATION_LOCAL_AUTHORITY, STR_TOWN_NAME, t->index));
+		}
+
+		/* Zoning */
+		if (TownZone zone = GetTownZone(this->tile); zone != TownZone::None) {
+			static const StringID zone_names[] = {
+				STR_LAND_AREA_INFORMATION_ZONE_RESIDENTIAL, STR_LAND_AREA_INFORMATION_ZONE_COMMERCIAL,
+				STR_LAND_AREA_INFORMATION_ZONE_INDUSTRIAL, STR_LAND_AREA_INFORMATION_ZONE_PARK,
+			};
+			this->landinfo_data.push_back(GetString(STR_LAND_AREA_INFORMATION_ZONE, zone_names[to_underlying(zone) - 1]));
+		}
+		if (IsTileType(this->tile, TileType::House)) {
+			static const StringID kind_names[] = {
+				STR_LAND_AREA_INFORMATION_HOUSE_KIND_HOME, STR_LAND_AREA_INFORMATION_HOUSE_KIND_BUSINESS,
+				STR_LAND_AREA_INFORMATION_HOUSE_KIND_PUBLIC,
+			};
+			HouseKind kind = GetHouseKind(*HouseSpec::Get(GetHouseType(this->tile)));
+			this->landinfo_data.push_back(GetString(STR_LAND_AREA_INFORMATION_HOUSE_KIND, kind_names[to_underlying(kind)]));
 		}
 
 		/* Build date */

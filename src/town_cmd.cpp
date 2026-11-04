@@ -66,6 +66,7 @@
 #include "timer/timer_game_calendar.h"
 #include "timer/timer_game_economy.h"
 #include "timer/timer_game_tick.h"
+#include "town_zoning.h"
 
 #include "table/strings.h"
 #include "table/town_land.h"
@@ -2824,6 +2825,10 @@ static bool TryBuildTownHouse(Town *t, TileIndex tile, TownExpandModes modes)
 	/* no house allowed at all, bail out */
 	if (!CanBuildHouseHere(tile, false)) return false;
 
+	/* Industrial and park zones are kept free of town buildings. */
+	TownZone planned_zone = GetTownZone(tile);
+	if (planned_zone == TownZone::Industrial || planned_zone == TownZone::Park) return false;
+
 	Slope slope = GetTileSlope(tile);
 	int maxz = GetTileMaxZ(tile);
 
@@ -2848,8 +2853,18 @@ static bool TryBuildTownHouse(Town *t, TileIndex tile, TownExpandModes modes)
 
 	/* Generate a list of all possible houses that can be built. */
 	for (const auto &hs : HouseSpec::Specs()) {
-		/* Verify that the candidate house spec matches the current tile status */
-		if (!hs.building_availability.All(zones) || !hs.enabled || hs.grf_prop.override_id != INVALID_HOUSE_ID) continue;
+		/* No businesses in residential zones, no homes in commercial zones. */
+		if (!TownZoneAllowsHouse(planned_zone, hs)) continue;
+
+		/* Verify that the candidate house spec matches the current tile status. Land zoned for
+		 * shops and offices gets them wherever it is in town, as long as the climate fits. */
+		bool fits = hs.building_availability.All(zones);
+		if (planned_zone == TownZone::Commercial) {
+			HouseZones climate = zones;
+			climate.Reset(HZ_ZONE_ALL);
+			fits = hs.building_availability.All(climate) && hs.building_availability.Any(HZ_ZONE_ALL);
+		}
+		if (!fits || !hs.enabled || hs.grf_prop.override_id != INVALID_HOUSE_ID) continue;
 
 		/* Don't let these counters overflow. Global counters are 32bit, there will never be that many houses. */
 		if (hs.class_id != HOUSE_NO_CLASS) {
@@ -2921,6 +2936,9 @@ static bool TryBuildTownHouse(Town *t, TileIndex tile, TownExpandModes modes)
 		} else {
 			/* 1x1 house checks are already done */
 		}
+
+		/* All tiles of the house must be zoned for it (or not zoned). */
+		if (!TownZonesAllowHouse(tile, *hs)) continue;
 
 		uint8_t random_bits = Random();
 

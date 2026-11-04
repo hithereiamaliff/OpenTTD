@@ -260,6 +260,7 @@ static const std::vector<ChunkHandlerRef> &ChunkHandlers()
 	extern const ChunkHandlerTable _water_region_chunk_handlers;
 	extern const ChunkHandlerTable _randomizer_chunk_handlers;
 	extern const ChunkHandlerTable _traffic_light_chunk_handlers;
+	extern const ChunkHandlerTable _town_zone_chunk_handlers;
 
 	/** List of all chunks in a savegame. */
 	static const ChunkHandlerTable _chunk_handler_tables[] = {
@@ -300,6 +301,7 @@ static const std::vector<ChunkHandlerRef> &ChunkHandlers()
 		_water_region_chunk_handlers,
 		_randomizer_chunk_handlers,
 		_traffic_light_chunk_handlers,
+		_town_zone_chunk_handlers,
 	};
 
 	static std::vector<ChunkHandlerRef> _chunk_handlers;

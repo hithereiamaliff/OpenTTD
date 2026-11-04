@@ -35,14 +35,14 @@ and tested. Nothing committed or published yet.
 
 ## Done: M1 traffic lights
 
-- Road toolbar button (hotkey `L`): click a junction to build lights,
+- Road toolbar button (hotkey `S`, as for rail signals): click a junction to build lights,
   Ctrl+click or the remove toggle to take them away. Works on town roads and on
   the company's own roads. Costs about as much as a road depot.
 - Lights are *actuated*: green stays on while traffic flows, and switches when
   vehicles wait on the other road (min 90, max 450 ticks of green; 30 ticks all
   red in between). Road vehicles and trams stop at red.
 - Drawn with the base set's electric signal sprites, one post per approach, on
-  the driving side.
+  the driving side (own graphics since M2 part 3).
 - Land info shows "Road junction with traffic lights" and the owner.
 - Lights disappear when the junction is removed; a bankrupt company's lights
   stay and become public.
@@ -162,6 +162,63 @@ times, which is now something players can experiment with.
   light penalty made buses avoid the lit junctions and did worse, hence the
   small default.
 
+## Done: M3 zoning
+
+- Towns menu, **Zoning** (hotkey Shift+Z) opens a small toolbar: homes
+  (residential), shops and offices (commercial), industry, parks, and clear.
+  Drag over the map to zone an area, up to 128 by 128 tiles at a time. Zoning
+  is free and works anywhere; it is a command, so it works in multiplayer and
+  for scripts.
+- While the toolbar is open, the main view tints zoned land: green for homes,
+  light blue for shops and offices, yellow for industry, dark green for parks.
+  The toolbar icons use the same colours.
+- Town growth follows the zones: houses and flats only on residential land;
+  businesses (offices, shops, hotels, theatres, cinemas, shopping centres, the
+  warehouse) only on commercial land; public buildings (churches, stadiums,
+  statues, fountains, parks) on either; nothing on industrial or park land. A
+  building on several tiles needs all of them zoned for it. Unzoned land works
+  as in regular OpenTTD, and existing buildings are left alone.
+- Commercial land gets businesses anywhere in town, not only in the centre
+  ring where OpenTTD normally puts offices. Without that, commercial zones at
+  the edge of town stayed almost empty.
+- Homes and businesses are told apart by building type. A NewGRF house counts
+  as the original building it names as its stand-in (the one the game shows
+  when the NewGRF is missing). Going by goods acceptance, the first try,
+  counted flats as shops.
+- Town window: "Homes for X, jobs for Y", and whether the town wants more
+  homes or more shops and offices (about one job per two residents counts as
+  balanced). This is advice; it doesn't change how the town grows. Typical
+  towns full of office blocks ask for homes, villages ask for shops.
+- Land info shows a tile's zone, and for a town building whether zoning counts
+  it as a home, a business or a public building.
+- Script API: `ScriptTown.SetZone`, `GetZone`, `GetBuildingKind`.
+- Savegame: chunk `ZONE` (tile, zone), zoned tiles only.
+- Code: `src/town_zoning.{h,cpp}`, `src/town_zoning_cmd.h`,
+  `src/town_zoning_gui.cpp`, `src/widgets/town_zoning_widget.h`,
+  `src/saveload/town_zoning_sl.cpp`, plus hooks in `town_cmd.cpp`,
+  `town_gui.cpp`, `viewport.cpp`, `misc_gui.cpp` and `toolbar_gui.cpp`.
+- Hotkeys: zoning is Shift+Z (Shift+F5 is already zoom in). The traffic light
+  tool moved from L to S, because L in the road toolbar hid the landscaping
+  hotkey.
+- Known limits: in multiplayer any company can change any zone (fine for
+  single player and friendly games; a setting or a cost could come later).
+  Zones are kept per tile in a hash map, which is fine for zoning around towns
+  but not meant for zoning a whole large map.
+
+Results (test AI, a town of 1,106 people, four quarters of about 24 by 24
+tiles zoned commercial, residential, park or left alone, fast town growth,
+about 3 years):
+
+| Quarter | New homes / businesses / public, zoned | Same quarter, no zoning |
+|---|---|---|
+| Commercial | 0 / 3 / 1 | 3 / 1 / 0 |
+| Residential | 9 / 0 / 1 | 7 / 1 / 2 |
+| Park | 0 / 0 / 0 | 6 / 7 / 4 |
+| Left alone | 7 / 4 / 0 | 7 / 11 / 0 |
+
+No building broke its zone. The zoned town reached 2,730 people against 3,178
+without zoning, because the park quarter stayed empty.
+
 ## Roadmap
 
 Sizes are rough: S = one session, M = a few, L = many, XL = a project in itself.
@@ -169,15 +226,15 @@ Sizes are rough: S = one session, M = a few, L = many, XL = a project in itself.
 | # | Feature | What it means in OpenTTD | Size | Notes |
 |---|---|---|---|---|
 | M2 | Traffic realism | Done: give way, light settings, traffic map and overlay, amber, routing around jams. | — | |
-| M3 | Zoning | Paint residential / commercial / industrial / park zones around towns; town growth only builds matching buildings there. Demand bars (RCI) in the town window. | L | Deep change to town growth (`town_cmd.cpp`). Zones live in their own chunk. |
+| M3 | Zoning | Done: zones, town growth follows them, homes/jobs line in the town window, zones in land info. | — | |
 | M4 | City services and happiness | Player funds police, fire, health, education and parks as buildings with a coverage radius. Coverage drives town happiness, which drives growth and ratings. Monthly upkeep. | L | Builds on objects; needs new graphics or reused object sprites. |
 | M5 | Town car traffic | Towns send private cars between homes and workplaces. Good public transport takes cars off the road. | XL | The most SimCity-like part; performance-sensitive on big maps. |
 | M6 | City budget and ordinances | Per-town budget (taxes from population, spending on services and roads) and ordinances (transit subsidy, parking limits and so on). | L | Needs a design call: the player stays a transport company, or also acts as mayor. |
 | M7 | Land value and pollution | Industries, stations and traffic pollute; parks and services raise land value; overlays show both. Affects which buildings appear. | M–L | Pairs well with M3 and M4. |
 | M8 | Utilities | Power and water networks. | XL | Probably skip, or keep it light (arctic/tropic towns already need food/water). |
 
-Recommended order: M2, then M3, M4 and M7 together (they share overlays and
-town growth), then M6 and M5.
+Recommended order: M4 and M7 together next (they build on zones, share
+overlays and town growth), then M6 and M5.
 
 ## Getting it onto the owner's computer (Windows)
 
@@ -203,5 +260,6 @@ Savegame locations (files end in `.sav`; autosaves are in `save/autosave`):
 ## Open questions for the owner
 
 1. Can you share one of your saves, so it can be tested before you play it?
-2. Which milestone next? Recommendation: M2.
+2. Which milestone next? Recommendation: M4 (city services) with M7 (land
+   value and pollution).
 3. A name for the fork.
