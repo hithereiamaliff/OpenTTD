@@ -1,0 +1,128 @@
+name: Windows build (city)
+
+# Builds a 64-bit Windows zip of this fork on every push to the 'city' branch,
+# keeps it as a workflow artifact, and publishes it as the rolling
+# "city-latest" pre-release so there is always one download link.
+#
+# Libraries come from vcpkg; the compiled packages are kept in the Actions
+# cache (no packages are published anywhere). The build is not code-signed,
+# so Windows SmartScreen asks for confirmation on first start.
+
+on:
+  push:
+    branches:
+    - city
+  workflow_dispatch:
+
+concurrency:
+  group: city-windows
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    name: Windows (x64)
+
+    runs-on: windows-latest
+
+    env:
+      VCPKG_TRIPLET: x64-windows-static
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v7
+
+    - name: Set paths
+      shell: bash
+      run: |
+        echo "VCPKG_DIR=${{ runner.temp }}/vcpkg" >> "${GITHUB_ENV}"
+        echo "VCPKG_CACHE=${{ runner.temp }}/vcpkg-cache" >> "${GITHUB_ENV}"
+
+    - name: Restore vcpkg package cache
+      id: vcpkg-cache
+      uses: actions/cache/restore@v6
+      with:
+        path: ${{ env.VCPKG_CACHE }}
+        key: vcpkg-${{ env.VCPKG_TRIPLET }}-${{ hashFiles('vcpkg.json') }}
+        restore-keys: vcpkg-${{ env.VCPKG_TRIPLET }}-
+
+    - name: Install vcpkg
+      shell: bash
+      run: |
+        git clone https://github.com/microsoft/vcpkg "${VCPKG_DIR}"
+        cd "${VCPKG_DIR}"
+        ./bootstrap-vcpkg.bat -disableMetrics
+        mkdir -p "${VCPKG_CACHE}"
+        echo "VCPKG_BINARY_SOURCES=clear;files,${VCPKG_CACHE},readwrite" >> "${GITHUB_ENV}"
+
+    - name: Install MSVC problem matcher
+      uses: ammaraskar/msvc-problem-matcher@master
+
+    - name: Configure developer command prompt for x64
+      uses: ilammy/msvc-dev-cmd@v1
+      with:
+        arch: x64
+
+    - name: Configure
+      shell: bash
+      run: |
+        mkdir build
+        cd build
+        cmake .. \
+          -GNinja \
+          -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+          -DVCPKG_TARGET_TRIPLET=${VCPKG_TRIPLET} \
+          -DCMAKE_TOOLCHAIN_FILE="${VCPKG_DIR}/scripts/buildsystems/vcpkg.cmake" \
+          # EOF
+
+    - name: Save vcpkg package cache
+      if: steps.vcpkg-cache.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v6
+      with:
+        path: ${{ env.VCPKG_CACHE }}
+        key: vcpkg-${{ env.VCPKG_TRIPLET }}-${{ hashFiles('vcpkg.json') }}
+
+    - name: Build
+      shell: bash
+      env:
+        NINJA_STATUS: "[%f/%t -- %e] "
+      run: |
+        cd build
+        cmake --build . --target openttd
+
+    - name: Package
+      shell: bash
+      run: |
+        cd build
+        cpack
+        rm -f bundles/*.sha256
+        mv bundles/openttd-*-windows-*.zip bundles/openttd-city-windows-x64.zip
+        ls -la bundles
+
+    - name: Store zip
+      uses: actions/upload-artifact@v7
+      with:
+        name: openttd-city-windows-x64
+        path: build/bundles/openttd-city-windows-x64.zip
+        retention-days: 30
+
+    - name: Publish as the city-latest pre-release
+      if: github.ref == 'refs/heads/city'
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        gh release delete city-latest --cleanup-tag --yes || true
+        gh release create city-latest build/bundles/openttd-city-windows-x64.zip \
+          --prerelease \
+          --target "${GITHUB_SHA}" \
+          --title "Latest Windows build (city branch)" \
+          --notes "Built from ${GITHUB_SHA} on the city branch.
+
+        How to play:
+        1. Unzip anywhere (for example your Desktop) and run openttd.exe.
+           The build isn't code-signed, so Windows may say it protected your PC: choose More info, then Run anyway.
+        2. It uses the same Documents\\OpenTTD folder as your normal OpenTTD, so it finds your saves, graphics and NewGRFs.
+        3. It loads your .sav files and saves as .csav. Your .sav files are never overwritten, and normal OpenTTD can't open .csav files."
