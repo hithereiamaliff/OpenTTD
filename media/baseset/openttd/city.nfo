@@ -10,9 +10,10 @@
 //   25-29: icons: zone residential, commercial, industrial, park, clear
 //   30-34: city service buildings: police, fire, clinic, school, park
 //   35-39: icons: police, fire, clinic, school, park
+//   40:    icon: network map of lines
 //
    -1 * 0	 0C "City fork graphics"
-   -1 * 3	 05 1C 28
+   -1 * 3	 05 1C 29
    -1 sprites/city.png 8bpp    4    4   4  17   -1  -16 normal
    -1 sprites/city.png 8bpp   12    4   4  17   -1  -16 normal
    -1 sprites/city.png 8bpp   20    4   4  17   -1  -16 normal
@@ -53,3 +54,4 @@
    -1 sprites/city.png 8bpp  390  160  14  12    0    0 normal
    -1 sprites/city.png 8bpp  408  160  16  15    0    0 normal
    -1 sprites/city.png 8bpp  428  160  14  14    0    0 normal
+   -1 sprites/city.png 8bpp  448  160  16  14    0    0 normal

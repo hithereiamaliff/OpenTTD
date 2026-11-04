@@ -394,7 +394,8 @@ static constexpr SpriteID SPR_IMG_ZONE_PARK = SPR_TRAFFIC_LIGHTS_BASE + 28; ///<
 static constexpr SpriteID SPR_IMG_ZONE_CLEAR = SPR_TRAFFIC_LIGHTS_BASE + 29; ///< Icon of the remove-zoning tool.
 static constexpr SpriteID SPR_CITY_SERVICE_BASE = SPR_TRAFFIC_LIGHTS_BASE + 30; ///< City service buildings, in #CityService order.
 static constexpr SpriteID SPR_IMG_CITY_SERVICE_BASE = SPR_TRAFFIC_LIGHTS_BASE + 35; ///< Icons of the city service tools, in #CityService order.
-static constexpr uint16_t TRAFFIC_LIGHTS_SPRITE_COUNT = 40;
+static constexpr SpriteID SPR_IMG_LINES_MAP = SPR_TRAFFIC_LIGHTS_BASE + 40; ///< Icon of the network map of lines.
+static constexpr uint16_t TRAFFIC_LIGHTS_SPRITE_COUNT = 41;
 
 static const SpriteID SPR_NEWGRFS_BASE = SPR_TRAFFIC_LIGHTS_BASE + TRAFFIC_LIGHTS_SPRITE_COUNT;
 

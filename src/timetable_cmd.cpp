@@ -528,6 +528,20 @@ void UpdateVehicleTimetable(Vehicle *v, bool travelling)
 		 * processing of different orders when filling the timetable. */
 		uint time_to_set = CeilDiv(std::max(time_taken, 1), Ticks::TICKS_PER_SECOND) * Ticks::TICKS_PER_SECOND;
 
+		/* Times that aren't timetabled are estimates. Let them follow the
+		 * measured times gradually, so one slow trip (a breakdown, a depot
+		 * visit, a traffic jam) doesn't throw off the estimate for the whole
+		 * line. They remember about one round trip: every vehicle sharing the
+		 * orders measures each order once per round trip. Departure boards and
+		 * the vehicles a line needs rely on them. */
+		uint16_t estimate = travelling ? real_current_order->GetTravelTime() : real_current_order->GetWaitTime();
+		if (!autofilling && estimate != 0) {
+			int weight = Clamp<int>(v->orders->GetNumVehicles(), 2, 8);
+			TimerGameTick::Ticks smoothed = estimate + (std::max(time_taken, 1) - estimate) / weight;
+			time_to_set = std::max<uint>(1, RoundDivSU(smoothed, Ticks::TICKS_PER_SECOND)) * Ticks::TICKS_PER_SECOND;
+		}
+		time_to_set = std::min<uint>(time_to_set, UINT16_MAX);
+
 		if (travelling && (autofilling || !real_current_order->IsTravelTimetabled())) {
 			ChangeTimetable(v, v->cur_real_order_index, time_to_set, MTF_TRAVEL_TIME, autofilling);
 		} else if (!travelling && (autofilling || !real_current_order->IsWaitTimetabled())) {

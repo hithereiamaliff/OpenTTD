@@ -20,6 +20,7 @@
 
 #include "line_type.h"
 #include "order_type.h"
+#include "station_type.h"
 #include "vehicle_type.h"
 
 struct OrderList;
@@ -38,5 +39,6 @@ void OnLineRidersDelivered(const Vehicle *front, uint count);
 int DrawLineBadge(const Rect &r, const OrderList *list, bool rtl = false);
 uint GetLineBadgeWidth(const OrderList *list);
 void ShowLineWindow(const Vehicle *v);
+void ShowDeparturesWindow(StationID station);
 
 #endif /* LINE_H */

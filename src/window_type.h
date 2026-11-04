@@ -767,6 +767,12 @@ enum class WindowClass : uint16_t {
 	 */
 	Line,
 
+	/**
+	 * Departure board; %Window numbers:
+	 *   - #StationID = #DeparturesWidgets
+	 */
+	Departures,
+
 	Invalid = 0xFFFF, ///< Invalid window.
 };
 

@@ -283,7 +283,7 @@ services took six tiles right at the centre, where towns would otherwise put
 their biggest office blocks. Services reach 10 tiles, so they do as well a
 few tiles out.
 
-## Done: transit part 1, lines (first two steps)
+## Done: transit part 1, lines
 
 The transit plan (City Bus Manager style play, Malaysian and Singaporean
 funding models, roads and BRT, buses and depots) is in
@@ -306,6 +306,26 @@ funding models, roads and BRT, buses and depots) is in
   vehicles, orders and timetable. Times show with tenths of a day.
 - Even spacing: with a target set, vehicles wait at the first stop until the
   target time since the last departure has passed (they keep loading).
+- Network map: the map window (F4) has a Lines view (its own button). Each
+  of your lines is drawn from stop to stop in its colour (all companies'
+  when spectating), stops are white squares, and lines sharing a stretch run
+  side by side instead of on top of each other.
+- Departure boards: the station window has a Departures button. The board
+  lists the next 14 vehicles to leave, soonest first: line badge, next two
+  stops ("to X, then Y"), vehicle and "now" or "in 3.4 days". Click a row
+  to show the vehicle, Ctrl+click for its line. Times are worked out from
+  where each vehicle is on its orders and the timetabled or estimated times
+  of those orders; at the first stop of a line with even spacing, vehicles
+  are spaced by the target as they will be held. "Go via" calls are left
+  out. Refreshes every second.
+- Steadier estimates: for orders without a timetable, OpenTTD keeps the time
+  the last vehicle took, so one slow trip (breakdown, depot visit, jam)
+  changed the estimate for the whole line. The estimate now moves a part of
+  the way towards each new measurement (half with one or two vehicles, an
+  eighth with eight or more), so it reflects about one round trip. The
+  timetable window shows these as "not timetabled" times as before, and the
+  vehicles a line needs and the departure boards use them. Timetabled times
+  and autofill are unchanged.
 - Statistics are counted when vehicles leave stops and when passengers get
   off, kept per month, and saved with the line in a new chunk `LINE` (by
   order list). Old saves get lines without numbers and fresh statistics.
@@ -317,8 +337,10 @@ funding models, roads and BRT, buses and depots) is in
 - Code: `src/line.{h,cpp}`, `src/line_type.h`, `src/line_cmd.h`,
   `src/line_gui.cpp`, `src/widgets/line_widget.h`,
   `src/saveload/line_sl.cpp`, plus hooks in `vehicle.cpp` (leaving a stop,
-  holding), `economy.cpp` (riders), `vehicle_gui.cpp`, `group_gui.cpp` and
-  `timetable_gui.cpp`.
+  holding), `economy.cpp` (riders), `vehicle_gui.cpp`, `group_gui.cpp`,
+  `timetable_gui.cpp`, `timetable_cmd.cpp` (estimates), `smallmap_gui.cpp`
+  (Lines view) and `station_gui.cpp` (Departures button). The board is in
+  `line_gui.cpp` too.
 
 Results (test AI, two town bus lines of 12 buses sharing orders, no
 lights, about 2 years; times in ticks, 74 per day):
@@ -332,6 +354,19 @@ lights, about 2 years; times in ticks, 74 per day):
 With even spacing the average wait is almost exactly half the gap, so the
 buses stop bunching. The line says it needs 11-17 buses for that target,
 against the 12 it has.
+
+Departure board accuracy (same save, 12 buses, about 2 years; a temporary
+probe noted each bus's predicted departure 4-6 and 14-16 days ahead and
+compared it with when it actually left; errors in days):
+
+| Estimates | 5 days ahead: median, 90% | 15 days ahead: median, 90% | Leaves later than shown, on average |
+|---|---|---|---|
+| Last trip only (OpenTTD as it was) | 2.1, 5.1 | 2.8, 8.2 | 1.5-1.8 |
+| Moving a quarter of the way | 1.6, 4.4 | 2.4, 6.4 | 0.9 |
+| Moving an eighth of the way (what a 12-bus line gets now) | 1.5, 4.4 | 2.1, 5.9 | 0.1-0.5 |
+
+The remaining error comes from bunching, breakdowns and depot visits, which
+no estimate from past trips can foresee.
 
 ## Roadmap
 

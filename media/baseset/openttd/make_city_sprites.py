@@ -11,6 +11,7 @@ Block layout (Action 5 type 0x1C, see SPR_TRAFFIC_LIGHTS_BASE in table/sprites.h
   25-29  icons: zone residential, commercial, industrial, park, clear zone
   30-34  city service buildings: police, fire, clinic, school, park
   35-39  icons: police, fire, clinic, school, park
+  40     icon: network map of lines
 """
 import math
 import sys
@@ -634,7 +635,24 @@ icon(428, 160, [
     ".w.......w....",
 ], {'T': TREE_DARK, 't': TREE, 'B': BROWN_DARK, 'w': BROWN}, "icon park")
 
-assert len(sprites) == 40, len(sprites)
+icon(448, 160, [
+    "..RRR...........",
+    ".RRRRR......BB..",
+    ".RRWRR....BBBB..",
+    ".RRRRR...BB.....",
+    "..RRRRRWWBB.....",
+    ".....RRWWWB.....",
+    "......RWWWB.....",
+    ".......BBRRR....",
+    "......BB..RRR...",
+    ".....BB....RRR..",
+    "..WWWB......RRWW",
+    ".WWWWW.......WWW",
+    ".WWWWW.......WWW",
+    "..WWW.........W.",
+], {'R': rgb_index((220, 40, 40)), 'B': rgb_index((40, 90, 220)), 'W': WHITE}, "icon network map")
+
+assert len(sprites) == 41, len(sprites)
 sheet.save(f"{SRC}/city.png", optimize=True)
 
 header = """// This file is part of OpenTTD.
@@ -649,6 +667,7 @@ header = """// This file is part of OpenTTD.
 //   25-29: icons: zone residential, commercial, industrial, park, clear
 //   30-34: city service buildings: police, fire, clinic, school, park
 //   35-39: icons: police, fire, clinic, school, park
+//   40:    icon: network map of lines
 //
    -1 * 0\t 0C "City fork graphics"
    -1 * 3\t 05 1C %02X

@@ -8,6 +8,8 @@
 /** @file smallmap_gui.cpp GUI that shows a small map of the world with metadata like owner or height. */
 
 #include "stdafx.h"
+#include "line.h"
+#include "order_base.h"
 #include "core/backup_type.hpp"
 #include "clear_map.h"
 #include "industry.h"
@@ -112,6 +114,14 @@ static const LegendAndColour _legend_routes[] = {
 	{.legend = STR_SMALLMAP_LEGENDA_AIRPORT_HELIPORT, .colour = PC_RED},
 	{.legend = STR_SMALLMAP_LEGENDA_DOCK, .colour = PC_LIGHT_BLUE},
 	{.end = true},
+};
+
+/** Legend for the network map of lines. */
+static const LegendAndColour _legend_lines[] = {
+	{.legend = STR_SMALLMAP_LEGENDA_LINES, .colour = PC_RED},
+	{.legend = STR_SMALLMAP_LEGENDA_LINE_STOPS, .colour = PC_WHITE},
+	{.legend = STR_SMALLMAP_LEGENDA_LINES_PARALLEL, .colour = PC_LIGHT_BLUE},
+	{.legend = STR_NULL, .end = true},
 };
 
 static const LegendAndColour _legend_traffic[] = {
@@ -244,6 +254,7 @@ enum class SmallMapType : uint8_t {
 	Vegetation, ///< Vegetation legend.
 	Owners, ///< Owners legend.
 	Traffic, ///< Road traffic legend.
+	Lines, ///< Network map of lines.
 	End, ///< End marker.
 };
 
@@ -257,6 +268,7 @@ static const EnumIndexArray<std::span<const LegendAndColour>, SmallMapType, Smal
 	_legend_vegetation,
 	_legend_land_owners,
 	_legend_traffic,
+	_legend_lines,
 };
 
 #define MKCOLOUR(x)         TO_LE32(x)
@@ -1166,6 +1178,9 @@ protected:
 		/* Draw link stat overlay */
 		if (this->map_type == SmallMapType::LinkStats) this->overlay->Draw(dpi);
 
+		/* Draw the lines of the network map */
+		if (this->map_type == SmallMapType::Lines) this->DrawLines();
+
 		const int map_labels_vertical_padding = ScaleGUITrad(2);
 
 		/* Draw town names */
@@ -1455,6 +1470,9 @@ protected:
 			case SmallMapType::Traffic:
 				return GetSmallMapTrafficPixels(tile, et);
 
+			case SmallMapType::Lines:
+				return GetSmallMapLinkStatsPixels(tile, et);
+
 			default: NOT_REACHED();
 		}
 	}
@@ -1552,6 +1570,62 @@ public:
 				std::max(0, (int)wid->current_x / 2 - 2), wid->current_y / 2, &sub);
 		this->SetNewScroll(sxy.x, sxy.y, sub);
 		this->SetDirty();
+	}
+
+	/**
+	 * Draw the lines of the local company (all companies when spectating) from
+	 * stop to stop in their colours, like a transit map. Lines sharing a stretch
+	 * are drawn side by side; stops are white squares.
+	 */
+	void DrawLines() const
+	{
+		const int width = std::max(3, ScaleGUITrad(3));
+		std::map<std::pair<StationID, StationID>, int> used; // Lines drawn so far per stretch, for side-by-side offsets.
+		std::vector<const Station *> stops_drawn;
+
+		for (const OrderList *list : OrderList::Iterate()) {
+			const Vehicle *v = list->GetFirstSharedVehicle();
+			if (v == nullptr || (_local_company != COMPANY_SPECTATOR && v->owner != _local_company)) continue;
+
+			std::vector<const Station *> stops;
+			for (const Order &order : list->GetOrders()) {
+				if (!order.IsType(OT_GOTO_STATION)) continue;
+				const Station *st = Station::GetIfValid(order.GetDestination().ToStationID());
+				if (st != nullptr && (stops.empty() || stops.back() != st)) stops.push_back(st);
+			}
+			if (stops.size() < 2) continue;
+
+			PixelColour colour = GetColourGradient(GetLineColour(list), Shade::Lighter);
+			for (size_t i = 0; i < stops.size(); i++) {
+				const Station *a = stops[i];
+				const Station *b = stops[(i + 1) % stops.size()];
+				if (a == b) continue;
+				auto key = std::minmax(a->index, b->index);
+				int k = used[key]++;
+				/* A line going back the way it came draws over itself; only offset distinct lines. */
+				if (stops.size() == 2 && i == 1) { used[key]--; continue; }
+				int offset = (k % 2 == 0 ? 1 : -1) * ((k + 1) / 2) * (width + 1);
+
+				Point pa = this->GetStationMiddle(a);
+				Point pb = this->GetStationMiddle(b);
+				if (std::abs(pa.x - pb.x) < std::abs(pa.y - pb.y)) {
+					pa.x += offset; pb.x += offset;
+				} else {
+					pa.y += offset; pb.y += offset;
+				}
+				GfxDrawLine(pa.x, pa.y, pb.x, pb.y, colour, width);
+			}
+			for (const Station *st : stops) {
+				if (std::ranges::find(stops_drawn, st) == stops_drawn.end()) stops_drawn.push_back(st);
+			}
+		}
+
+		const int half = std::max(2, width / 2 + 1);
+		for (const Station *st : stops_drawn) {
+			Point p = this->GetStationMiddle(st);
+			GfxFillRect(p.x - half, p.y - half, p.x + half, p.y + half, PC_BLACK);
+			GfxFillRect(p.x - half + 1, p.y - half + 1, p.x + half - 1, p.y + half - 1, PC_WHITE);
+		}
 	}
 
 	/**
@@ -1791,6 +1865,7 @@ public:
 			case WID_SM_VEGETATION: // Show vegetation
 			case WID_SM_OWNERS:     // Show land owners
 			case WID_SM_TRAFFIC:    // Show road traffic
+			case WID_SM_LINES:      // Show the network map of lines
 				this->SwitchMapType(static_cast<SmallMapType>(widget - WID_SM_CONTOUR));
 				SndClickBeep();
 				break;
@@ -1986,6 +2061,7 @@ class NWidgetSmallmapButtons : public NWidgetContainer {
 		{WID_SM_VEHICLES, WWT_IMGBTN, SPR_IMG_SHOW_VEHICLES, STR_SMALLMAP_TOOLTIP_SHOW_VEHICLES_ON_MAP},
 		{WID_SM_INDUSTRIES, WWT_IMGBTN, SPR_IMG_INDUSTRY, STR_SMALLMAP_TOOLTIP_SHOW_INDUSTRIES_ON_MAP},
 		{WID_SM_TRAFFIC, WWT_IMGBTN, SPR_IMG_TRAFFIC_OVERLAY, STR_SMALLMAP_TOOLTIP_SHOW_TRAFFIC_ON_MAP},
+		{WID_SM_LINES, WWT_IMGBTN, SPR_IMG_LINES_MAP, STR_SMALLMAP_TOOLTIP_SHOW_LINES_ON_MAP},
 	};
 
 	uint num_buttons; ///< The number of buttons excluding spacers.

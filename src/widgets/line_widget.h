@@ -24,4 +24,10 @@ enum LineWidgets : WidgetID {
 	WID_LN_TIMETABLE, ///< Show the line's timetable.
 };
 
+/** Widgets of the #DeparturesWindow class. */
+enum DeparturesWidgets : WidgetID {
+	WID_DEP_CAPTION, ///< Caption of the window.
+	WID_DEP_LIST,    ///< The departures.
+};
+
 #endif /* WIDGETS_LINE_WIDGET_H */

@@ -20,6 +20,7 @@
 #include "order_base.h"
 #include "palette_func.h"
 #include "settings_type.h"
+#include "station_base.h"
 #include "strings_func.h"
 #include "textbuf_gui.h"
 #include "timer/timer.h"
@@ -410,4 +411,255 @@ void ShowLineWindow(const Vehicle *v)
 {
 	if (v == nullptr || v->orders == nullptr) return;
 	AllocateWindowDescFront<LineWindow>(_line_desc, v->orders->index.base());
+}
+
+/** One expected departure from a station. */
+struct Departure {
+	TimerGameTick::Ticks when; ///< Ticks from now until it leaves.
+	VehicleID vehicle; ///< The vehicle.
+	VehicleOrderID order; ///< The order it leaves from.
+	std::array<StationID, 2> next{StationID::Invalid(), StationID::Invalid()}; ///< Its next two stops.
+};
+
+/**
+ * Does a vehicle stop at a station for this order?
+ * @param order The order.
+ * @param station The station.
+ * @return True if it is a station order for this station that isn't "go via".
+ */
+static bool StopsAt(const Order *order, StationID station)
+{
+	return order->IsType(OT_GOTO_STATION) && order->GetDestination() == station && !order->GetNonStopType().Test(OrderNonStopFlag::GoVia);
+}
+
+/**
+ * The next station stops of an order list after an order.
+ * @param list The order list.
+ * @param from The order after which to look.
+ * @param here The station to skip.
+ * @return Up to two stations.
+ */
+static std::array<StationID, 2> GetNextStops(const OrderList *list, VehicleOrderID from, StationID here)
+{
+	std::array<StationID, 2> next{StationID::Invalid(), StationID::Invalid()};
+	uint found = 0;
+	VehicleOrderID idx = from;
+	for (uint steps = 0; steps < list->GetNumOrders() && found < next.size(); steps++) {
+		idx = list->GetNext(idx);
+		const Order *order = list->GetOrderAt(idx);
+		if (order == nullptr || !order->IsType(OT_GOTO_STATION) || order->GetNonStopType().Test(OrderNonStopFlag::GoVia)) continue;
+		StationID st = order->GetDestination().ToStationID();
+		if (st == here || (found > 0 && st == next[found - 1])) continue;
+		next[found++] = st;
+	}
+	return next;
+}
+
+/**
+ * When will a vehicle next leave a station? Worked out from where it is on
+ * its orders and the timetabled or estimated times of those orders.
+ * @param v The vehicle.
+ * @param station The station.
+ * @return The departure, if the vehicle stops there.
+ */
+static std::optional<Departure> GetNextDeparture(const Vehicle *v, StationID station)
+{
+	const OrderList *list = v->orders;
+	VehicleOrderID num = list->GetNumOrders();
+	if (num == 0 || v->cur_real_order_index >= num) return std::nullopt;
+	if (std::ranges::none_of(list->GetOrders(), [station](const Order &order) { return StopsAt(&order, station); })) return std::nullopt;
+
+	VehicleOrderID idx = v->cur_real_order_index;
+	const Order *order = list->GetOrderAt(idx);
+	TimerGameTick::Ticks time;
+	if (v->current_order.IsType(OT_LOADING) && v->current_order.GetNonStopType().Any()) {
+		/* Loading at the stop of its current order (a stop that isn't in its
+		 * orders doesn't count): it leaves when its usual stay there is over. */
+		time = std::max<TimerGameTick::Ticks>(0, order->GetWaitTime() - v->current_order_time);
+		if (StopsAt(order, station)) return Departure{time, v->index, idx, GetNextStops(list, idx, station)};
+		idx = list->GetNext(idx);
+		order = list->GetOrderAt(idx);
+		time += order->GetTravelTime();
+	} else {
+		time = std::max<TimerGameTick::Ticks>(0, order->GetTravelTime() - v->current_order_time);
+	}
+
+	for (uint steps = 0; steps < num; steps++) {
+		if (StopsAt(order, station)) return Departure{time + order->GetWaitTime(), v->index, idx, GetNextStops(list, idx, station)};
+		time += order->GetWaitTime();
+		idx = list->GetNext(idx);
+		order = list->GetOrderAt(idx);
+		time += order->GetTravelTime();
+	}
+	return std::nullopt;
+}
+
+/**
+ * Work out when vehicles will next leave a station.
+ * @param station The station.
+ * @return The departures, soonest first.
+ */
+static std::vector<Departure> GetDepartures(StationID station)
+{
+	std::vector<Departure> departures;
+	for (const Vehicle *v : Vehicle::Iterate()) {
+		if (!v->IsPrimaryVehicle() || v->orders == nullptr || v->vehstatus.Any({VehState::Stopped, VehState::Crashed})) continue;
+		if (auto departure = GetNextDeparture(v, station); departure.has_value()) departures.push_back(*departure);
+	}
+	auto soonest = [](const Departure &a, const Departure &b) { return a.when != b.when ? a.when < b.when : a.vehicle < b.vehicle; };
+	std::ranges::sort(departures, soonest);
+
+	/* Lines that hold vehicles at their first stop for even spacing let one go
+	 * only every target gap. */
+	std::vector<const OrderList *> held;
+	for (const Departure &d : departures) {
+		const OrderList *list = Vehicle::Get(d.vehicle)->orders;
+		if (list->line.hold_for_spacing && list->line.target_gap > 0 && d.order == GetLineFirstStop(list) && std::ranges::find(held, list) == held.end()) held.push_back(list);
+	}
+	if (held.empty()) return departures;
+	for (const OrderList *list : held) {
+		TimerGameTick::Ticks earliest = list->line.last_departure == 0 ? 0 :
+				static_cast<TimerGameTick::Ticks>(list->line.last_departure + list->line.target_gap - TimerGameTick::counter);
+		for (Departure &d : departures) {
+			if (Vehicle::Get(d.vehicle)->orders != list || d.order != GetLineFirstStop(list)) continue;
+			d.when = std::max(d.when, earliest);
+			earliest = d.when + list->line.target_gap;
+		}
+	}
+	std::ranges::sort(departures, soonest);
+	return departures;
+}
+
+/** Departure board of a station: the next vehicles to leave, line by line. */
+struct DeparturesWindow : Window {
+	static constexpr uint ROWS = 14; ///< How many departures to show.
+	std::vector<Departure> departures; ///< What is shown.
+
+	DeparturesWindow(WindowDesc &desc, WindowNumber window_number) : Window(desc)
+	{
+		this->departures = GetDepartures(StationID(window_number));
+		this->InitNested(window_number);
+	}
+
+	int RowHeight() const
+	{
+		return std::max(GetCharacterHeight(FontSize::Normal), GetCharacterHeight(FontSize::Small) + ScaleGUITrad(1)) + WidgetDimensions::scaled.vsep_normal;
+	}
+
+	void UpdateWidgetSize(WidgetID widget, Dimension &size, [[maybe_unused]] const Dimension &padding, [[maybe_unused]] Dimension &fill, [[maybe_unused]] Dimension &resize) override
+	{
+		if (widget != WID_DEP_LIST) return;
+		size.height = WidgetDimensions::scaled.framerect.Vertical() + ROWS * this->RowHeight();
+		size.width = std::max(size.width, static_cast<uint>(ScaleGUITrad(420)));
+	}
+
+	std::string GetWidgetString(WidgetID widget, StringID stringid) const override
+	{
+		if (widget == WID_DEP_CAPTION) return GetString(STR_DEPARTURES_CAPTION, StationID(this->window_number));
+		return this->Window::GetWidgetString(widget, stringid);
+	}
+
+	void DrawWidget(const Rect &r, WidgetID widget) const override
+	{
+		if (widget != WID_DEP_LIST) return;
+		bool rtl = _current_text_dir == TD_RTL;
+		Rect ir = r.Shrink(WidgetDimensions::scaled.framerect);
+		if (this->departures.empty()) {
+			DrawString(ir, STR_DEPARTURES_NONE);
+			return;
+		}
+
+		/* Size the badge and vehicle columns to what is shown. */
+		int badge_width = 0;
+		int vehicle_width = 0;
+		uint counted = 0;
+		for (const Departure &d : this->departures) {
+			if (counted++ == ROWS) break;
+			const Vehicle *v = Vehicle::GetIfValid(d.vehicle);
+			if (v == nullptr) continue;
+			badge_width = std::max<int>(badge_width, GetLineBadgeWidth(v->orders));
+			vehicle_width = std::max<int>(vehicle_width, GetStringBoundingBox(GetString(STR_DEPARTURES_VEHICLE, v->index)).width);
+		}
+		int time_width = GetStringBoundingBox(GetString(STR_DEPARTURES_IN, FormatLineDuration(99 * TicksPerDisplayUnit() + TicksPerDisplayUnit() * 9 / 10))).width;
+		vehicle_width = std::min(vehicle_width, static_cast<int>(ir.Width()) / 3);
+		int row = this->RowHeight();
+		uint shown = 0;
+		for (const Departure &d : this->departures) {
+			if (shown++ == ROWS) break;
+			Rect line = ir.WithHeight(row);
+			ir.top += row;
+			const Vehicle *v = Vehicle::GetIfValid(d.vehicle);
+			if (v == nullptr) continue;
+
+			int text_top = line.top + (row - GetCharacterHeight(FontSize::Normal)) / 2;
+			DrawLineBadge(line.WithWidth(badge_width, rtl).WithY(line.top + (row - GetCharacterHeight(FontSize::Small)) / 2, line.bottom), v->orders, rtl);
+
+			Rect rest = line.Indent(badge_width + WidgetDimensions::scaled.hsep_wide, rtl);
+			Rect time = rest.WithWidth(time_width, !rtl);
+			Rect vehicle = rest.Indent(time_width + WidgetDimensions::scaled.hsep_wide, !rtl).WithWidth(vehicle_width, !rtl);
+			Rect to = rest.Indent(time_width + vehicle_width + 2 * WidgetDimensions::scaled.hsep_wide, !rtl);
+
+			std::string where;
+			if (d.next[0] == StationID::Invalid()) {
+				where = GetString(STR_DEPARTURES_TERMINATES);
+			} else if (d.next[1] == StationID::Invalid()) {
+				where = GetString(STR_DEPARTURES_TO, d.next[0]);
+			} else {
+				where = GetString(STR_DEPARTURES_TO_THEN, d.next[0], d.next[1]);
+			}
+			if (to.left < to.right) DrawString(to.left, to.right, text_top, where);
+			DrawString(vehicle.left, vehicle.right, text_top, GetString(STR_DEPARTURES_VEHICLE, v->index));
+			DrawString(time.left, time.right, text_top, d.when < Ticks::DAY_TICKS / 2 ? GetString(STR_DEPARTURES_NOW) : GetString(STR_DEPARTURES_IN, FormatLineDuration(d.when)), TextColour::FromString, AlignmentH::End);
+		}
+	}
+
+	void OnClick([[maybe_unused]] Point pt, WidgetID widget, [[maybe_unused]] int click_count) override
+	{
+		if (widget != WID_DEP_LIST) return;
+		int index = (pt.y - this->GetWidget<NWidgetBase>(WID_DEP_LIST)->pos_y - WidgetDimensions::scaled.framerect.top) / this->RowHeight();
+		if (index < 0 || static_cast<size_t>(index) >= std::min<size_t>(this->departures.size(), ROWS)) return;
+		const Vehicle *v = Vehicle::GetIfValid(this->departures[index].vehicle);
+		if (v == nullptr) return;
+		if (_ctrl_pressed) {
+			ShowLineWindow(v);
+		} else {
+			ShowVehicleViewWindow(v);
+		}
+	}
+
+	/** Refresh the board every second. */
+	const IntervalTimer<TimerWindow> refresh_interval = {std::chrono::seconds(1), [this](auto) {
+		if (!Station::IsValidID(this->window_number)) {
+			this->Close();
+			return;
+		}
+		this->departures = GetDepartures(StationID(this->window_number));
+		this->SetWidgetDirty(WID_DEP_LIST);
+	}};
+};
+
+static constexpr std::initializer_list<NWidgetPart> _nested_departures_widgets = {
+	NWidget(NWID_HORIZONTAL),
+		NWidget(WWT_CLOSEBOX, Colours::Grey),
+		NWidget(WWT_CAPTION, Colours::Grey, WID_DEP_CAPTION), SetToolTip(STR_TOOLTIP_WINDOW_TITLE_DRAG_THIS),
+		NWidget(WWT_SHADEBOX, Colours::Grey),
+		NWidget(WWT_STICKYBOX, Colours::Grey),
+	EndContainer(),
+	NWidget(WWT_PANEL, Colours::Grey, WID_DEP_LIST), SetFill(1, 0), SetToolTip(STR_DEPARTURES_LIST_TOOLTIP), EndContainer(),
+};
+
+static WindowDesc _departures_desc(
+	WindowPosition::Automatic, "view_departures", 0, 0,
+	WindowClass::Departures, WindowClass::None,
+	{},
+	_nested_departures_widgets
+);
+
+/**
+ * Open the departure board of a station.
+ * @param station The station.
+ */
+void ShowDeparturesWindow(StationID station)
+{
+	AllocateWindowDescFront<DeparturesWindow>(_departures_desc, station.base());
 }
