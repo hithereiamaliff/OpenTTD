@@ -19,7 +19,11 @@
 #include "road_map.h"
 #include "settings_type.h"
 #include "spritecache.h"
+#include "station_base.h"
 #include "station_map.h"
+#include "cargotype.h"
+#include "road_func.h"
+#include "roadstop_base.h"
 #include "tile_cmd.h"
 #include "timer/timer.h"
 #include "timer/timer_game_tick.h"
@@ -128,6 +132,37 @@ struct VisibleRoad {
 	uint16_t density; ///< Vehicles it should carry, in 1/100.
 	bool edge; ///< Near the edge of the view or just outside it: new vehicles appear here.
 };
+
+/** Someone walking along a town pavement. */
+struct Pedestrian {
+	TileIndex tile = INVALID_TILE; ///< Tile they walk on.
+	DiagDirection from = DiagDirection::NE; ///< Side of the tile they came in by.
+	DiagDirection to = DiagDirection::SW; ///< Side of the tile they leave by.
+	std::array<StreetPoint, 4> path{}; ///< Their way along the pavement through the tile.
+	std::array<int32_t, 3> segment{}; ///< Length of each part of the way.
+	uint8_t points = 0; ///< Points on the way.
+	int32_t progress = 0; ///< Distance walked on this tile.
+	int32_t length = 0; ///< Length of the way through this tile.
+	int32_t x = 0; ///< World position, in 1/256 units.
+	int32_t y = 0; ///< World position, in 1/256 units.
+	int z = 0; ///< Height, in world units.
+	int speed = 0; ///< Walking speed, in 1/256 units per tick.
+	bool left = false; ///< Walks on the pavement on their left.
+	uint8_t look = 0; ///< Which of the people sprites.
+	Colours colour = Colours::Blue; ///< Clothes.
+	Rect coord{}; ///< Where on the screen they are drawn, in virtual coordinates.
+};
+
+/** People waiting at a bus stop tile in view. */
+struct StopCrowd {
+	TileIndex tile; ///< The road stop tile.
+	uint8_t people; ///< How many are drawn.
+};
+
+static std::vector<Pedestrian> _pedestrians; ///< All people walking.
+static std::vector<StopCrowd> _stop_crowds; ///< People waiting at bus stops in view, sorted by tile.
+static std::vector<VisibleRoad> _visible_pavements; ///< Town pavements in or just outside the views.
+static uint32_t _visible_pavement_target = 0; ///< People the pavements in view should have, in 1/100.
 
 static std::vector<StreetVehicle> _street_vehicles; ///< All street life vehicles.
 static std::vector<std::pair<TileIndex, uint32_t>> _street_index; ///< Street vehicles by tile, sorted; built each tick.
@@ -565,12 +600,340 @@ static bool UpdateStreetViews()
 	return changed;
 }
 
+/** Most people walking at once. */
+static constexpr size_t MAX_PEDESTRIANS = 1500;
+/** Most people drawn waiting at one bus stop tile. */
+static constexpr uint MAX_CROWD = 8;
+/** Waiting passengers per person drawn at a stop. */
+static constexpr uint PASSENGERS_PER_PERSON = 8;
+
+/**
+ * Are people shown at all?
+ * @return True if the setting asks for them.
+ */
+static bool ShowPeople()
+{
+	return _settings_client.gui.street_life == to_underlying(StreetLifeSetting::All);
+}
+
+/**
+ * Does a tile have a town pavement to walk on?
+ * @param tile The tile.
+ * @return True for plain roads with paved sidewalks.
+ */
+static bool IsPavementTile(TileIndex tile)
+{
+	if (!IsValidTile(tile) || !IsTileType(tile, TileType::Road) || !IsNormalRoad(tile) || !HasTileRoadType(tile, RoadTramType::Road)) return false;
+	Roadside rs = GetRoadside(tile);
+	return rs == Roadside::Paved || rs == Roadside::StreetLights || rs == Roadside::Trees;
+}
+
+/**
+ * How many people a pavement tile should have.
+ * @param tile The tile.
+ * @return People, in 1/100.
+ */
+static uint16_t GetPavementDensity(TileIndex tile)
+{
+	const Town *t = ClosestTownFromTile(tile, UINT_MAX);
+	if (t == nullptr) return 0;
+	switch (GetTownRadiusGroup(t, tile)) {
+		case HouseZone::TownCentre: return 320;
+		case HouseZone::TownInnerSuburb: return 180;
+		case HouseZone::TownOuterSuburb: return 90;
+		case HouseZone::TownOutskirt: return 35;
+		default: return 10;
+	}
+}
+
+/**
+ * The pavement on one side of someone walking in a direction.
+ * @param moving The direction.
+ * @param left The pavement on their left (else their right).
+ * @return The position across the tile, in 1/256 units.
+ */
+static int32_t GetPavement(DiagDirection moving, bool left)
+{
+	bool low = (moving == DiagDirection::NE || moving == DiagDirection::SE) == left;
+	return low ? 3 * UNIT / 2 : TILE_LENGTH - 3 * UNIT / 2;
+}
+
+/**
+ * Lay out someone's way along the pavement through their tile.
+ * @param p The person.
+ */
+static void BuildWalkPath(Pedestrian &p)
+{
+	DiagDirection in = ReverseDiagDir(p.from);
+	TileIndexDiffC din = TileIndexDiffCByDiagDir(in);
+	StreetPoint start = GetEdgePoint(p.from, GetPavement(in, p.left));
+	if (p.to == p.from) {
+		/* Turn around and walk back on the same pavement. */
+		StreetPoint a{start.x + din.x * 4 * UNIT, start.y + din.y * 4 * UNIT};
+		p.path = {start, a, start, start};
+		p.points = 3;
+	} else {
+		StreetPoint end = GetEdgePoint(p.to, GetPavement(p.to, p.left));
+		if (p.to == in) {
+			p.path = {start, end, end, end};
+			p.points = 2;
+		} else {
+			StreetPoint corner = (DiagDirToAxis(in) == Axis::X) ? StreetPoint{end.x, start.y} : StreetPoint{start.x, end.y};
+			p.path = {start, corner, end, end};
+			p.points = 3;
+		}
+	}
+	p.length = 0;
+	for (uint i = 0; i + 1 < p.points; i++) {
+		p.segment[i] = std::abs(p.path[i + 1].x - p.path[i].x) + std::abs(p.path[i + 1].y - p.path[i].y);
+		p.length += p.segment[i];
+	}
+	p.length = std::max(p.length, 1);
+}
+
+/**
+ * Pick the side by which someone leaves the tile they just came onto: along
+ * the pavement, straight on more often than round a corner; back the way
+ * they came where the pavement ends.
+ * @param p The person, with their tile and the side they came in by.
+ */
+static void ChooseWalkExit(Pedestrian &p)
+{
+	DiagDirection in = ReverseDiagDir(p.from);
+	RoadBits bits = GetRoadBits(p.tile, RoadTramType::Road);
+	std::array<DiagDirection, 4> options{};
+	std::array<uint, 4> weights{};
+	uint count = 0;
+	uint total = 0;
+	for (DiagDirection exit : EnumRange(DiagDirection::End)) {
+		if (exit == p.from || !bits.Any(DiagDirToRoadBits(exit))) continue;
+		TileIndex next = TileAddByDiagDir(p.tile, exit);
+		if (!IsPavementTile(next) || !GetRoadBits(next, RoadTramType::Road).Any(DiagDirToRoadBits(ReverseDiagDir(exit)))) continue;
+		options[count] = exit;
+		weights[count] = exit == in ? 2 : 1;
+		total += weights[count];
+		count++;
+	}
+	if (count == 0) {
+		p.to = p.from;
+		return;
+	}
+	uint pick = InteractiveRandomRange(total);
+	for (uint i = 0; i < count; i++) {
+		if (pick < weights[i]) {
+			p.to = options[i];
+			return;
+		}
+		pick -= weights[i];
+	}
+	p.to = options[count - 1];
+}
+
+/**
+ * Work out where someone is from how far they walked along their way.
+ * @param p The person.
+ */
+static void UpdateWalkPosition(Pedestrian &p)
+{
+	int32_t d = p.progress;
+	uint i = 0;
+	while (i + 2 < p.points && d > p.segment[i]) {
+		d -= p.segment[i];
+		i++;
+	}
+	const StreetPoint &a = p.path[i];
+	const StreetPoint &b = p.path[i + 1];
+	int32_t seg = std::max(p.segment[i], 1);
+	d = std::min(d, seg);
+	p.x = static_cast<int32_t>(TileX(p.tile) * TILE_LENGTH) + a.x + (b.x - a.x) * d / seg;
+	p.y = static_cast<int32_t>(TileY(p.tile) * TILE_LENGTH) + a.y + (b.y - a.y) * d / seg;
+	p.z = GetSlopePixelZ(p.x / UNIT, p.y / UNIT, true);
+}
+
+/**
+ * The sprite of someone walking or standing.
+ * @param look Which person.
+ * @param step Walking step (0 or 1), or 2 for standing.
+ * @return The sprite.
+ */
+static SpriteID GetPersonSprite(uint8_t look, uint step)
+{
+	return SPR_STREET_LIFE_PEOPLE + (look % 2) * 3 + step;
+}
+
+/**
+ * The sprite of someone walking.
+ * @param p The person.
+ * @return The sprite.
+ */
+static SpriteID GetPedestrianSprite(const Pedestrian &p)
+{
+	return GetPersonSprite(p.look, (p.progress / (3 * UNIT / 2)) & 1);
+}
+
+/**
+ * Where a sprite at a world position is on the screen.
+ * @param sprite The sprite.
+ * @param x World x, in 1/256 units.
+ * @param y World y, in 1/256 units.
+ * @param z Height.
+ * @return The rectangle, in virtual coordinates.
+ */
+static Rect GetSpriteRectAt(SpriteID sprite, int32_t x, int32_t y, int z)
+{
+	const Sprite *spr = GetSprite(sprite, SpriteType::Normal);
+	Point pt = RemapCoords(x / UNIT, y / UNIT, z);
+	const int margin = 2 * static_cast<int>(ZOOM_BASE);
+	return {pt.x + spr->x_offs, pt.y + spr->y_offs, pt.x + spr->x_offs + spr->width + margin, pt.y + spr->y_offs + spr->height + margin};
+}
+
+/**
+ * Walk someone for a tick.
+ * @param p The person.
+ * @return False if they left the pavements (or went inside) and should go.
+ */
+static bool MovePedestrian(Pedestrian &p)
+{
+	if (!IsPavementTile(p.tile)) return false;
+	p.progress += p.speed;
+	while (p.progress >= p.length) {
+		TileIndex next = TileAddByDiagDir(p.tile, p.to);
+		if (!IsPavementTile(next)) return false;
+		/* Now and then someone goes into a building. */
+		if (InteractiveRandomRange(60) == 0) return false;
+		if (p.to == p.from) p.left = !p.left;
+		p.progress -= p.length;
+		p.tile = next;
+		p.from = ReverseDiagDir(p.to);
+		ChooseWalkExit(p);
+		BuildWalkPath(p);
+	}
+	UpdateWalkPosition(p);
+	Rect now = GetSpriteRectAt(GetPedestrianSprite(p), p.x, p.y, p.z);
+	if (now.left != p.coord.left || now.top != p.coord.top || now.right != p.coord.right || now.bottom != p.coord.bottom) {
+		MarkAllViewportsDirty(std::min(now.left, p.coord.left), std::min(now.top, p.coord.top), std::max(now.right, p.coord.right), std::max(now.bottom, p.coord.bottom));
+		p.coord = now;
+	}
+	return true;
+}
+
+/**
+ * Put someone somewhere on a pavement tile.
+ * @param tile The tile.
+ * @return True if they were put there.
+ */
+static bool SpawnPedestrian(TileIndex tile)
+{
+	RoadBits bits = GetRoadBits(tile, RoadTramType::Road);
+	std::array<DiagDirection, 4> sides{};
+	uint count = 0;
+	for (DiagDirection side : EnumRange(DiagDirection::End)) {
+		if (bits.Any(DiagDirToRoadBits(side))) sides[count++] = side;
+	}
+	if (count == 0) return false;
+
+	Pedestrian p;
+	p.tile = tile;
+	p.from = sides[InteractiveRandomRange(count)];
+	p.left = InteractiveRandomRange(2) == 0;
+	ChooseWalkExit(p);
+	BuildWalkPath(p);
+	p.progress = InteractiveRandomRange(p.length);
+	p.speed = 12 + InteractiveRandomRange(9);
+	p.look = static_cast<uint8_t>(InteractiveRandomRange(2));
+	p.colour = static_cast<Colours>(InteractiveRandomRange(to_underlying(Colours::End)));
+	UpdateWalkPosition(p);
+	p.coord = GetSpriteRectAt(GetPedestrianSprite(p), p.x, p.y, p.z);
+	MarkAllViewportsDirty(p.coord.left, p.coord.top, p.coord.right, p.coord.bottom);
+	_pedestrians.push_back(p);
+	return true;
+}
+
+/**
+ * Walk everyone for a tick, let people out of sight go and new ones come.
+ */
+static void PedestriansTick()
+{
+	if (!ShowPeople()) {
+		for (const Pedestrian &p : _pedestrians) MarkAllViewportsDirty(p.coord.left, p.coord.top, p.coord.right, p.coord.bottom);
+		_pedestrians.clear();
+		return;
+	}
+
+	uint in_view = 0;
+	size_t n = 0;
+	for (size_t i = 0; i < _pedestrians.size(); i++) {
+		Pedestrian &p = _pedestrians[i];
+		if (!MovePedestrian(p) || !IsInStreetView(p.coord, VIEW_MARGIN)) {
+			MarkAllViewportsDirty(p.coord.left, p.coord.top, p.coord.right, p.coord.bottom);
+			continue;
+		}
+		if (IsInStreetView(p.coord, 0)) in_view++;
+		if (n != i) _pedestrians[n] = p;
+		n++;
+	}
+	_pedestrians.resize(n);
+
+	uint target = _visible_pavement_target / 100;
+	if (in_view >= target || _visible_pavements.empty()) return;
+	bool fill = in_view * 10 < target * 6;
+	uint wanted = std::min<uint>(fill ? 8 : 1, target - in_view);
+	for (uint attempt = 0; attempt < 24 * wanted && wanted > 0 && _pedestrians.size() < MAX_PEDESTRIANS; attempt++) {
+		const VisibleRoad &road = _visible_pavements[InteractiveRandomRange(static_cast<uint>(_visible_pavements.size()))];
+		if (InteractiveRandomRange((fill || road.edge) ? 320 : 1280) >= road.density) continue;
+		if (SpawnPedestrian(road.tile)) wanted--;
+	}
+}
+
+/**
+ * How many people to draw waiting at a bus stop tile: one per few waiting
+ * passengers of its station, spread over the station's bus stops.
+ * @param tile The road stop tile.
+ * @return The number of people.
+ */
+static uint8_t GetStopCrowd(TileIndex tile)
+{
+	if (!IsStationRoadStopTile(tile) || GetRoadStopType(tile) != RoadStopType::Bus) return 0;
+	const Station *st = Station::GetByTile(tile);
+	uint waiting = 0;
+	for (const CargoSpec *cs : CargoSpec::Iterate()) {
+		if (!cs->IsValid() || !IsCargoInClass(cs->Index(), CargoClass::Passengers)) continue;
+		const GoodsEntry &ge = st->goods[cs->Index()];
+		if (ge.HasData()) waiting += ge.GetData().cargo.TotalCount();
+	}
+	uint stops = 0;
+	for (const RoadStop *rs = st->bus_stops; rs != nullptr; rs = rs->next) stops++;
+	return static_cast<uint8_t>(std::min<uint>(MAX_CROWD, CeilDiv(waiting / std::max(1U, stops), PASSENGERS_PER_PERSON)));
+}
+
+/**
+ * Where someone of a crowd at a bus stop stands: at the kerb on the far side of the road.
+ * @param tile The road stop tile.
+ * @param i Which of them.
+ * @return World position, in 1/256 units.
+ */
+static StreetPoint GetCrowdPosition(TileIndex tile, uint i)
+{
+	Axis axis = IsDriveThroughStopTile(tile) ? GetDriveThroughStopAxis(tile) : DiagDirToAxis(GetBayRoadStopDir(tile));
+	uint32_t hash = (tile.base() * 2654435761U) ^ (i * 40503U);
+	/* Two staggered rows at the kerb on the far side of the road, where the shelters don't hide them. */
+	int32_t along = 2 * UNIT + static_cast<int32_t>(i / 2) * (5 * UNIT / 2) + static_cast<int32_t>(i % 2) * UNIT + static_cast<int32_t>(hash % (UNIT / 2));
+	int32_t across = (i % 2 == 0) ? 5 * UNIT / 2 : 7 * UNIT / 2;
+	int32_t lx = axis == Axis::X ? along : across;
+	int32_t ly = axis == Axis::X ? across : along;
+	return {static_cast<int32_t>(TileX(tile) * TILE_LENGTH) + lx, static_cast<int32_t>(TileY(tile) * TILE_LENGTH) + ly};
+}
+
 /** List the road tiles in and just outside the views, and how much traffic they should show. */
 static void FindVisibleRoads()
 {
 	_visible_roads.clear();
 	_visible_target = 0;
 	_visible_roads_age = 0;
+	_visible_pavements.clear();
+	_visible_pavement_target = 0;
+	std::vector<StopCrowd> crowds;
+	bool people = ShowPeople();
 
 	for (const Rect &view : _street_views) {
 		/* The tiles under the corners of the view at sea level, plus room for hills. */
@@ -592,18 +955,44 @@ static void FindVisibleRoads()
 		for (int y = y0; y <= y1; y++) {
 			for (int x = x0; x <= x1; x++) {
 				TileIndex tile = TileXY(x, y);
-				if (!IsStreetTile(tile)) continue;
+				if (!IsStreetTile(tile) && !(people && IsBayRoadStopTile(tile))) continue;
 				Point pt = RemapCoords(x * TILE_SIZE + TILE_SIZE / 2, y * TILE_SIZE + TILE_SIZE / 2, TileHeight(tile) * TILE_HEIGHT);
 				bool inside = pt.x >= view.left && pt.x <= view.right && pt.y >= view.top && pt.y <= view.bottom;
 				bool near = pt.x >= view.left - VIEW_MARGIN && pt.x <= view.right + VIEW_MARGIN && pt.y >= view.top - VIEW_MARGIN && pt.y <= view.bottom + VIEW_MARGIN;
 				if (!near) continue;
 				bool edge = !inside || pt.x < view.left + band_x || pt.x > view.right - band_x || pt.y < view.top + band_y || pt.y > view.bottom - band_y;
-				uint16_t density = GetStreetDensity(tile);
-				_visible_roads.push_back({tile, density, edge});
-				if (inside) _visible_target += density;
+				if (IsStreetTile(tile)) {
+					uint16_t density = GetStreetDensity(tile);
+					_visible_roads.push_back({tile, density, edge});
+					if (inside) _visible_target += density;
+				}
+
+				if (!people) continue;
+				if (IsPavementTile(tile)) {
+					uint16_t walkers = GetPavementDensity(tile);
+					_visible_pavements.push_back({tile, walkers, edge});
+					if (inside) _visible_pavement_target += walkers;
+				} else if (uint8_t crowd = GetStopCrowd(tile); crowd > 0) {
+					crowds.push_back({tile, crowd});
+				}
 			}
 		}
 	}
+
+	/* Redraw bus stops whose crowd changed. */
+	std::sort(crowds.begin(), crowds.end(), [](const StopCrowd &a, const StopCrowd &b) { return a.tile < b.tile; });
+	crowds.erase(std::unique(crowds.begin(), crowds.end(), [](const StopCrowd &a, const StopCrowd &b) { return a.tile == b.tile; }), crowds.end());
+	auto find = [](const std::vector<StopCrowd> &list, TileIndex tile) -> uint8_t {
+		auto it = std::lower_bound(list.begin(), list.end(), tile, [](const StopCrowd &c, TileIndex t) { return c.tile < t; });
+		return (it != list.end() && it->tile == tile) ? it->people : 0;
+	};
+	for (const StopCrowd &c : crowds) {
+		if (find(_stop_crowds, c.tile) != c.people) MarkTileDirtyByTile(c.tile);
+	}
+	for (const StopCrowd &c : _stop_crowds) {
+		if (find(crowds, c.tile) == 0) MarkTileDirtyByTile(c.tile);
+	}
+	_stop_crowds = std::move(crowds);
 }
 
 /**
@@ -689,6 +1078,12 @@ static void ClearStreetLife()
 	_street_index.clear();
 	_visible_roads.clear();
 	_visible_target = 0;
+	for (const Pedestrian &p : _pedestrians) MarkAllViewportsDirty(p.coord.left, p.coord.top, p.coord.right, p.coord.bottom);
+	_pedestrians.clear();
+	for (const StopCrowd &c : _stop_crowds) MarkTileDirtyByTile(c.tile);
+	_stop_crowds.clear();
+	_visible_pavements.clear();
+	_visible_pavement_target = 0;
 }
 
 /** Drive all street life for a tick, let vehicles out of sight go and new ones come. */
@@ -698,7 +1093,7 @@ static void StreetLifeTick()
 
 	bool views_changed = UpdateStreetViews();
 	if (_street_views.empty()) {
-		if (!_street_vehicles.empty()) ClearStreetLife();
+		if (!_street_vehicles.empty() || !_pedestrians.empty() || !_stop_crowds.empty()) ClearStreetLife();
 		return;
 	}
 	if (views_changed || ++_visible_roads_age >= 128) FindVisibleRoads();
@@ -732,6 +1127,7 @@ static void StreetLifeTick()
 	}
 
 	SpawnStreetVehicles(in_view);
+	PedestriansTick();
 }
 
 /** Street life moves with the game. */
@@ -741,6 +1137,8 @@ static const IntervalTimer<TimerGameTick> _street_life_ticker({TimerGameTick::Pr
 
 /** Bounding box of street vehicles, for sorting them among other sprites. */
 static constexpr SpriteBounds STREET_VEHICLE_BOUNDS{{-1, -1, 0}, {3, 3, 5}, {}};
+/** Bounding box of people. */
+static constexpr SpriteBounds PERSON_BOUNDS{{0, 0, 0}, {1, 1, 6}, {}};
 
 /**
  * Add the street life that shows in part of a view to what is drawn.
@@ -748,7 +1146,7 @@ static constexpr SpriteBounds STREET_VEHICLE_BOUNDS{{-1, -1, 0}, {3, 3, 5}, {}};
  */
 void ViewportAddStreetLife(DrawPixelInfo *dpi)
 {
-	if (_street_vehicles.empty()) return;
+	if (_street_vehicles.empty() && _pedestrians.empty() && _stop_crowds.empty()) return;
 	const int l = dpi->left;
 	const int r = dpi->left + dpi->width;
 	const int t = dpi->top;
@@ -757,11 +1155,31 @@ void ViewportAddStreetLife(DrawPixelInfo *dpi)
 		if (v.coord.right < l || v.coord.left > r || v.coord.bottom < t || v.coord.top > b) continue;
 		AddSortableSpriteToDraw(GetStreetVehicleSprite(v), GetColourPalette(v.colour), v.x / UNIT, v.y / UNIT, v.z, STREET_VEHICLE_BOUNDS);
 	}
+	for (const Pedestrian &p : _pedestrians) {
+		if (p.coord.right < l || p.coord.left > r || p.coord.bottom < t || p.coord.top > b) continue;
+		AddSortableSpriteToDraw(GetPedestrianSprite(p), GetColourPalette(p.colour), p.x / UNIT, p.y / UNIT, p.z, PERSON_BOUNDS);
+	}
+	for (const StopCrowd &c : _stop_crowds) {
+		if (!IsStationRoadStopTile(c.tile)) continue;
+		for (uint i = 0; i < c.people; i++) {
+			StreetPoint pos = GetCrowdPosition(c.tile, i);
+			uint32_t hash = (c.tile.base() * 2246822519U) ^ (i * 3266489917U);
+			SpriteID sprite = GetPersonSprite(static_cast<uint8_t>(hash & 1), 2);
+			int z = GetSlopePixelZ(pos.x / UNIT, pos.y / UNIT, true);
+			Rect rect = GetSpriteRectAt(sprite, pos.x, pos.y, z);
+			if (rect.right < l || rect.left > r || rect.bottom < t || rect.top > b) continue;
+			AddSortableSpriteToDraw(sprite, GetColourPalette(static_cast<Colours>((hash >> 8) % to_underlying(Colours::End))), pos.x / UNIT, pos.y / UNIT, z, PERSON_BOUNDS);
+		}
+	}
 }
 
 /** Forget all street life; used when starting or loading a game. */
 void InitializeStreetLife()
 {
+	_pedestrians.clear();
+	_stop_crowds.clear();
+	_visible_pavements.clear();
+	_visible_pavement_target = 0;
 	_street_vehicles.clear();
 	_street_index.clear();
 	_street_views.clear();

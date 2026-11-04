@@ -12,9 +12,10 @@
 //   35-39: icons: police, fire, clinic, school, park
 //   40:    icon: network map of lines
 //   41-72: street life vehicles: car, van, lorry, motorbike; 8 directions each
+//   73-78: street life people: light and dark skin; walking (two steps) and standing
 //
    -1 * 0	 0C "City fork graphics"
-   -1 * 3	 05 1C 49
+   -1 * 3	 05 1C 4F
    -1 sprites/city.png 8bpp    4    4   4  17   -1  -16 normal
    -1 sprites/city.png 8bpp   12    4   4  17   -1  -16 normal
    -1 sprites/city.png 8bpp   20    4   4  17   -1  -16 normal
@@ -88,3 +89,9 @@
    -1 sprites/city.png 8bpp  342  250  10   9   -5   -6 normal
    -1 sprites/city.png 8bpp  368  250  10   8   -5   -6 normal
    -1 sprites/city.png 8bpp  394  250  10   9   -5   -6 normal
+   -1 sprites/city.png 8bpp    4  276   3   7   -1   -7 normal
+   -1 sprites/city.png 8bpp   10  276   3   7   -1   -7 normal
+   -1 sprites/city.png 8bpp   16  276   3   7   -1   -7 normal
+   -1 sprites/city.png 8bpp   22  276   3   7   -1   -7 normal
+   -1 sprites/city.png 8bpp   28  276   3   7   -1   -7 normal
+   -1 sprites/city.png 8bpp   34  276   3   7   -1   -7 normal

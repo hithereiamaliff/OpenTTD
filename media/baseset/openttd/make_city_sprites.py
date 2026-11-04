@@ -13,6 +13,7 @@ Block layout (Action 5 type 0x1C, see SPR_TRAFFIC_LIGHTS_BASE in table/sprites.h
   35-39  icons: police, fire, clinic, school, park
   40     icon: network map of lines
   41-72  street life vehicles: car, van, lorry, motorbike; 8 directions each (N, NE, E, SE, S, SW, W, NW)
+  73-78  street life people: light and dark skin; walking (two steps) and standing; clothes in company colours
 """
 import math
 import sys
@@ -692,7 +693,23 @@ for kind in ('car', 'van', 'lorry', 'motorbike'):
         sprites.append((x0, y0, img.width, img.height, -ox, -oy, f"{kind} {d}"))
         slot += 1
 
-assert len(sprites) == 73, len(sprites)
+# Street life people: 3 pixels wide, 7 tall, feet at the origin.
+HAIR, HAIR_DARK = nearest((60, 40, 25)), nearest((25, 20, 15))
+SKINS = [nearest((236, 190, 150)), nearest((160, 105, 65))]
+TROUSERS = nearest((55, 55, 75))
+PERSON = {
+    'walk1': [".h.", ".s.", "CcD", ".cD", ".c.", "T.T", "T.T"],
+    'walk2': [".h.", ".s.", "CcD", ".cD", ".c.", ".T.", ".T."],
+    'stand': [".h.", ".s.", "CcD", "Ccd", ".c.", ".T.", ".T."],
+}
+for skin_index, skin in enumerate(SKINS):
+    for frame in ('walk1', 'walk2', 'stand'):
+        slot = len(sprites) - 73
+        x0, y0 = 4 + slot * 6, 276
+        put(x0, y0, PERSON[frame], {'h': HAIR if skin_index == 0 else HAIR_DARK, 's': skin, 'C': 0xCB, 'c': 0xC9, 'D': 0xC7, 'd': skin, 'T': TROUSERS})
+        sprites.append((x0, y0, 3, 7, -1, -7, f"person {skin_index} {frame}"))
+
+assert len(sprites) == 79, len(sprites)
 sheet.save(f"{SRC}/city.png", optimize=True)
 
 header = """// This file is part of OpenTTD.
@@ -709,6 +726,7 @@ header = """// This file is part of OpenTTD.
 //   35-39: icons: police, fire, clinic, school, park
 //   40:    icon: network map of lines
 //   41-72: street life vehicles: car, van, lorry, motorbike; 8 directions each
+//   73-78: street life people: light and dark skin; walking (two steps) and standing
 //
    -1 * 0\t 0C "City fork graphics"
    -1 * 3\t 05 1C %02X

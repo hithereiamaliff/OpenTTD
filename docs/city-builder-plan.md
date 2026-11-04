@@ -453,6 +453,28 @@ Tests: no street vehicle entered a junction against a red light in 489
 junction entries; in Gredinghall at normal zoom about 115 vehicles cost
 0.07-0.08 ms per tick and drawing went from about 0.5 to 1.2 ms per frame.
 
+### Done: people on the pavements (step 3)
+
+- People walk the town pavements (roads with paved sidewalks, street lights
+  or trees, which towns lay out from the outer suburbs inwards): about 3.2
+  per tile in the centre, 1.8 in the inner suburbs, 0.9 in the outer ones.
+  They keep to one side, follow the pavement round corners, cross side
+  streets at junctions, turn back where the pavement ends and now and then
+  go into a building. Two walking steps, two skin tones, clothes in any of
+  the 16 colours.
+- Crowds wait at bus stops in view: one person per 8 passengers waiting at
+  the station, shared over its bus stops, at most 8 per stop tile, standing
+  in two rows at the kerb on the far side of the road (the shelters hide the
+  near side).
+- Part of the "Street life" setting ("vehicles and people", the default).
+- Sprites 73-78 in `make_city_sprites.py`.
+
+With vehicles and people in Gredinghall at normal zoom, drawing took about
+1.4-1.6 ms per frame (0.5 ms without street life).
+
+Not in this part, for later: pedestrians waiting at red lights and on
+zebra crossings, people at train and tram stations, rush hours (part 12).
+
 ## Roadmap
 
 Sizes are rough: S = one session, M = a few, L = many, XL = a project in itself.

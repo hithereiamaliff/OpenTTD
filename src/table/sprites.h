@@ -396,7 +396,8 @@ static constexpr SpriteID SPR_CITY_SERVICE_BASE = SPR_TRAFFIC_LIGHTS_BASE + 30; 
 static constexpr SpriteID SPR_IMG_CITY_SERVICE_BASE = SPR_TRAFFIC_LIGHTS_BASE + 35; ///< Icons of the city service tools, in #CityService order.
 static constexpr SpriteID SPR_IMG_LINES_MAP = SPR_TRAFFIC_LIGHTS_BASE + 40; ///< Icon of the network map of lines.
 static constexpr SpriteID SPR_STREET_LIFE_VEHICLES = SPR_TRAFFIC_LIGHTS_BASE + 41; ///< Street life: car, van, lorry, motorbike; 8 directions each (32 sprites).
-static constexpr uint16_t TRAFFIC_LIGHTS_SPRITE_COUNT = 73;
+static constexpr SpriteID SPR_STREET_LIFE_PEOPLE = SPR_TRAFFIC_LIGHTS_BASE + 73; ///< Street life people: light and dark skin; walking (two steps) and standing (6 sprites).
+static constexpr uint16_t TRAFFIC_LIGHTS_SPRITE_COUNT = 79;
 
 static const SpriteID SPR_NEWGRFS_BASE = SPR_TRAFFIC_LIGHTS_BASE + TRAFFIC_LIGHTS_SPRITE_COUNT;
 
