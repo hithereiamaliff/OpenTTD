@@ -46,6 +46,8 @@
 #include "traffic_light.h"
 #include "road_traffic.h"
 
+#include "town_traffic.h"
+
 #include "table/strings.h"
 #include "table/roadtypes.h"
 
@@ -2124,6 +2126,7 @@ static void TileLoop_Road(TileIndex tile)
 	if (IsRoadDepot(tile)) return;
 
 	const Town *t = ClosestTownFromTile(tile, UINT_MAX);
+	UpdateRoadCongestion(tile, t);
 	if (!HasRoadWorks(tile)) {
 		HouseZone grp = HouseZone::TownEdge;
 

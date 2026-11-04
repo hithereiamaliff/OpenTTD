@@ -18,7 +18,9 @@
 #include "road_traffic.h"
 #include "network/network.h"
 #include "order_type.h"
+#include "road_map.h"
 #include "roadveh.h"
+#include "town_traffic.h"
 #include "timer/timer.h"
 #include "timer/timer_game_tick.h"
 #include "timer/timer_window.h"
@@ -87,11 +89,11 @@ static const IntervalTimer<TimerGameTick> _road_traffic_sampler({TimerGameTick::
 });
 
 /**
- * How busy has a road tile been lately?
+ * How held up have vehicles on a road tile been lately?
  * @param tile The tile.
  * @return The traffic level.
  */
-RoadTrafficLevel GetRoadTrafficLevel(TileIndex tile)
+static RoadTrafficLevel GetVehicleTrafficLevel(TileIndex tile)
 {
 	auto it = _road_traffic.find(tile);
 	if (it == _road_traffic.end()) return RoadTrafficLevel::Quiet;
@@ -102,6 +104,23 @@ RoadTrafficLevel GetRoadTrafficLevel(TileIndex tile)
 	if (score.held_up >= 40) return RoadTrafficLevel::Waiting;
 	if (score.passing >= 16 || score.held_up > 0) return RoadTrafficLevel::Flowing;
 	return RoadTrafficLevel::Quiet;
+}
+
+/**
+ * How busy is a road tile: the busier of what the vehicles on it went
+ * through lately and the town traffic on it.
+ * @param tile The tile.
+ * @return The traffic level.
+ */
+RoadTrafficLevel GetRoadTrafficLevel(TileIndex tile)
+{
+	static constexpr RoadTrafficLevel TOWN_TRAFFIC_LEVEL[ROAD_CONGESTION_MAX + 1] = {
+		RoadTrafficLevel::Quiet, RoadTrafficLevel::Flowing, RoadTrafficLevel::Waiting, RoadTrafficLevel::Waiting,
+		RoadTrafficLevel::Slow, RoadTrafficLevel::Slow, RoadTrafficLevel::Jammed, RoadTrafficLevel::Jammed,
+	};
+	RoadTrafficLevel level = GetVehicleTrafficLevel(tile);
+	if (IsTileType(tile, TileType::Road) && !IsRoadDepot(tile)) level = std::max(level, TOWN_TRAFFIC_LEVEL[GetRoadCongestion(tile)]);
+	return level;
 }
 
 /** Whether road tiles in the main view are coloured by traffic. */

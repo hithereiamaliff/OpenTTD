@@ -550,6 +550,16 @@ public:
 	static bool HasTrafficLights(TileIndex tile);
 
 	/**
+	 * How congested a road tile is with town traffic. Road vehicles drive
+	 * slower on congested roads: from level 2 on, at most 70, 55, 42, 32, 22
+	 * and 14 km/h.
+	 * @param tile The tile to check.
+	 * @pre ScriptMap::IsValidTile(tile).
+	 * @return 0 (traffic flows freely) to 7 (jammed), or -1 if the tile isn't a road tile (depots aren't either).
+	 */
+	static SQInteger GetCongestion(TileIndex tile);
+
+	/**
 	 * Builds traffic lights at a road junction (a road tile with three or four road pieces).
 	 * @param tile The junction tile.
 	 * @pre ScriptMap::IsValidTile(tile).

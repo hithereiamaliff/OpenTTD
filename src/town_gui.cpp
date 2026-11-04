@@ -50,6 +50,7 @@
 #include "graph_gui.h"
 
 #include "widgets/town_widget.h"
+#include "town_traffic.h"
 #include "town_zoning.h"
 #include "city_services.h"
 
@@ -418,6 +419,24 @@ public:
 		}
 		tr.top += row_height;
 
+		/* Town traffic: how bad it is, and how much the player's passenger services help. */
+		if (_settings_game.economy.town_traffic != to_underlying(TownTrafficSetting::Off)) {
+			TownTrafficSummary traffic = GetTownTrafficSummary(this->town);
+			uint congested = traffic.roads == 0 ? 0 : traffic.congested * 100 / traffic.roads;
+			StringID level = STR_TOWN_VIEW_TRAFFIC_LIGHT;
+			if (congested >= 25) {
+				level = STR_TOWN_VIEW_TRAFFIC_VERY_HEAVY;
+			} else if (congested >= 10) {
+				level = STR_TOWN_VIEW_TRAFFIC_HEAVY;
+			} else if (traffic.congested > 0 || traffic.worst >= 2) {
+				level = STR_TOWN_VIEW_TRAFFIC_MODERATE;
+			}
+			DrawString(tr, GetString(STR_TOWN_VIEW_TRAFFIC, level, congested));
+			tr.top += GetCharacterHeight(FontSize::Normal);
+			DrawString(tr, GetString(STR_TOWN_VIEW_TRAFFIC_TRANSIT, GetTownCarReduction(this->town)));
+			tr.top += GetCharacterHeight(FontSize::Normal);
+		}
+
 		StringID str_last_period = TimerGameEconomy::UsingWallclockUnits() ? STR_TOWN_VIEW_CARGO_LAST_MINUTE_MAX : STR_TOWN_VIEW_CARGO_LAST_MONTH_MAX;
 
 		for (auto tpe : {TownProductionEffect::Passengers, TownProductionEffect::Mail}) {
@@ -549,11 +568,6 @@ public:
 	}
 
 	/**
-	 * Gets the desired height for the information panel.
-	 * @param width The width of the panel in pixels.
-	 * @return the desired height in pixels.
-	 */
-	/**
 	 * Height of the row with an icon and percentage per city service.
 	 * @return The height.
 	 */
@@ -566,9 +580,15 @@ public:
 		return height;
 	}
 
+	/**
+	 * Gets the desired height for the information panel.
+	 * @param width The width of the panel in pixels.
+	 * @return the desired height in pixels.
+	 */
 	uint GetDesiredInfoHeight(int width) const
 	{
-		uint aimed_height = static_cast<uint>(3 + CargoSpec::town_production_cargoes[TownProductionEffect::Passengers].size() + CargoSpec::town_production_cargoes[TownProductionEffect::Mail].size()) * GetCharacterHeight(FontSize::Normal);
+		uint traffic_lines = _settings_game.economy.town_traffic != to_underlying(TownTrafficSetting::Off) ? 2 : 0;
+		uint aimed_height = static_cast<uint>(3 + traffic_lines + CargoSpec::town_production_cargoes[TownProductionEffect::Passengers].size() + CargoSpec::town_production_cargoes[TownProductionEffect::Mail].size()) * GetCharacterHeight(FontSize::Normal);
 		aimed_height += GetServiceRowHeight();
 
 		bool first = true;

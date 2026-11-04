@@ -669,6 +669,13 @@ static bool NeighbourHasReachableRoad(::RoadType rt, TileIndex start_tile, DiagD
 	return ::IsNormalRoadTile(tile) && ::HasTrafficLight(tile);
 }
 
+/* static */ SQInteger ScriptRoad::GetCongestion(TileIndex tile)
+{
+	if (!::IsValidTile(tile) || !::IsTileType(tile, TileType::Road) || ::IsRoadDepot(tile)) return -1;
+
+	return ::GetRoadCongestion(tile);
+}
+
 /* static */ bool ScriptRoad::BuildTrafficLights(TileIndex tile)
 {
 	EnforceCompanyModeValid(false);

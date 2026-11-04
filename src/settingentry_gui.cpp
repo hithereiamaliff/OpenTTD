@@ -827,6 +827,7 @@ SettingsContainer &GetSettingsTree()
 			{
 				towns->Add(new SettingEntry("economy.town_cargo_scale"));
 				towns->Add(new SettingEntry("economy.town_growth_rate"));
+				towns->Add(new SettingEntry("economy.town_traffic"));
 				towns->Add(new SettingEntry("economy.allow_town_roads"));
 				towns->Add(new SettingEntry("economy.allow_town_level_crossings"));
 				towns->Add(new SettingEntry("economy.found_town"));

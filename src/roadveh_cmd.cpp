@@ -41,6 +41,7 @@
 #include "road_cmd.h"
 #include "newgrf_roadstop.h"
 #include "road_junction.h"
+#include "town_traffic.h"
 
 #include "table/strings.h"
 
@@ -488,6 +489,9 @@ inline int RoadVehicle::GetCurrentMaxSpeed() const
 			max_speed = std::min(max_speed, GetBridgeSpec(GetBridgeType(u->tile))->speed * 2);
 		}
 	}
+
+	/* Town traffic: everyone crawls along congested roads. */
+	max_speed = std::min(max_speed, GetRoadCongestionSpeedLimit(this->tile));
 
 	return std::min(max_speed, this->current_order.GetMaxSpeed() * 2);
 }

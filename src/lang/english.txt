@@ -2131,6 +2131,13 @@ STR_CONFIG_SETTING_TOWN_GROWTH_NORMAL                           :Normal
 STR_CONFIG_SETTING_TOWN_GROWTH_FAST                             :Fast
 STR_CONFIG_SETTING_TOWN_GROWTH_VERY_FAST                        :Very fast
 
+STR_CONFIG_SETTING_TOWN_TRAFFIC                                 :Town traffic: {STRING2}
+STR_CONFIG_SETTING_TOWN_TRAFFIC_HELPTEXT                        :How busy town roads get with the cars of the town's people. Congested roads slow down all road vehicles, and the pathfinder drives around them where it can. Big towns, dense centres and junctions get the most traffic; one-way roads and road types meant for through traffic take more. The more of a town's passengers you carry, the fewer cars: up to 60% fewer
+STR_CONFIG_SETTING_TOWN_TRAFFIC_OFF                             :Off
+STR_CONFIG_SETTING_TOWN_TRAFFIC_LIGHT                           :Light
+STR_CONFIG_SETTING_TOWN_TRAFFIC_NORMAL                          :Normal
+STR_CONFIG_SETTING_TOWN_TRAFFIC_HEAVY                           :Heavy
+
 STR_CONFIG_SETTING_LARGER_TOWNS                                 :Proportion of towns that will become cities: {STRING2}
 STR_CONFIG_SETTING_LARGER_TOWNS_HELPTEXT                        :Amount of towns which will become a city, thus a town which starts out larger and grows faster
 STR_CONFIG_SETTING_LARGER_TOWNS_VALUE                           :1 in {COMMA}
@@ -3279,6 +3286,8 @@ STR_LAND_AREA_INFORMATION_ZONE_RESIDENTIAL                      :homes
 STR_LAND_AREA_INFORMATION_ZONE_COMMERCIAL                       :shops and offices
 STR_LAND_AREA_INFORMATION_ZONE_INDUSTRIAL                       :industry
 STR_LAND_AREA_INFORMATION_ZONE_PARK                             :parks
+STR_LAND_AREA_INFORMATION_TOWN_TRAFFIC_FREE                     :{BLACK}Town traffic: {LTBLUE}level {NUM} of 7, flows freely
+STR_LAND_AREA_INFORMATION_TOWN_TRAFFIC                          :{BLACK}Town traffic: {LTBLUE}level {NUM} of 7, moves at {VELOCITY}
 STR_LAND_AREA_INFORMATION_HOUSE_KIND                            :{BLACK}Zoning counts it as: {LTBLUE}{STRING}
 STR_LAND_AREA_INFORMATION_HOUSE_KIND_HOME                       :a home
 STR_LAND_AREA_INFORMATION_HOUSE_KIND_BUSINESS                   :a business
@@ -3858,6 +3867,12 @@ STR_TOWN_VIEW_ZONING_WANTS_COMMERCIAL                           :{BLACK}Homes fo
 STR_TOWN_VIEW_ZONING_WANTS_RESIDENTIAL                          :{BLACK}Homes for {ORANGE}{COMMA}{BLACK}, jobs for {ORANGE}{COMMA}{BLACK}: wants more homes
 STR_TOWN_VIEW_HAPPINESS                                         :{BLACK}Happiness: {ORANGE}{NUM}%{BLACK}. City services reach:
 STR_TOWN_VIEW_SERVICE_PERCENT                                   :{BLACK}{NUM}%
+STR_TOWN_VIEW_TRAFFIC                                           :{BLACK}Traffic: {ORANGE}{STRING}{BLACK}, {NUM}% of roads congested
+STR_TOWN_VIEW_TRAFFIC_LIGHT                                     :light
+STR_TOWN_VIEW_TRAFFIC_MODERATE                                  :moderate
+STR_TOWN_VIEW_TRAFFIC_HEAVY                                     :heavy
+STR_TOWN_VIEW_TRAFFIC_VERY_HEAVY                                :very heavy
+STR_TOWN_VIEW_TRAFFIC_TRANSIT                                   :{BLACK}Your services take {ORANGE}{NUM}%{BLACK} of cars off the road
 STR_TOWN_VIEW_CARGO_LAST_MONTH_MAX                              :{BLACK}{CARGO_LIST} last month: {ORANGE}{COMMA}{BLACK}  max: {ORANGE}{COMMA}
 STR_TOWN_VIEW_CARGO_LAST_MINUTE_MAX                             :{BLACK}{CARGO_LIST} last minute: {ORANGE}{COMMA}{BLACK}  max: {ORANGE}{COMMA}
 STR_TOWN_VIEW_CARGO_FOR_TOWNGROWTH                              :{BLACK}Cargo needed for town growth:

@@ -536,6 +536,7 @@ struct YAPFSettings {
 	uint32_t road_stop_bay_occupied_penalty; ///< penalty multiplied by the fill percentage of a road bay
 	uint32_t road_traffic_light_penalty; ///< penalty for a junction with traffic lights
 	uint32_t road_junction_queue_penalty; ///< penalty per vehicle held up in front of a junction
+	uint32_t road_congestion_penalty; ///< penalty for roads congested with town traffic, in percent of the default
 	bool rail_firstred_twoway_eol; ///< treat first red two-way signal as dead end
 	uint32_t rail_firstred_penalty; ///< penalty for first red signal
 	uint32_t rail_firstred_exit_penalty; ///< penalty for first red exit signal
@@ -635,6 +636,7 @@ struct EconomySettings {
 	bool mod_road_rebuild; ///< roadworks remove unnecessary RoadBits
 	bool multiple_industry_per_town; ///< allow many industries of the same type per town
 	uint8_t town_growth_rate; ///< town growth rate
+	uint8_t town_traffic; ///< how much traffic towns make on their roads, @see TownTrafficSetting
 	uint8_t larger_towns; ///< the number of cities to build. These start off larger and grow twice as fast
 	uint8_t initial_city_size; ///< multiplier for the initial size of the cities compared to towns
 	TownLayout town_layout; ///< select town layout, @see TownLayout

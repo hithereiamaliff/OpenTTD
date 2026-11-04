@@ -547,6 +547,30 @@ inline void SetTrafficLight(Tile t, bool lights)
 }
 
 /**
+ * How congested the road on a tile is with town traffic.
+ * @param t The tile.
+ * @pre IsTileType(t, TileType::Road) && !IsRoadDepot(t)
+ * @return The level, 0 (free) to 7 (jammed).
+ */
+inline uint8_t GetRoadCongestion(Tile t)
+{
+	assert(IsTileType(t, TileType::Road) && !IsRoadDepot(t));
+	return GB(t.m8(), 13, 3);
+}
+
+/**
+ * Set how congested the road on a tile is with town traffic.
+ * @param t The tile.
+ * @param level The level, 0 (free) to 7 (jammed).
+ * @pre IsTileType(t, TileType::Road) && !IsRoadDepot(t)
+ */
+inline void SetRoadCongestion(Tile t, uint8_t level)
+{
+	assert(IsTileType(t, TileType::Road) && !IsRoadDepot(t));
+	SB(t.m8(), 13, 3, level);
+}
+
+/**
  * Increase the progress counter of road works.
  * @param t The tile to modify.
  * @return True if the road works are in the last stage.

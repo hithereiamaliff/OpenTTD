@@ -13,6 +13,7 @@
 #include "../../roadstop_base.h"
 #include "../../road_junction.h"
 #include "../../road_map.h"
+#include "../../town_traffic.h"
 
 #include "../../safeguards.h"
 
@@ -103,6 +104,9 @@ protected:
 			/* non-diagonal trackdir */
 			cost = YAPF_TILE_CORNER_LENGTH + Yapf().PfGetSettings().road_curve_penalty;
 		}
+
+		/* Roads congested with town traffic take longer. */
+		cost += GetRoadCongestionPenalty(tile);
 
 		/* Junctions with traffic lights, and junctions where traffic is held up, take time. */
 		if (IsRoadJunctionTile(tile)) {

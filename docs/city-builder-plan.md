@@ -368,6 +368,55 @@ compared it with when it actually left; errors in days):
 The remaining error comes from bunching, breakdowns and depot visits, which
 no estimate from past trips can foresee.
 
+## Transit part 2, street life and traffic
+
+### Done: town traffic (step 1)
+
+Towns don't put real vehicles on the road (every attempt at that in
+OpenTTD went badly: desyncs, gridlock, frame time). Instead every road tile
+has a congestion level from 0 to 7 that real vehicles feel.
+
+- The level comes from the homes, jobs and city services within 3 tiles
+  (offices count a bit more than homes), the town's size (25% more traffic
+  per doubling above 500 people), how central the road is (town zone), the
+  road's capacity (one-way roads 1.6x, road types where towns build no
+  houses 2.5x, junctions 0.75x or 0.85x with traffic lights) and the
+  setting. The more of the town's passengers the player carries, the fewer
+  cars: up to 60% fewer when all of them ride.
+- It is kept in the map (road tiles, m8 bits 13-15), so it is saved and the
+  same for every player. The tile loop moves it up to two steps towards the
+  target every other visit (about once a week). Old saves start at 0 and
+  catch up within a month.
+- From level 2 on, road vehicles (trams too, where they share the road) go
+  at most 70, 55, 42, 32, 22 and 14 km/h on the tile. The road pathfinder
+  adds 0.1 to 1.8 tiles of cost per congested tile (setting
+  `pf.yapf.road_congestion_penalty`, percent).
+- Setting "Town traffic" (Environment, Towns): off, light, normal (default)
+  or heavy.
+- Shown in the town window ("Traffic: moderate, 6% of roads congested" and
+  how many cars the player's services take off the road), land info ("level
+  2 of 7, moves at 70 km/h"), the traffic map and the traffic overlay.
+  Script API: `ScriptRoad.GetCongestion(tile)`.
+- Code: `src/town_traffic.{h,cpp}`, hooks in `road_cmd.cpp` (tile loop),
+  `roadveh_cmd.cpp` (top speed), `yapf_road.cpp`, `road_traffic.cpp`,
+  `town_gui.cpp`, `misc_gui.cpp`.
+
+Calibration (normal setting, after two months):
+
+| Town | Road tiles at level 0-7 | Congested (4+) |
+|---|---|---|
+| Gredinghall, 10,100 people | 54 28 25 22 6 2 0 0 | 6% |
+| Abernbury, 9,200 | 48 10 24 18 14 2 2 0 | 15% |
+| Grintfield (15.3 save), 11,800 | 33 27 21 39 6 6 0 0 | 9% |
+| Towns of 3,800-6,400 | mostly 0-2 | 0-1% |
+
+In the lines demo, the two 12-bus lines through Gredinghall's centre took
+about 12% longer per round trip with town traffic on (average gap 200-250
+ticks against 180-200). On a 1024x1024 map with many towns and no vehicles,
+the game loop took about 13% longer (0.06 ms per tick); every-other-visit
+updates and skipping roads that can't congest halved the first version's
+cost.
+
 ## Roadmap
 
 Sizes are rough: S = one session, M = a few, L = many, XL = a project in itself.
