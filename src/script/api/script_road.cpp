@@ -16,6 +16,8 @@
 #include "../../station_cmd.h"
 #include "../../strings_func.h"
 #include "../../newgrf_roadstop.h"
+#include "../../traffic_light.h"
+#include "../../traffic_light_cmd.h"
 #include "../../script/squirrel_helper_type.hpp"
 
 #include "../../safeguards.h"
@@ -658,4 +660,36 @@ static bool NeighbourHasReachableRoad(::RoadType rt, TileIndex start_tile, DiagD
 	if (!ScriptRoad::IsRoadTypeAvailable(roadtype)) return 0;
 
 	return GetRoadTypeInfo((::RoadType)roadtype)->maintenance_multiplier;
+}
+
+/* static */ bool ScriptRoad::HasTrafficLights(TileIndex tile)
+{
+	if (!::IsValidTile(tile)) return false;
+
+	return ::IsNormalRoadTile(tile) && ::HasTrafficLight(tile);
+}
+
+/* static */ bool ScriptRoad::BuildTrafficLights(TileIndex tile)
+{
+	EnforceCompanyModeValid(false);
+	EnforcePrecondition(false, ::IsValidTile(tile));
+
+	return ScriptObject::Command<Commands::BuildTrafficLight>::Do(tile);
+}
+
+/* static */ bool ScriptRoad::RemoveTrafficLights(TileIndex tile)
+{
+	EnforceCompanyModeValid(false);
+	EnforcePrecondition(false, HasTrafficLights(tile));
+
+	return ScriptObject::Command<Commands::RemoveTrafficLight>::Do(tile);
+}
+
+/* static */ bool ScriptRoad::IsTrafficLightGreen(TileIndex tile, TileIndex from)
+{
+	if (!HasTrafficLights(tile) || !::IsValidTile(from)) return false;
+	if (::DistanceManhattan(tile, from) != 1) return false;
+
+	/* Traffic coming from 'from' travels towards 'tile'. */
+	return ::TrafficLightShowsGreen(tile, ::DiagDirToAxis(::DiagdirBetweenTiles(from, tile)));
 }

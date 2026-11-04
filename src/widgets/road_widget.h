@@ -27,6 +27,7 @@ enum RoadToolbarWidgets : WidgetID {
 	WID_ROT_BUILD_TUNNEL,   ///< Build tunnel.
 	WID_ROT_REMOVE,         ///< Remove road.
 	WID_ROT_CONVERT_ROAD,   ///< Convert road.
+	WID_ROT_TRAFFIC_LIGHTS, ///< Build or remove traffic lights (roads only, not trams).
 };
 
 /** Widgets of the #BuildRoadDepotWindow class. */

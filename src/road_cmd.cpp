@@ -43,6 +43,7 @@
 #include "road_cmd.h"
 #include "landscape_cmd.h"
 #include "rail_cmd.h"
+#include "traffic_light.h"
 
 #include "table/strings.h"
 #include "table/roadtypes.h"
@@ -475,6 +476,9 @@ static CommandCost RemoveRoad(TileIndex tile, DoCommandFlags flags, RoadBits pie
 					SetRoadBits(tile, present, rtt);
 					MarkTileDirtyByTile(tile);
 				}
+
+				/* Traffic lights go away with the junction. */
+				TrafficLightsOnRoadChanged(tile);
 			}
 
 			CommandCost cost(ExpensesType::Construction, pieces.Count() * RoadClearCost(existing_rt));
@@ -1627,6 +1631,52 @@ void DrawRoadGroundSprites(const TileInfo *ti, RoadBits road, RoadBits tram, con
 }
 
 /**
+ * Draw the traffic lights of a junction: one light for every road leading into
+ * it, standing where the traffic of that road waits, on its driving side.
+ * The lights reuse the base set's electric rail signal sprites.
+ * @param ti The junction tile.
+ * @param bits All road and tram pieces on the tile.
+ */
+static void DrawTrafficLights(const TileInfo *ti, RoadBits bits)
+{
+	/* Offset of the electric signal sprite, by the direction the traffic travels in; same as rail signals. */
+	static const uint8_t travel_to_sprite_offset[] = {
+		0, // DiagDirection::NE
+		2, // DiagDirection::SE
+		1, // DiagDirection::SW
+		3, // DiagDirection::NW
+	};
+	/* Where on the tile to stand, by tile edge: x and y within the tile, or -1 for "unchanged". */
+	static const int8_t edge_x[] = {1, -1, 14, -1};
+	static const int8_t edge_y[] = {-1, 14, -1, 1};
+
+	DiagDirDiff to_side = (_settings_game.vehicle.road_side == RoadVehicleDrivingSide::Right) ? DiagDirDiff::Right90 : DiagDirDiff::Left90;
+
+	for (DiagDirection edge : {DiagDirection::NE, DiagDirection::SE, DiagDirection::SW, DiagDirection::NW}) {
+		if (!bits.Any(DiagDirToRoadBits(edge))) continue;
+
+		/* Traffic coming in over this edge travels away from it. */
+		DiagDirection travel = ReverseDiagDir(edge);
+		DiagDirection side = ChangeDiagDir(travel, to_side);
+
+		int x = 8;
+		int y = 8;
+		for (DiagDirection d : {edge, side}) {
+			if (edge_x[to_underlying(d)] >= 0) x = edge_x[to_underlying(d)];
+			if (edge_y[to_underlying(d)] >= 0) y = edge_y[to_underlying(d)];
+		}
+
+		bool green = TrafficLightShowsGreen(ti->tile, DiagDirToAxis(travel));
+		SpriteID sprite = SPR_ORIGINAL_SIGNALS_BASE + travel_to_sprite_offset[to_underlying(travel)] * 2 + (green ? 1 : 0);
+
+		int px = ti->x + x;
+		int py = ti->y + y;
+		int z = (ti->tileh == SLOPE_FLAT) ? ti->z : GetSlopePixelZ(px, py);
+		AddSortableSpriteToDraw(sprite, PAL_NONE, px, py, z, {{}, {1, 1, BB_HEIGHT_UNDER_BRIDGE}, {}});
+	}
+}
+
+/**
  * Draw ground sprite and road pieces
  * @param ti TileInfo
  */
@@ -1673,6 +1723,8 @@ static void DrawRoadBits(TileInfo *ti)
 
 	/* Draw road, tram catenary */
 	DrawRoadCatenary(ti);
+
+	if (HasTrafficLight(ti->tile)) DrawTrafficLights(ti, road | tram);
 
 	/* Return if full detail is disabled, or we are zoomed fully out. */
 	if (!_display_opt.Test(DisplayOption::FullDetail) || _cur_dpi->zoom > ZoomLevel::Detail) return;
@@ -2173,6 +2225,8 @@ static TrackStatus GetTileTrackStatus_Road(TileIndex tile, TransportType mode, R
 
 					uint multiplier = drd_to_multiplier[(rtt == RoadTramType::Tram) ? 0 : GetDisallowedRoadDirections(tile).base()];
 					if (!HasRoadWorks(tile)) trackdirbits = static_cast<TrackdirBits>(_road_trackbits[bits.base()].base() * multiplier);
+					/* Traffic lights: entering from a road with a red light is not allowed. */
+					if (HasTrafficLight(tile)) red_signals = trackdirbits & GetTrafficLightRedTrackdirs(tile);
 					break;
 				}
 
@@ -2267,6 +2321,14 @@ static void GetTileDesc_Road(TileIndex tile, TileDesc &td)
 
 		default: {
 			td.str = (road_rt != INVALID_ROADTYPE ? _road_tile_strings[to_underlying(GetRoadside(tile))] : STR_LAI_ROAD_DESCRIPTION_TRAMWAY);
+			if (HasTrafficLight(tile)) {
+				td.str = STR_LAI_ROAD_DESCRIPTION_JUNCTION_WITH_TRAFFIC_LIGHTS;
+				const TrafficLight *tl = GetTrafficLight(tile);
+				if (tl != nullptr && tl->owner != OWNER_NONE) {
+					td.owner_type[3] = STR_LAND_AREA_INFORMATION_TRAFFIC_LIGHTS_OWNER;
+					td.owner[3] = tl->owner;
+				}
+			}
 			break;
 		}
 	}

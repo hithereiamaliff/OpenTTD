@@ -2996,6 +2996,7 @@ STR_ROAD_TOOLBAR_TOOLTIP_BUILD_PASSENGER_TRAM_STATION           :{BLACK}Build pa
 STR_ROAD_TOOLBAR_TOOLTIP_BUILD_TRUCK_LOADING_BAY                :{BLACK}Build lorry station. Ctrl+Click to select another station to join. Also press Shift to show cost estimate only
 STR_ROAD_TOOLBAR_TOOLTIP_BUILD_CARGO_TRAM_STATION               :{BLACK}Build freight tram station. Ctrl+Click to select another station to join. Also press Shift to show cost estimate only
 STR_ROAD_TOOLBAR_TOOLTIP_TOGGLE_ONE_WAY_ROAD                    :{BLACK}Activate/Deactivate one way roads
+STR_ROAD_TOOLBAR_TOOLTIP_BUILD_TRAFFIC_LIGHTS                   :{BLACK}Build traffic lights at a road junction. Ctrl+Click to remove them. Also press Shift to show cost estimate only
 STR_ROAD_TOOLBAR_TOOLTIP_BUILD_ROAD_BRIDGE                      :{BLACK}Build road bridge. Also press Shift to show cost estimate only
 STR_ROAD_TOOLBAR_TOOLTIP_BUILD_TRAMWAY_BRIDGE                   :{BLACK}Build tramway bridge. Also press Shift to show cost estimate only
 STR_ROAD_TOOLBAR_TOOLTIP_BUILD_ROAD_TUNNEL                      :{BLACK}Build road tunnel. Also press Shift to show cost estimate only
@@ -3199,6 +3200,7 @@ STR_LAND_AREA_INFORMATION_REVENUE_WHEN_CLEARED                  :{BLACK}Revenue 
 STR_LAND_AREA_INFORMATION_OWNER_N_A                             :N/A
 STR_LAND_AREA_INFORMATION_OWNER                                 :{BLACK}Owner: {LTBLUE}{STRING1}
 STR_LAND_AREA_INFORMATION_ROAD_OWNER                            :{BLACK}Road owner: {LTBLUE}{STRING1}
+STR_LAND_AREA_INFORMATION_TRAFFIC_LIGHTS_OWNER                  :{BLACK}Traffic lights owner: {LTBLUE}{STRING1}
 STR_LAND_AREA_INFORMATION_TRAM_OWNER                            :{BLACK}Tramway owner: {LTBLUE}{STRING1}
 STR_LAND_AREA_INFORMATION_RAIL_OWNER                            :{BLACK}Railway owner: {LTBLUE}{STRING1}
 STR_LAND_AREA_INFORMATION_LOCAL_AUTHORITY                       :{BLACK}Local authority: {LTBLUE}{STRING1}
@@ -3263,6 +3265,7 @@ STR_LAI_ROAD_DESCRIPTION_ROAD_WITH_STREETLIGHTS                 :Road with stree
 STR_LAI_ROAD_DESCRIPTION_TREE_LINED_ROAD                        :Tree-lined road
 STR_LAI_ROAD_DESCRIPTION_ROAD_VEHICLE_DEPOT                     :Road vehicle depot
 STR_LAI_ROAD_DESCRIPTION_ROAD_RAIL_LEVEL_CROSSING               :Road/rail level crossing
+STR_LAI_ROAD_DESCRIPTION_JUNCTION_WITH_TRAFFIC_LIGHTS           :Road junction with traffic lights
 STR_LAI_ROAD_DESCRIPTION_TRAMWAY                                :Tramway
 
 # Houses come directly from their building names
@@ -5342,6 +5345,11 @@ STR_ERROR_CAN_T_CONVERT_ROAD                                    :Can't convert r
 STR_ERROR_CAN_T_CONVERT_TRAMWAY                                 :Can't convert tram type here...
 STR_ERROR_NO_SUITABLE_ROAD                                      :no suitable road
 STR_ERROR_NO_SUITABLE_TRAMWAY                                   :no suitable tramway
+STR_ERROR_CAN_T_BUILD_TRAFFIC_LIGHTS                            :Can't build traffic lights here...
+STR_ERROR_CAN_T_REMOVE_TRAFFIC_LIGHTS                           :Can't remove traffic lights from here...
+STR_ERROR_TRAFFIC_LIGHTS_NEED_JUNCTION                          :traffic lights need a road junction
+STR_ERROR_ALREADY_HAS_TRAFFIC_LIGHTS                            :... junction already has traffic lights
+STR_ERROR_NO_TRAFFIC_LIGHTS                                     :there are no traffic lights here
 
 # Waterway construction errors
 STR_ERROR_CAN_T_BUILD_CANALS                                    :Can't build canals here...

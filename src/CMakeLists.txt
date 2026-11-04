@@ -556,6 +556,9 @@ add_files(
     townname_type.h
     track_func.h
     track_type.h
+    traffic_light.cpp
+    traffic_light.h
+    traffic_light_cmd.h
     train.h
     train_cmd.cpp
     train_cmd.h

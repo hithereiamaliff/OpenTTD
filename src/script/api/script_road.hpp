@@ -542,6 +542,45 @@ public:
 	static bool RemoveRoadStation(TileIndex tile);
 
 	/**
+	 * Checks whether the given tile is a road junction with traffic lights.
+	 * @param tile The tile to check.
+	 * @pre ScriptMap::IsValidTile(tile).
+	 * @return True if and only if the tile is a road junction with traffic lights.
+	 */
+	static bool HasTrafficLights(TileIndex tile);
+
+	/**
+	 * Builds traffic lights at a road junction (a road tile with three or four road pieces).
+	 * @param tile The junction tile.
+	 * @pre ScriptMap::IsValidTile(tile).
+	 * @game @pre ScriptCompanyMode::IsValid().
+	 * @exception ScriptError::ERR_OWNED_BY_ANOTHER_COMPANY
+	 * @exception ScriptRoad::ERR_ROAD_WORKS_IN_PROGRESS
+	 * @return Whether the traffic lights have been/can be built or not.
+	 */
+	static bool BuildTrafficLights(TileIndex tile);
+
+	/**
+	 * Removes the traffic lights from a road junction.
+	 * @param tile The junction tile.
+	 * @pre HasTrafficLights(tile).
+	 * @game @pre ScriptCompanyMode::IsValid().
+	 * @exception ScriptError::ERR_OWNED_BY_ANOTHER_COMPANY
+	 * @return Whether the traffic lights have been/can be removed or not.
+	 */
+	static bool RemoveTrafficLights(TileIndex tile);
+
+	/**
+	 * Checks whether traffic coming from a neighbouring tile currently has a green light.
+	 * @param tile The junction tile.
+	 * @param from The tile next to the junction that the traffic comes from.
+	 * @pre HasTrafficLights(tile).
+	 * @pre ScriptMap::DistanceManhattan(tile, from) == 1.
+	 * @return True if traffic coming from 'from' may enter the junction now.
+	 */
+	static bool IsTrafficLightGreen(TileIndex tile, TileIndex from);
+
+	/**
 	 * Get the baseprice of building a road-related object.
 	 * @param roadtype the roadtype of the object to build
 	 * @param build_type the type of object to build

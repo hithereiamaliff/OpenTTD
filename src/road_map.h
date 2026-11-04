@@ -522,6 +522,31 @@ inline bool HasRoadWorks(Tile t)
 }
 
 /**
+ * Check if a road junction has traffic lights.
+ * This bit only caches whether the junction is in the list of traffic lights.
+ * @param t The tile to check.
+ * @pre IsNormalRoad(t)
+ * @return True if the junction has traffic lights.
+ */
+inline bool HasTrafficLight(Tile t)
+{
+	assert(IsNormalRoad(t));
+	return HasBit(t.m8(), 12);
+}
+
+/**
+ * Mark whether a road junction has traffic lights.
+ * @param t The tile to change.
+ * @param lights Whether the junction has traffic lights.
+ * @pre IsNormalRoad(t)
+ */
+inline void SetTrafficLight(Tile t, bool lights)
+{
+	assert(IsNormalRoad(t));
+	AssignBit(t.m8(), 12, lights);
+}
+
+/**
  * Increase the progress counter of road works.
  * @param t The tile to modify.
  * @return True if the road works are in the last stage.

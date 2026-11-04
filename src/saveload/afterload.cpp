@@ -61,6 +61,7 @@
 #include "../timer/timer_game_economy.h"
 #include "../timer/timer_game_tick.h"
 #include "../picker_func.h"
+#include "../traffic_light.h"
 
 #include "saveload_error.hpp"
 #include "saveload_func.h"
@@ -3430,6 +3431,7 @@ bool AfterLoadGame()
 	AfterLoadLabelMaps();
 	AfterLoadCompanyStats();
 	AfterLoadStoryBook();
+	AfterLoadTrafficLights();
 
 	_gamelog.PrintDebug(Severity::Error);
 

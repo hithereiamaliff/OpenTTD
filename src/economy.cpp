@@ -60,6 +60,8 @@
 #include "timer/timer_game_calendar.h"
 #include "timer/timer_game_economy.h"
 
+#include "traffic_light.h"
+
 #include "table/strings.h"
 #include "table/pricebase.h"
 
@@ -514,6 +516,9 @@ void ChangeOwnershipOfCompanyItems(Owner old_owner, Owner new_owner)
 			st->owner = new_owner == INVALID_OWNER ? OWNER_NONE : new_owner;
 		}
 	}
+
+	/* Traffic lights keep working; those of a bankrupt company become public. */
+	ChangeTrafficLightOwner(old_owner, new_owner);
 
 	/* do the same for waypoints (we need to do this here so deleted waypoints are converted too) */
 	for (Waypoint *wp : Waypoint::Iterate()) {

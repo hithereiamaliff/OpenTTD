@@ -1722,6 +1722,7 @@ void OnTick_Town();
 void OnTick_Trees();
 void OnTick_Station();
 void OnTick_Industry();
+void OnTick_TrafficLights();
 
 void OnTick_Companies();
 void OnTick_LinkGraph();
@@ -1735,6 +1736,7 @@ void CallLandscapeTick()
 		OnTick_Trees();
 		OnTick_Station();
 		OnTick_Industry();
+		OnTick_TrafficLights();
 	}
 
 	OnTick_Companies();

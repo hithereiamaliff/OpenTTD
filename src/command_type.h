@@ -380,6 +380,9 @@ enum class Commands : uint8_t {
 	UpdateLeagueTableElementScore, ///< update the score of a league table element
 	RemoveLeagueTableElement, ///< remove a league table element
 
+	BuildTrafficLight, ///< build traffic lights at a road junction
+	RemoveTrafficLight, ///< remove traffic lights from a road junction
+
 	End, ///< @important Must ALWAYS be on the end of this list!! (period)
 };
 

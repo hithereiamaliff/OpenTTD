@@ -46,6 +46,7 @@
 #include "timer/timer_game_calendar.h"
 
 #include "widgets/road_widget.h"
+#include "traffic_light_cmd.h"
 
 #include "table/strings.h"
 
@@ -340,6 +341,10 @@ static bool RoadToolbar_CtrlChanged(Window *w)
 			return true;
 		}
 	}
+	if (w->GetWidget<NWidgetCore>(WID_ROT_TRAFFIC_LIGHTS) != nullptr && w->IsWidgetLowered(WID_ROT_TRAFFIC_LIGHTS)) {
+		ToggleRoadButton_Remove(w);
+		return true;
+	}
 
 	return false;
 }
@@ -501,6 +506,7 @@ struct BuildRoadToolbarWindow : Window {
 			case WID_ROT_BUS_STATION:
 			case WID_ROT_TRUCK_STATION:
 			case WID_ROT_BUILD_WAYPOINT:
+			case WID_ROT_TRAFFIC_LIGHTS:
 				if (RoadTypeIsRoad(this->roadtype)) this->DisableWidget(WID_ROT_ONE_WAY);
 				this->SetWidgetDisabledState(WID_ROT_REMOVE, !this->IsWidgetLowered(clicked_widget));
 				break;
@@ -548,6 +554,7 @@ struct BuildRoadToolbarWindow : Window {
 			case WID_ROT_BUILD_BRIDGE: return SPR_CURSOR_BRIDGE;
 			case WID_ROT_BUILD_TUNNEL: return GetRoadTypeInfo(this->roadtype)->cursor.tunnel;
 			case WID_ROT_CONVERT_ROAD: return GetRoadTypeInfo(this->roadtype)->cursor.convert_road;
+			case WID_ROT_TRAFFIC_LIGHTS: return ANIMCURSOR_BUILDSIGNALS;
 			default: NOT_REACHED();
 		}
 	}
@@ -571,6 +578,7 @@ struct BuildRoadToolbarWindow : Window {
 			case WID_ROT_BUILD_BRIDGE: return HT_RECT;
 			case WID_ROT_BUILD_TUNNEL: return HT_SPECIAL;
 			case WID_ROT_CONVERT_ROAD: return HT_RECT | HT_DIAGONAL;
+			case WID_ROT_TRAFFIC_LIGHTS: return HT_RECT;
 			default: NOT_REACHED();
 		}
 	}
@@ -722,6 +730,14 @@ struct BuildRoadToolbarWindow : Window {
 
 			case WID_ROT_CONVERT_ROAD:
 				VpStartPlaceSizing(tile, VPM_X_AND_Y, DDSP_CONVERT_ROAD);
+				break;
+
+			case WID_ROT_TRAFFIC_LIGHTS:
+				if (_remove_button_clicked) {
+					Command<Commands::RemoveTrafficLight>::Post(STR_ERROR_CAN_T_REMOVE_TRAFFIC_LIGHTS, CcPlaySound_CONSTRUCTION_OTHER, tile);
+				} else {
+					Command<Commands::BuildTrafficLight>::Post(STR_ERROR_CAN_T_BUILD_TRAFFIC_LIGHTS, CcPlaySound_CONSTRUCTION_OTHER, tile);
+				}
 				break;
 
 			default: NOT_REACHED();
@@ -949,6 +965,7 @@ struct BuildRoadToolbarWindow : Window {
 		Hotkey('T', "tunnel", WID_ROT_BUILD_TUNNEL),
 		Hotkey('R', "remove", WID_ROT_REMOVE),
 		Hotkey('C', "convert", WID_ROT_CONVERT_ROAD),
+		Hotkey('L', "traffic_lights", WID_ROT_TRAFFIC_LIGHTS),
 		Hotkey(WKC_L_BRACKET, "prev_roadtype", to_underlying(SpecialListHotkeys::PreviousItem)),
 		Hotkey(WKC_R_BRACKET, "next_roadtype", to_underlying(SpecialListHotkeys::NextItem)),
 		Hotkey(WKC_L_BRACKET | WKC_CTRL, "first_roadtype", to_underlying(SpecialListHotkeys::FirstItem)),
@@ -1003,6 +1020,8 @@ static constexpr std::initializer_list<NWidgetPart> _nested_build_road_widgets =
 
 		NWidget(WWT_IMGBTN, Colours::DarkGreen, WID_ROT_ONE_WAY),
 						SetFill(0, 1), SetToolbarMinimalSize(1), SetSpriteTip(SPR_IMG_ROAD_ONE_WAY, STR_ROAD_TOOLBAR_TOOLTIP_TOGGLE_ONE_WAY_ROAD),
+		NWidget(WWT_IMGBTN, Colours::DarkGreen, WID_ROT_TRAFFIC_LIGHTS),
+						SetFill(0, 1), SetToolbarMinimalSize(1), SetSpriteTip(SPR_IMG_SIGNAL_ELECTRIC_NORM, STR_ROAD_TOOLBAR_TOOLTIP_BUILD_TRAFFIC_LIGHTS),
 		NWidget(WWT_IMGBTN, Colours::DarkGreen, WID_ROT_BUILD_BRIDGE),
 						SetFill(0, 1), SetToolbarMinimalSize(2), SetSpriteTip(SPR_IMG_BRIDGE, STR_ROAD_TOOLBAR_TOOLTIP_BUILD_ROAD_BRIDGE),
 		NWidget(WWT_IMGBTN, Colours::DarkGreen, WID_ROT_BUILD_TUNNEL),
@@ -1117,6 +1136,8 @@ static constexpr std::initializer_list<NWidgetPart> _nested_build_road_scen_widg
 
 		NWidget(WWT_IMGBTN, Colours::DarkGreen, WID_ROT_ONE_WAY),
 						SetFill(0, 1), SetToolbarMinimalSize(1), SetSpriteTip(SPR_IMG_ROAD_ONE_WAY, STR_ROAD_TOOLBAR_TOOLTIP_TOGGLE_ONE_WAY_ROAD),
+		NWidget(WWT_IMGBTN, Colours::DarkGreen, WID_ROT_TRAFFIC_LIGHTS),
+						SetFill(0, 1), SetToolbarMinimalSize(1), SetSpriteTip(SPR_IMG_SIGNAL_ELECTRIC_NORM, STR_ROAD_TOOLBAR_TOOLTIP_BUILD_TRAFFIC_LIGHTS),
 		NWidget(WWT_IMGBTN, Colours::DarkGreen, WID_ROT_BUILD_BRIDGE),
 						SetFill(0, 1), SetToolbarMinimalSize(2), SetSpriteTip(SPR_IMG_BRIDGE, STR_ROAD_TOOLBAR_TOOLTIP_BUILD_ROAD_BRIDGE),
 		NWidget(WWT_IMGBTN, Colours::DarkGreen, WID_ROT_BUILD_TUNNEL),
