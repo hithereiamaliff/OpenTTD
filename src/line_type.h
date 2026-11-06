@@ -10,6 +10,7 @@
 #ifndef LINE_TYPE_H
 #define LINE_TYPE_H
 
+#include "fare_type.h"
 #include "gfx_type.h"
 #include "timer/timer_game_tick.h"
 
@@ -38,6 +39,8 @@ struct LineInfo {
 	Colours colour = Colours::Invalid; ///< Line colour; Colours::Invalid picks one automatically.
 	TimerGameTick::Ticks target_gap = 0; ///< Wanted time between departures from the first stop; 0 for none.
 	bool hold_for_spacing = false; ///< Hold vehicles at the first stop to keep the target gap.
+	FareScheme fare_scheme = FareScheme::Inherit; ///< The line's own fare scheme, or Inherit for the company's.
+	uint16_t fare_price = 0; ///< The line's own price level in percent, or 0 for the company's.
 
 	TimerGameTick::TickCounter last_departure = 0; ///< When a vehicle last left the first stop; 0 for never.
 	std::array<uint32_t, LINE_GAP_HISTORY> gaps{}; ///< Recent gaps between departures from the first stop, in ticks.
@@ -66,6 +69,8 @@ enum class LineProperty : uint8_t {
 	Colour, ///< The line colour; uses the value, Colours::Invalid for automatic.
 	TargetGap, ///< Wanted ticks between departures; uses the value, 0 for none.
 	HoldForSpacing, ///< Whether to hold vehicles at the first stop; uses the value.
+	FareScheme, ///< The line's own fare scheme; uses the value, FareScheme::Inherit for the company's.
+	FarePrice, ///< The line's own price level in percent; uses the value, 0 for the company's.
 	End, ///< End marker.
 };
 

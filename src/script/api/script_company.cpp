@@ -20,6 +20,7 @@
 #include "../../tile_map.h"
 #include "../../string_func.h"
 #include "../../company_cmd.h"
+#include "../../fare_cmd.h"
 #include "../../misc_cmd.h"
 #include "../../object_cmd.h"
 #include "../../settings_cmd.h"
@@ -246,6 +247,87 @@
 /* static */ Money ScriptCompany::GetLoanInterval()
 {
 	return LOAN_INTERVAL;
+}
+
+/* static */ bool ScriptCompany::SetFareScheme(FareTransport transport, FareScheme scheme)
+{
+	EnforceCompanyModeValid(false);
+	EnforcePrecondition(false, transport >= FT_BUS && transport <= FT_AIR);
+	EnforcePrecondition(false, scheme >= FS_CLASSIC && scheme <= FS_FREE);
+
+	return ScriptObject::Command<Commands::SetCompanyFare>::Do(static_cast<::FareMode>(transport), ::FareSetting::Scheme, static_cast<uint16_t>(scheme));
+}
+
+/* static */ bool ScriptCompany::SetFarePrice(FareTransport transport, SQInteger price)
+{
+	EnforceCompanyModeValid(false);
+	EnforcePrecondition(false, transport >= FT_BUS && transport <= FT_AIR);
+	EnforcePrecondition(false, price >= FARE_PRICE_MIN && price <= FARE_PRICE_MAX);
+
+	return ScriptObject::Command<Commands::SetCompanyFare>::Do(static_cast<::FareMode>(transport), ::FareSetting::Price, static_cast<uint16_t>(price));
+}
+
+/* static */ bool ScriptCompany::SetConcessionFare(FareTransport transport, SQInteger concession)
+{
+	EnforceCompanyModeValid(false);
+	EnforcePrecondition(false, transport >= FT_BUS && transport <= FT_AIR);
+	EnforcePrecondition(false, concession >= 0 && concession < to_underlying(::FareConcession::End));
+
+	return ScriptObject::Command<Commands::SetCompanyFare>::Do(static_cast<::FareMode>(transport), ::FareSetting::Concession, static_cast<uint16_t>(concession));
+}
+
+/* static */ bool ScriptCompany::SetMonthlyPass(FareTransport transport, SQInteger fares)
+{
+	EnforceCompanyModeValid(false);
+	EnforcePrecondition(false, transport >= FT_BUS && transport <= FT_AIR);
+	EnforcePrecondition(false, fares == 0 || (fares >= FARE_PASS_MIN && fares <= FARE_PASS_MAX));
+
+	return ScriptObject::Command<Commands::SetCompanyFare>::Do(static_cast<::FareMode>(transport), ::FareSetting::Pass, static_cast<uint16_t>(fares));
+}
+
+/**
+ * The fares of a company for a transport type, for the getters.
+ * @param company The company.
+ * @param transport The transport type.
+ * @return The fares, or nullptr if the company or transport type is invalid.
+ */
+static const FarePolicy *GetScriptFare(ScriptCompany::CompanyID company, ScriptCompany::FareTransport transport)
+{
+	company = ScriptCompany::ResolveCompanyID(company);
+	if (company == ScriptCompany::COMPANY_INVALID || transport < ScriptCompany::FT_BUS || transport > ScriptCompany::FT_AIR) return nullptr;
+	const ::Company *c = ::Company::GetIfValid(ScriptCompany::FromScriptCompanyID(company));
+	return c == nullptr ? nullptr : &c->fares[transport];
+}
+
+/* static */ SQInteger ScriptCompany::GetFareScheme(ScriptCompany::CompanyID company, FareTransport transport)
+{
+	const FarePolicy *fare = GetScriptFare(company, transport);
+	return fare == nullptr ? -1 : to_underlying(fare->scheme);
+}
+
+/* static */ SQInteger ScriptCompany::GetFarePrice(ScriptCompany::CompanyID company, FareTransport transport)
+{
+	const FarePolicy *fare = GetScriptFare(company, transport);
+	return fare == nullptr ? -1 : fare->price;
+}
+
+/* static */ SQInteger ScriptCompany::GetConcessionFare(ScriptCompany::CompanyID company, FareTransport transport)
+{
+	const FarePolicy *fare = GetScriptFare(company, transport);
+	return fare == nullptr ? -1 : to_underlying(fare->concession);
+}
+
+/* static */ SQInteger ScriptCompany::GetMonthlyPass(ScriptCompany::CompanyID company, FareTransport transport)
+{
+	const FarePolicy *fare = GetScriptFare(company, transport);
+	return fare == nullptr ? -1 : fare->pass;
+}
+
+/* static */ Money ScriptCompany::GetPassIncome(ScriptCompany::CompanyID company, FareTransport transport)
+{
+	::CompanyID c = ResolveCompanyID(company) == COMPANY_INVALID ? ::CompanyID::Invalid() : FromScriptCompanyID(ResolveCompanyID(company));
+	if (!::Company::IsValidID(c) || transport < FT_BUS || transport > FT_AIR) return -1;
+	return ::Company::Get(c)->pass_stats[transport].income;
 }
 
 /* static */ bool ScriptCompany::SetLoanAmount(Money loan)

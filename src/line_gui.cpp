@@ -15,6 +15,8 @@
 #include "core/string_consumer.hpp"
 #include "dropdown_common_type.h"
 #include "dropdown_func.h"
+#include "fare.h"
+#include "fare_gui.h"
 #include "gfx_func.h"
 #include "gui.h"
 #include "order_base.h"
@@ -185,6 +187,16 @@ struct LineWindow : Window {
 
 		lines.push_back(GetString(STR_LINE_RIDERS, line.last_month.riders, line.this_month.riders));
 
+		const Vehicle *first = list->GetFirstSharedVehicle();
+		FarePolicy fare = GetVehicleFare(first);
+		bool own = line.fare_scheme != FareScheme::Inherit || line.fare_price != 0;
+		StringID whose = own ? STR_LINE_FARE_OWN : STR_LINE_FARE_COMPANYS;
+		if (fare.scheme == FareScheme::Free) {
+			lines.push_back(GetString(STR_LINE_FARE_FREE, whose));
+		} else {
+			lines.push_back(GetString(STR_LINE_FARE, GetFareSchemeName(fare.scheme), fare.price, GetFareExample(fare, 20, false), whose));
+		}
+
 		if (line.last_month.load_count > 0) {
 			lines.push_back(GetString(STR_LINE_LOAD, line.last_month.load_sum / line.last_month.load_count, line.last_month.max_load));
 		} else {
@@ -207,7 +219,7 @@ struct LineWindow : Window {
 	}
 
 	/** Number of lines in the info panel, below the badge row. */
-	static constexpr uint INFO_LINES = 8;
+	static constexpr uint INFO_LINES = 9;
 
 	void UpdateWidgetSize(WidgetID widget, Dimension &size, [[maybe_unused]] const Dimension &padding, [[maybe_unused]] Dimension &fill, [[maybe_unused]] Dimension &resize) override
 	{
@@ -298,6 +310,14 @@ struct LineWindow : Window {
 				Command<Commands::SetLineProperty>::Post(STR_ERROR_CAN_T_CHANGE_LINE, v->index, LineProperty::HoldForSpacing, list->line.hold_for_spacing ? 0 : 1, {});
 				break;
 
+			case WID_LN_FARE:
+				ShowDropDownList(this, MakeFareSchemeDropDown(true), to_underlying(list->line.fare_scheme), WID_LN_FARE);
+				break;
+
+			case WID_LN_FARE_PRICE:
+				ShowDropDownList(this, MakeFarePriceDropDown(true), list->line.fare_price, WID_LN_FARE_PRICE);
+				break;
+
 			case WID_LN_VEHICLES:
 				ShowVehicleListWindow(v);
 				break;
@@ -317,10 +337,16 @@ struct LineWindow : Window {
 
 	void OnDropdownSelect(WidgetID widget, int index, int) override
 	{
-		if (widget != WID_LN_COLOUR) return;
 		const OrderList *list = this->GetList();
 		if (list == nullptr) return;
-		Command<Commands::SetLineProperty>::Post(STR_ERROR_CAN_T_CHANGE_LINE, list->GetFirstSharedVehicle()->index, LineProperty::Colour, static_cast<uint32_t>(index), {});
+		LineProperty property;
+		switch (widget) {
+			case WID_LN_COLOUR: property = LineProperty::Colour; break;
+			case WID_LN_FARE: property = LineProperty::FareScheme; break;
+			case WID_LN_FARE_PRICE: property = LineProperty::FarePrice; break;
+			default: return;
+		}
+		Command<Commands::SetLineProperty>::Post(STR_ERROR_CAN_T_CHANGE_LINE, list->GetFirstSharedVehicle()->index, property, static_cast<uint32_t>(index), {});
 	}
 
 	void OnQueryTextFinished(std::optional<std::string> str) override
@@ -356,7 +382,7 @@ struct LineWindow : Window {
 			return;
 		}
 		bool mine = this->owner == _local_company;
-		this->SetWidgetsDisabledState(!mine, WID_LN_NUMBER, WID_LN_NAME, WID_LN_COLOUR, WID_LN_TARGET);
+		this->SetWidgetsDisabledState(!mine, WID_LN_NUMBER, WID_LN_NAME, WID_LN_COLOUR, WID_LN_TARGET, WID_LN_FARE, WID_LN_FARE_PRICE);
 		this->SetWidgetDisabledState(WID_LN_HOLD, !mine || list->line.target_gap <= 0);
 		this->SetWidgetLoweredState(WID_LN_HOLD, list->line.hold_for_spacing);
 		this->SetDirty();
@@ -388,6 +414,10 @@ static constexpr std::initializer_list<NWidgetPart> _nested_line_widgets = {
 	NWidget(NWID_HORIZONTAL, NWidContainerFlag::EqualSize),
 		NWidget(WWT_PUSHTXTBTN, Colours::Grey, WID_LN_TARGET), SetFill(1, 0), SetStringTip(STR_LINE_TARGET_BUTTON, STR_LINE_TARGET_TOOLTIP),
 		NWidget(WWT_TEXTBTN, Colours::Grey, WID_LN_HOLD), SetFill(1, 0), SetStringTip(STR_LINE_HOLD_BUTTON, STR_LINE_HOLD_TOOLTIP),
+	EndContainer(),
+	NWidget(NWID_HORIZONTAL, NWidContainerFlag::EqualSize),
+		NWidget(WWT_DROPDOWN, Colours::Grey, WID_LN_FARE), SetFill(1, 0), SetStringTip(STR_LINE_FARE_BUTTON, STR_LINE_FARE_TOOLTIP),
+		NWidget(WWT_DROPDOWN, Colours::Grey, WID_LN_FARE_PRICE), SetFill(1, 0), SetStringTip(STR_LINE_FARE_PRICE_BUTTON, STR_LINE_FARE_PRICE_TOOLTIP),
 	EndContainer(),
 	NWidget(NWID_HORIZONTAL, NWidContainerFlag::EqualSize),
 		NWidget(WWT_PUSHTXTBTN, Colours::Grey, WID_LN_VEHICLES), SetFill(1, 0), SetStringTip(STR_LINE_VEHICLES_BUTTON, STR_LINE_VEHICLES_TOOLTIP),

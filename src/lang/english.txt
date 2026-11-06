@@ -4042,6 +4042,8 @@ STR_STATION_VIEW_RATINGS_TOOLTIP                                :{BLACK}Show sta
 STR_STATION_VIEW_SUPPLY_RATINGS_TITLE_MONTH                     :{BLACK}Supply per month and local rating:
 STR_STATION_VIEW_SUPPLY_RATINGS_TITLE_MINUTE                    :{BLACK}Supply per minute and local rating:
 STR_STATION_VIEW_CARGO_SUPPLY_RATING                            :{WHITE}{STRING}: {YELLOW}{COMMA} / {STRING} ({COMMA}%)
+STR_STATION_VIEW_FARE_CHEAP                                     :{BLACK}Riders from here paid {GREEN}{NUM}%{BLACK} of the classic fare: passengers {GREEN}+{NUM}%
+STR_STATION_VIEW_FARE_DEAR                                      :{BLACK}Riders from here paid {RED}{NUM}%{BLACK} of the classic fare: passengers {RED}-{NUM}%
 
 STR_STATION_VIEW_GROUP                                          :{BLACK}Group by
 STR_STATION_VIEW_WAITING_STATION                                :Station: Waiting
@@ -4144,6 +4146,8 @@ STR_FINANCES_BORROW_TOOLTIP                                     :{BLACK}Increase
 STR_FINANCES_REPAY_BUTTON                                       :{BLACK}Repay {CURRENCY_LONG}
 STR_FINANCES_REPAY_TOOLTIP                                      :{BLACK}Repay part of loan. Ctrl+Click to repay as much loan as possible
 STR_FINANCES_INFRASTRUCTURE_BUTTON                              :{BLACK}Infrastructure
+STR_FINANCES_FARES_BUTTON                                       :{BLACK}Fares
+STR_FINANCES_FARES_TOOLTIP                                      :{BLACK}Set passenger fares for buses, trams, trains, ships and aircraft
 
 # Company view
 STR_COMPANY_VIEW_CAPTION                                        :{WHITE}{COMPANY} {BLACK}{COMPANY_NUM}
@@ -5087,6 +5091,55 @@ STR_LINE_QUERY_NAME                                             :{WHITE}Line nam
 STR_LINE_QUERY_TARGET_DAYS                                      :{WHITE}Leave the first stop every how many days? (0 for no target)
 STR_LINE_QUERY_TARGET_SECONDS                                   :{WHITE}Leave the first stop every how many seconds? (0 for no target)
 STR_LINE_QUERY_TARGET_TICKS                                     :{WHITE}Leave the first stop every how many ticks? (0 for no target)
+STR_LINE_FARE_BUTTON                                            :{BLACK}Fare
+STR_LINE_FARE_TOOLTIP                                           :{BLACK}Give this line its own fare, or let it charge the company's fare for its transport type (set in the Finances window)
+STR_LINE_FARE_PRICE_BUTTON                                      :{BLACK}Price
+STR_LINE_FARE_PRICE_TOOLTIP                                     :{BLACK}Give this line its own price level, or use the company's
+STR_LINE_FARE_COMPANY                                           :Company's fare
+STR_LINE_FARE_PRICE_COMPANY                                     :Company's price
+STR_LINE_FARE                                                   :{BLACK}Fare: {ORANGE}{STRING} {NUM}%{BLACK}, 10 riders over 20 tiles pay {ORANGE}{CURRENCY_SHORT}{BLACK} {STRING}
+STR_LINE_FARE_FREE                                              :{BLACK}Fare: {ORANGE}free{BLACK} {STRING}
+STR_LINE_FARE_OWN                                               :(this line's)
+STR_LINE_FARE_COMPANYS                                          :(company's)
+STR_FARES_CAPTION                                               :{WHITE}{COMPANY} - Passenger fares
+STR_FARES_TABLE_TOOLTIP                                         :{BLACK}Click a fare, price, concession or pass to change it. A journey pays one fare however often riders change. Riders weigh what they pay against the classic fare: paying less raises the passenger rating where they board, paying more lowers it (about 120% earns the most). Lines can have their own fare (line window)
+STR_FARES_HEADER_MODE                                           :{BLACK}Transport
+STR_FARES_HEADER_SCHEME                                         :{BLACK}Fare
+STR_FARES_HEADER_PRICE                                          :{BLACK}Price
+STR_FARES_HEADER_CONCESSION                                     :{BLACK}Concessions
+STR_FARES_HEADER_PASS                                           :{BLACK}Monthly pass
+STR_FARES_MODE_BUS                                              :{BLACK}Buses
+STR_FARES_MODE_TRAM                                             :{BLACK}Trams
+STR_FARES_MODE_RAIL                                             :{BLACK}Trains
+STR_FARES_MODE_WATER                                            :{BLACK}Ships
+STR_FARES_MODE_AIR                                              :{BLACK}Aircraft
+STR_FARES_VALUE                                                 :{ORANGE}{STRING}
+STR_FARES_PRICE_VALUE                                           :{ORANGE}{NUM}%
+STR_FARES_PASS_VALUE                                            :{ORANGE}{NUM} fares
+STR_FARES_EXAMPLE                                               :{SILVER}10 riders: 5 tiles {CURRENCY_SHORT}, 20 tiles {CURRENCY_SHORT}, 60 tiles to another town {CURRENCY_SHORT}
+STR_FARES_PASSES                                                :{SILVER}Last month: {COMMA} rider{P "" s}, {COMMA} pass{P "" es} sold for {CURRENCY_SHORT}
+STR_FARES_NO_PASSES                                             :{SILVER}Last month: {COMMA} rider{P "" s} on lines that charge fares
+STR_FARE_SCHEME_CLASSIC                                         :Classic
+STR_FARE_SCHEME_DISTANCE                                        :Distance
+STR_FARE_SCHEME_FLAT                                            :Flat
+STR_FARE_SCHEME_ZONES                                           :Zones
+STR_FARE_SCHEME_FREE                                            :Free
+STR_FARE_SCHEME_CLASSIC_DESC                                    :Classic: by distance, less for slow trips (OpenTTD's)
+STR_FARE_SCHEME_DISTANCE_DESC                                   :Distance: a boarding charge plus a rate per tile
+STR_FARE_SCHEME_FLAT_DESC                                       :Flat: the same for every journey
+STR_FARE_SCHEME_ZONES_DESC                                      :Zones: 1 in town, 2 to another town, 1 more per 40 tiles
+STR_FARE_SCHEME_FREE_DESC                                       :Free: riders pay nothing
+STR_FARE_PRICE                                                  :{NUM}%
+STR_FARE_CONCESSION_NONE                                        :Full fare
+STR_FARE_CONCESSION_HALF                                        :Half fare
+STR_FARE_CONCESSION_FREE                                        :Free
+STR_FARE_CONCESSION_NONE_DESC                                   :No concessions: everyone pays the full fare
+STR_FARE_CONCESSION_HALF_DESC                                   :Students, seniors and disabled riders (a fifth) pay half
+STR_FARE_CONCESSION_FREE_DESC                                   :Students, seniors and disabled riders (a fifth) ride free
+STR_FARE_PASS_NONE                                              :None
+STR_FARE_PASS_NONE_DESC                                         :No monthly pass
+STR_FARE_PASS_DESC                                              :Pass for {NUM} single fares: {NUM}% of riders buy one and ride free
+STR_ERROR_CAN_T_CHANGE_FARES                                    :{WHITE}Can't change fares...
 STR_DEPARTURES_CAPTION                                          :{WHITE}{STATION} - Departures
 STR_DEPARTURES_LIST_TOOLTIP                                     :{BLACK}The next vehicles to leave, with their line and next stops. Click a departure to show the vehicle, Ctrl+Click to show its line
 STR_DEPARTURES_NONE                                             :{BLACK}No departures expected

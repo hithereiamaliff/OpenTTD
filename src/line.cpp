@@ -12,6 +12,7 @@
 #include "line_cmd.h"
 #include "command_func.h"
 #include "company_func.h"
+#include "fare.h"
 #include "order_base.h"
 #include "string_func.h"
 #include "timer/timer.h"
@@ -165,9 +166,10 @@ void OnLineRidersDelivered(const Vehicle *front, uint count)
 	front->orders->line.this_month.riders += count;
 }
 
-/** Start each month's line statistics afresh. */
+/** Start each month's line statistics afresh, after selling monthly passes for the month's riders. */
 static const IntervalTimer<TimerGameEconomy> _economy_lines_monthly({TimerGameEconomy::Trigger::Month, TimerGameEconomy::Priority::None}, [](auto)
 {
+	FaresMonthlyLoop();
 	for (OrderList *list : OrderList::Iterate()) {
 		list->line.last_month = list->line.this_month;
 		list->line.this_month = {};
@@ -208,6 +210,12 @@ CommandCost CmdSetLineProperty(DoCommandFlags flags, VehicleID veh_id, LinePrope
 		case LineProperty::HoldForSpacing:
 			if (value > 1) return CMD_ERROR;
 			break;
+		case LineProperty::FareScheme:
+			if (value >= to_underlying(FareScheme::End) && value != to_underlying(FareScheme::Inherit)) return CMD_ERROR;
+			break;
+		case LineProperty::FarePrice:
+			if (value != 0 && (value < FARE_PRICE_MIN || value > FARE_PRICE_MAX)) return CMD_ERROR;
+			break;
 		default:
 			return CMD_ERROR;
 	}
@@ -220,6 +228,8 @@ CommandCost CmdSetLineProperty(DoCommandFlags flags, VehicleID veh_id, LinePrope
 			case LineProperty::Colour: line.colour = static_cast<Colours>(value); break;
 			case LineProperty::TargetGap: line.target_gap = static_cast<TimerGameTick::Ticks>(value); break;
 			case LineProperty::HoldForSpacing: line.hold_for_spacing = value != 0; break;
+			case LineProperty::FareScheme: line.fare_scheme = static_cast<FareScheme>(value); break;
+			case LineProperty::FarePrice: line.fare_price = static_cast<uint16_t>(value); break;
 			default: NOT_REACHED();
 		}
 		SetWindowDirty(WindowClass::Line, v->orders->index.base());

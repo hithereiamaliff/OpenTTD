@@ -38,6 +38,8 @@ static const SaveLoad _line_desc[] = {
 	SaveLoad::Variable<VarFileType::U8>("colour", SLE_OBJECT_ADDRESS(LineInfo, colour)),
 	SaveLoad::Variable<VarFileType::I32>("target_gap", SLE_OBJECT_ADDRESS(LineInfo, target_gap)),
 	SaveLoad::Variable<VarFileType::Bool>("hold_for_spacing", SLE_OBJECT_ADDRESS(LineInfo, hold_for_spacing)),
+	SaveLoad::Variable<VarFileType::U8>("fare_scheme", SLE_OBJECT_ADDRESS(LineInfo, fare_scheme)),
+	SaveLoad::Variable<VarFileType::U16>("fare_price", SLE_OBJECT_ADDRESS(LineInfo, fare_price)),
 	SaveLoad::Variable<VarFileType::U64>("last_departure", SLE_OBJECT_ADDRESS(LineInfo, last_departure)),
 	SaveLoad::Array<VarFileType::U32, LINE_GAP_HISTORY>("gaps", SLE_OBJECT_ADDRESS(LineInfo, gaps)),
 	SaveLoad::Variable<VarFileType::U8>("num_gaps", SLE_OBJECT_ADDRESS(LineInfo, num_gaps)),
@@ -73,6 +75,8 @@ struct LINEChunkHandler : ChunkHandler {
 			if (!OrderList::IsValidID(index)) SlErrorCorrupt("Line for an order list that doesn't exist");
 			if (line.num_gaps > LINE_GAP_HISTORY || line.next_gap >= LINE_GAP_HISTORY) SlErrorCorrupt("Invalid line gap history");
 			if (to_underlying(line.colour) >= to_underlying(Colours::End) && line.colour != Colours::Invalid) line.colour = Colours::Invalid;
+			if (line.fare_scheme >= FareScheme::End && line.fare_scheme != FareScheme::Inherit) line.fare_scheme = FareScheme::Inherit;
+			if (line.fare_price != 0) line.fare_price = Clamp<uint16_t>(line.fare_price, FARE_PRICE_MIN, FARE_PRICE_MAX);
 			OrderList::Get(index)->line = std::move(line);
 		}
 	}

@@ -8,6 +8,7 @@
 /** @file company_gui.cpp %Company related GUIs. */
 
 #include "stdafx.h"
+#include "fare.h"
 #include "currency_func.h"
 #include "error.h"
 #include "gui.h"
@@ -336,6 +337,7 @@ static constexpr std::initializer_list<NWidgetPart> _nested_company_finances_wid
 			NWidget(WWT_PUSHTXTBTN, Colours::Grey, WID_CF_INCREASE_LOAN), SetFill(1, 0), SetToolTip(STR_FINANCES_BORROW_TOOLTIP),
 			NWidget(WWT_PUSHTXTBTN, Colours::Grey, WID_CF_REPAY_LOAN), SetFill(1, 0), SetToolTip(STR_FINANCES_REPAY_TOOLTIP),
 			NWidget(WWT_PUSHTXTBTN, Colours::Grey, WID_CF_INFRASTRUCTURE), SetFill(1, 0), SetStringTip(STR_FINANCES_INFRASTRUCTURE_BUTTON, STR_COMPANY_VIEW_INFRASTRUCTURE_TOOLTIP),
+			NWidget(WWT_PUSHTXTBTN, Colours::Grey, WID_CF_FARES), SetFill(1, 0), SetStringTip(STR_FINANCES_FARES_BUTTON, STR_FINANCES_FARES_TOOLTIP),
 		EndContainer(),
 	EndContainer(),
 };
@@ -521,6 +523,10 @@ struct CompanyFinancesWindow : Window {
 
 			case WID_CF_INFRASTRUCTURE: // show infrastructure details
 				ShowCompanyInfrastructure(this->window_number);
+				break;
+
+			case WID_CF_FARES: // set passenger fares
+				ShowFaresWindow(static_cast<CompanyID>(this->window_number));
 				break;
 		}
 	}

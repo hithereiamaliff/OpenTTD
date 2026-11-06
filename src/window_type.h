@@ -773,6 +773,12 @@ enum class WindowClass : uint16_t {
 	 */
 	Departures,
 
+	/**
+	 * Fares window; %Window numbers:
+	 *   - #CompanyID = #FaresWidgets
+	 */
+	Fares,
+
 	Invalid = 0xFFFF, ///< Invalid window.
 };
 

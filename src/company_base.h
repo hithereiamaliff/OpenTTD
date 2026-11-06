@@ -10,6 +10,7 @@
 #ifndef COMPANY_BASE_H
 #define COMPANY_BASE_H
 
+#include "fare_type.h"
 #include "road_type.h"
 #include "livery.h"
 #include "autoreplace_type.h"
@@ -146,6 +147,9 @@ struct Company : CompanyProperties, CompanyPool::PoolItem<&_company_pool> {
 
 	VehicleTypeIndexArray<FreeUnitIDGenerator> freeunits{};
 	FreeUnitIDGenerator freegroups{};
+
+	std::array<FarePolicy, to_underlying(FareMode::End)> fares{}; ///< City fork: passenger fares per transport type (saved in chunk FARE).
+	std::array<FarePassStats, to_underlying(FareMode::End)> pass_stats{}; ///< City fork: monthly pass figures of last month (saved in chunk FARE).
 
 	Money GetMaxLoan() const;
 

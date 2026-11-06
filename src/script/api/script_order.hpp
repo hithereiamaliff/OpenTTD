@@ -660,6 +660,26 @@ public:
 	static bool SetLineHoldForSpacing(VehicleID vehicle_id, bool hold);
 
 	/**
+	 * Give a vehicle's line its own fare scheme, or let it use the company's for its transport type.
+	 * @param vehicle_id Any vehicle of the line.
+	 * @param scheme How fares are worked out (see ScriptCompany::FareScheme), or -1 for the company's.
+	 * @pre ScriptVehicle::IsPrimaryVehicle(vehicle_id).
+	 * @game @pre ScriptCompanyMode::IsValid().
+	 * @return Whether the scheme has been/can be set.
+	 */
+	static bool SetLineFareScheme(VehicleID vehicle_id, SQInteger scheme);
+
+	/**
+	 * Give a vehicle's line its own fare price level, or let it use the company's.
+	 * @param vehicle_id Any vehicle of the line.
+	 * @param price Price level in percent, 25 to 300, or 0 for the company's.
+	 * @pre ScriptVehicle::IsPrimaryVehicle(vehicle_id).
+	 * @game @pre ScriptCompanyMode::IsValid().
+	 * @return Whether the price has been/can be set.
+	 */
+	static bool SetLineFarePrice(VehicleID vehicle_id, SQInteger price);
+
+	/**
 	 * Get how many passengers got off a vehicle's line last month.
 	 * @param vehicle_id Any vehicle of the line.
 	 * @pre ScriptVehicle::IsPrimaryVehicle(vehicle_id).

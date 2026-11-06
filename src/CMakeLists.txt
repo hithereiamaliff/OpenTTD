@@ -262,6 +262,12 @@ add_files(
     line.cpp
     line.h
     line_cmd.h
+    fare.cpp
+    fare.h
+    fare_cmd.h
+    fare_gui.cpp
+    fare_gui.h
+    fare_type.h
     line_gui.cpp
     line_type.h
     league_base.h

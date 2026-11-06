@@ -475,6 +475,69 @@ With vehicles and people in Gredinghall at normal zoom, drawing took about
 Not in this part, for later: pedestrians waiting at red lights and on
 zebra crossings, people at train and tram stations, rush hours (part 12).
 
+## Done: transit part 3, fares
+
+Every company sets passenger fares per transport type (buses, trams,
+trains, ships, aircraft) in a Fares window (Finances, "Fares"); a line can
+have its own fare and price (line window, "Fare" and "Price").
+
+- Schemes: classic (OpenTTD's payment: by distance, less for slow trips),
+  distance (BAS.MY style: what 3 tiles cost to board plus 90% of the
+  standard rate per tile, however long the trip takes), flat (what 20 tiles
+  cost, for every journey), zones (what 16 tiles cost per zone: 1 within a
+  town, 2 to another town, 1 more per 40 tiles) and free. The standard fare
+  is OpenTTD's payment for a trip that takes no time.
+- Price level 25-300%. Concessions: a fifth of riders (students, seniors,
+  disabled) pay the full fare, half or nothing. Monthly pass for 10-30
+  single fares: the cheaper, the more riders buy one ((40 - price) x 1.5%,
+  so 20 fares means 30%); pass holders ride free and each pass holder makes
+  40 trips, so passes are paid at the end of each month.
+- A journey pays one fare, worked out at the end for the whole trip from
+  where the passengers first boarded, however often they changed (transfer
+  credits use the same fare). The defaults (classic, 100%, no concessions,
+  no pass) pay exactly as OpenTTD does.
+- Riders weigh what they pay: each station keeps what riders who boarded
+  there paid against what the classic fare would have been, monthly. The
+  passenger rating moves by 4 points (of 255) for every 3% below or above
+  the classic fare, at most +60 and down to -150. The station window's
+  ratings view shows it ("Riders from here paid 63% of the classic fare:
+  passengers +19%").
+- Saved in chunks FARE (companies) and FSTA (stations); line fares in LINE.
+- Script API: `ScriptCompany.SetFareScheme`, `SetFarePrice`,
+  `SetConcessionFare`, `SetMonthlyPass`, `GetFareScheme`, `GetFarePrice`,
+  `GetConcessionFare`, `GetMonthlyPass`, `GetPassIncome`;
+  `ScriptOrder.SetLineFareScheme`, `SetLineFarePrice`.
+- Code: `src/fare.{h,cpp}`, `src/fare_type.h`, `src/fare_cmd.h`,
+  `src/fare_gui.{h,cpp}`, `src/saveload/fare_sl.cpp`, hooks in
+  `economy.cpp` (payment), `station_cmd.cpp` (rating), `line.cpp`,
+  `line_gui.cpp`, `company_gui.cpp`, `station_gui.cpp`.
+
+Results (lines demo, two 12-bus town lines, a year and a half, averages
+over the last year; income per quarter):
+
+| Bus fares | Riders a month | Passenger rating | Income |
+|---|---|---|---|
+| Classic 100% (OpenTTD as it was) | 436 | 70% | about 8,930 |
+| Classic 50% | 491 | 94% | about 4,960 |
+| Classic 125% | 362 | 58% | about 9,290 |
+| Classic 150% | 271 | 44% | about 8,310 |
+| Classic 200% | 87 | 17% | about 3,330 |
+| Classic 300% | 56 | 11% | about 2,880 |
+| Flat 100% | 394 | 64% | about 9,050 |
+| Distance 100% | 416 | 67% | about 9,000 |
+| Zones 100% | 456 | 76% | about 8,410 |
+| Free | 491 | 94% | 0 |
+| Pass for 20 fares, half fare concessions | 500 | 90% | about 8,050 (600 a month from passes) |
+
+The first version weighed the price level of departing vehicles gently;
+then the dearest price always paid best and a flat fare on short trips
+charged several times the classic fare unpunished. Weighing what riders
+actually paid against the classic fare fixed both.
+
+Not in this part: fare money from towns (part 4: free lines, resident
+passes and concessions paid by towns), separate fares per transfer
+(without integrated ticketing), satisfaction (part 11).
+
 ## Roadmap
 
 Sizes are rough: S = one session, M = a few, L = many, XL = a project in itself.

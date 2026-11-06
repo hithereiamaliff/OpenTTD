@@ -781,6 +781,25 @@ static const OrderList *GetScriptLine(VehicleID vehicle_id)
 	return ScriptObject::Command<Commands::SetLineProperty>::Do(vehicle_id, LineProperty::HoldForSpacing, hold ? 1 : 0, {});
 }
 
+/* static */ bool ScriptOrder::SetLineFareScheme(VehicleID vehicle_id, SQInteger scheme)
+{
+	EnforceCompanyModeValid(false);
+	EnforcePrecondition(false, ScriptVehicle::IsPrimaryVehicle(vehicle_id));
+	EnforcePrecondition(false, scheme == -1 || (scheme >= 0 && scheme < to_underlying(::FareScheme::End)));
+
+	uint32_t value = scheme == -1 ? to_underlying(::FareScheme::Inherit) : static_cast<uint32_t>(scheme);
+	return ScriptObject::Command<Commands::SetLineProperty>::Do(vehicle_id, LineProperty::FareScheme, value, {});
+}
+
+/* static */ bool ScriptOrder::SetLineFarePrice(VehicleID vehicle_id, SQInteger price)
+{
+	EnforceCompanyModeValid(false);
+	EnforcePrecondition(false, ScriptVehicle::IsPrimaryVehicle(vehicle_id));
+	EnforcePrecondition(false, price == 0 || (price >= FARE_PRICE_MIN && price <= FARE_PRICE_MAX));
+
+	return ScriptObject::Command<Commands::SetLineProperty>::Do(vehicle_id, LineProperty::FarePrice, static_cast<uint32_t>(price), {});
+}
+
 /* static */ SQInteger ScriptOrder::GetLineRiders(VehicleID vehicle_id)
 {
 	const OrderList *list = GetScriptLine(vehicle_id);

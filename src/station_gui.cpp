@@ -9,6 +9,7 @@
 
 #include "stdafx.h"
 #include "line.h"
+#include "fare.h"
 #include "debug.h"
 #include "gui.h"
 #include "querystring_gui.h"
@@ -1948,6 +1949,14 @@ struct StationViewWindow : public Window {
 					lg != nullptr ? lg->Monthly((*lg)[ge->node].supply) : 0,
 					STR_CARGO_RATING_APPALLING + (ge->rating >> 5),
 					ToPercent8(ge->rating)));
+			tr.top += GetCharacterHeight(FontSize::Normal);
+		}
+
+		/* What riders who boarded here paid, and what that does to the passenger rating. */
+		bool passengers = std::ranges::any_of(_sorted_standard_cargo_specs, [st](const CargoSpec *cs) { return IsCargoInClass(cs->Index(), CargoClass::Passengers) && st->goods[cs->Index()].HasRating(); });
+		if (passengers && st->fare_level != 100) {
+			int bonus = GetStationFareRatingBonus(st);
+			DrawString(tr.Indent(WidgetDimensions::scaled.hsep_indent, rtl), GetString(bonus >= 0 ? STR_STATION_VIEW_FARE_CHEAP : STR_STATION_VIEW_FARE_DEAR, st->fare_level, std::abs(bonus) * 100 / 255));
 			tr.top += GetCharacterHeight(FontSize::Normal);
 		}
 		return CeilDiv(tr.top - r.top - WidgetDimensions::scaled.framerect.top, GetCharacterHeight(FontSize::Normal));

@@ -51,6 +51,24 @@ public:
 	 */
 	static ScriptCompany::CompanyID ToScriptCompanyID(::CompanyID company);
 
+	/** Transport types that each have their own passenger fares. */
+	enum FareTransport {
+		FT_BUS = 0, ///< Buses.
+		FT_TRAM = 1, ///< Trams.
+		FT_RAIL = 2, ///< Trains.
+		FT_WATER = 3, ///< Ships.
+		FT_AIR = 4, ///< Aircraft.
+	};
+
+	/** How passenger fares are worked out. */
+	enum FareScheme {
+		FS_CLASSIC = 0, ///< OpenTTD's: by distance, less the longer the trip takes.
+		FS_DISTANCE = 1, ///< A boarding charge plus a rate per tile.
+		FS_FLAT = 2, ///< The same for every journey.
+		FS_ZONES = 3, ///< Per zone: one within a town, two to another town, one more per 40 tiles.
+		FS_FREE = 4, ///< No fare.
+	};
+
 	/** Possible genders for company presidents. */
 	enum Gender {
 		GENDER_MALE,         ///< A male person.
@@ -210,6 +228,84 @@ public:
 	 * @return True if the loan could be set to your requested amount.
 	 */
 	static bool SetLoanAmount(Money loan);
+
+	/**
+	 * Set how your company's passenger fares for a transport type are worked out.
+	 * @param transport The transport type.
+	 * @param scheme How fares are worked out.
+	 * @pre ScriptCompanyMode::IsValid().
+	 * @return Whether the scheme has been/can be set.
+	 */
+	static bool SetFareScheme(FareTransport transport, FareScheme scheme);
+
+	/**
+	 * Set the price level of your company's passenger fares for a transport type.
+	 * @param transport The transport type.
+	 * @param price Price level in percent of the standard fare, 25 to 300.
+	 * @pre ScriptCompanyMode::IsValid().
+	 * @return Whether the price has been/can be set.
+	 */
+	static bool SetFarePrice(FareTransport transport, SQInteger price);
+
+	/**
+	 * Set what students, seniors and disabled riders (a fifth of all riders) pay on a transport type of your company.
+	 * @param transport The transport type.
+	 * @param concession 0 for the full fare, 1 for half, 2 for free.
+	 * @pre ScriptCompanyMode::IsValid().
+	 * @return Whether the concession has been/can be set.
+	 */
+	static bool SetConcessionFare(FareTransport transport, SQInteger concession);
+
+	/**
+	 * Set the price of your company's monthly pass for a transport type. The
+	 * cheaper the pass, the more riders buy one; pass holders ride free and
+	 * passes are paid at the end of each month.
+	 * @param transport The transport type.
+	 * @param fares Price in standard single fares, 10 to 40; 0 for no pass.
+	 * @pre ScriptCompanyMode::IsValid().
+	 * @return Whether the pass has been/can be set.
+	 */
+	static bool SetMonthlyPass(FareTransport transport, SQInteger fares);
+
+	/**
+	 * How a company's passenger fares for a transport type are worked out.
+	 * @param company The company.
+	 * @param transport The transport type.
+	 * @return The scheme, or -1 if the company is invalid.
+	 */
+	static SQInteger GetFareScheme(ScriptCompany::CompanyID company, FareTransport transport);
+
+	/**
+	 * The price level of a company's passenger fares for a transport type.
+	 * @param company The company.
+	 * @param transport The transport type.
+	 * @return The price level in percent, or -1 if the company is invalid.
+	 */
+	static SQInteger GetFarePrice(ScriptCompany::CompanyID company, FareTransport transport);
+
+	/**
+	 * What students, seniors and disabled riders pay on a transport type of a company.
+	 * @param company The company.
+	 * @param transport The transport type.
+	 * @return 0 for the full fare, 1 for half, 2 for free, or -1 if the company is invalid.
+	 */
+	static SQInteger GetConcessionFare(ScriptCompany::CompanyID company, FareTransport transport);
+
+	/**
+	 * The price of a company's monthly pass for a transport type.
+	 * @param company The company.
+	 * @param transport The transport type.
+	 * @return The price in single fares, 0 if there is no pass, or -1 if the company is invalid.
+	 */
+	static SQInteger GetMonthlyPass(ScriptCompany::CompanyID company, FareTransport transport);
+
+	/**
+	 * Income from a company's monthly passes for a transport type last month.
+	 * @param company The company.
+	 * @param transport The transport type.
+	 * @return The income, or -1 if the company is invalid.
+	 */
+	static Money GetPassIncome(ScriptCompany::CompanyID company, FareTransport transport);
 
 	/**
 	 * Sets the minimum amount to loan, i.e. the given amount of loan rounded up.

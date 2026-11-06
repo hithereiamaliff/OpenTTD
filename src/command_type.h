@@ -385,6 +385,7 @@ enum class Commands : uint8_t {
 	ConfigureTrafficLight, ///< change how traffic lights switch
 	SetTownZone, ///< zone land for homes, shops and offices, industry or parks
 	SetLineProperty, ///< change a line's number, name, colour or frequency
+	SetCompanyFare, ///< change a company's passenger fares
 
 	End, ///< @important Must ALWAYS be on the end of this list!! (period)
 };

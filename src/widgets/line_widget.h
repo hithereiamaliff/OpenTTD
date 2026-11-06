@@ -22,6 +22,8 @@ enum LineWidgets : WidgetID {
 	WID_LN_VEHICLES,  ///< Show the line's vehicles.
 	WID_LN_ORDERS,    ///< Show the line's orders.
 	WID_LN_TIMETABLE, ///< Show the line's timetable.
+	WID_LN_FARE, ///< Choose the line's own fare scheme.
+	WID_LN_FARE_PRICE, ///< Choose the line's own price level.
 };
 
 /** Widgets of the #DeparturesWindow class. */

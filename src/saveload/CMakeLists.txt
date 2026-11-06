@@ -21,6 +21,7 @@ add_files(
     industry_sl.cpp
     labelmaps_sl.cpp
     league_sl.cpp
+    fare_sl.cpp
     line_sl.cpp
     linkgraph_sl.cpp
     map_sl.cpp

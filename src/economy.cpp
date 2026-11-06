@@ -9,6 +9,7 @@
 
 #include "stdafx.h"
 #include "line.h"
+#include "fare.h"
 #include <ranges>
 #include "company_func.h"
 #include "command_func.h"
@@ -1092,7 +1093,7 @@ static uint DeliverGoodsToIndustry(const Station *st, CargoType cargo_type, uint
  * @return Revenue for delivering cargo
  * @note The cargo is just added to the stockpile of the industry. It is due to the caller to trigger the industry's production machinery
  */
-static Money DeliverGoods(int num_pieces, CargoType cargo_type, StationID dest, uint distance, uint16_t periods_in_transit, Company *company, Source src)
+static Money DeliverGoods(int num_pieces, CargoType cargo_type, StationID dest, uint distance, uint16_t periods_in_transit, Company *company, Source src, const Vehicle *front, StationID first_station)
 {
 	assert(num_pieces > 0);
 
@@ -1120,8 +1121,13 @@ static Money DeliverGoods(int num_pieces, CargoType cargo_type, StationID dest, 
 		st->town->GetOrCreateCargoAccepted(cargo_type).history[THIS_MONTH].accepted += accepted_total - accepted_ind;
 	}
 
-	/* Determine profit */
+	/* Determine profit; passengers pay the vehicle's fare, which their boarding station remembers against the classic fare. */
 	Money profit = GetTransportedGoodsIncome(accepted_total, distance, periods_in_transit, cargo_type);
+	if (IsCargoInClass(cargo_type, CargoClass::Passengers)) {
+		Money standard = profit;
+		profit = GetPassengerIncome(front, accepted_total, distance, periods_in_transit, cargo_type, first_station, st);
+		OnFarePaid(first_station, profit, standard);
+	}
 
 	/* Update the cargo monitor. */
 	AddCargoDelivery(cargo_type, company->index, accepted_total - accepted_ind, src, st);
@@ -1224,7 +1230,7 @@ CargoPayment::~CargoPayment()
 void CargoPayment::PayFinalDelivery(CargoType cargo, const CargoPacket *cp, uint count, TileIndex current_tile)
 {
 	/* Handle end of route payment */
-	Money profit = DeliverGoods(count, cargo, this->current_station, cp->GetDistance(current_tile), cp->GetPeriodsInTransit(), Company::Get(this->front->owner), cp->GetSource());
+	Money profit = DeliverGoods(count, cargo, this->current_station, cp->GetDistance(current_tile), cp->GetPeriodsInTransit(), Company::Get(this->front->owner), cp->GetSource(), this->front, cp->GetFirstStation());
 	this->route_profit += profit;
 	if (IsCargoInClass(cargo, CargoClass::Passengers)) OnLineRidersDelivered(this->front, count);
 
@@ -1244,11 +1250,10 @@ Money CargoPayment::PayTransfer(CargoType cargo, const CargoPacket *cp, uint cou
 {
 	/* Pay transfer vehicle the difference between the payment for the journey from
 	 * the source to the current point, and the sum of the previous transfer payments */
-	Money profit = -cp->GetFeederShare(count) + GetTransportedGoodsIncome(
-			count,
-			cp->GetDistance(current_tile),
-			cp->GetPeriodsInTransit(),
-			cargo);
+	Money income = IsCargoInClass(cargo, CargoClass::Passengers) ?
+			GetPassengerIncome(this->front, count, cp->GetDistance(current_tile), cp->GetPeriodsInTransit(), cargo, cp->GetFirstStation(), Station::GetIfValid(this->current_station)) :
+			GetTransportedGoodsIncome(count, cp->GetDistance(current_tile), cp->GetPeriodsInTransit(), cargo);
+	Money profit = -cp->GetFeederShare(count) + income;
 
 	profit = profit * _settings_game.economy.feeder_payment_share / 100;
 	if (IsCargoInClass(cargo, CargoClass::Passengers)) OnLineRidersDelivered(this->front, count);
