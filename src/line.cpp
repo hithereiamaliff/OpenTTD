@@ -13,6 +13,7 @@
 #include "command_func.h"
 #include "company_func.h"
 #include "fare.h"
+#include "transit_authority.h"
 #include "order_base.h"
 #include "string_func.h"
 #include "timer/timer.h"
@@ -170,6 +171,7 @@ void OnLineRidersDelivered(const Vehicle *front, uint count)
 static const IntervalTimer<TimerGameEconomy> _economy_lines_monthly({TimerGameEconomy::Trigger::Month, TimerGameEconomy::Priority::None}, [](auto)
 {
 	FaresMonthlyLoop();
+	TransitMonthlyLoop();
 	for (OrderList *list : OrderList::Iterate()) {
 		list->line.last_month = list->line.this_month;
 		list->line.this_month = {};

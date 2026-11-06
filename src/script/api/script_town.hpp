@@ -212,6 +212,14 @@ public:
 	static bool SetText(TownID town_id, Text *text);
 
 	/**
+	 * Get the yearly transit budget of a town: what it can spend on contracts for lines.
+	 * @param town_id The town.
+	 * @pre IsValidTown(town_id).
+	 * @return The budget; 0 for towns under 1,500 people.
+	 */
+	static Money GetTransitBudget(TownID town_id);
+
+	/**
 	 * Gets the number of inhabitants in the town.
 	 * @param town_id The town to get the population of.
 	 * @pre IsValidTown(town_id).

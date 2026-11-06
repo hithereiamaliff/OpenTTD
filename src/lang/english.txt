@@ -3893,6 +3893,8 @@ STR_TOWN_VIEW_NOISE_IN_TOWN                                     :{BLACK}Noise li
 STR_TOWN_VIEW_CENTER_TOOLTIP                                    :{BLACK}Centre the main view on town location. Ctrl+Click to open a new viewport on town location
 STR_TOWN_VIEW_LOCAL_AUTHORITY_BUTTON                            :{BLACK}Local Authority
 STR_TOWN_VIEW_LOCAL_AUTHORITY_TOOLTIP                           :{BLACK}Show information on local authority
+STR_TOWN_VIEW_TRANSIT_BUTTON                                    :{BLACK}Transit
+STR_TOWN_VIEW_TRANSIT_TOOLTIP                                   :{BLACK}Show the town's transit authority: its budget, and its tenders and contracts for lines
 STR_TOWN_VIEW_RENAME_TOOLTIP                                    :{BLACK}Change town name
 STR_TOWN_VIEW_CARGO_GRAPH                                       :Cargo Graph
 STR_TOWN_VIEW_CARGO_GRAPH_TOOLTIP                               :Show graph of town's cargo history
@@ -5101,6 +5103,9 @@ STR_LINE_FARE                                                   :{BLACK}Fare: {O
 STR_LINE_FARE_FREE                                              :{BLACK}Fare: {ORANGE}free{BLACK} {STRING}
 STR_LINE_FARE_OWN                                               :(this line's)
 STR_LINE_FARE_COMPANYS                                          :(company's)
+STR_LINE_CONTRACT                                               :{BLACK}Contract with {TOWN}: {ORANGE}{STRING}{BLACK}, {CURRENCY_SHORT} a month until {DATE_SHORT}
+STR_LINE_CONTRACT_GROSS                                         :the town keeps the fares
+STR_LINE_CONTRACT_FREE                                          :free line
 STR_FARES_CAPTION                                               :{WHITE}{COMPANY} - Passenger fares
 STR_FARES_TABLE_TOOLTIP                                         :{BLACK}Click a fare, price, concession or pass to change it. A journey pays one fare however often riders change. Riders weigh what they pay against the classic fare: paying less raises the passenger rating where they board, paying more lowers it (about 120% earns the most). Lines can have their own fare (line window)
 STR_FARES_HEADER_MODE                                           :{BLACK}Transport
@@ -5140,6 +5145,55 @@ STR_FARE_PASS_NONE                                              :None
 STR_FARE_PASS_NONE_DESC                                         :No monthly pass
 STR_FARE_PASS_DESC                                              :Pass for {NUM} single fares: {NUM}% of riders buy one and ride free
 STR_ERROR_CAN_T_CHANGE_FARES                                    :{WHITE}Can't change fares...
+STR_TRANSIT_CAPTION                                             :{WHITE}{TOWN} transit authority
+STR_TRANSIT_BUDGET                                              :{BLACK}Budget: {CURRENCY_LONG} a year, {CURRENCY_LONG} in contracts, {CURRENCY_LONG} free
+STR_TRANSIT_BUDGET_NONE                                         :{BLACK}No transit budget: towns have one from 1,500 people
+STR_TRANSIT_FARES                                               :{BLACK}Fares from its contracts: {CURRENCY_LONG} last year, {CURRENCY_LONG} this year
+STR_TRANSIT_LIST_TOOLTIP                                        :{BLACK}Tenders and contracts for lines in this town. Under a contract the town keeps the fares and pays a monthly fee; on a free line riders ride free and the town pays the fee. The fee shrinks with missed departures; regularity and punctuality earn up to 5% more or less. Click one to select it
+STR_TRANSIT_EMPTY                                               :{BLACK}No tenders or contracts yet. Now and then the town invites tenders for a line that serves it, those losing money first, if its budget allows
+STR_TRANSIT_TYPE_GROSS_COST                                     :contract
+STR_TRANSIT_TYPE_FREE                                           :free line
+STR_TRANSIT_ROW_TENDER                                          :{BLACK}{RAW_STRING} ({COMPANY}): {YELLOW}tender{BLACK} for a {STRING} until {DATE_SHORT}
+STR_TRANSIT_ROW_ACTIVE                                          :{BLACK}{RAW_STRING} ({COMPANY}): {GREEN}{STRING}{BLACK}, {CURRENCY_LONG} a month until {DATE_SHORT}
+STR_TRANSIT_ROW_ENDED                                           :{BLACK}{RAW_STRING} ({COMPANY}): {SILVER}ended {DATE_SHORT}, {STRING}
+STR_TRANSIT_DETAIL_TENDER_NO_BID                                :{SILVER}The line costs {CURRENCY_LONG} a month. No bid yet
+STR_TRANSIT_DETAIL_TENDER                                       :{SILVER}The line costs {CURRENCY_LONG} a month. Your bid: {NUM}% margin, {CURRENCY_LONG} a month
+STR_TRANSIT_DETAIL_STARTED                                      :{SILVER}Targets: {NUM} departures a month, extra wait at most {RAW_STRING}, 70% on time if timetabled
+STR_TRANSIT_DETAIL_ACTIVE                                       :{SILVER}Last month {NUM} departures ({NUM} wanted), extra wait {RAW_STRING}, {RAW_STRING}: paid {CURRENCY_SHORT} ({RAW_STRING}%). Targets met {NUM} of {NUM} months
+STR_TRANSIT_DETAIL_LOST                                         :{SILVER}Best rival: {NUM}% margin, quality {NUM}. You: {NUM}% margin, quality {NUM}
+STR_TRANSIT_ON_TIME                                             :on time {NUM}%
+STR_TRANSIT_NO_TIMETABLE                                        :no timetable
+STR_TRANSIT_END_EXPIRED                                         :its term ran out
+STR_TRANSIT_END_LOST                                            :a rival operator won the tender
+STR_TRANSIT_END_NO_BID                                          :no bid
+STR_TRANSIT_END_REVIEW                                          :too few riders for its cost
+STR_TRANSIT_END_BY_COMPANY                                      :ended early by its operator
+STR_TRANSIT_END_NO_SERVICE                                      :the line stopped running
+STR_TRANSIT_END_LINE_GONE                                       :the line is gone
+STR_TRANSIT_BID_BUTTON                                          :{BLACK}Bid
+STR_TRANSIT_BID_TOOLTIP                                         :{BLACK}Bid for the selected tender: a margin on top of the line's running costs and wear. Rival operators bid too; the town weighs quality (regularity, reliability and age of the vehicles) against price 60:40
+STR_TRANSIT_END_BUTTON                                          :{BLACK}End contract
+STR_TRANSIT_END_TOOLTIP                                         :{BLACK}End the selected contract early, for three months' fees
+STR_TRANSIT_LINE_BUTTON                                         :{BLACK}Line
+STR_TRANSIT_LINE_TOOLTIP                                        :{BLACK}Show the line of the selected tender or contract
+STR_TRANSIT_BID_MARGIN                                          :{NUM}% margin: {CURRENCY_LONG} a month
+STR_TRANSIT_BID_WITHDRAW                                        :Take the bid back
+STR_TRANSIT_LINE_NUMBER_NAME                                    :Line {RAW_STRING} ({RAW_STRING})
+STR_TRANSIT_LINE_NUMBER                                         :Line {RAW_STRING}
+STR_TRANSIT_LINE_NAME                                           :{RAW_STRING}
+STR_TRANSIT_LINE_VEHICLE                                        :the line of {VEHICLE}
+STR_ERROR_CAN_T_BID                                             :{WHITE}Can't bid...
+STR_ERROR_CAN_T_END_CONTRACT                                    :{WHITE}Can't end the contract...
+STR_NEWS_TRANSIT_TENDER                                         :{BIG_FONT}{BLACK}{TOWN} invites tenders to run {RAW_STRING} under a 5-year contract: the town keeps the fares and pays a monthly fee. The line costs {CURRENCY_LONG} a month; bid in the town's transit window by {DATE_LONG}
+STR_NEWS_TRANSIT_TENDER_FREE                                    :{BIG_FONT}{BLACK}{TOWN} invites tenders to run {RAW_STRING} as a free line for 5 years: riders ride free and the town pays a monthly fee. The line costs {CURRENCY_LONG} a month; bid in the town's transit window by {DATE_LONG}
+STR_NEWS_TRANSIT_WON                                            :{BIG_FONT}{BLACK}{TOWN} gives its contract for {RAW_STRING} to {COMPANY}: {CURRENCY_LONG} a month for 5 years
+STR_NEWS_TRANSIT_WON_FREE                                       :{BIG_FONT}{BLACK}{TOWN} makes {RAW_STRING} a free line run by {COMPANY}: {CURRENCY_LONG} a month for 5 years
+STR_NEWS_TRANSIT_LOST                                           :{BIG_FONT}{BLACK}{TOWN} gives its contract for {RAW_STRING} to a rival operator ({NUM}% margin, quality {NUM}) over your bid ({NUM}% margin, quality {NUM}). Your line runs on its own account
+STR_NEWS_TRANSIT_NO_BID                                         :{BIG_FONT}{BLACK}{TOWN}'s tender for {RAW_STRING} closed without a bid from its operator
+STR_NEWS_TRANSIT_EXTENDED                                       :{BIG_FONT}{BLACK}{TOWN} extends the contract for {RAW_STRING} by {NUM} years for good service
+STR_NEWS_TRANSIT_RETENDER                                       :{BIG_FONT}{BLACK}{TOWN}'s contract for {RAW_STRING} ends; the town invites new tenders until {DATE_LONG}
+STR_NEWS_TRANSIT_ENDED_REVIEW                                   :{BIG_FONT}{BLACK}{TOWN} ends the contract for {RAW_STRING} after a review: too few riders for its cost
+STR_NEWS_TRANSIT_ENDED_NO_SERVICE                               :{BIG_FONT}{BLACK}{TOWN} ends the contract for {RAW_STRING}: the line stopped running
 STR_DEPARTURES_CAPTION                                          :{WHITE}{STATION} - Departures
 STR_DEPARTURES_LIST_TOOLTIP                                     :{BLACK}The next vehicles to leave, with their line and next stops. Click a departure to show the vehicle, Ctrl+Click to show its line
 STR_DEPARTURES_NONE                                             :{BLACK}No departures expected

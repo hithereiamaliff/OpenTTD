@@ -573,6 +573,11 @@ add_files(
     street_life.cpp
     street_life.h
     town_traffic.cpp
+    transit_authority.cpp
+    transit_authority.h
+    transit_authority_cmd.h
+    transit_authority_gui.cpp
+    transit_authority_type.h
     town_traffic.h
     town_zoning.cpp
     town_zoning.h

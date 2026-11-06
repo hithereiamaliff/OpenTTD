@@ -680,6 +680,44 @@ public:
 	static bool SetLineFarePrice(VehicleID vehicle_id, SQInteger price);
 
 	/**
+	 * Is a town inviting tenders for a vehicle's line?
+	 * @param vehicle_id Any vehicle of the line.
+	 * @return The town, or an invalid town (see ScriptTown::IsValidTown) if there is no open tender.
+	 */
+	static TownID GetLineTenderTown(VehicleID vehicle_id);
+
+	/**
+	 * The monthly cost of a vehicle's line that a town's tender is based on: running costs and wear of its vehicles.
+	 * @param vehicle_id Any vehicle of the line.
+	 * @return The cost, or -1 if there is no open tender.
+	 */
+	static Money GetLineTenderCost(VehicleID vehicle_id);
+
+	/**
+	 * Bid for the open tender for a vehicle's line, or take the bid back.
+	 * @param vehicle_id Any vehicle of the line.
+	 * @param margin Margin on top of the line's costs in percent, 0 to 40, or -1 to take the bid back.
+	 * @pre ScriptTown::IsValidTown(GetLineTenderTown(vehicle_id)).
+	 * @game @pre ScriptCompanyMode::IsValid().
+	 * @return Whether the bid has been/can be made.
+	 */
+	static bool BidLineTender(VehicleID vehicle_id, SQInteger margin);
+
+	/**
+	 * The monthly fee a town pays for a vehicle's line under contract.
+	 * @param vehicle_id Any vehicle of the line.
+	 * @return The fee, or -1 if the line isn't under contract.
+	 */
+	static Money GetLineContractFee(VehicleID vehicle_id);
+
+	/**
+	 * What a town paid for a vehicle's line under contract last month, after bonuses and penalties.
+	 * @param vehicle_id Any vehicle of the line.
+	 * @return The payment, or -1 if the line isn't under contract.
+	 */
+	static Money GetLineContractPayment(VehicleID vehicle_id);
+
+	/**
 	 * Get how many passengers got off a vehicle's line last month.
 	 * @param vehicle_id Any vehicle of the line.
 	 * @pre ScriptVehicle::IsPrimaryVehicle(vehicle_id).

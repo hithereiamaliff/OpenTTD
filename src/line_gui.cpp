@@ -17,6 +17,7 @@
 #include "dropdown_func.h"
 #include "fare.h"
 #include "fare_gui.h"
+#include "transit_authority.h"
 #include "gfx_func.h"
 #include "gui.h"
 #include "order_base.h"
@@ -191,7 +192,9 @@ struct LineWindow : Window {
 		FarePolicy fare = GetVehicleFare(first);
 		bool own = line.fare_scheme != FareScheme::Inherit || line.fare_price != 0;
 		StringID whose = own ? STR_LINE_FARE_OWN : STR_LINE_FARE_COMPANYS;
-		if (fare.scheme == FareScheme::Free) {
+		if (const TransitContract *contract = GetLineContract(list); contract != nullptr) {
+			lines.push_back(GetString(STR_LINE_CONTRACT, contract->town, contract->type == TransitContractType::FreeLine ? STR_LINE_CONTRACT_FREE : STR_LINE_CONTRACT_GROSS, contract->fee, contract->end));
+		} else if (fare.scheme == FareScheme::Free) {
 			lines.push_back(GetString(STR_LINE_FARE_FREE, whose));
 		} else {
 			lines.push_back(GetString(STR_LINE_FARE, GetFareSchemeName(fare.scheme), fare.price, GetFareExample(fare, 20, false), whose));
@@ -382,7 +385,8 @@ struct LineWindow : Window {
 			return;
 		}
 		bool mine = this->owner == _local_company;
-		this->SetWidgetsDisabledState(!mine, WID_LN_NUMBER, WID_LN_NAME, WID_LN_COLOUR, WID_LN_TARGET, WID_LN_FARE, WID_LN_FARE_PRICE);
+		this->SetWidgetsDisabledState(!mine, WID_LN_NUMBER, WID_LN_NAME, WID_LN_COLOUR, WID_LN_TARGET);
+		this->SetWidgetsDisabledState(!mine || GetLineContract(list) != nullptr, WID_LN_FARE, WID_LN_FARE_PRICE);
 		this->SetWidgetDisabledState(WID_LN_HOLD, !mine || list->line.target_gap <= 0);
 		this->SetWidgetLoweredState(WID_LN_HOLD, list->line.hold_for_spacing);
 		this->SetDirty();

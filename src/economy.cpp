@@ -10,6 +10,7 @@
 #include "stdafx.h"
 #include "line.h"
 #include "fare.h"
+#include "transit_authority.h"
 #include <ranges>
 #include "company_func.h"
 #include "command_func.h"
@@ -1127,6 +1128,7 @@ static Money DeliverGoods(int num_pieces, CargoType cargo_type, StationID dest, 
 		Money standard = profit;
 		profit = GetPassengerIncome(front, accepted_total, distance, periods_in_transit, cargo_type, first_station, st);
 		OnFarePaid(first_station, profit, standard);
+		profit = TakeContractFares(front, profit);
 	}
 
 	/* Update the cargo monitor. */
@@ -1251,7 +1253,7 @@ Money CargoPayment::PayTransfer(CargoType cargo, const CargoPacket *cp, uint cou
 	/* Pay transfer vehicle the difference between the payment for the journey from
 	 * the source to the current point, and the sum of the previous transfer payments */
 	Money income = IsCargoInClass(cargo, CargoClass::Passengers) ?
-			GetPassengerIncome(this->front, count, cp->GetDistance(current_tile), cp->GetPeriodsInTransit(), cargo, cp->GetFirstStation(), Station::GetIfValid(this->current_station)) :
+			(GetLineContract(this->front->orders) != nullptr ? Money{0} : GetPassengerIncome(this->front, count, cp->GetDistance(current_tile), cp->GetPeriodsInTransit(), cargo, cp->GetFirstStation(), Station::GetIfValid(this->current_station))) :
 			GetTransportedGoodsIncome(count, cp->GetDistance(current_tile), cp->GetPeriodsInTransit(), cargo);
 	Money profit = -cp->GetFeederShare(count) + income;
 

@@ -386,6 +386,8 @@ enum class Commands : uint8_t {
 	SetTownZone, ///< zone land for homes, shops and offices, industry or parks
 	SetLineProperty, ///< change a line's number, name, colour or frequency
 	SetCompanyFare, ///< change a company's passenger fares
+	TransitBid, ///< bid for a town's transit tender
+	TransitEndContract, ///< end a town transit contract early
 
 	End, ///< @important Must ALWAYS be on the end of this list!! (period)
 };

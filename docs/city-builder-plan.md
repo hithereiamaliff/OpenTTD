@@ -538,6 +538,58 @@ Not in this part: fare money from towns (part 4: free lines, resident
 passes and concessions paid by towns), separate fares per transfer
 (without integrated ticketing), satisfaction (part 11).
 
+## Transit part 4, town transit authorities
+
+### Done: budgets, tenders and contracts (step 1)
+
+- Towns from 1,500 people have a yearly transit budget: 12 bus-years per
+  10,000 people (a bus-year is three times a town bus's running costs: the
+  bus, its wear and the operator), plus last year's fares from their
+  contracts. Shown in a Transit window (town window, "Transit").
+- Now and then (a chance of one in four a month, at least six months
+  apart) a town invites tenders for a line that serves it (at least half
+  its stops in the town, 4 or more departures a month), lines losing money
+  three times as often, if its budget allows: a contract (the town keeps
+  the fares, like Singapore's Bus Contracting Model and BAS.MY) or, one
+  time in three, a free line (riders ride free, like Penang's CAT and Bas
+  Muafakat Johor). Any company's lines, AI ones too.
+- Bids: a margin of 0-40% on the line's monthly cost (running costs plus
+  value spread over its vehicles' lifetime). Two or three simulated rival
+  operators bid 5-35% with quality 45-90; the town scores quality and price
+  60:40, as Singapore did for Tampines. The company's quality comes from the
+  line: regularity (40%), reliability (30%) and age of its vehicles (30%).
+  No bid means no contract; the line simply runs on its own account.
+- A contract runs 5 years. Contracted lines charge the town's fare (a
+  distance fare at 100%; none on free lines) and the fares go to the town.
+  Each month the town pays the fee for the departures made (at most the
+  90% of the starting month's departures it asked for), plus or minus up
+  to 5%: +2/-2 for regularity against the starting excess wait, +3/-3 for
+  punctuality where there is a timetable, -2 for missed departures. The
+  payment shows in the vehicles' profits.
+- At the end of the term: a review ends contracts that cost more than four
+  standard 20-tile fares per rider; contracts that met every target in 80%
+  of their months are extended by 3 years; the rest go back to tender.
+  Two months without departures end a contract; a company can end one
+  early for three months' fees.
+- News for tenders, results, extensions and endings. The line window shows
+  a line's contract instead of its fare.
+- Saved in chunks TTRA (towns) and TCON (contracts).
+- Script API: `ScriptTown.GetTransitBudget`; `ScriptOrder.GetLineTenderTown`,
+  `GetLineTenderCost`, `BidLineTender`, `GetLineContractFee`,
+  `GetLineContractPayment`.
+- Code: `src/transit_authority*.{h,cpp}`, `src/saveload/transit_authority_sl.cpp`,
+  hooks in `fare.cpp`, `economy.cpp`, `line.cpp`, `line_gui.cpp`,
+  `town_gui.cpp`.
+
+Test (lines demo, test AI bidding 15%, three years): Gredinghall (10,100
+people) had a budget of 27,232 a year. It tendered Line 1 in the first
+month (cost 1,108 a month), the AI won at 1,274 a month and was paid 1,299
+(+2% for regularity), less in months with missed departures (815). Six
+months later Line 2 followed at 1,201 a month, affordable thanks to the
+fares Line 1 brought the town. Company income moved from about 8,300 to
+7,500 a quarter: on these profitable lines cost plus 15% pays almost what
+the fares did, but steadily. Contracts survive saving and loading.
+
 ## Roadmap
 
 Sizes are rough: S = one session, M = a few, L = many, XL = a project in itself.

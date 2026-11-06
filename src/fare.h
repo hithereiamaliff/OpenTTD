@@ -23,6 +23,7 @@
 #define FARE_H
 
 #include "cargo_type.h"
+#include "economy_type.h"
 #include "company_type.h"
 #include "fare_type.h"
 #include "station_type.h"
@@ -31,6 +32,7 @@ struct Station;
 struct Vehicle;
 
 FareMode GetFareMode(const Vehicle *v);
+ExpensesType GetFareRevenueType(FareMode mode);
 FarePolicy GetVehicleFare(const Vehicle *front);
 uint GetPassUptake(uint8_t pass);
 uint GetFarePayingShare(const FarePolicy &fare);

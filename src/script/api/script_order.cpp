@@ -23,6 +23,8 @@
 
 #include "../../line.h"
 #include "../../line_cmd.h"
+#include "../../transit_authority.h"
+#include "../../transit_authority_cmd.h"
 #include "../../string_func.h"
 
 #include "../../safeguards.h"
@@ -798,6 +800,55 @@ static const OrderList *GetScriptLine(VehicleID vehicle_id)
 	EnforcePrecondition(false, price == 0 || (price >= FARE_PRICE_MIN && price <= FARE_PRICE_MAX));
 
 	return ScriptObject::Command<Commands::SetLineProperty>::Do(vehicle_id, LineProperty::FarePrice, static_cast<uint32_t>(price), {});
+}
+
+/**
+ * The open tender for a vehicle's line.
+ * @param vehicle_id The vehicle.
+ * @return The tender, or nullptr.
+ */
+static const TransitContract *GetScriptLineTender(VehicleID vehicle_id)
+{
+	const OrderList *list = GetScriptLine(vehicle_id);
+	if (list == nullptr) return nullptr;
+	for (const TransitContract &c : GetTransitContracts()) {
+		if (c.line == list->index && c.state == TransitContractState::Tender) return &c;
+	}
+	return nullptr;
+}
+
+/* static */ TownID ScriptOrder::GetLineTenderTown(VehicleID vehicle_id)
+{
+	const TransitContract *c = GetScriptLineTender(vehicle_id);
+	return c == nullptr ? TownID::Invalid() : c->town;
+}
+
+/* static */ Money ScriptOrder::GetLineTenderCost(VehicleID vehicle_id)
+{
+	const TransitContract *c = GetScriptLineTender(vehicle_id);
+	return c == nullptr ? Money{-1} : c->cost_basis;
+}
+
+/* static */ bool ScriptOrder::BidLineTender(VehicleID vehicle_id, SQInteger margin)
+{
+	EnforceCompanyModeValid(false);
+	const TransitContract *c = GetScriptLineTender(vehicle_id);
+	EnforcePrecondition(false, c != nullptr);
+	EnforcePrecondition(false, margin == -1 || (margin >= 0 && margin <= TRANSIT_BID_MAX));
+
+	return ScriptObject::Command<Commands::TransitBid>::Do(c->id, margin == -1 ? UINT8_MAX : static_cast<uint8_t>(margin));
+}
+
+/* static */ Money ScriptOrder::GetLineContractFee(VehicleID vehicle_id)
+{
+	const TransitContract *c = GetLineContract(GetScriptLine(vehicle_id));
+	return c == nullptr ? Money{-1} : c->fee;
+}
+
+/* static */ Money ScriptOrder::GetLineContractPayment(VehicleID vehicle_id)
+{
+	const TransitContract *c = GetLineContract(GetScriptLine(vehicle_id));
+	return c == nullptr ? Money{-1} : c->last_payment;
 }
 
 /* static */ SQInteger ScriptOrder::GetLineRiders(VehicleID vehicle_id)

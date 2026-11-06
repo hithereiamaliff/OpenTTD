@@ -27,6 +27,7 @@
 #include "../../object_cmd.h"
 #include "../../object_map.h"
 
+#include "../../transit_authority.h"
 #include "../../safeguards.h"
 
 /* static */ SQInteger ScriptTown::GetTownCount()
@@ -69,6 +70,12 @@
 	EnforcePrecondition(false, IsValidTown(town_id));
 
 	return ScriptObject::Command<Commands::TownSetText>::Do(town_id, text != nullptr ? text->GetEncodedText() : EncodedString{});
+}
+
+/* static */ Money ScriptTown::GetTransitBudget(TownID town_id)
+{
+	if (!IsValidTown(town_id)) return -1;
+	return GetTownTransitBudget(::Town::Get(town_id));
 }
 
 /* static */ SQInteger ScriptTown::GetPopulation(TownID town_id)

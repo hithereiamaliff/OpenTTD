@@ -28,6 +28,7 @@ add_files(
     intro_widget.h
     league_widget.h
     fare_widget.h
+    transit_authority_widget.h
     line_widget.h
     link_graph_legend_widget.h
     main_widget.h

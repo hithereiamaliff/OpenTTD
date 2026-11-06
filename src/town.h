@@ -10,6 +10,7 @@
 #ifndef TOWN_H
 #define TOWN_H
 
+#include "transit_authority_type.h"
 #include "misc/history_type.hpp"
 #include "viewport_type.h"
 #include "timer/timer_game_tick.h"
@@ -195,6 +196,7 @@ struct Town : TownPool::PoolItem<&_town_pool> {
 	uint16_t growth_rate = 0; ///< town growth rate
 
 	CityServiceCoverage service_coverage{}; ///< City fork: share of the population near each city service, updated monthly.
+	TownTransit transit{}; ///< City fork: the town's transit authority (saved in chunk TTRA).
 
 	uint8_t fund_buildings_months = 0; ///< fund buildings program in action?
 	uint8_t road_build_months = 0; ///< fund road reconstruction in action?

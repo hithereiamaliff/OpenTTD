@@ -22,6 +22,7 @@ add_files(
     labelmaps_sl.cpp
     league_sl.cpp
     fare_sl.cpp
+    transit_authority_sl.cpp
     line_sl.cpp
     linkgraph_sl.cpp
     map_sl.cpp

@@ -19,6 +19,7 @@
 #include "road_func.h"
 #include "roadveh.h"
 #include "station_base.h"
+#include "transit_authority.h"
 #include "vehicle_base.h"
 #include "window_func.h"
 
@@ -67,6 +68,10 @@ FarePolicy GetVehicleFare(const Vehicle *front)
 	const Company *c = Company::GetIfValid(front->owner);
 	FarePolicy fare = (c == nullptr) ? FarePolicy{} : c->fares[to_underlying(GetFareMode(front))];
 	if (front->orders != nullptr) {
+		/* Lines under contract charge the town's fare: a distance fare, or none on free lines. */
+		if (const TransitContract *contract = GetLineContract(front->orders); contract != nullptr) {
+			return contract->type == TransitContractType::FreeLine ? FarePolicy{FareScheme::Free, 100, FareConcession::None, 0} : FarePolicy{FareScheme::Distance, 100, FareConcession::None, 0};
+		}
 		const LineInfo &line = front->orders->line;
 		if (line.fare_scheme != FareScheme::Inherit) fare.scheme = line.fare_scheme;
 		if (line.fare_price != 0) fare.price = line.fare_price;
@@ -233,11 +238,11 @@ void OnFarePaid(StationID first_station, Money paid, Money standard)
 }
 
 /**
- * Which income a transport type's passes go to.
+ * Which income a transport type's fares, passes and contract fees go to.
  * @param mode The transport type.
  * @return The expenses type.
  */
-static ExpensesType GetFareRevenueType(FareMode mode)
+ExpensesType GetFareRevenueType(FareMode mode)
 {
 	switch (mode) {
 		case FareMode::Rail: return ExpensesType::TrainRevenue;

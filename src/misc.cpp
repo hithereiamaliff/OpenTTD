@@ -30,6 +30,7 @@
 #include "traffic_light.h"
 #include "road_traffic.h"
 #include "street_life.h"
+#include "transit_authority.h"
 #include "town_zoning.h"
 #include "city_services.h"
 #include "town.h"
@@ -156,6 +157,7 @@ void InitializeGame(uint size_x, uint size_y, bool reset_date, bool reset_settin
 	InitializeTrafficLights();
 	InitializeRoadTraffic();
 	InitializeStreetLife();
+	InitializeTransitAuthorities();
 	InitializeTownZones();
 	InitializeCityServices();
 

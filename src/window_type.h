@@ -779,6 +779,12 @@ enum class WindowClass : uint16_t {
 	 */
 	Fares,
 
+	/**
+	 * Town transit authority window; %Window numbers:
+	 *   - #TownID = #TransitAuthorityWidgets
+	 */
+	TransitAuthority,
+
 	Invalid = 0xFFFF, ///< Invalid window.
 };
 
