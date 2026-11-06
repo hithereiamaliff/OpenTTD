@@ -388,6 +388,7 @@ enum class Commands : uint8_t {
 	SetCompanyFare, ///< change a company's passenger fares
 	TransitBid, ///< bid for a town's transit tender
 	TransitEndContract, ///< end a town transit contract early
+	SetTownTransitSchemes, ///< set a town's resident pass and concession schemes (game scripts)
 
 	End, ///< @important Must ALWAYS be on the end of this list!! (period)
 };

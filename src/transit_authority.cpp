@@ -509,8 +509,77 @@ static void MaybeOpenTender(Town *t, TimerGameEconomy::Date today)
 }
 
 /**
- * The month ended: run the contracts, close tenders, open new ones. Called
- * before the line statistics move on to the next month.
+ * A town that grew big enough decides once whether it gives its residents a
+ * free pass (four towns in ten) and whether it pays for concession fares
+ * (half of them).
+ * @param t The town.
+ */
+static void DecideTownSchemes(Town *t)
+{
+	if (t->transit.policy_set || t->cache.population < MIN_TRANSIT_POPULATION) return;
+	t->transit.policy_set = true;
+	t->transit.resident_pass = Chance16(40, 100);
+	t->transit.pays_concessions = Chance16(50, 100);
+	if (t->transit.resident_pass) {
+		AddNewsItem(GetEncodedString(STR_NEWS_TRANSIT_RESIDENT_PASS, t->index), NewsType::Subsidies, NewsStyle::Normal, {}, t->index);
+	}
+}
+
+/**
+ * Pay the operators for the town's passes and concessions of the month,
+ * as far as the town's budget goes.
+ * @param t The town.
+ */
+static void PayTownSchemes(Town *t)
+{
+	TownTransit &transit = t->transit;
+	transit.last_pass_holders = 0;
+	transit.last_pass_paid = 0;
+	transit.last_concessions_paid = 0;
+	if (!transit.resident_pass && !transit.pays_concessions) return;
+
+	CargoType cargo = INVALID_CARGO;
+	for (const CargoSpec *cs : CargoSpec::town_production_cargoes[TownProductionEffect::Passengers]) {
+		cargo = cs->Index();
+		break;
+	}
+	Money pass_price = IsValidCargoType(cargo) ? GetTransportedGoodsIncome(1, 20, 0, cargo) * RESIDENT_PASS_FARES : Money{0};
+
+	bool short_of_money = false;
+	for (uint company = 0; company < MAX_COMPANIES; company++) {
+		uint32_t holders = (transit.pass_riders[company] + 50 * 40) / (100 * 40);
+		Money owed = pass_price * holders + transit.concessions_owed[company];
+		Money pass_part = pass_price * holders;
+		transit.pass_riders[company] = 0;
+		Money concessions = transit.concessions_owed[company];
+		transit.concessions_owed[company] = 0;
+		if (owed <= 0 || !Company::IsValidID(company)) continue;
+
+		Money left = GetTownTransitAvailable(t) - transit.spent_this_year;
+		if (left < owed) {
+			short_of_money = true;
+			if (left <= 0) continue;
+			int64_t share_left = static_cast<int64_t>(left), share_owed = static_cast<int64_t>(owed);
+			pass_part = Money{static_cast<int64_t>(pass_part) * share_left / share_owed};
+			concessions = Money{static_cast<int64_t>(concessions) * share_left / share_owed};
+			owed = left;
+		}
+		SubtractMoneyFromCompany(static_cast<CompanyID>(company), CommandCost(ExpensesType::RoadVehRevenue, -owed));
+		transit.spent_this_year += owed;
+		transit.last_pass_holders += holders;
+		transit.last_pass_paid += pass_part;
+		transit.last_concessions_paid += concessions;
+	}
+	if (short_of_money && !transit.told_budget_gone) {
+		transit.told_budget_gone = true;
+		AddNewsItem(GetEncodedString(STR_NEWS_TRANSIT_BUDGET_GONE, t->index), NewsType::Subsidies, NewsStyle::Normal, {}, t->index);
+	}
+}
+
+/**
+ * The month ended: run the contracts, close tenders, open new ones, pay for
+ * the towns' passes and concessions. Called before the line statistics move
+ * on to the next month.
  */
 void TransitMonthlyLoop()
 {
@@ -527,12 +596,18 @@ void TransitMonthlyLoop()
 		return !Town::IsValidID(c.town) || (c.state == TransitContractState::Ended && today - c.end > KEEP_ENDED_DAYS);
 	});
 
-	for (Town *t : Town::Iterate()) MaybeOpenTender(t, today);
+	for (Town *t : Town::Iterate()) {
+		MaybeOpenTender(t, today);
+		DecideTownSchemes(t);
+		PayTownSchemes(t);
+	}
 
 	if (TimerGameEconomy::month == 0) {
 		for (Town *t : Town::Iterate()) {
 			t->transit.fares_last_year = t->transit.fares_this_year;
 			t->transit.fares_this_year = 0;
+			t->transit.spent_this_year = 0;
+			t->transit.told_budget_gone = false;
 		}
 	}
 
@@ -594,4 +669,27 @@ CommandCost CmdTransitEndContract(DoCommandFlags flags, uint32_t contract)
 		InvalidateWindowClassesData(WindowClass::Line);
 	}
 	return cost;
+}
+
+/**
+ * Set a town's resident pass and concession schemes; for game scripts.
+ * @param flags Operation to perform.
+ * @param town The town.
+ * @param resident_pass Whether residents ride free with the town's pass.
+ * @param pays_concessions Whether the town pays back concession fares.
+ * @return The cost of this operation or an error.
+ */
+CommandCost CmdSetTownTransitSchemes(DoCommandFlags flags, TownID town, bool resident_pass, bool pays_concessions)
+{
+	if (_current_company != OWNER_DEITY) return CMD_ERROR;
+	Town *t = Town::GetIfValid(town);
+	if (t == nullptr) return CMD_ERROR;
+
+	if (flags.Test(DoCommandFlag::Execute)) {
+		t->transit.policy_set = true;
+		t->transit.resident_pass = resident_pass;
+		t->transit.pays_concessions = pays_concessions;
+		InvalidateWindowClassesData(WindowClass::TransitAuthority);
+	}
+	return CommandCost();
 }

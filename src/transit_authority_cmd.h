@@ -11,11 +11,14 @@
 #define TRANSIT_AUTHORITY_CMD_H
 
 #include "command_type.h"
+#include "town_type.h"
 
 CommandCost CmdTransitBid(DoCommandFlags flags, uint32_t contract, uint8_t margin);
 CommandCost CmdTransitEndContract(DoCommandFlags flags, uint32_t contract);
+CommandCost CmdSetTownTransitSchemes(DoCommandFlags flags, TownID town, bool resident_pass, bool pays_concessions);
 
 DEF_CMD_TRAIT(Commands::TransitBid, CmdTransitBid, {}, CommandType::OtherManagement)
 DEF_CMD_TRAIT(Commands::TransitEndContract, CmdTransitEndContract, {}, CommandType::OtherManagement)
+DEF_CMD_TRAIT(Commands::SetTownTransitSchemes, CmdSetTownTransitSchemes, CommandFlag::Deity, CommandType::OtherManagement)
 
 #endif /* TRANSIT_AUTHORITY_CMD_H */

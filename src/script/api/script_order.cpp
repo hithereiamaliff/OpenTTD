@@ -839,6 +839,15 @@ static const TransitContract *GetScriptLineTender(VehicleID vehicle_id)
 	return ScriptObject::Command<Commands::TransitBid>::Do(c->id, margin == -1 ? UINT8_MAX : static_cast<uint8_t>(margin));
 }
 
+/* static */ bool ScriptOrder::EndLineContract(VehicleID vehicle_id)
+{
+	EnforceCompanyModeValid(false);
+	const TransitContract *c = GetLineContract(GetScriptLine(vehicle_id));
+	EnforcePrecondition(false, c != nullptr);
+
+	return ScriptObject::Command<Commands::TransitEndContract>::Do(c->id);
+}
+
 /* static */ Money ScriptOrder::GetLineContractFee(VehicleID vehicle_id)
 {
 	const TransitContract *c = GetLineContract(GetScriptLine(vehicle_id));

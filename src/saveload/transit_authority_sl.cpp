@@ -27,6 +27,16 @@ static const SaveLoad _town_transit_desc[] = {
 	SaveLoad::Variable<VarFileType::I64>("fares_this_year", SLE_OBJECT_ADDRESS(Town, transit.fares_this_year)),
 	SaveLoad::Variable<VarFileType::I64>("fares_last_year", SLE_OBJECT_ADDRESS(Town, transit.fares_last_year)),
 	SaveLoad::Variable<VarFileType::I32>("last_tender", SLE_OBJECT_ADDRESS(Town, transit.last_tender)),
+	SaveLoad::Variable<VarFileType::Bool>("policy_set", SLE_OBJECT_ADDRESS(Town, transit.policy_set)),
+	SaveLoad::Variable<VarFileType::Bool>("resident_pass", SLE_OBJECT_ADDRESS(Town, transit.resident_pass)),
+	SaveLoad::Variable<VarFileType::Bool>("pays_concessions", SLE_OBJECT_ADDRESS(Town, transit.pays_concessions)),
+	SaveLoad::Variable<VarFileType::I64>("spent_this_year", SLE_OBJECT_ADDRESS(Town, transit.spent_this_year)),
+	SaveLoad::Array<VarFileType::U32, MAX_COMPANIES>("pass_riders", SLE_OBJECT_ADDRESS(Town, transit.pass_riders)),
+	SaveLoad::Array<VarFileType::I64, MAX_COMPANIES>("concessions_owed", SLE_OBJECT_ADDRESS(Town, transit.concessions_owed)),
+	SaveLoad::Variable<VarFileType::U32>("last_pass_holders", SLE_OBJECT_ADDRESS(Town, transit.last_pass_holders)),
+	SaveLoad::Variable<VarFileType::I64>("last_pass_paid", SLE_OBJECT_ADDRESS(Town, transit.last_pass_paid)),
+	SaveLoad::Variable<VarFileType::I64>("last_concessions_paid", SLE_OBJECT_ADDRESS(Town, transit.last_concessions_paid)),
+	SaveLoad::Variable<VarFileType::Bool>("told_budget_gone", SLE_OBJECT_ADDRESS(Town, transit.told_budget_gone)),
 };
 
 static const SaveLoad _transit_contract_desc[] = {

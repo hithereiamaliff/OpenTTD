@@ -5149,6 +5149,11 @@ STR_TRANSIT_CAPTION                                             :{WHITE}{TOWN} t
 STR_TRANSIT_BUDGET                                              :{BLACK}Budget: {CURRENCY_LONG} a year, {CURRENCY_LONG} in contracts, {CURRENCY_LONG} free
 STR_TRANSIT_BUDGET_NONE                                         :{BLACK}No transit budget: towns have one from 1,500 people
 STR_TRANSIT_FARES                                               :{BLACK}Fares from its contracts: {CURRENCY_LONG} last year, {CURRENCY_LONG} this year
+STR_TRANSIT_SCHEMES_UNDECIDED                                   :{BLACK}Resident pass and concessions: decided once the town has 1,500 people
+STR_TRANSIT_RESIDENT_PASS                                       :{BLACK}Resident pass ({NUM}% of riders from here ride free, the town pays {NUM} fares a pass): {COMMA} pass{P "" es}, {CURRENCY_SHORT} last month
+STR_TRANSIT_NO_RESIDENT_PASS                                    :{BLACK}No resident pass
+STR_TRANSIT_CONCESSIONS                                         :{BLACK}Concessions: the town pays back concession fares from here: {CURRENCY_SHORT} last month
+STR_TRANSIT_NO_CONCESSIONS                                      :{BLACK}Concessions: not paid back by the town
 STR_TRANSIT_LIST_TOOLTIP                                        :{BLACK}Tenders and contracts for lines in this town. Under a contract the town keeps the fares and pays a monthly fee; on a free line riders ride free and the town pays the fee. The fee shrinks with missed departures; regularity and punctuality earn up to 5% more or less. Click one to select it
 STR_TRANSIT_EMPTY                                               :{BLACK}No tenders or contracts yet. Now and then the town invites tenders for a line that serves it, those losing money first, if its budget allows
 STR_TRANSIT_TYPE_GROSS_COST                                     :contract
@@ -5194,6 +5199,8 @@ STR_NEWS_TRANSIT_EXTENDED                                       :{BIG_FONT}{BLAC
 STR_NEWS_TRANSIT_RETENDER                                       :{BIG_FONT}{BLACK}{TOWN}'s contract for {RAW_STRING} ends; the town invites new tenders until {DATE_LONG}
 STR_NEWS_TRANSIT_ENDED_REVIEW                                   :{BIG_FONT}{BLACK}{TOWN} ends the contract for {RAW_STRING} after a review: too few riders for its cost
 STR_NEWS_TRANSIT_ENDED_NO_SERVICE                               :{BIG_FONT}{BLACK}{TOWN} ends the contract for {RAW_STRING}: the line stopped running
+STR_NEWS_TRANSIT_RESIDENT_PASS                                  :{BIG_FONT}{BLACK}{TOWN} gives its residents a free transit pass: a third of riders from the town ride free, and the town pays operators 30 fares a month for each pass
+STR_NEWS_TRANSIT_BUDGET_GONE                                    :{BIG_FONT}{BLACK}{TOWN}'s transit budget is used up for this year: passes and concessions are paid only in part until the new year
 STR_DEPARTURES_CAPTION                                          :{WHITE}{STATION} - Departures
 STR_DEPARTURES_LIST_TOOLTIP                                     :{BLACK}The next vehicles to leave, with their line and next stops. Click a departure to show the vehicle, Ctrl+Click to show its line
 STR_DEPARTURES_NONE                                             :{BLACK}No departures expected

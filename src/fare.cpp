@@ -20,6 +20,7 @@
 #include "roadveh.h"
 #include "station_base.h"
 #include "transit_authority.h"
+#include "town.h"
 #include "vehicle_base.h"
 #include "window_func.h"
 
@@ -190,12 +191,27 @@ Money GetFareExample(const FarePolicy &fare, uint distance, bool other_town)
  * @param at Where they get off.
  * @return The income.
  */
-Money GetPassengerIncome(const Vehicle *front, uint count, uint distance, uint16_t periods, CargoType cargo, StationID first_station, const Station *at)
+Money GetPassengerIncome(const Vehicle *front, uint count, uint distance, uint16_t periods, CargoType cargo, StationID first_station, const Station *at, bool final_delivery)
 {
 	FarePolicy fare = GetVehicleFare(front);
 	const Station *first = Station::GetIfValid(first_station);
 	bool other_town = first != nullptr && at != nullptr && first->town != at->town;
-	return GetFare(fare, count, distance, periods, cargo, other_town) * GetFarePayingShare(fare) / 100;
+	Money full = GetFare(fare, count, distance, periods, cargo, other_town);
+	if (full == 0) return 0;
+
+	/* Residents of a town with a resident pass ride free; the town pays the operator for the passes. */
+	Town *town = (first != nullptr && GetLineContract(front->orders) == nullptr) ? first->town : nullptr;
+	uint residents = (town != nullptr && town->transit.resident_pass) ? RESIDENT_PASS_SHARE : 0;
+	Money others = full * (100 - residents) / 100;
+	if (final_delivery && town != nullptr && Company::IsValidID(front->owner)) {
+		if (residents > 0) town->transit.pass_riders[front->owner.base()] += count * residents;
+		/* A town that pays for concessions pays back what concession riders don't pay. */
+		if (town->transit.pays_concessions && fare.concession != FareConcession::None) {
+			uint discount = fare.concession == FareConcession::Half ? 50 : 100;
+			town->transit.concessions_owed[front->owner.base()] += others * (100 - GetPassUptake(fare.pass)) / 100 * CONCESSION_SHARE * discount / 10000;
+		}
+	}
+	return others * GetFarePayingShare(fare) / 100;
 }
 
 /**

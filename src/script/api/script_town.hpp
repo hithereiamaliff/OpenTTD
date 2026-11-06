@@ -212,6 +212,21 @@ public:
 	static bool SetText(TownID town_id, Text *text);
 
 	/**
+	 * Set a town's transit schemes: a free resident pass (a third of riders
+	 * from the town ride free and the town pays operators per pass) and paying
+	 * back concession fares on journeys from the town. Towns otherwise decide
+	 * once they have 1,500 people.
+	 * @param town_id The town.
+	 * @param resident_pass Whether residents ride free with the town's pass.
+	 * @param pays_concessions Whether the town pays back concession fares.
+	 * @pre IsValidTown(town_id).
+	 * @pre ScriptCompanyMode::IsDeity().
+	 * @return True if the action succeeded.
+	 * @api -ai
+	 */
+	static bool SetTransitSchemes(TownID town_id, bool resident_pass, bool pays_concessions);
+
+	/**
 	 * Get the yearly transit budget of a town: what it can spend on contracts for lines.
 	 * @param town_id The town.
 	 * @pre IsValidTown(town_id).

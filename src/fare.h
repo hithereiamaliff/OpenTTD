@@ -38,7 +38,7 @@ uint GetPassUptake(uint8_t pass);
 uint GetFarePayingShare(const FarePolicy &fare);
 Money GetFare(const FarePolicy &fare, uint count, uint distance, uint16_t periods, CargoType cargo, bool other_town);
 Money GetFareExample(const FarePolicy &fare, uint distance, bool other_town);
-Money GetPassengerIncome(const Vehicle *front, uint count, uint distance, uint16_t periods, CargoType cargo, StationID first_station, const Station *at);
+Money GetPassengerIncome(const Vehicle *front, uint count, uint distance, uint16_t periods, CargoType cargo, StationID first_station, const Station *at, bool final_delivery);
 int GetFareRatingBonus(uint level);
 int GetStationFareRatingBonus(const Station *st);
 

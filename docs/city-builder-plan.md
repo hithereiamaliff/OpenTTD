@@ -590,6 +590,33 @@ fares Line 1 brought the town. Company income moved from about 8,300 to
 7,500 a quarter: on these profitable lines cost plus 15% pays almost what
 the fares did, but steadily. Contracts survive saving and loading.
 
+### Done: resident passes and concessions (step 2)
+
+- Once a town has 1,500 people it decides, once: four in ten give their
+  residents a free pass (like Penang's Pas Mutiara), half pay back
+  concession fares. Game scripts can set both
+  (`ScriptTown.SetTransitSchemes`).
+- Resident pass: a third of riders boarding in the town ride free on every
+  operator's lines there (not on contracted lines, whose fares go to the
+  town anyway). The town pays each operator 30 standard 20-tile fares a
+  month per pass, a pass being 40 trips: three quarters of what those riders
+  would have paid, made up by the extra riders free travel brings (the
+  fares they pay count towards the station ratings).
+- Concessions: where a company gives concessions, the town pays back what
+  concession riders on journeys from the town didn't pay.
+- Both come from what is left of the town's yearly budget after contracts;
+  when it runs out, they are paid in part until the new year (with a news
+  message once a year).
+- Shown in the town's Transit window; news when a town introduces a pass.
+- Script API: `ScriptOrder.EndLineContract`.
+
+Test: with Line 2's contract ended, Gredinghall (which chose a resident
+pass) paid for 2 passes in the first month (280 at 20 fares; now 30).
+
+Later, if wanted: shuttles to a place (clinic, school, factory zone,
+station), fleet funding, renameable scheme names, an optional national
+agency. On-demand zones belong with part 12, e-bus quotas need part 5.
+
 ## Roadmap
 
 Sizes are rough: S = one session, M = a few, L = many, XL = a project in itself.

@@ -82,7 +82,7 @@ struct TransitAuthorityWindow : Window {
 	{
 		switch (widget) {
 			case WID_TRA_BUDGET:
-				size.height = WidgetDimensions::scaled.framerect.Vertical() + 2 * GetCharacterHeight(FontSize::Normal);
+				size.height = WidgetDimensions::scaled.framerect.Vertical() + 4 * GetCharacterHeight(FontSize::Normal);
 				size.width = std::max<uint>(size.width, ScaleGUITrad(560));
 				break;
 
@@ -156,6 +156,22 @@ struct TransitAuthorityWindow : Window {
 				}
 				ir.top += GetCharacterHeight(FontSize::Normal);
 				DrawString(ir, GetString(STR_TRANSIT_FARES, t->transit.fares_last_year, t->transit.fares_this_year));
+				ir.top += GetCharacterHeight(FontSize::Normal);
+				if (!t->transit.policy_set) {
+					DrawString(ir, STR_TRANSIT_SCHEMES_UNDECIDED);
+					break;
+				}
+				if (t->transit.resident_pass) {
+					DrawString(ir, GetString(STR_TRANSIT_RESIDENT_PASS, RESIDENT_PASS_SHARE, RESIDENT_PASS_FARES, t->transit.last_pass_holders, t->transit.last_pass_paid));
+				} else {
+					DrawString(ir, STR_TRANSIT_NO_RESIDENT_PASS);
+				}
+				ir.top += GetCharacterHeight(FontSize::Normal);
+				if (t->transit.pays_concessions) {
+					DrawString(ir, GetString(STR_TRANSIT_CONCESSIONS, t->transit.last_concessions_paid));
+				} else {
+					DrawString(ir, STR_TRANSIT_NO_CONCESSIONS);
+				}
 				break;
 			}
 

@@ -704,6 +704,15 @@ public:
 	static bool BidLineTender(VehicleID vehicle_id, SQInteger margin);
 
 	/**
+	 * End the contract of a vehicle's line early, for three months' fees.
+	 * @param vehicle_id Any vehicle of the line.
+	 * @pre GetLineContractFee(vehicle_id) >= 0.
+	 * @game @pre ScriptCompanyMode::IsValid().
+	 * @return Whether the contract has been/can be ended.
+	 */
+	static bool EndLineContract(VehicleID vehicle_id);
+
+	/**
 	 * The monthly fee a town pays for a vehicle's line under contract.
 	 * @param vehicle_id Any vehicle of the line.
 	 * @return The fee, or -1 if the line isn't under contract.

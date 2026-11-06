@@ -82,7 +82,21 @@ struct TownTransit {
 	Money fares_this_year = 0; ///< Fares its contracts brought in this year.
 	Money fares_last_year = 0; ///< Fares its contracts brought in last year.
 	TimerGameEconomy::Date last_tender{}; ///< When it last invited tenders.
+
+	bool policy_set = false; ///< Whether the town decided on its schemes (once it is big enough).
+	bool resident_pass = false; ///< Residents ride free with the town's pass; the town pays operators per pass holder.
+	bool pays_concessions = false; ///< The town pays back what concession riders don't pay on journeys from the town.
+	Money spent_this_year = 0; ///< Spent on passes and concessions this year.
+	std::array<uint32_t, MAX_COMPANIES> pass_riders{}; ///< Riders with the town's pass this month per company, in hundredths.
+	std::array<Money, MAX_COMPANIES> concessions_owed{}; ///< Concession fares owed this month per company.
+	uint32_t last_pass_holders = 0; ///< Passes paid for last month.
+	Money last_pass_paid = 0; ///< Paid for passes last month.
+	Money last_concessions_paid = 0; ///< Paid back for concessions last month.
+	bool told_budget_gone = false; ///< Whether the news that this year's budget is used up came out.
 };
+
+static constexpr uint RESIDENT_PASS_SHARE = 33; ///< Share of riders (in percent) boarding in a town with a resident pass that hold one.
+static constexpr uint RESIDENT_PASS_FARES = 30; ///< What a town pays per pass holder a month, in standard 20-tile fares.
 
 static constexpr uint8_t TRANSIT_BID_MAX = 40; ///< Highest margin a company may bid, in percent.
 
