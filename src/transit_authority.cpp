@@ -9,6 +9,8 @@
 
 #include "stdafx.h"
 #include "transit_authority.h"
+#include "city_bus.h"
+#include "roadveh.h"
 #include "transit_authority_cmd.h"
 #include "cargotype.h"
 #include "command_func.h"
@@ -37,6 +39,10 @@ static constexpr uint BUDGET_BUSES_PER_10K = 12;
 /** Length of a contract, and of an extension for good service, in years. */
 static constexpr int CONTRACT_YEARS = 5;
 static constexpr int EXTENSION_YEARS = 3;
+/** Length of a contract for a line run mostly with electric buses: they pay off over a longer term (Bogota and Santiago give 14-15 years). */
+static constexpr int ELECTRIC_CONTRACT_YEARS = 8;
+/** Quality points a town adds for a line run only with electric buses. */
+static constexpr uint ELECTRIC_QUALITY_BONUS = 10;
 /** How long a tender stays open, in days. */
 static constexpr int TENDER_DAYS = 60;
 /** A town waits this long after a tender before the next, in days. */
@@ -184,8 +190,24 @@ static uint32_t GetExcessWait(const LineInfo &line)
 }
 
 /**
+ * Share of a line's vehicles that are electric buses.
+ * @param list The line.
+ * @return The share in percent.
+ */
+static uint GetLineElectricShare(const OrderList *list)
+{
+	uint electric = 0, count = 0;
+	for (const Vehicle *v = list->GetFirstSharedVehicle(); v != nullptr; v = v->NextShared()) {
+		if (v->type == VehicleType::Road && IsElectricBus(RoadVehicle::From(v))) electric++;
+		count++;
+	}
+	return count == 0 ? 0 : electric * 100 / count;
+}
+
+/**
  * How good a line's service is, as a town judges a bid: regularity (40%),
- * reliability of its vehicles (30%) and their age (30%).
+ * reliability of its vehicles (30%) and their age (30%), plus up to 10
+ * points for electric buses.
  * @param list The line.
  * @return The quality, 0 to 100.
  */
@@ -202,7 +224,8 @@ uint GetTransitLineQuality(const OrderList *list)
 		count++;
 	}
 	if (count == 0) return 0;
-	return (40 * regularity + 30 * reliability / count + 30 * youth / count) / 100;
+	const uint quality = (40 * regularity + 30 * reliability / count + 30 * youth / count) / 100;
+	return std::min<uint>(100, quality + ELECTRIC_QUALITY_BONUS * GetLineElectricShare(list) / 100);
 }
 
 /**
@@ -333,7 +356,9 @@ static void ResolveTender(TransitContract &c, TimerGameEconomy::Date today)
 
 	c.state = TransitContractState::Active;
 	c.start = today;
-	c.end = today + CONTRACT_YEARS * EconomyTime::DAYS_IN_YEAR;
+	/* Lines run mostly with electric buses get a longer term. */
+	const int years = GetLineElectricShare(list) >= 50 ? ELECTRIC_CONTRACT_YEARS : CONTRACT_YEARS;
+	c.end = today + years * EconomyTime::DAYS_IN_YEAR;
 	c.fee = c.cost_basis * (100 + c.bid) / 100;
 	c.required_departures = static_cast<uint16_t>(std::max<uint>(2, list->line.this_month.departures * 9 / 10));
 	c.baseline_wait = GetExcessWait(list->line);
@@ -342,7 +367,7 @@ static void ResolveTender(TransitContract &c, TimerGameEconomy::Date today)
 	c.idle_months = 0;
 	c.paid = 0;
 	c.fares = 0;
-	AddContractNews(c, c.type == TransitContractType::FreeLine ? STR_NEWS_TRANSIT_WON_FREE : STR_NEWS_TRANSIT_WON, c.company, c.fee);
+	AddContractNews(c, c.type == TransitContractType::FreeLine ? STR_NEWS_TRANSIT_WON_FREE : STR_NEWS_TRANSIT_WON, c.company, c.fee, years);
 }
 
 /**

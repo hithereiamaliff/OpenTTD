@@ -24,6 +24,7 @@
 #include "engine_gui.h"
 #include "engine_func.h"
 #include "engine_base.h"
+#include "city_bus.h"
 #include "company_base.h"
 #include "rail.h"
 #include "road_func.h"
@@ -92,8 +93,10 @@ uint8_t GetOriginalEngineOffset(VehicleType type)
 }
 
 static_assert(lengthof(_orig_rail_vehicle_info) + lengthof(_orig_road_vehicle_info) + lengthof(_orig_ship_vehicle_info) + lengthof(_orig_aircraft_vehicle_info) == lengthof(_orig_engine_info));
+static_assert(lengthof(_city_engine_info) == CITY_ENGINE_COUNT && lengthof(_city_road_vehicle_info) == CITY_ENGINE_COUNT);
+static_assert(lengthof(_orig_road_vehicle_info) == CITY_ENGINE_FIRST_ID);
 
-Engine::Engine(EngineID index, VehicleType type, uint16_t local_id) : EnginePool::PoolItem<&_engine_pool>(index)
+Engine::Engine(EngineID index, VehicleType type, uint16_t local_id, bool city) : EnginePool::PoolItem<&_engine_pool>(index)
 {
 	this->type = type;
 
@@ -104,6 +107,17 @@ Engine::Engine(EngineID index, VehicleType type, uint16_t local_id) : EnginePool
 	this->list_position = local_id;
 	this->preview_company = CompanyID::Invalid();
 	this->display_last_variant = EngineID::Invalid();
+
+	/* The city fork's built-in buses have their own tables. */
+	if (city) {
+		assert(type == VehicleType::Road && local_id >= CITY_ENGINE_FIRST_ID && local_id < CITY_ENGINE_FIRST_ID + CITY_ENGINE_COUNT);
+		this->city_index = static_cast<uint8_t>(local_id - CITY_ENGINE_FIRST_ID);
+		this->info = _city_engine_info[this->city_index];
+		RoadVehicleInfo &rvi = this->vehicle_info.emplace<RoadVehicleInfo>(_city_road_vehicle_info[this->city_index]);
+		this->original_image_index = rvi.image_index;
+		this->info.string_id = GetCityBusSpec(this)->name;
+		return;
+	}
 
 	/* Check if this base engine is within the original engine data range */
 	if (local_id >= GetOriginalEngineCount(type)) {
@@ -545,6 +559,28 @@ void EngineOverrideManager::ResetToDefaultMapping()
 			map.emplace_back(INVALID_GRFID, internal_id, type, internal_id, id);
 		}
 	}
+
+	/* The city fork's buses come after all original engines, so the original engines keep their classic ids. */
+	this->AddCityEngines(id);
+}
+
+/**
+ * Add the city fork's built-in buses that are missing from the map.
+ * Used for new games and for savegames from before the city buses existed.
+ * @param first The engine id for the first bus that is added; others follow.
+ * @return The number of buses added.
+ */
+uint EngineOverrideManager::AddCityEngines(EngineID first)
+{
+	EngineID id = first;
+	uint added = 0;
+	for (uint16_t internal_id = CITY_ENGINE_FIRST_ID; internal_id < CITY_ENGINE_FIRST_ID + CITY_ENGINE_COUNT; internal_id++) {
+		if (this->GetID(VehicleType::Road, internal_id, CITY_ENGINE_GRFID) != EngineID::Invalid()) continue;
+		this->SetID(VehicleType::Road, internal_id, CITY_ENGINE_GRFID, static_cast<uint8_t>(internal_id), id);
+		++id;
+		added++;
+	}
+	return added;
 }
 
 /**
@@ -647,7 +683,7 @@ void SetupEngines()
 		assert(std::size(mapping) >= GetOriginalEngineCount(type));
 
 		for (const EngineIDMapping &eid : mapping) {
-			Engine::CreateAtIndex(eid.engine, type, eid.internal_id);
+			Engine::CreateAtIndex(eid.engine, type, eid.internal_id, type == VehicleType::Road && eid.grfid == CITY_ENGINE_GRFID);
 		}
 	}
 }
@@ -829,6 +865,18 @@ void StartupOneEngine(Engine *e, const TimerGameCalendar::YearMonthDay &aging_ym
 		e->flags.Set(EngineFlag::Available);
 		e->company_avail = CompanyMask{};
 	}
+}
+
+/**
+ * Start an engine that a savegame knows nothing about: the city fork's buses in games from before them.
+ * Engines already introduced become available to everyone right away.
+ * @param e The engine.
+ */
+void StartupEngineAfterLoad(Engine *e)
+{
+	const TimerGameCalendar::Date aging_date = std::min(TimerGameCalendar::date, TimerGameCalendar::ConvertYMDToDate(_year_engine_aging_stops, 0, 1));
+	StartupOneEngine(e, TimerGameCalendar::ConvertDateToYMD(aging_date), 0);
+	CalcEngineReliability(e, false);
 }
 
 /**

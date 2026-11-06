@@ -16,6 +16,7 @@
 #include "engine_func.h"
 #include "company_func.h"
 #include "newgrf.h"
+#include "city_bus.h"
 
 #include "table/strings.h"
 
@@ -36,6 +37,12 @@ static EngineID GetNextArticulatedPart(uint index, EngineID front_type, Vehicle 
 	assert(front == nullptr || front->engine_type == front_type);
 
 	const Engine *front_engine = Engine::Get(front_type);
+
+	/* The city fork's articulated buses have one rear section, without NewGRF. */
+	if (front_engine->GetGRF() == nullptr) {
+		if (mirrored != nullptr) *mirrored = false;
+		return index == 1 ? GetCityEngineRearPart(front_type) : EngineID::Invalid();
+	}
 
 	uint16_t callback = GetVehicleCallback(CBID_VEHICLE_ARTIC_ENGINE, index, 0, front_type, front);
 	if (callback == CALLBACK_FAILED) return EngineID::Invalid();

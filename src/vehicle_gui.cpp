@@ -20,6 +20,7 @@
 #include "newgrf_text.h"
 #include "newgrf_debug.h"
 #include "roadveh.h"
+#include "city_bus.h"
 #include "train.h"
 #include "aircraft.h"
 #include "depot_map.h"
@@ -2505,6 +2506,8 @@ struct VehicleDetailsWindow : Window {
 		} else {
 			desired_height = 4 * GetCharacterHeight(FontSize::Normal) + WidgetDimensions::scaled.vsep_normal * 2;
 		}
+		/* Electric city buses show their battery. */
+		if (IsElectricBus(RoadVehicle::From(v))) desired_height += GetCharacterHeight(FontSize::Normal);
 		return desired_height;
 	}
 
@@ -3210,6 +3213,8 @@ public:
 		}
 
 		if (v->IsInDepot() && v->IsWaitingForUnbunching()) return GetString(STR_VEHICLE_STATUS_WAITING_UNBUNCHING);
+
+		if (v->type == VehicleType::Road && IsChargingInDepot(RoadVehicle::From(v))) return GetString(STR_VEHICLE_STATUS_CHARGING, GetBatteryPercent(RoadVehicle::From(v)));
 
 		if (v->type == VehicleType::Train && Train::From(v)->flags.Test(VehicleRailFlag::Stuck) && !v->current_order.IsType(OT_LOADING)) return GetString(STR_VEHICLE_STATUS_TRAIN_STUCK);
 

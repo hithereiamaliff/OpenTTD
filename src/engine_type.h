@@ -149,8 +149,8 @@ struct AircraftVehicleInfo {
 /** Information about a road vehicle. */
 struct RoadVehicleInfo {
 	uint8_t image_index = 0;
-	uint8_t cost_factor = 0;
-	uint8_t running_cost = 0;
+	uint16_t cost_factor = 0; ///< Purchase cost factor; wider than one byte for the city fork's built-in buses.
+	uint16_t running_cost = 0; ///< Running cost factor; wider than one byte for the city fork's built-in buses.
 	Price running_cost_class{};
 	SoundID sfx{};
 	uint16_t max_speed = 0; ///< Maximum speed (1 unit = 1/3.2 mph = 0.5 km-ish/h)

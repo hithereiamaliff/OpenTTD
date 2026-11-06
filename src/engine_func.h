@@ -17,6 +17,7 @@
 
 void SetupEngines();
 void StartupEngines();
+void StartupEngineAfterLoad(Engine *e);
 void CheckEngines();
 
 /* Original engine data counts and offsets */

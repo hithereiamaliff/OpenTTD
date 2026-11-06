@@ -357,6 +357,40 @@ static constexpr EngineInfo _orig_engine_info[] = {
 	MA( 28215,  20,  20,  50,                  LandscapeTypes({T,A,S  })), // 254 Guru X2 Helicopter
 	MA( 13575,  20,  20,  99,                  LandscapeTypes({      Y})), // 255 Powernaut Helicopter
 };
+
+/**
+ * Writes the properties of a built-in city bus into the EngineInfo struct.
+ * Like #MR, with the load amount (passengers boarding per loading step and section) and two company colours.
+ * @param a base introduction date (days since 1920-01-01)
+ * @param c life length (years)
+ * @param d base life (years)
+ * @param f Bitmask of the climates
+ * @param g load amount
+ * @param h callback mask (articulated buses)
+ */
+#define MRC(a, c, d, f, g, h) { CalendarTime::DAYS_TILL_ORIGINAL_BASE_YEAR + a, TimerGameCalendar::Year{c}, TimerGameCalendar::Year{d}, 20, g, f, INVALID_CARGO, CT_PASSENGERS, CargoTypes{}, 8, EngineMiscFlags{EngineMiscFlag::Uses2CC}, h, 0, {}, STR_EMPTY, Ticks::CARGO_AGING_TICKS, EngineID::Invalid() }
+#define ARTIC VehicleCallbackMasks{VehicleCallbackMask::ArticEngine}
+#define NOCB VehicleCallbackMasks{}
+/** Engine info of the built-in city buses (see city_bus.h), in #CityBusSpec order. */
+static constexpr EngineInfo _city_engine_info[] = {
+	MRC( 23801, 12, 40, LandscapeTypes({T,A,S}), 3, NOCB ), //  0 Tanjung Minibus, 1985
+	MRC( 26450, 15, 40, LandscapeTypes({T,A,S}), 5, NOCB ), //  1 Seri M9 Midibus, 1992
+	MRC( 27484, 15, 40, LandscapeTypes({T,A,S}), 7, NOCB ), //  2 Kenari City 12, 1995
+	MRC( 28733, 15, 40, LandscapeTypes({T,A,S}), 7, NOCB ), //  3 Merbok Twin Decker, 1998
+	MRC( 29341, 15, 40, LandscapeTypes({T,A,S}), 5, ARTIC), //  4 Kenari Bendi 18, 2000
+	MRC( 29341, 15, 40, LandscapeTypes{}       , 5, NOCB ), //  5 Kenari Bendi 18, rear section
+	MRC( 34730, 12, 80, LandscapeTypes({T,A,S}), 3, NOCB ), //  6 Tanjung e-Minibus, 2015
+	MRC( 35277, 15, 80, LandscapeTypes({T,A,S}), 5, NOCB ), //  7 Seri M9e Midibus, 2016
+	MRC( 33785, 15, 80, LandscapeTypes({T,A,S}), 7, NOCB ), //  8 Kenari City 12e, 2012
+	MRC( 35854, 15, 80, LandscapeTypes({T,A,S}), 7, NOCB ), //  9 Merbok Twin Decker E, 2018
+	MRC( 35155, 15, 80, LandscapeTypes({T,A,S}), 5, ARTIC), // 10 Kenari Bendi 18e, 2016
+	MRC( 35155, 15, 80, LandscapeTypes{}       , 5, NOCB ), // 11 Kenari Bendi 18e, rear section
+	MRC( 34972, 15, 80, LandscapeTypes({T,A,S}), 8, ARTIC), // 12 Laju BRT 18e, 2015
+	MRC( 34972, 15, 80, LandscapeTypes{}       , 8, NOCB ), // 13 Laju BRT 18e, rear section
+};
+#undef NOCB
+#undef ARTIC
+#undef MRC
 #undef Y
 #undef S
 #undef A
@@ -761,6 +795,35 @@ static constexpr RoadVehicleInfo _orig_road_vehicle_info[] = {
 	ROV( 62, 147, 168, SND_3F_DEPARTURE_TRUCK_TOYLAND_1, 176, 19,  48, 22), // 86 Powernaught Bubble Truck
 	ROV( 62, 157, 240, SND_40_DEPARTURE_TRUCK_TOYLAND_2, 224, 22,  69, 45), // 87 Wizzowow Bubble Truck
 };
+
+/**
+ * Writes the properties of a built-in city bus into the RoadVehicleInfo struct; like #ROV with a length.
+ * Costs go beyond 255: the city buses span vans to 18 m electric buses.
+ * @param i shorten factor: the bus (section) is 8 - i long, a tile being 16
+ */
+#define ROVC(a, b, c, e, f, g, h, i) { a, b, c, Price::RunningRoadveh, SND_1B_DEPARTURE_MODERN_BUS, e, f, g, h, 76, 0, VE_DEFAULT, i, ROADTYPE_ROAD }
+/** Road vehicle info of the built-in city buses (see city_bus.h), in #CityBusSpec order. Articulated buses carry their weight and power in the front section. */
+static constexpr RoadVehicleInfo _city_road_vehicle_info[] = {
+	/*     image_index      max_speed  weight
+	 *     |   cost_factor  |    capacity  power
+	 *     |   |    running_cost   |   |   |  shorten_factor
+	 *     |   |    |       |    |   |   |  | */
+	ROVC( 63,  70,  90,   200,  16, 16, 13, 3), //  0 Tanjung Minibus
+	ROVC( 64, 140, 170,   180,  40, 36, 21, 2), //  1 Seri M9 Midibus
+	ROVC( 65, 230, 300,   180,  80, 48, 28, 0), //  2 Kenari City 12
+	ROVC( 66, 320, 400,   160, 120, 68, 33, 0), //  3 Merbok Twin Decker
+	ROVC( 67, 380, 460,   160,  75, 76, 33, 2), //  4 Kenari Bendi 18
+	ROVC( 68,   0,   0,   160,  75,  0,  0, 2), //  5 Kenari Bendi 18, rear section
+	ROVC( 69, 126,  55,   200,  16, 18, 13, 3), //  6 Tanjung e-Minibus
+	ROVC( 70, 250, 104,   180,  40, 42, 20, 2), //  7 Seri M9e Midibus
+	ROVC( 71, 410, 180,   180,  80, 56, 30, 0), //  8 Kenari City 12e
+	ROVC( 72, 560, 240,   160, 115, 76, 38, 0), //  9 Merbok Twin Decker E
+	ROVC( 73, 680, 280,   160,  70, 88, 40, 2), // 10 Kenari Bendi 18e
+	ROVC( 74,   0,   0,   160,  70,  0,  0, 2), // 11 Kenari Bendi 18e, rear section
+	ROVC( 75, 720, 300,   200,  70, 88, 45, 2), // 12 Laju BRT 18e
+	ROVC( 76,   0,   0,   200,  70,  0,  0, 2), // 13 Laju BRT 18e, rear section
+};
+#undef ROVC
 #undef ROV
 
 #endif /* ENGINES_H */

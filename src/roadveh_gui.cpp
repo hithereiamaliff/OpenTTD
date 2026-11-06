@@ -10,6 +10,7 @@
 #include "stdafx.h"
 #include "core/backup_type.hpp"
 #include "roadveh.h"
+#include "city_bus.h"
 #include "window_gui.h"
 #include "strings_func.h"
 #include "vehicle_func.h"
@@ -100,6 +101,22 @@ void DrawRoadVehDetails(const Vehicle *v, const Rect &r)
 
 	/* Draw Transfer credits text */
 	DrawString(r.left, r.right, y, GetString(STR_VEHICLE_INFO_FEEDER_CARGO_VALUE, feeder_share));
+
+	/* Electric city buses: the battery, and what air-con or heating takes today. */
+	const RoadVehicle *rv = RoadVehicle::From(v);
+	if (IsElectricBus(rv)) {
+		y += GetCharacterHeight(FontSize::Normal);
+		const uint percent = GetBatteryPercent(rv);
+		const uint kwh = GetBatteryCapacityWh(rv) / 1000;
+		const uint health = GetBatteryHealthPercent(rv);
+		const uint tiles = GetBatteryTilesLeft(rv);
+		const uint hvac = GetHvacLoadPercent();
+		if (hvac == 0) {
+			DrawString(r.left, r.right, y, GetString(STR_VEHICLE_DETAILS_BATTERY, percent, kwh, health, tiles));
+		} else {
+			DrawString(r.left, r.right, y, GetString(IsHvacHeating() ? STR_VEHICLE_DETAILS_BATTERY_HEATING : STR_VEHICLE_DETAILS_BATTERY_AIRCON, percent, kwh, health, tiles, hvac));
+		}
+	}
 }
 
 /**

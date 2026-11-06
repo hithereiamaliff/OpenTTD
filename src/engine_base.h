@@ -68,6 +68,7 @@ public:
 	EngineInfo info{};
 
 	uint16_t list_position = 0;
+	uint8_t city_index = 0xFF; ///< NOSAVE: index of the city fork's built-in bus (see city_bus.h), 0xFF for other engines. Set up from the engine map.
 
 	/* NewGRF related data */
 	CargoGRFFileProps grf_prop{}; ///< Link to NewGRF
@@ -79,8 +80,14 @@ private:
 	std::variant<std::monostate, RailVehicleInfo, RoadVehicleInfo, ShipVehicleInfo, AircraftVehicleInfo> vehicle_info{};
 
 public:
-	Engine(EngineID index, VehicleType type, uint16_t local_id);
+	Engine(EngineID index, VehicleType type, uint16_t local_id, bool city = false);
 	bool IsEnabled() const;
+
+	/**
+	 * Is this one of the city fork's built-in buses?
+	 * @return True for the city buses, including their articulated rear sections.
+	 */
+	inline bool IsCityEngine() const { return this->city_index != 0xFF; }
 
 	/**
 	 * Determines the default cargo type of an engine.
@@ -250,6 +257,7 @@ struct EngineOverrideManager {
 	VehicleTypeIndexArray<std::vector<EngineIDMapping>> mappings;
 
 	void ResetToDefaultMapping();
+	uint AddCityEngines(EngineID first);
 	EngineID GetID(VehicleType type, uint16_t grf_local_id, GrfID grfid);
 	EngineID UseUnreservedID(VehicleType type, uint16_t grf_local_id, GrfID grfid, bool static_access);
 	void SetID(VehicleType type, uint16_t grf_local_id, GrfID grfid, uint8_t substitute_id, EngineID engine);

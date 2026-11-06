@@ -860,6 +860,12 @@ static const TransitContract *GetScriptLineTender(VehicleID vehicle_id)
 	return c == nullptr ? Money{-1} : c->last_payment;
 }
 
+/* static */ ScriptDate::Date ScriptOrder::GetLineContractEnd(VehicleID vehicle_id)
+{
+	const TransitContract *c = GetLineContract(GetScriptLine(vehicle_id));
+	return c == nullptr ? ScriptDate::DATE_INVALID : (ScriptDate::Date)c->end.base();
+}
+
 /* static */ SQInteger ScriptOrder::GetLineRiders(VehicleID vehicle_id)
 {
 	const OrderList *list = GetScriptLine(vehicle_id);

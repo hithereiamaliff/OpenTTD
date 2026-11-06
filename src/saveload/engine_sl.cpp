@@ -14,6 +14,7 @@
 
 #include "saveload_internal.h"
 #include "../engine_base.h"
+#include "../engine_func.h"
 #include "../string_func.h"
 
 #include "../safeguards.h"
@@ -102,8 +103,13 @@ struct ENGNChunkHandler : ChunkHandler {
  */
 void CopyTempEngineData()
 {
+	std::vector<Engine *> unsaved_city_engines;
 	for (Engine *e : Engine::Iterate()) {
-		if (e->index >= _temp_engine.size()) break;
+		if (e->index >= _temp_engine.size()) {
+			/* The city fork's buses are new to savegames from before them. */
+			if (e->IsCityEngine()) unsaved_city_engines.push_back(e);
+			continue;
+		}
 
 		const Engine *se = GetTempDataEngine(e->index);
 		e->intro_date          = se->intro_date;
@@ -126,6 +132,8 @@ void CopyTempEngineData()
 	}
 
 	ResetTempEngineData();
+
+	for (Engine *e : unsaved_city_engines) StartupEngineAfterLoad(e);
 }
 
 void ResetTempEngineData()
@@ -197,11 +205,16 @@ struct EIDSChunkHandler : ChunkHandler {
 		_engine_mngr.mappings = {};
 
 		int index;
+		uint next = 0;
 		while ((index = SlIterateArray()) != -1) {
 			EngineIDMapping eid;
 			SlObject(&eid, slt);
 			_engine_mngr.SetID(eid.type, eid.internal_id, eid.grfid, eid.substitute_id, static_cast<EngineID>(index));
+			next = std::max<uint>(next, index + 1);
 		}
+
+		/* Savegames from before the city fork's buses get them after all their engines. */
+		_engine_mngr.AddCityEngines(static_cast<EngineID>(next));
 	}
 };
 

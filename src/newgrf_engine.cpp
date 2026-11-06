@@ -1361,6 +1361,8 @@ void AlterVehicleListOrder(EngineID engine, uint16_t target)
 	_list_order_changes.emplace_back(engine, target);
 }
 
+static constexpr int CITY_BUS_LIST_AFTER = 3; ///< Local id of the original bus the city fork's buses are listed after (the Foster MkII).
+
 /**
  * Comparator function to sort engines via scope-GRFID and local ID.
  * @param a left side
@@ -1378,8 +1380,12 @@ static bool EnginePreSort(const EngineID &a, const EngineID &b)
 	/* 2. Sort by scope-GRFID */
 	if (engine_a.grf_prop.grfid != engine_b.grf_prop.grfid) return engine_a.grf_prop.grfid < engine_b.grf_prop.grfid;
 
-	/* 3. Sort by local ID */
-	return static_cast<int>(engine_a.grf_prop.local_id) < static_cast<int>(engine_b.grf_prop.local_id);
+	/* 3. Sort by local ID; the city fork's buses come right after the original buses. */
+	auto position = [](const Engine &e) {
+		if (e.IsCityEngine() && e.GetGRF() == nullptr) return std::pair<int, int>(CITY_BUS_LIST_AFTER * 2 + 1, e.grf_prop.local_id);
+		return std::pair<int, int>(e.grf_prop.local_id * 2, 0);
+	};
+	return position(engine_a) < position(engine_b);
 }
 
 /**

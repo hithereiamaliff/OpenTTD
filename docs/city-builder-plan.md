@@ -617,6 +617,93 @@ Later, if wanted: shuttles to a place (clinic, school, factory zone,
 station), fleet funding, renameable scheme names, an optional national
 agency. On-demand zones belong with part 12, e-bus quotas need part 5.
 
+## Done: transit part 5, modern buses
+
+Eleven new built-in buses in temperate, sub-arctic and sub-tropic (not
+toyland), with invented Malaysian-flavoured names. Prices and running costs
+are at base costs, without inflation (2020 test game); the Foster MkII is
+6,562 and 1,125 a year for 40 seats at 127 km/h.
+
+| Bus | From | Seats | km/h | Doors (boarding a step) | Price | Running a year | Battery |
+|---|---|---|---|---|---|---|---|
+| Tanjung Minibus (van) | 1985 | 16 | 100 | 1 (3) | 2,871 | 421 | |
+| Seri M9 Midibus | 1992 | 40 | 90 | 2 (5) | 5,742 | 796 | |
+| Kenari City 12 (12 m) | 1995 | 80 | 90 | 2 (7) | 9,433 | 1,406 | |
+| Merbok Twin Decker | 1998 | 120 | 80 | 2 (7) | 13,125 | 1,875 | |
+| Kenari Bendi 18 (articulated) | 2000 | 150 | 80 | 3 (10) | 15,585 | 2,156 | |
+| Kenari City 12e | 2012 | 80 | 90 | 2 (7) | 16,816 | 843 | 350 kWh |
+| Tanjung e-Minibus | 2015 | 16 | 100 | 1 (3) | 5,167 | 257 | 110 kWh |
+| Laju BRT 18e (articulated) | 2015 | 140 | 100 | 4 (16) | 29,531 | 1,406 | 500 kWh |
+| Kenari Bendi 18e (articulated) | 2016 | 140 | 80 | 3 (10) | 27,890 | 1,312 | 500 kWh |
+| Seri M9e Midibus | 2016 | 40 | 90 | 2 (5) | 10,253 | 487 | 230 kWh |
+| Merbok Twin Decker E | 2018 | 115 | 80 | 2 (7) | 22,968 | 1,125 | 450 kWh |
+
+- Electric buses cost about 1.8 times as much and about 0.6 times as much to
+  run; over 15 years a 12 m bus costs about the same either way, before the
+  time electric buses spend charging. Big buses cost more to run but less
+  per seat, so they pay on busy lines and lose on quiet ones.
+- Lengths: minibus 5, midibus 6, 12 m and double-deck 8 (a tile is 16),
+  articulated 6 + 6. Articulated buses need drive-through stops (as all
+  articulated road vehicles do). Boarding speed comes from the doors.
+- Drawn in two company colours (body in the first, roof and window pillars
+  in the second; with the default livery both are the company colour), air-
+  con on diesel roofs, battery packs on electric ones; 8 directions, rendered
+  from boxes like the street life (`street_life_sprites.py`, sprites 79-190
+  of `city.png`). The purchase list shows them right after the original
+  buses, with a doors and boarding line and the battery and today's range.
+
+Batteries:
+
+- A tile counts as about 2 km: a 12 m bus uses 2.2 kWh a tile, so a new
+  battery lasts about 150-170 tiles. Air-con and heating add: sub-tropic
+  +20% all year, temperate +10% June-August and +15% December-February,
+  sub-arctic +25% November-March and +5% otherwise.
+- Batteries fade 2% a year of age, down to 60%.
+- Below 25% a bus heads for a depot not far out of its way (four times the
+  service detour), unless it is loading. A flat battery makes it crawl at
+  15 km/h to the nearest depot, with a news message.
+- In a depot a bus charges 90 kWh a day (a 12 m bus from 25% to 95% in about
+  three days) and leaves at 95%; its status reads "Charging: 72%". The
+  vehicle details show charge, size, health, tiles left and air-con or
+  heating. Charging bays and chargers at end stops come with part 6.
+- Towns add up to 10 quality points to tenders for electric lines, and lines
+  at least half electric get 8-year contracts instead of 5 (part 4's "longer
+  e-bus terms"; e-bus quotas are left for later).
+
+Saves and NewGRFs:
+
+- The city buses are kept in the engine map under their own pseudo NewGRF ID
+  (`\xFFCTY`, local ids 88-101), so a NewGRF vehicle set's vehicles 88+ are new
+  engines as before and can't take over the city buses (vehicles 0-87 still
+  replace the original ones, as in OpenTTD). New games put them after the
+  256 original engines, which keep their ids; older saves get them appended
+  after their last engine on load and started then (models already
+  introduced are available at once).
+- Battery charge is saved in chunk BATT, by vehicle. `RoadVehicleInfo` cost
+  and running cost factors are 16 bits now (the big buses need more than 255).
+- Script API: `ScriptEngine.GetBatteryCapacity`, `ScriptVehicle.GetBatteryCharge`,
+  `GetBatteryHealth`, `ScriptOrder.GetLineContractEnd`.
+- Code: `src/city_bus.{h,cpp}`, engine tables in `src/table/engines.h`,
+  `src/saveload/city_bus_sl.cpp`; hooks in `engine.cpp`, `saveload/engine_sl.cpp`,
+  `newgrf.cpp`, `newgrf_engine.cpp`, `articulated_vehicles.cpp`, `roadveh_cmd.cpp`,
+  `roadveh_gui.cpp`, `vehicle_gui.cpp`, `build_vehicle_gui.cpp`, `transit_authority.cpp`.
+
+Tests (test AI BusTest; save `city-bus-demo.csav`):
+
+- 99/99 unit tests; vanilla 15.3 and 14.1, bundled and fork demo saves load,
+  save and reload. In the vanilla saves (mid-1995) the Tanjung Minibus,
+  Seri M9 and Kenari City 12 are on sale at once, as engines 256-258.
+- A test NewGRF with road vehicles 0, 88 and 89: vehicle 0 takes over the
+  MPS Regal as in OpenTTD, 88 and 89 become new engines, all city buses stay
+  (dynamic engines on and off), also after saving and loading.
+- 2020 game, one of each bus on a 16-tile town line: electric buses lost
+  about 18% per 20 days, went to the depot below 25% (lowest 12%), charged in
+  about 3-4 days and spent 4-8% of their time there; health 97% after 1.5
+  years. Without a depot for 250 days they ran flat after 90-130 days,
+  crawled at 15 km/h and recovered once the depot was back.
+- Tenders: an all-electric line won an 8-year contract (2021-08 to 2029-07),
+  a line with 6 of 13 buses electric a 5-year one.
+
 ## Roadmap
 
 Sizes are rough: S = one session, M = a few, L = many, XL = a project in itself.

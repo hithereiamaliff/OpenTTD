@@ -13,9 +13,11 @@
 //   40:    icon: network map of lines
 //   41-72: street life vehicles: car, van, lorry, motorbike; 8 directions each
 //   73-78: street life people: light and dark skin; walking (two steps) and standing
+//   79-190: city buses, 8 directions each: minibus, midibus, 12 m, double-deck, articulated front and rear;
+//           the same electric; BRT front and rear
 //
    -1 * 0	 0C "City fork graphics"
-   -1 * 3	 05 1C 4F
+   -1 * 3	 05 1C BF
    -1 sprites/city.png 8bpp    4    4   4  17   -1  -16 normal
    -1 sprites/city.png 8bpp   12    4   4  17   -1  -16 normal
    -1 sprites/city.png 8bpp   20    4   4  17   -1  -16 normal
@@ -95,3 +97,115 @@
    -1 sprites/city.png 8bpp   22  276   3   7   -1   -7 normal
    -1 sprites/city.png 8bpp   28  276   3   7   -1   -7 normal
    -1 sprites/city.png 8bpp   34  276   3   7   -1   -7 normal
+   -1 sprites/city.png 8bpp    4  290   8  14   -4  -10 normal
+   -1 sprites/city.png 8bpp   32  290  18  15   -9  -10 normal
+   -1 sprites/city.png 8bpp   60  290  18  11   -9   -8 normal
+   -1 sprites/city.png 8bpp   88  290  18  15   -9  -10 normal
+   -1 sprites/city.png 8bpp  116  290   8  14   -4  -10 normal
+   -1 sprites/city.png 8bpp  144  290  18  15   -9  -10 normal
+   -1 sprites/city.png 8bpp  172  290  18  11   -9   -8 normal
+   -1 sprites/city.png 8bpp  200  290  18  15   -9  -10 normal
+   -1 sprites/city.png 8bpp  228  290  10  16   -5  -11 normal
+   -1 sprites/city.png 8bpp  256  290  20  16  -10  -11 normal
+   -1 sprites/city.png 8bpp  284  290  20  11  -10   -8 normal
+   -1 sprites/city.png 8bpp  312  290  20  16  -10  -11 normal
+   -1 sprites/city.png 8bpp  340  290  10  16   -5  -11 normal
+   -1 sprites/city.png 8bpp  368  290  20  16  -10  -11 normal
+   -1 sprites/city.png 8bpp  396  290  20  11  -10   -8 normal
+   -1 sprites/city.png 8bpp  424  290  20  16  -10  -11 normal
+   -1 sprites/city.png 8bpp    4  313  10  18   -5  -12 normal
+   -1 sprites/city.png 8bpp   32  313  24  18  -12  -12 normal
+   -1 sprites/city.png 8bpp   60  313  26  12  -13   -9 normal
+   -1 sprites/city.png 8bpp   88  313  24  18  -12  -12 normal
+   -1 sprites/city.png 8bpp  116  313  10  18   -5  -12 normal
+   -1 sprites/city.png 8bpp  144  313  24  18  -12  -12 normal
+   -1 sprites/city.png 8bpp  172  313  26  12  -13   -9 normal
+   -1 sprites/city.png 8bpp  200  313  24  18  -12  -12 normal
+   -1 sprites/city.png 8bpp  228  313  10  20   -5  -14 normal
+   -1 sprites/city.png 8bpp  256  313  24  20  -12  -14 normal
+   -1 sprites/city.png 8bpp  284  313  26  13  -13  -10 normal
+   -1 sprites/city.png 8bpp  312  313  24  20  -12  -14 normal
+   -1 sprites/city.png 8bpp  340  313  10  20   -5  -14 normal
+   -1 sprites/city.png 8bpp  368  313  24  20  -12  -14 normal
+   -1 sprites/city.png 8bpp  396  313  26  13  -13  -10 normal
+   -1 sprites/city.png 8bpp  424  313  24  20  -12  -14 normal
+   -1 sprites/city.png 8bpp    4  336  10  16   -5  -11 normal
+   -1 sprites/city.png 8bpp   32  336  19  16   -9  -11 normal
+   -1 sprites/city.png 8bpp   60  336  20  12  -10   -9 normal
+   -1 sprites/city.png 8bpp   88  336  19  16   -9  -11 normal
+   -1 sprites/city.png 8bpp  116  336  10  16   -5  -11 normal
+   -1 sprites/city.png 8bpp  144  336  19  16  -10  -11 normal
+   -1 sprites/city.png 8bpp  172  336  20  12  -10   -9 normal
+   -1 sprites/city.png 8bpp  200  336  19  16  -10  -11 normal
+   -1 sprites/city.png 8bpp  228  336  10  16   -5  -11 normal
+   -1 sprites/city.png 8bpp  256  336  19  16  -10  -11 normal
+   -1 sprites/city.png 8bpp  284  336  20  12  -10   -9 normal
+   -1 sprites/city.png 8bpp  312  336  19  16  -10  -11 normal
+   -1 sprites/city.png 8bpp  340  336  10  16   -5  -11 normal
+   -1 sprites/city.png 8bpp  368  336  19  16   -9  -11 normal
+   -1 sprites/city.png 8bpp  396  336  20  12  -10   -9 normal
+   -1 sprites/city.png 8bpp  424  336  19  16   -9  -11 normal
+   -1 sprites/city.png 8bpp    4  359   8  14   -4  -10 normal
+   -1 sprites/city.png 8bpp   32  359  18  15   -9  -10 normal
+   -1 sprites/city.png 8bpp   60  359  18  11   -9   -8 normal
+   -1 sprites/city.png 8bpp   88  359  18  15   -9  -10 normal
+   -1 sprites/city.png 8bpp  116  359   8  14   -4  -10 normal
+   -1 sprites/city.png 8bpp  144  359  18  15   -9  -10 normal
+   -1 sprites/city.png 8bpp  172  359  18  11   -9   -8 normal
+   -1 sprites/city.png 8bpp  200  359  18  15   -9  -10 normal
+   -1 sprites/city.png 8bpp  228  359  10  16   -5  -11 normal
+   -1 sprites/city.png 8bpp  256  359  20  16  -10  -11 normal
+   -1 sprites/city.png 8bpp  284  359  20  12  -10   -9 normal
+   -1 sprites/city.png 8bpp  312  359  20  16  -10  -11 normal
+   -1 sprites/city.png 8bpp  340  359  10  16   -5  -11 normal
+   -1 sprites/city.png 8bpp  368  359  20  16  -10  -11 normal
+   -1 sprites/city.png 8bpp  396  359  20  12  -10   -9 normal
+   -1 sprites/city.png 8bpp  424  359  20  16  -10  -11 normal
+   -1 sprites/city.png 8bpp    4  382  10  18   -5  -12 normal
+   -1 sprites/city.png 8bpp   32  382  24  18  -12  -12 normal
+   -1 sprites/city.png 8bpp   60  382  26  12  -13   -9 normal
+   -1 sprites/city.png 8bpp   88  382  24  18  -12  -12 normal
+   -1 sprites/city.png 8bpp  116  382  10  19   -5  -13 normal
+   -1 sprites/city.png 8bpp  144  382  24  18  -12  -12 normal
+   -1 sprites/city.png 8bpp  172  382  26  12  -13   -9 normal
+   -1 sprites/city.png 8bpp  200  382  24  18  -12  -12 normal
+   -1 sprites/city.png 8bpp  228  382  10  20   -5  -14 normal
+   -1 sprites/city.png 8bpp  256  382  24  20  -12  -14 normal
+   -1 sprites/city.png 8bpp  284  382  26  14  -13  -11 normal
+   -1 sprites/city.png 8bpp  312  382  24  20  -12  -14 normal
+   -1 sprites/city.png 8bpp  340  382  10  21   -5  -15 normal
+   -1 sprites/city.png 8bpp  368  382  24  20  -12  -14 normal
+   -1 sprites/city.png 8bpp  396  382  26  14  -13  -11 normal
+   -1 sprites/city.png 8bpp  424  382  24  20  -12  -14 normal
+   -1 sprites/city.png 8bpp    4  405  10  16   -5  -11 normal
+   -1 sprites/city.png 8bpp   32  405  19  16   -9  -11 normal
+   -1 sprites/city.png 8bpp   60  405  20  12  -10   -9 normal
+   -1 sprites/city.png 8bpp   88  405  19  16   -9  -11 normal
+   -1 sprites/city.png 8bpp  116  405  10  16   -5  -11 normal
+   -1 sprites/city.png 8bpp  144  405  19  16  -10  -11 normal
+   -1 sprites/city.png 8bpp  172  405  20  12  -10   -9 normal
+   -1 sprites/city.png 8bpp  200  405  19  16  -10  -11 normal
+   -1 sprites/city.png 8bpp  228  405  10  16   -5  -11 normal
+   -1 sprites/city.png 8bpp  256  405  19  16  -10  -11 normal
+   -1 sprites/city.png 8bpp  284  405  20  12  -10   -9 normal
+   -1 sprites/city.png 8bpp  312  405  19  16  -10  -11 normal
+   -1 sprites/city.png 8bpp  340  405  10  16   -5  -11 normal
+   -1 sprites/city.png 8bpp  368  405  19  16   -9  -11 normal
+   -1 sprites/city.png 8bpp  396  405  20  12  -10   -9 normal
+   -1 sprites/city.png 8bpp  424  405  19  16   -9  -11 normal
+   -1 sprites/city.png 8bpp    4  428  10  16   -5  -11 normal
+   -1 sprites/city.png 8bpp   32  428  19  16   -9  -11 normal
+   -1 sprites/city.png 8bpp   60  428  20  12  -10   -9 normal
+   -1 sprites/city.png 8bpp   88  428  19  16   -9  -11 normal
+   -1 sprites/city.png 8bpp  116  428  10  16   -5  -11 normal
+   -1 sprites/city.png 8bpp  144  428  19  16  -10  -11 normal
+   -1 sprites/city.png 8bpp  172  428  20  12  -10   -9 normal
+   -1 sprites/city.png 8bpp  200  428  19  16  -10  -11 normal
+   -1 sprites/city.png 8bpp  228  428  10  16   -5  -11 normal
+   -1 sprites/city.png 8bpp  256  428  19  16  -10  -11 normal
+   -1 sprites/city.png 8bpp  284  428  20  12  -10   -9 normal
+   -1 sprites/city.png 8bpp  312  428  19  16  -10  -11 normal
+   -1 sprites/city.png 8bpp  340  428  10  16   -5  -11 normal
+   -1 sprites/city.png 8bpp  368  428  19  16   -9  -11 normal
+   -1 sprites/city.png 8bpp  396  428  20  12  -10   -9 normal
+   -1 sprites/city.png 8bpp  424  428  19  16   -9  -11 normal

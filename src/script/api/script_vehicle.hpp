@@ -603,6 +603,25 @@ public:
 	static SQInteger GetReliability(VehicleID vehicle_id);
 
 	/**
+	 * Get how full the battery of an electric bus is.
+	 * @param vehicle_id The vehicle to check.
+	 * @pre IsPrimaryVehicle(vehicle_id).
+	 * @return The charge in percent of what the battery holds now, or -1 if the vehicle has no battery.
+	 * @see ScriptEngine::GetBatteryCapacity
+	 * @api ai game
+	 */
+	static SQInteger GetBatteryCharge(VehicleID vehicle_id);
+
+	/**
+	 * Get what is left of the battery of an electric bus after fading with age (2% a year, at least 60%).
+	 * @param vehicle_id The vehicle to check.
+	 * @pre IsPrimaryVehicle(vehicle_id).
+	 * @return The battery's health in percent of its size when new, or -1 if the vehicle has no battery.
+	 * @api ai game
+	 */
+	static SQInteger GetBatteryHealth(VehicleID vehicle_id);
+
+	/**
 	 * Get the maximum allowed distance between two orders for a vehicle.
 	 * The distance returned is a vehicle-type specific distance independent from other
 	 * map distances, you may use the result of this function to compare it

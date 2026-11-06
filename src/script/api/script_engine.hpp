@@ -277,6 +277,17 @@ public:
 	static bool IsArticulated(EngineID engine_id);
 
 	/**
+	 * Get the battery size of an electric bus. Electric buses use their battery
+	 * as they drive (more with air-con or heating), head for a depot when it runs
+	 * low and stay in a depot until it is charged; batteries fade with age.
+	 * @param engine_id The engine to check.
+	 * @pre IsValidEngine(engine_id).
+	 * @return The battery size when new in kWh, or 0 if the engine has no battery.
+	 * @api ai game
+	 */
+	static SQInteger GetBatteryCapacity(EngineID engine_id);
+
+	/**
 	 * Get the PlaneType of the engine.
 	 * @param engine_id The engine to get the PlaneType of.
 	 * @pre IsValidEngine(engine_id).

@@ -957,6 +957,7 @@ STR_NEWS_VEHICLE_IS_GETTING_VERY_OLD                            :{WHITE}{VEHICLE
 STR_NEWS_VEHICLE_IS_GETTING_VERY_OLD_AND                        :{WHITE}{VEHICLE} is getting very old and urgently needs replacing
 STR_NEWS_TRAIN_IS_STUCK                                         :{WHITE}{VEHICLE} can't find a path to continue
 STR_NEWS_VEHICLE_IS_LOST                                        :{WHITE}{VEHICLE} is lost
+STR_NEWS_VEHICLE_BATTERY_FLAT                                   :{WHITE}{VEHICLE} has run its battery flat and crawls to a depot to charge
 STR_NEWS_VEHICLE_UNPROFITABLE_YEAR                              :{WHITE}{VEHICLE}'s profit last year was {CURRENCY_LONG}
 STR_NEWS_VEHICLE_UNPROFITABLE_PERIOD                            :{WHITE}{VEHICLE}'s profit last period was {CURRENCY_LONG}
 STR_NEWS_AIRCRAFT_DEST_TOO_FAR                                  :{WHITE}{VEHICLE} can't get to the next destination because it is out of range
@@ -4357,6 +4358,10 @@ STR_PURCHASE_INFO_SPEED                                         :{BLACK}Speed: {
 STR_PURCHASE_INFO_SPEED_OCEAN                                   :{BLACK}Speed on ocean: {GOLD}{VELOCITY}
 STR_PURCHASE_INFO_SPEED_CANAL                                   :{BLACK}Speed on canal/river: {GOLD}{VELOCITY}
 STR_PURCHASE_INFO_RUNNINGCOST_YEAR                              :{BLACK}Running Cost: {GOLD}{CURRENCY_LONG}/year
+STR_PURCHASE_INFO_CITY_BUS_DOORS                                :{BLACK}Doors: {GOLD}{NUM}{BLACK}, boarding {GOLD}{NUM}{BLACK} passengers at a time
+STR_PURCHASE_INFO_CITY_BUS_BATTERY                              :{BLACK}Battery: {GOLD}{NUM} kWh{BLACK}, range {GOLD}{NUM} tiles
+STR_PURCHASE_INFO_CITY_BUS_BATTERY_AIRCON                       :{BLACK}Battery: {GOLD}{NUM} kWh{BLACK}, range {GOLD}{NUM} tiles{BLACK} (air-con)
+STR_PURCHASE_INFO_CITY_BUS_BATTERY_HEATING                      :{BLACK}Battery: {GOLD}{NUM} kWh{BLACK}, range {GOLD}{NUM} tiles{BLACK} (heating)
 STR_PURCHASE_INFO_RUNNINGCOST_PERIOD                            :{BLACK}Running Cost: {GOLD}{CURRENCY_LONG}/period
 STR_PURCHASE_INFO_CAPACITY                                      :{BLACK}Capacity: {GOLD}{CARGO_LONG} {STRING}
 STR_PURCHASE_INFO_REFITTABLE                                    :(refittable)
@@ -4689,6 +4694,7 @@ STR_VEHICLE_VIEW_AIRCRAFT_STATUS_START_STOP_TOOLTIP             :{BLACK}Current 
 STR_VEHICLE_STATUS_LOADING_UNLOADING                            :{LTBLUE}Loading / Unloading
 STR_VEHICLE_STATUS_LEAVING                                      :{LTBLUE}Leaving
 STR_VEHICLE_STATUS_WAITING_UNBUNCHING                           :{LTBLUE}Waiting to unbunch
+STR_VEHICLE_STATUS_CHARGING                                     :{LTBLUE}Charging: {NUM}%
 STR_VEHICLE_STATUS_CRASHED                                      :{RED}Crashed!
 STR_VEHICLE_STATUS_BROKEN_DOWN                                  :{RED}Broken down
 STR_VEHICLE_STATUS_STOPPED                                      :{RED}Stopped
@@ -4744,6 +4750,9 @@ STR_VEHICLE_INFO_CAPACITY                                       :{BLACK}Capacity
 STR_VEHICLE_INFO_CAPACITY_CAPACITY                              :{BLACK}Capacity: {LTBLUE}{CARGO_LONG}, {CARGO_LONG}{STRING}
 
 STR_VEHICLE_INFO_FEEDER_CARGO_VALUE                             :{BLACK}Transfer Credits: {LTBLUE}{CURRENCY_LONG}
+STR_VEHICLE_DETAILS_BATTERY                                     :{BLACK}Battery: {LTBLUE}{NUM}%{BLACK} of {NUM} kWh (health {NUM}%), {NUM} tiles left
+STR_VEHICLE_DETAILS_BATTERY_AIRCON                              :{BLACK}Battery: {LTBLUE}{NUM}%{BLACK} of {NUM} kWh (health {NUM}%), {NUM} tiles left (air-con +{NUM}%)
+STR_VEHICLE_DETAILS_BATTERY_HEATING                             :{BLACK}Battery: {LTBLUE}{NUM}%{BLACK} of {NUM} kWh (health {NUM}%), {NUM} tiles left (heating +{NUM}%)
 
 STR_VEHICLE_DETAILS_SERVICING_INTERVAL_DAYS                     :{BLACK}Servicing interval: {LTBLUE}{COMMA}{NBSP}days{BLACK}   {STRING1}
 STR_VEHICLE_DETAILS_SERVICING_INTERVAL_MINUTES                  :{BLACK}Servicing interval: {LTBLUE}{COMMA}{NBSP}minute{P "" s}{BLACK}   {STRING1}
@@ -5187,12 +5196,25 @@ STR_TRANSIT_LINE_NUMBER_NAME                                    :Line {RAW_STRIN
 STR_TRANSIT_LINE_NUMBER                                         :Line {RAW_STRING}
 STR_TRANSIT_LINE_NAME                                           :{RAW_STRING}
 STR_TRANSIT_LINE_VEHICLE                                        :the line of {VEHICLE}
+
+# City fork: built-in modern buses (city_bus.cpp)
+STR_CITY_BUS_TANJUNG_MINIBUS                                    :Tanjung Minibus
+STR_CITY_BUS_SERI_M9                                            :Seri M9 Midibus
+STR_CITY_BUS_KENARI_CITY_12                                     :Kenari City 12
+STR_CITY_BUS_MERBOK_TWIN_DECKER                                 :Merbok Twin Decker
+STR_CITY_BUS_KENARI_BENDI_18                                    :Kenari Bendi 18
+STR_CITY_BUS_TANJUNG_E_MINIBUS                                  :Tanjung e-Minibus
+STR_CITY_BUS_SERI_M9E                                           :Seri M9e Midibus
+STR_CITY_BUS_KENARI_CITY_12E                                    :Kenari City 12e
+STR_CITY_BUS_MERBOK_TWIN_DECKER_E                               :Merbok Twin Decker E
+STR_CITY_BUS_KENARI_BENDI_18E                                   :Kenari Bendi 18e
+STR_CITY_BUS_LAJU_BRT_18E                                       :Laju BRT 18e
 STR_ERROR_CAN_T_BID                                             :{WHITE}Can't bid...
 STR_ERROR_CAN_T_END_CONTRACT                                    :{WHITE}Can't end the contract...
-STR_NEWS_TRANSIT_TENDER                                         :{BIG_FONT}{BLACK}{TOWN} invites tenders to run {RAW_STRING} under a 5-year contract: the town keeps the fares and pays a monthly fee. The line costs {CURRENCY_LONG} a month; bid in the town's transit window by {DATE_LONG}
-STR_NEWS_TRANSIT_TENDER_FREE                                    :{BIG_FONT}{BLACK}{TOWN} invites tenders to run {RAW_STRING} as a free line for 5 years: riders ride free and the town pays a monthly fee. The line costs {CURRENCY_LONG} a month; bid in the town's transit window by {DATE_LONG}
-STR_NEWS_TRANSIT_WON                                            :{BIG_FONT}{BLACK}{TOWN} gives its contract for {RAW_STRING} to {COMPANY}: {CURRENCY_LONG} a month for 5 years
-STR_NEWS_TRANSIT_WON_FREE                                       :{BIG_FONT}{BLACK}{TOWN} makes {RAW_STRING} a free line run by {COMPANY}: {CURRENCY_LONG} a month for 5 years
+STR_NEWS_TRANSIT_TENDER                                         :{BIG_FONT}{BLACK}{TOWN} invites tenders to run {RAW_STRING} under a 5-year contract (8 years with electric buses): the town keeps the fares and pays a monthly fee. The line costs {CURRENCY_LONG} a month; bid in the town's transit window by {DATE_LONG}
+STR_NEWS_TRANSIT_TENDER_FREE                                    :{BIG_FONT}{BLACK}{TOWN} invites tenders to run {RAW_STRING} as a free line for 5 years (8 with electric buses): riders ride free and the town pays a monthly fee. The line costs {CURRENCY_LONG} a month; bid in the town's transit window by {DATE_LONG}
+STR_NEWS_TRANSIT_WON                                            :{BIG_FONT}{BLACK}{TOWN} gives its contract for {RAW_STRING} to {COMPANY}: {CURRENCY_LONG} a month for {NUM} years
+STR_NEWS_TRANSIT_WON_FREE                                       :{BIG_FONT}{BLACK}{TOWN} makes {RAW_STRING} a free line run by {COMPANY}: {CURRENCY_LONG} a month for {NUM} years
 STR_NEWS_TRANSIT_LOST                                           :{BIG_FONT}{BLACK}{TOWN} gives its contract for {RAW_STRING} to a rival operator ({NUM}% margin, quality {NUM}) over your bid ({NUM}% margin, quality {NUM}). Your line runs on its own account
 STR_NEWS_TRANSIT_NO_BID                                         :{BIG_FONT}{BLACK}{TOWN}'s tender for {RAW_STRING} closed without a bid from its operator
 STR_NEWS_TRANSIT_EXTENDED                                       :{BIG_FONT}{BLACK}{TOWN} extends the contract for {RAW_STRING} by {NUM} years for good service

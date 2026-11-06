@@ -855,7 +855,7 @@ static void FinaliseCanals()
 static void FinaliseEngineArray()
 {
 	for (Engine *e : Engine::Iterate()) {
-		if (e->GetGRF() == nullptr) {
+		if (e->GetGRF() == nullptr && !e->IsCityEngine()) {
 			auto found = std::ranges::find(_engine_mngr.mappings[e->type], e->index, &EngineIDMapping::engine);
 			if (found == std::end(_engine_mngr.mappings[e->type]) || found->grfid != INVALID_GRFID || found->internal_id != found->substitute_id) {
 				e->info.string_id = STR_NEWGRF_INVALID_ENGINE;

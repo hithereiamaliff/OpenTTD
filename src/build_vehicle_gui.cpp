@@ -9,6 +9,7 @@
 
 #include "stdafx.h"
 #include "engine_base.h"
+#include "city_bus.h"
 #include "engine_func.h"
 #include "station_base.h"
 #include "network/network.h"
@@ -666,6 +667,21 @@ static int DrawRoadVehPurchaseInfo(int left, int right, int y, EngineID engine_n
 	/* Running cost */
 	DrawString(left, right, y, GetString(TimerGameEconomy::UsingWallclockUnits() ? STR_PURCHASE_INFO_RUNNINGCOST_PERIOD : STR_PURCHASE_INFO_RUNNINGCOST_YEAR, e->GetRunningCost()));
 	y += GetCharacterHeight(FontSize::Normal);
+
+	/* City buses: doors and boarding, and the battery of electric ones. */
+	if (const CityBusSpec *spec = GetCityBusSpec(e); spec != nullptr) {
+		const uint boarding = e->info.load_amount * (1 + CountArticulatedParts(engine_number));
+		DrawString(left, right, y, GetString(STR_PURCHASE_INFO_CITY_BUS_DOORS, spec->doors, boarding));
+		y += GetCharacterHeight(FontSize::Normal);
+
+		if (spec->battery_kwh != 0) {
+			const uint range = GetBatteryRangeTiles(engine_number, 100);
+			StringID str = STR_PURCHASE_INFO_CITY_BUS_BATTERY;
+			if (GetHvacLoadPercent() != 0) str = IsHvacHeating() ? STR_PURCHASE_INFO_CITY_BUS_BATTERY_HEATING : STR_PURCHASE_INFO_CITY_BUS_BATTERY_AIRCON;
+			DrawString(left, right, y, GetString(str, spec->battery_kwh, range));
+			y += GetCharacterHeight(FontSize::Normal);
+		}
+	}
 
 	return y;
 }

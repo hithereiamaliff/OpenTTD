@@ -11,6 +11,7 @@
 #define SCRIPT_ORDER_HPP
 
 #include "script_vehicle.hpp"
+#include "script_date.hpp"
 #include "../../order_type.h"
 
 /**
@@ -725,6 +726,14 @@ public:
 	 * @return The payment, or -1 if the line isn't under contract.
 	 */
 	static Money GetLineContractPayment(VehicleID vehicle_id);
+
+	/**
+	 * When a vehicle's line's contract ends, unless the town extends it.
+	 * Contracts run 5 years, 8 for lines run mostly with electric buses.
+	 * @param vehicle_id Any vehicle of the line.
+	 * @return The date, or ScriptDate::DATE_INVALID if the line isn't under contract.
+	 */
+	static ScriptDate::Date GetLineContractEnd(VehicleID vehicle_id);
 
 	/**
 	 * Get how many passengers got off a vehicle's line last month.

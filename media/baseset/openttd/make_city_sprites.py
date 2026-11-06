@@ -47,7 +47,7 @@ BROWN, BROWN_DARK = nearest((150, 90, 40)), nearest((90, 50, 20))
 YELLOW = nearest((252, 220, 0))
 TREE, TREE_DARK = nearest((60, 150, 40)), nearest((30, 90, 20))
 
-W, H = 512, 300
+W, H = 512, 460
 sheet = Image.new("P", (W, H), T)
 sheet.putpalette(pal)
 px = sheet.load()
@@ -662,6 +662,8 @@ GLASS, GLASS_LIT = nearest((60, 75, 100)), nearest((120, 145, 175))
 CARGO, CARGO_DARK, CARGO_TOP = nearest((205, 205, 200)), nearest((150, 150, 145)), nearest((230, 230, 225))
 CHASSIS = nearest((45, 45, 45))
 RIDER, RIDER_DARK = nearest((70, 60, 50)), nearest((40, 35, 30))
+BUS_GLASS, BUS_GLASS_LIT = nearest((35, 45, 65)), nearest((75, 95, 125))
+POD, POD_LIT, POD_TOP = nearest((130, 130, 135)), nearest((175, 175, 180)), nearest((210, 210, 215))
 
 
 def vehicle_colour(role, face, light):
@@ -680,6 +682,14 @@ def vehicle_colour(role, face, light):
         return BLACK
     if base == 'rider':
         return RIDER if light >= 0.9 else RIDER_DARK
+    if base == 'cc2':  # second company colour (the buses use two)
+        if face == 'top':
+            return 0x56
+        return 0x55 if light >= 0.95 else (0x54 if light >= 0.8 else 0x52)
+    if base == 'bus_glass':
+        return BUS_GLASS_LIT if light >= 0.9 else BUS_GLASS
+    if base == 'pod':
+        return POD_TOP if face == 'top' else (POD_LIT if light >= 0.9 else POD)
     return 0xCA
 
 
@@ -710,6 +720,19 @@ for skin_index, skin in enumerate(SKINS):
         sprites.append((x0, y0, 3, 7, -1, -7, f"person {skin_index} {frame}"))
 
 assert len(sprites) == 79, len(sprites)
+
+# City buses (built-in road vehicles), 8 directions each in OpenTTD's Direction order;
+# bodies in the first company colour, roofs in the second (the engines use two company colours).
+for kind in SL.BUSES:
+    for d in range(8):
+        slot = len(sprites) - 79
+        img, ox, oy = SL.rasterise(SL.render_sorted(kind, d), vehicle_colour, None, None)
+        x0, y0 = 4 + (slot % 16) * 28, 290 + (slot // 16) * 23
+        assert img.width <= 27 and img.height <= 22, (kind, d, img.size)
+        sheet.paste(img, (x0, y0), img.point(lambda c: 255 if c else 0, '1'))
+        sprites.append((x0, y0, img.width, img.height, -ox, -oy, f"{kind} {d}"))
+
+assert len(sprites) == 191, len(sprites)
 sheet.save(f"{SRC}/city.png", optimize=True)
 
 header = """// This file is part of OpenTTD.
@@ -727,6 +750,8 @@ header = """// This file is part of OpenTTD.
 //   40:    icon: network map of lines
 //   41-72: street life vehicles: car, van, lorry, motorbike; 8 directions each
 //   73-78: street life people: light and dark skin; walking (two steps) and standing
+//   79-190: city buses, 8 directions each: minibus, midibus, 12 m, double-deck, articulated front and rear;
+//           the same electric; BRT front and rear
 //
    -1 * 0\t 0C "City fork graphics"
    -1 * 3\t 05 1C %02X

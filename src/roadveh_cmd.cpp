@@ -10,6 +10,7 @@
 #include "stdafx.h"
 #include "bridge.h"
 #include "roadveh.h"
+#include "city_bus.h"
 #include "command_func.h"
 #include "error_func.h"
 #include "news_func.h"
@@ -43,6 +44,7 @@
 #include "road_junction.h"
 #include "town_traffic.h"
 
+#include "table/sprites.h"
 #include "table/strings.h"
 
 #include "safeguards.h"
@@ -55,8 +57,13 @@ static const uint16_t _roadveh_images[] = {
 	0xCB4, 0xCBC, 0xD94, 0xD9C, 0xDA4, 0xDAC, 0xDB4, 0xDBC,
 	0xDCC, 0xDD4, 0xDE4, 0xDDC, 0xDEC, 0xDC4, 0xDDC, 0xDE4,
 	0xE2C, 0xE34, 0xE3C, 0xC14, 0xC1C, 0xC2C, 0xC3C, 0xC4C,
-	0xC5C, 0xC64, 0xC6C, 0xC74, 0xC84, 0xC94, 0xCA4
+	0xC5C, 0xC64, 0xC6C, 0xC74, 0xC84, 0xC94, 0xCA4,
+	/* City fork buses (city.png): minibus, midibus, 12 m, double-deck, articulated front and rear; electric versions; BRT front and rear. */
+	SPR_CITY_BUSES +   0, SPR_CITY_BUSES +   8, SPR_CITY_BUSES +  16, SPR_CITY_BUSES +  24, SPR_CITY_BUSES +  32, SPR_CITY_BUSES +  40,
+	SPR_CITY_BUSES +  48, SPR_CITY_BUSES +  56, SPR_CITY_BUSES +  64, SPR_CITY_BUSES +  72, SPR_CITY_BUSES +  80, SPR_CITY_BUSES +  88,
+	SPR_CITY_BUSES +  96, SPR_CITY_BUSES + 104,
 };
+static_assert(SPR_CITY_BUSES + 111 <= UINT16_MAX);
 
 static const uint16_t _roadveh_full_adder[] = {
 	 0,  88,   0,   0,   0,   0,  48,  48,
@@ -66,7 +73,9 @@ static const uint16_t _roadveh_full_adder[] = {
 	16,  16,   0,  88,   0,   0,   0,   0,
 	48,  48,  48,  48,   0,   0,  64,  64,
 	 0,  16,  16,   0,   8,   8,   8,   8,
-	 0,   0,   0,   8,   8,   8,   8
+	 0,   0,   0,   8,   8,   8,   8,
+	 0,   0,   0,   0,   0,   0,   0,   0,
+	 0,   0,   0,   0,   0,   0,
 };
 static_assert(lengthof(_roadveh_images) == lengthof(_roadveh_full_adder));
 
@@ -335,6 +344,7 @@ CommandCost CmdBuildRoadVehicle(DoCommandFlags flags, TileIndex tile, const Engi
 			u->InvalidateNewGRFCache();
 		}
 		RoadVehUpdateCache(v);
+		InitBattery(v);
 		/* Initialize cached values for realistic acceleration. */
 		if (_settings_game.vehicle.roadveh_acceleration_model != AccelerationModel::Original) v->CargoChanged();
 
@@ -492,6 +502,9 @@ inline int RoadVehicle::GetCurrentMaxSpeed() const
 
 	/* Town traffic: everyone crawls along congested roads. */
 	max_speed = std::min(max_speed, GetRoadCongestionSpeedLimit(this->tile));
+
+	/* An electric bus with a flat battery crawls to a depot. */
+	if (this->battery_charge == 0 && IsBatteryFlat(this)) max_speed = std::min<int>(max_speed, FLAT_BATTERY_SPEED);
 
 	return std::min(max_speed, this->current_order.GetMaxSpeed() * 2);
 }
@@ -1610,6 +1623,8 @@ static bool RoadVehController(RoadVehicle *v)
 	if (v->IsInDepot()) {
 		/* Check if we should wait here for unbunching. */
 		if (v->IsWaitingForUnbunching()) return true;
+		/* Electric buses charge before they leave. */
+		if (IsChargingInDepot(v)) return true;
 		if (RoadVehLeaveDepot(v, true)) return true;
 	}
 
@@ -1620,6 +1635,7 @@ static bool RoadVehController(RoadVehicle *v)
 
 	int adv_spd = v->GetAdvanceDistance();
 	bool blocked = false;
+	uint steps = 0;
 	while (j >= adv_spd) {
 		j -= adv_spd;
 
@@ -1631,6 +1647,7 @@ static bool RoadVehController(RoadVehicle *v)
 			}
 		}
 		if (blocked) break;
+		steps++;
 
 		/* Determine distance to next map position */
 		adv_spd = v->GetAdvanceDistance();
@@ -1638,6 +1655,9 @@ static bool RoadVehController(RoadVehicle *v)
 		/* Test for a collision, but only if another movement will occur. */
 		if (j >= adv_spd && RoadVehCheckTrainCrash(v)) break;
 	}
+
+	/* Electric buses use their battery as they drive. */
+	if (steps != 0 && v->battery_charge != 0) UseBattery(v, steps);
 
 	v->SetLastSpeed();
 
@@ -1725,6 +1745,35 @@ static void CheckIfRoadVehNeedsService(RoadVehicle *v)
 	SetWindowWidgetDirty(WindowClass::VehicleView, v->index, WID_VV_START_STOP);
 }
 
+/**
+ * Look after the battery of an electric bus, once a day: charge it in a depot,
+ * and send the bus to a depot when it runs low.
+ * @param v The bus (front section).
+ */
+static void CheckRoadVehBattery(RoadVehicle *v)
+{
+	if (!IsElectricBus(v)) return;
+
+	if (v->IsChainInDepot()) {
+		ChargeBatteryInDepot(v);
+		return;
+	}
+
+	if (GetBatteryPercent(v) >= BATTERY_SEEK_DEPOT_PERCENT) return;
+	if (v->current_order.IsType(OT_GOTO_DEPOT) || v->current_order.IsType(OT_LOADING)) return;
+
+	/* A bus running low looks for a depot not far out of its way; with a flat battery any depot will do. */
+	const bool flat = IsBatteryFlat(v);
+	const uint max_penalty = flat ? 0 : _settings_game.pf.yapf.maximum_go_to_depot_penalty * 4;
+	FindDepotData rfdd = FindClosestRoadDepot(v, max_penalty);
+	if (rfdd.best_length == UINT_MAX || (!flat && rfdd.best_length > max_penalty)) return;
+
+	v->gv_flags.Set(GroundVehicleFlag::SuppressImplicitOrders);
+	v->current_order.MakeGoToDepot(GetDepotIndex(rfdd.tile), OrderDepotTypeFlag::Service);
+	v->SetDestTile(rfdd.tile);
+	SetWindowWidgetDirty(WindowClass::VehicleView, v->index, WID_VV_START_STOP);
+}
+
 /** Calender day handler */
 void RoadVehicle::OnNewCalendarDay()
 {
@@ -1742,6 +1791,7 @@ void RoadVehicle::OnNewEconomyDay()
 	if (this->blocked_ctr == 0) CheckVehicleBreakdown(this);
 
 	CheckIfRoadVehNeedsService(this);
+	CheckRoadVehBattery(this);
 
 	CheckOrders(this);
 

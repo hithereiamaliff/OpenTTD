@@ -17,6 +17,7 @@
 #include "../../engine_base.h"
 #include "../../engine_func.h"
 #include "../../articulated_vehicles.h"
+#include "../../city_bus.h"
 #include "../../engine_cmd.h"
 
 #include "table/strings.h"
@@ -266,6 +267,13 @@
 	if (GetVehicleType(engine_id) != ScriptVehicle::VT_ROAD && GetVehicleType(engine_id) != ScriptVehicle::VT_RAIL) return false;
 
 	return IsArticulatedEngine(engine_id);
+}
+
+/* static */ SQInteger ScriptEngine::GetBatteryCapacity(EngineID engine_id)
+{
+	if (!IsValidEngine(engine_id)) return -1;
+
+	return ::GetBatteryCapacityKwh(engine_id);
 }
 
 /* static */ ScriptAirport::PlaneType ScriptEngine::GetPlaneType(EngineID engine_id)

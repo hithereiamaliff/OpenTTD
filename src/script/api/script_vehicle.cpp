@@ -18,6 +18,7 @@
 #include "../../strings_func.h"
 #include "../../command_func.h"
 #include "../../roadveh.h"
+#include "../../city_bus.h"
 #include "../../train.h"
 #include "../../vehicle_func.h"
 #include "../../aircraft.h"
@@ -478,6 +479,24 @@
 
 	const Vehicle *v = ::Vehicle::Get(vehicle_id);
 	return ::ToPercent16(v->reliability);
+}
+
+/* static */ SQInteger ScriptVehicle::GetBatteryCharge(VehicleID vehicle_id)
+{
+	if (!IsPrimaryVehicle(vehicle_id)) return -1;
+
+	const Vehicle *v = ::Vehicle::Get(vehicle_id);
+	if (v->type != ::VehicleType::Road || !::IsElectricBus(::RoadVehicle::From(v))) return -1;
+	return ::GetBatteryPercent(::RoadVehicle::From(v));
+}
+
+/* static */ SQInteger ScriptVehicle::GetBatteryHealth(VehicleID vehicle_id)
+{
+	if (!IsPrimaryVehicle(vehicle_id)) return -1;
+
+	const Vehicle *v = ::Vehicle::Get(vehicle_id);
+	if (v->type != ::VehicleType::Road || !::IsElectricBus(::RoadVehicle::From(v))) return -1;
+	return ::GetBatteryHealthPercent(::RoadVehicle::From(v));
 }
 
 /* static */ SQInteger ScriptVehicle::GetMaximumOrderDistance(VehicleID vehicle_id)
