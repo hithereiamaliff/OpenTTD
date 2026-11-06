@@ -791,6 +791,12 @@ enum class WindowClass : uint16_t {
 	 */
 	DepotYard,
 
+	/**
+	 * Bus priority toolbar; %Window numbers:
+	 *   - 0 = #BusPriorityWidgets
+	 */
+	BusPriority,
+
 	Invalid = 0xFFFF, ///< Invalid window.
 };
 

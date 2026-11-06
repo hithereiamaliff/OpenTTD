@@ -90,6 +90,8 @@ struct TrafficLightWindow : Window {
 		bool can_change = CanChange(*tl);
 		this->SetWidgetLoweredState(WID_TL_MODE_SMART, !fixed);
 		this->SetWidgetLoweredState(WID_TL_MODE_FIXED, fixed);
+		this->SetWidgetLoweredState(WID_TL_BUS_PRIORITY, tl->bus_priority);
+		this->SetWidgetDisabledState(WID_TL_BUS_PRIORITY, !can_change);
 		this->SetWidgetsDisabledState(!can_change, WID_TL_MODE_SMART, WID_TL_MODE_FIXED,
 				WID_TL_GREEN_X_DECREASE, WID_TL_GREEN_X_INCREASE, WID_TL_GREEN_Y_DECREASE, WID_TL_GREEN_Y_INCREASE);
 		this->SetWidgetsDisabledState(!can_change || fixed, WID_TL_MIN_GREEN_DECREASE, WID_TL_MIN_GREEN_INCREASE);
@@ -205,6 +207,11 @@ struct TrafficLightWindow : Window {
 		const TrafficLight *tl = this->GetLights();
 		if (tl == nullptr || !CanChange(*tl)) return;
 
+		if (widget == WID_TL_BUS_PRIORITY) {
+			Command<Commands::SetTrafficLightBusPriority>::Post(STR_ERROR_CAN_T_CHANGE_BUS_SIGNAL, this->tile, !tl->bus_priority);
+			return;
+		}
+
 		const int step = _ctrl_pressed ? TRAFFIC_LIGHT_STEP * 10 : TRAFFIC_LIGHT_STEP;
 		TrafficLightMode mode = tl->mode;
 		int green_x = tl->green_x;
@@ -250,6 +257,7 @@ static constexpr std::initializer_list<NWidgetPart> _nested_traffic_light_widget
 				NWidget(WWT_TEXTBTN, Colours::Grey, WID_TL_MODE_SMART), SetFill(1, 0), SetStringTip(STR_TRAFFIC_LIGHT_MODE_SMART, STR_TRAFFIC_LIGHT_MODE_SMART_TOOLTIP),
 				NWidget(WWT_TEXTBTN, Colours::Grey, WID_TL_MODE_FIXED), SetFill(1, 0), SetStringTip(STR_TRAFFIC_LIGHT_MODE_FIXED, STR_TRAFFIC_LIGHT_MODE_FIXED_TOOLTIP),
 			EndContainer(),
+			NWidget(WWT_TEXTBTN, Colours::Grey, WID_TL_BUS_PRIORITY), SetFill(1, 0), SetStringTip(STR_TRAFFIC_LIGHT_BUS_PRIORITY, STR_TRAFFIC_LIGHT_BUS_PRIORITY_TOOLTIP),
 			NWidget(NWID_HORIZONTAL), SetPIP(0, WidgetDimensions::unscaled.hsep_normal, 0),
 				NWidget(WWT_PUSHARROWBTN, Colours::Grey, WID_TL_GREEN_X_DECREASE), SetArrowWidgetTypeTip(ArrowWidgetType::Decrease, STR_TRAFFIC_LIGHT_DECREASE_TOOLTIP),
 				NWidget(WWT_PUSHARROWBTN, Colours::Grey, WID_TL_GREEN_X_INCREASE), SetArrowWidgetTypeTip(ArrowWidgetType::Increase, STR_TRAFFIC_LIGHT_INCREASE_TOOLTIP),

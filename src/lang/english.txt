@@ -516,6 +516,7 @@ STR_RAIL_MENU_MAGLEV_CONSTRUCTION                               :Maglev construc
 # Road construction menu
 STR_ROAD_MENU_ROAD_CONSTRUCTION                                 :Road construction
 STR_ROAD_MENU_TRAM_CONSTRUCTION                                 :Tramway construction
+STR_ROAD_MENU_BUS_ROAD_CONSTRUCTION                             :Bus-only road construction
 
 # Waterways construction menu
 STR_WATERWAYS_MENU_WATERWAYS_CONSTRUCTION                       :Waterways construction
@@ -3019,6 +3020,7 @@ STR_BRIDGE_TUBULAR_SILICON                                      :Tubular, Silico
 # Road construction toolbar
 STR_ROAD_TOOLBAR_ROAD_CONSTRUCTION_CAPTION                      :{WHITE}Road Construction
 STR_ROAD_TOOLBAR_TRAM_CONSTRUCTION_CAPTION                      :{WHITE}Tramway Construction
+STR_ROAD_TOOLBAR_BUS_ROAD_CONSTRUCTION_CAPTION                  :{WHITE}Bus-only Road Construction
 STR_ROAD_TOOLBAR_TOOLTIP_BUILD_ROAD_SECTION                     :{BLACK}Build road section. Ctrl+Click to remove road section. Also press Shift to show cost estimate only
 STR_ROAD_TOOLBAR_TOOLTIP_BUILD_TRAMWAY_SECTION                  :{BLACK}Build tramway section. Ctrl+Click to remove tramway section. Also press Shift to show cost estimate only
 STR_ROAD_TOOLBAR_TOOLTIP_BUILD_AUTOROAD                         :{BLACK}Build road section using the Autoroad mode. Ctrl+Click to remove road section. Also press Shift to show cost estimate only
@@ -3034,6 +3036,12 @@ STR_ROAD_TOOLBAR_TOOLTIP_BUILD_CARGO_TRAM_STATION               :{BLACK}Build fr
 STR_ROAD_TOOLBAR_TOOLTIP_TOGGLE_ONE_WAY_ROAD                    :{BLACK}Activate/Deactivate one way roads
 STR_ROAD_TOOLBAR_TOOLTIP_TRAFFIC_OVERLAY                        :{BLACK}Show road traffic: colour roads by how much traffic is held up there (green flows, yellow some waiting, orange slow, red jammed)
 STR_ROAD_TOOLBAR_TOOLTIP_BUILD_STOP_CHARGER                     :{BLACK}Build a fast charger over a bus stop: electric buses top up while they stand there, and one below 40% waits until it gets there. Ctrl+Click removes the charger
+STR_ROAD_TOOLBAR_TOOLTIP_BUS_PRIORITY                           :{BLACK}Bus priority: bus lanes, give-way markings at stops and bus signals at traffic lights. Bus-only roads are a road type of their own (road construction menu)
+STR_BUS_PRIORITY_CAPTION                                        :{WHITE}Bus Priority
+STR_BUS_PRIORITY_LANE_TOOLTIP                                   :{BLACK}Paint bus lanes, all day: drag along a road. Buses drive past town traffic at full speed; the other traffic, a lane short, is slower. Ctrl+Drag removes bus lanes
+STR_BUS_PRIORITY_LANE_PEAK_TOOLTIP                              :{BLACK}Paint bus lanes for the peak hours: drag along a road. Buses get through town traffic faster (two congestion levels less), and the other traffic keeps its lanes. Ctrl+Drag removes bus lanes
+STR_BUS_PRIORITY_GIVE_WAY_TOOLTIP                               :{BLACK}Paint give-way markings at a bus stop: buses pull out of the stop ahead of the queue, as town traffic gives way to them on the roads next to it. Ctrl+Click removes them
+STR_BUS_PRIORITY_BUS_SIGNAL_TOOLTIP                             :{BLACK}Give traffic lights bus signals: buses get green a moment before the rest of the traffic; smart lights also turn green early for a waiting bus and stay green for a bus about to cross. Click a junction with traffic lights; Ctrl+Click switches the bus signals off
 STR_ROAD_TOOLBAR_TOOLTIP_BUILD_TRAFFIC_LIGHTS                   :{BLACK}Build traffic lights at a road junction, or click lights to change their timings. Ctrl+Click to remove them. Also press Shift to show cost estimate only
 
 # Zoning toolbar
@@ -3070,6 +3078,8 @@ STR_TRAFFIC_LIGHT_MODE_SMART                                    :{BLACK}Smart
 STR_TRAFFIC_LIGHT_MODE_SMART_TOOLTIP                            :{BLACK}Stay green while traffic keeps coming, and switch when vehicles wait on the other road
 STR_TRAFFIC_LIGHT_MODE_FIXED                                    :{BLACK}Fixed time
 STR_TRAFFIC_LIGHT_MODE_FIXED_TOOLTIP                            :{BLACK}Switch on a fixed cycle, whether vehicles wait or not. Give neighbouring lights the same cycle and suitable offsets for a green wave
+STR_TRAFFIC_LIGHT_BUS_PRIORITY                                  :Bus signals
+STR_TRAFFIC_LIGHT_BUS_PRIORITY_TOOLTIP                          :{BLACK}Bus signals: buses get green a moment before the rest of the traffic; smart lights also turn green early for a waiting bus and stay green for a bus about to cross
 STR_TRAFFIC_LIGHT_LONGEST_GREEN_X                               :{BLACK}Longest green, north-east/south-west road: {ORANGE}{DECIMAL}{NBSP}s
 STR_TRAFFIC_LIGHT_LONGEST_GREEN_Y                               :{BLACK}Longest green, north-west/south-east road: {ORANGE}{DECIMAL}{NBSP}s
 STR_TRAFFIC_LIGHT_GREEN_X                                       :{BLACK}Green, north-east/south-west road: {ORANGE}{DECIMAL}{NBSP}s
@@ -3097,6 +3107,7 @@ STR_ROAD_TOOLBAR_TOOLTIP_CONVERT_TRAM                           :{BLACK}Convert/
 
 STR_ROAD_NAME_ROAD                                              :Road
 STR_ROAD_NAME_TRAM                                              :Tramway
+STR_ROAD_NAME_BUS_ONLY                                          :Bus-only road
 
 # Road depot construction window
 STR_BUILD_DEPOT_ROAD_ORIENTATION_CAPTION                        :{WHITE}Road Depot Orientation
@@ -3309,6 +3320,9 @@ STR_LAND_AREA_INFORMATION_CITY_SERVICE                          :{BLACK}Reaches:
 STR_LAND_AREA_INFORMATION_DEPOT_YARD                            :{BLACK}Depot yard of: {LTBLUE}{DEPOT}{BLACK}; upkeep {CURRENCY_LONG} a year
 STR_LAND_AREA_INFORMATION_DEPOT_YARD_NONE                       :{BLACK}Depot yard of: {LTBLUE}no depot{BLACK} (not next to one); upkeep {CURRENCY_LONG} a year
 STR_LAND_AREA_INFORMATION_STOP_CHARGER                          :{BLACK}Charger for electric buses: {LTBLUE}{NUM} kWh a day{BLACK}; upkeep {CURRENCY_LONG} a year
+STR_LAND_AREA_INFORMATION_BUS_LANE                              :{BLACK}Bus lane: {LTBLUE}all day{BLACK}: buses pass town traffic, other traffic is slower
+STR_LAND_AREA_INFORMATION_BUS_LANE_PEAK                         :{BLACK}Bus lane: {LTBLUE}peak hours{BLACK}: buses get through town traffic faster
+STR_LAND_AREA_INFORMATION_GIVE_WAY                              :{BLACK}Give-way markings: {LTBLUE}buses pull out ahead of the queue
 STR_LAND_AREA_INFORMATION_CITY_SERVICES_HERE                    :{BLACK}City services here: {LTBLUE}{RAW_STRING}
 STR_LAND_AREA_INFORMATION_LANDINFO_COORDS                       :{BLACK}Coordinates: {LTBLUE}{NUM} x {NUM} x {NUM}
 STR_LAND_AREA_INFORMATION_LANDINFO_INDEX                        :{BLACK}Tile index: {LTBLUE}{NUM} ({HEX})
@@ -5702,6 +5716,17 @@ STR_ERROR_CAN_T_BUILD_STOP_CHARGER                              :{WHITE}Can't bu
 STR_ERROR_CAN_T_REMOVE_STOP_CHARGER                             :{WHITE}Can't remove the charger here...
 STR_ERROR_STOP_CHARGER_BUS_STOP_ONLY                            :{WHITE}... chargers go over bus stops
 STR_ERROR_STOP_CHARGER_NONE                                     :{WHITE}... there is no charger here
+STR_ERROR_CAN_T_BUILD_BUS_LANE                                  :{WHITE}Can't paint a bus lane here...
+STR_ERROR_CAN_T_REMOVE_BUS_LANE                                 :{WHITE}Can't remove the bus lane here...
+STR_ERROR_BUS_LANE_STRAIGHT_ONLY                                :{WHITE}... drag along a straight road
+STR_ERROR_BUS_LANE_ROAD_ONLY                                    :{WHITE}... bus lanes go on roads (not on bus-only roads)
+STR_ERROR_BUS_LANE_NONE                                         :{WHITE}... there is no bus lane here
+STR_ERROR_CAN_T_BUILD_GIVE_WAY                                  :{WHITE}Can't paint give-way markings here...
+STR_ERROR_CAN_T_REMOVE_GIVE_WAY                                 :{WHITE}Can't remove the give-way markings here...
+STR_ERROR_GIVE_WAY_BUS_STOP_ONLY                                :{WHITE}... they go at bus stops
+STR_ERROR_GIVE_WAY_NONE                                         :{WHITE}... there are no give-way markings here
+STR_ERROR_CAN_T_CHANGE_BUS_SIGNAL                               :{WHITE}Can't change the bus signals here...
+STR_ERROR_BUS_SIGNAL_NONE                                       :{WHITE}... these traffic lights have no bus signals
 STR_ERROR_TRAFFIC_LIGHTS_NEED_JUNCTION                          :traffic lights need a road junction
 STR_ERROR_ALREADY_HAS_TRAFFIC_LIGHTS                            :... junction already has traffic lights
 STR_ERROR_NO_TRAFFIC_LIGHTS                                     :there are no traffic lights here

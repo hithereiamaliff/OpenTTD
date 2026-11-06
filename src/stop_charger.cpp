@@ -17,6 +17,7 @@
 #include "stdafx.h"
 #include "stop_charger.h"
 #include "stop_charger_cmd.h"
+#include "bus_priority.h"
 #include "city_bus.h"
 #include "command_func.h"
 #include "company_base.h"
@@ -89,6 +90,8 @@ Money GetStopChargerYearlyUpkeep()
 void OnRoadStopRemoved(TileIndex tile)
 {
 	_stop_chargers.erase(tile);
+	/* Give-way markings go with the stop; a bus lane stays with the road. */
+	if (HasGiveWayStop(tile)) GetGiveWayStops().erase(tile);
 }
 
 /**

@@ -10,6 +10,7 @@
 /** @defgroup SnowLineGroup Snowline functions and data structures */
 
 #include "stdafx.h"
+#include "bus_priority.h"
 #include "bridge_map.h"
 #include "heightmap.h"
 #include "clear_map.h"
@@ -548,6 +549,7 @@ void DoClearSquare(TileIndex tile)
 	if (MayAnimateTile(tile)) DeleteAnimatedTile(tile, true);
 
 	bool remove = IsDockingTile(tile);
+	OnBusPriorityTileCleared(tile);
 	MakeClear(tile, ClearGround::Grass, _generating_world ? 3 : 0);
 	MarkTileDirtyByTile(tile);
 	if (remove) RemoveDockingTile(tile);

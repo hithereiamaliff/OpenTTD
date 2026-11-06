@@ -18,9 +18,11 @@
 //   191-200: depot yards: park and charging bay ground, solar roof, multi-storey park, chargers, fast chargers,
 //            substation, repair bay, wash and fuel lane, staff building
 //   201-203: charger over a bus stop (road along X, along Y), icon of the stop charger tool
+//   204-211: bus lanes (all day, peak), bus-only road, give-way markings; each for roads along X and along Y
+//   212-218: icons: bus priority, bus lane, peak bus lane, give way, bus signal; "B" lamp lit and dark
 //
    -1 * 0	 0C "City fork graphics"
-   -1 * 3	 05 1C CC
+   -1 * 3	 05 1C DB
    -1 sprites/city.png 8bpp    4    4   4  17   -1  -16 normal
    -1 sprites/city.png 8bpp   12    4   4  17   -1  -16 normal
    -1 sprites/city.png 8bpp   20    4   4  17   -1  -16 normal
@@ -225,3 +227,18 @@
    -1 sprites/city.png 8bpp  220  530  34  31  -16   -7 normal
    -1 sprites/city.png 8bpp  292  530  34  31  -16   -7 normal
    -1 sprites/city.png 8bpp  366  530  16  13    0    0 normal
+   -1 sprites/city.png 8bpp    4  600  48  24  -23    4 normal
+   -1 sprites/city.png 8bpp   76  600  48  24  -23    4 normal
+   -1 sprites/city.png 8bpp  148  600  48  24  -23    4 normal
+   -1 sprites/city.png 8bpp  220  600  48  24  -23    4 normal
+   -1 sprites/city.png 8bpp  292  600  48  24  -23    4 normal
+   -1 sprites/city.png 8bpp  364  600  48  24  -23    4 normal
+   -1 sprites/city.png 8bpp  436  600  46  22  -22    5 normal
+   -1 sprites/city.png 8bpp    4  640  46  22  -22    5 normal
+   -1 sprites/city.png 8bpp   80  640  16  10    0    0 normal
+   -1 sprites/city.png 8bpp  100  640  16  10    0    0 normal
+   -1 sprites/city.png 8bpp  120  640  16  10    0    0 normal
+   -1 sprites/city.png 8bpp  140  640  13  11    0    0 normal
+   -1 sprites/city.png 8bpp  156  640  10  11    0    0 normal
+   -1 sprites/city.png 8bpp  170  640   5   7   -2  -23 normal
+   -1 sprites/city.png 8bpp  178  640   5   7   -2  -23 normal

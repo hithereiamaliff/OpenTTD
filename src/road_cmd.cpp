@@ -18,6 +18,7 @@
 #include "pathfinder/yapf/yapf_cache.h"
 #include "depot_base.h"
 #include "depot_yard.h"
+#include "bus_priority.h"
 #include "newgrf.h"
 #include "autoslope.h"
 #include "tunnelbridge_map.h"
@@ -74,7 +75,7 @@ void ResetRoadTypes()
 	std::fill(insert, std::end(_roadtypes), RoadTypeInfo{});
 
 	_roadtypes_hidden_mask = {};
-	_roadtypes_road = {ROADTYPE_ROAD};
+	_roadtypes_road = {ROADTYPE_ROAD, ROADTYPE_BUS};
 	_roadtypes_tram = {ROADTYPE_TRAM};
 }
 
@@ -1681,6 +1682,12 @@ static void DrawTrafficLights(const TileInfo *ti, RoadBits bits)
 		int py = ti->y + y;
 		int z = (ti->tileh == SLOPE_FLAT) ? ti->z : GetSlopePixelZ(px, py);
 		AddSortableSpriteToDraw(sprite, PAL_NONE, px, py, z, {{}, {1, 1, BB_HEIGHT_UNDER_BRIDGE}, {}});
+
+		/* Bus signals: a "B" lamp on top, lit when buses may go. */
+		if (!faces_away) {
+			int bus_lamp = GetTrafficLightBusLamp(ti->tile, DiagDirToAxis(travel));
+			if (bus_lamp >= 0) AddSortableSpriteToDraw(bus_lamp > 0 ? SPR_BUS_SIGNAL_LIT : SPR_BUS_SIGNAL_DARK, PAL_NONE, px, py, z, {{}, {1, 1, BB_HEIGHT_UNDER_BRIDGE}, {}});
+		}
 	}
 }
 
@@ -1743,6 +1750,9 @@ static void DrawRoadBits(TileInfo *ti)
 			DrawGroundSpriteAt(oneway + drd.base() - 1 + ((road == ROAD_X) ? 0 : 3), PAL_NONE, 8, 8, GetPartialPixelZ(8, 8, ti->tileh));
 		}
 	}
+
+	/* Bus lanes and the red of bus-only roads. */
+	if (!HasRoadWorks(ti->tile)) DrawBusPriorityRoad(ti);
 
 	DrawRoadTrafficOverlay(ti);
 

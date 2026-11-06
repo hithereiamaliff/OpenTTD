@@ -47,7 +47,7 @@ BROWN, BROWN_DARK = nearest((150, 90, 40)), nearest((90, 50, 20))
 YELLOW = nearest((252, 220, 0))
 TREE, TREE_DARK = nearest((60, 150, 40)), nearest((30, 90, 20))
 
-W, H = 512, 600
+W, H = 512, 680
 sheet = Image.new("P", (W, H), T)
 sheet.putpalette(pal)
 px = sheet.load()
@@ -943,6 +943,145 @@ icon(366, 530, [
 ], {'K': BLACK, 'Y': YELLOW}, "icon stop charger")
 
 assert len(sprites) == 204, len(sprites)
+
+# Bus priority: ground markings for roads along X and along Y (the carriageway is
+# about 3.6 to 12.4 across, lanes about 4 wide), then toolbar icons and the "B" lamps.
+BUS_RED, BUS_RED_DARK = rgb_index((185, 45, 40)), rgb_index((150, 40, 35))
+GIVE_WAY_YELLOW = rgb_index((240, 205, 30))
+
+
+def across_along(axis, x, y):
+    """The position across the road and along it."""
+    return (y, x) if axis == 'x' else (x, y)
+
+
+def lane_fn(axis, peak):
+    def fn(x, y):
+        w, u = across_along(axis, x, y)
+        if peak and u % 2.2 >= 1.5:
+            return None
+        if 3.7 <= w <= 5.6 or 10.4 <= w <= 12.3:
+            return BUS_RED
+        if 5.6 < w <= 5.95 or 10.05 <= w < 10.4:
+            return LINE_WHITE
+        return None
+    return fn
+
+
+def bus_road_fn(axis):
+    def fn(x, y):
+        w, u = across_along(axis, x, y)
+        if not 3.7 <= w <= 12.3:
+            return None
+        if abs(w - 8) < 0.3 and u % 3.2 < 1.6:
+            return LINE_WHITE
+        return BUS_RED_DARK
+    return fn
+
+
+def give_way_fn(axis):
+    def fn(x, y):
+        w, u = across_along(axis, x, y)
+        tri = abs((u * 0.9) % 2 - 1)  # 0..1 zigzag
+        for base, sign in ((4.1, 1), (11.9, -1)):
+            if abs(w - (base + sign * 0.9 * tri)) < 0.28:
+                return GIVE_WAY_YELLOW
+        return None
+    return fn
+
+
+bus_ground = []
+for axis in ('x', 'y'):
+    bus_ground.append((lane_fn(axis, False), f"bus lane {axis}"))
+for axis in ('x', 'y'):
+    bus_ground.append((lane_fn(axis, True), f"peak bus lane {axis}"))
+for axis in ('x', 'y'):
+    bus_ground.append((bus_road_fn(axis), f"bus-only road {axis}"))
+for axis in ('x', 'y'):
+    bus_ground.append((give_way_fn(axis), f"give-way markings {axis}"))
+for i, (fn, name) in enumerate(bus_ground):
+    b = Building()
+    b.ground(fn)
+    x0, y0 = (4 + (i % 7) * 72, 600) if i < 7 else (4 + (i - 7) * 72, 640)
+    b.emit(x0, y0, name)
+
+R, W_, K_, Y_, G_ = BUS_RED, WHITE, BLACK, YELLOW, rgb_index((150, 150, 150))
+icon(80, 640, [
+    "..KKKKKKKKKKK...",
+    ".KYYYYYYYYYYYK..",
+    ".KYGGYGGYGGYYK..",
+    ".KYGGYGGYGGYYK..",
+    ".KYYYYYYYYYYYK..",
+    ".KKKKKKKKKKKKK..",
+    "..KK.......KK...",
+    "RRRRRRRRRRRRRRRR",
+    "RRRRRRRRRRRRRRRR",
+    "WWWWWWWWWWWWWWWW",
+], {'K': K_, 'Y': Y_, 'G': GLASS, 'R': R, 'W': W_}, "icon bus priority")
+icon(100, 640, [
+    "W...RRRRRR...W..",
+    "W...RRRRRR...W..",
+    "W...RRRRRR...W..",
+    "W...RRRRRR...W..",
+    "W...RRRRRR...W..",
+    "W...RRRRRR...W..",
+    "W...RRRRRR...W..",
+    "W...RRRRRR...W..",
+    "W...RRRRRR...W..",
+    "W...RRRRRR...W..",
+], {'R': R, 'W': W_}, "icon bus lane")
+icon(120, 640, [
+    "W...RRRRRR...W..",
+    "W...RRRRRR...W..",
+    "W...RRRRRR...W..",
+    "W............W..",
+    "W...RRRRRR...W..",
+    "W...RRRRRR...W..",
+    "W...RRRRRR...W..",
+    "W............W..",
+    "W...RRRRRR...W..",
+    "W...RRRRRR...W..",
+], {'R': R, 'W': W_}, "icon peak bus lane")
+icon(140, 640, [
+    "RRRRRRRRRRRRR",
+    "RRWWWWWWWWWRR",
+    ".RRWWWWWWWRR.",
+    ".RRWWWWWWWRR.",
+    "..RRWWWWWRR..",
+    "..RRWWWWWRR..",
+    "...RRWWWRR...",
+    "...RRWWWRR...",
+    "....RRWRR....",
+    ".....RRR.....",
+    "......R......",
+], {'R': rgb_index((210, 30, 30)), 'W': W_}, "icon give way")
+icon(156, 640, [
+    ".KKKKKKKK.",
+    "KKWWWWWKKK",
+    "KKWKKKKWKK",
+    "KKWKKKKWKK",
+    "KKWWWWWKKK",
+    "KKWKKKKWKK",
+    "KKWKKKKWKK",
+    "KKWWWWWKKK",
+    ".KKKKKKKK.",
+    "....KK....",
+    "....KK....",
+], {'K': K_, 'W': W_}, "icon bus signal")
+for name, letter in (("bus lamp lit", W_), ("bus lamp dark", G_)):
+    x0 = 170 if name.endswith("lit") else 178
+    put(x0, 640, [
+        "KKKKK",
+        "KLLKK",
+        "KLKLK",
+        "KLLKK",
+        "KLKLK",
+        "KLLKK",
+        "KKKKK",
+    ], {'K': K_, 'L': letter})
+    sprites.append((x0, 640, 5, 7, -2, -23, name))
+
+assert len(sprites) == 219, len(sprites)
 sheet.save(f"{SRC}/city.png", optimize=True)
 
 header = """// This file is part of OpenTTD.
@@ -965,6 +1104,8 @@ header = """// This file is part of OpenTTD.
 //   191-200: depot yards: park and charging bay ground, solar roof, multi-storey park, chargers, fast chargers,
 //            substation, repair bay, wash and fuel lane, staff building
 //   201-203: charger over a bus stop (road along X, along Y), icon of the stop charger tool
+//   204-211: bus lanes (all day, peak), bus-only road, give-way markings; each for roads along X and along Y
+//   212-218: icons: bus priority, bus lane, peak bus lane, give way, bus signal; "B" lamp lit and dark
 //
    -1 * 0\t 0C "City fork graphics"
    -1 * 3\t 05 1C %02X

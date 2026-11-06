@@ -800,6 +800,84 @@ Tests (test AI BusTest settings `yard`, `park`, `stopcharge`, `staff`; saves
 - Parked buses show on the bus parks and under the solar roof; the charger
   gantries show over the stops after saving and loading.
 
+## Done: transit part 7, bus priority
+
+Town traffic slows road vehicles on congested roads (part 2). Bus priority
+lets buses past it. A new road toolbar button (bus over a red lane, hotkey
+Y) opens the Bus Priority toolbar; Ctrl removes with every tool there.
+
+- **Bus lanes, all day** (drag along a straight road, 160 a tile): buses
+  ignore congestion on the tile; the other traffic (road vehicles and the
+  street-life cars), a lane short, is one congestion level worse. Drawn as
+  red kerbside lanes with a white line.
+- **Bus lanes, peak hours** (120 a tile): buses get two congestion levels
+  less; the other traffic keeps its lanes. Dashed red lanes. Without a city
+  clock (part 12) this averages the day: buses gain at the busy times, cars
+  lose nothing.
+- Lanes go on roads and drive-through stops (own, town or nobody's roads),
+  not on bus-only roads; they stay when a stop is built on them or removed,
+  and go when the road goes. The pathfinder takes them into account, so
+  buses prefer routes along bus lanes.
+- **Give-way markings at a stop** (400): yellow zigzags; on the roads next
+  to the stop buses ignore congestion, pulling out ahead of the queue. They
+  go with the stop.
+- **Bus signals at traffic lights** (1,000; also a toggle in the traffic
+  light window): buses get green 10 ticks before the rest of the traffic,
+  at the end of the all-red time. Smart lights also cut the other road's
+  green short for a waiting bus (after half the shortest green) and keep
+  the green for a bus up to two tiles before the junction (up to the
+  longest green), like transit signal priority. Fixed lights keep their
+  cycle, so green waves stay; only the head start applies there. A "B"
+  lamp on the posts lights up when buses may go.
+- **Bus-only roads**: a third built-in road type ("Bus-only road", label
+  CBUS) in the road construction menu; build it, or convert your own road
+  to it (town roads can't be converted to a road type towns don't build
+  houses along, as in vanilla). Only buses may use it (buses' compatible
+  road types include it; lorries route around), town traffic and
+  street-life cars stay off it, towns don't build it or houses along it.
+  Drawn as road with a red carriageway. NewGRF road types that were at its
+  index in older games are moved by the road type label map on loading.
+- Saved: lanes in chunk BLAN, give-way stops in GWAY, bus signals as a new
+  field of the traffic lights (TRFL).
+- Script API: `ScriptRoad.BuildBusLane`, `RemoveBusLane`, `GetBusLane`
+  (`BL_*`), `BuildGiveWayStop`, `HasGiveWayStop`,
+  `SetTrafficLightBusPriority`, `HasTrafficLightBusPriority`,
+  `ROADTYPE_BUS`.
+- Code: `src/bus_priority*.{h,cpp}`, `src/saveload/bus_priority_sl.cpp`; hooks
+  in `town_traffic.cpp` (congestion per vehicle), `yapf_road.cpp`,
+  `roadveh_cmd.cpp`, `road_junction.cpp`, `traffic_light*.cpp`, `road_cmd.cpp`,
+  `station_cmd.cpp`, `landscape.cpp` (DoClearSquare), `street_life.cpp`,
+  `table/roadtypes.h`, `road_gui.cpp`.
+
+Tests (test AI BusTest setting `prio`: one 16-tile line through a town
+centre with 13 buses, the same map and seed each time, 55,000 ticks, 17
+monthly samples; saves `city-prio1/2/3/6-demo.csav`,
+`city-busroad-demo.csav`):
+
+- 99/99 unit tests; the vanilla, bundled and fork demo saves load, save and
+  reload, the new ones with their lanes, markings and bus signals.
+- Congestion along the line (levels 0-7): 2 1 3 3 5 4 4 4 5 4 4 3 4 2 1.
+
+| Setup | Departures a month | Range |
+|---|---|---|
+| Nothing | 13.2 | 12-16 |
+| Bus lanes all day | 17.8 (+35%) | 12-23 |
+| Bus lanes peak hours | 16.5 (+25%) | 12-21 |
+| Give-way at both end stops | 12.5 (no gain: the end stops are on quiet roads) | 10-16 |
+| 4 smart traffic lights | 10.1 | 3-14 |
+| 4 smart traffic lights with bus signals | 13.4 (+33% on the lights) | 11-18 |
+
+- The first bus signals (head start, and switching for a waiting bus only
+  after the shortest green) gave 10.4, within the noise; cutting the green
+  short and keeping it for a bus about to cross made the difference.
+- Bus-only road: a bus bought in a depot next to it drove along it to its
+  stop; a mail lorry ordered to a lorry stop on it stayed in its depot (the
+  road in front is bus-only). Converting town road to it is refused.
+- A lane stays when its stop is removed and when a stop is built on it;
+  give-way markings go with their stop.
+- Lanes, peak lanes, give-way zigzags, the bus road and the "B" lamps
+  show in screenshots after saving and loading.
+
 ## Roadmap
 
 Sizes are rough: S = one session, M = a few, L = many, XL = a project in itself.

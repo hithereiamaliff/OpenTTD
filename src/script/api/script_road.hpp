@@ -14,6 +14,7 @@
 #include "../squirrel_helper_type.hpp"
 #include "../../station_type.h"
 #include "../../depot_yard_type.h"
+#include "../../bus_priority.h"
 
 /**
  * Class that handles all road related functions.
@@ -56,6 +57,7 @@ public:
 		/* Note: these values represent part of the in-game static values */
 		ROADTYPE_ROAD    = ::ROADTYPE_ROAD,    ///< Build road objects.
 		ROADTYPE_TRAM    = ::ROADTYPE_TRAM,    ///< Build tram objects.
+		ROADTYPE_BUS     = ::ROADTYPE_BUS,     ///< Build bus-only roads: only buses may use them, and town traffic doesn't.
 
 		/* Custom added value, only valid for this API */
 		ROADTYPE_INVALID = -1,                 ///< Invalid RoadType.
@@ -85,6 +87,13 @@ public:
 		BT_DEPOT,      ///< Build a road depot
 		BT_BUS_STOP,   ///< Build a bus stop
 		BT_TRUCK_STOP, ///< Build a truck stop
+	};
+
+	/** Bus lanes painted on roads. */
+	enum BusLane {
+		BL_NONE    = ::to_underlying(::BusLane::None),   ///< No bus lane.
+		BL_PEAK    = ::to_underlying(::BusLane::Peak),   ///< Bus lane in the peak hours: two congestion levels less for buses.
+		BL_ALL_DAY = ::to_underlying(::BusLane::AllDay), ///< Bus lane all day: buses ignore congestion, other traffic gets one level more.
 	};
 
 	/**
@@ -646,6 +655,76 @@ public:
 	 * @api ai game
 	 */
 	static bool HasStopCharger(TileIndex tile);
+
+	/**
+	 * Paint bus lanes along a straight stretch of road.
+	 * @param start One end of the stretch.
+	 * @param end The other end, in a straight line from start.
+	 * @param lane BL_ALL_DAY or BL_PEAK.
+	 * @pre ScriptMap::IsValidTile(start) && ScriptMap::IsValidTile(end).
+	 * @game @pre ScriptCompanyMode::IsValid().
+	 * @exception ScriptError::ERR_NOT_ENOUGH_CASH
+	 * @return Whether the lanes have been/can be painted.
+	 * @api ai game
+	 */
+	static bool BuildBusLane(TileIndex start, TileIndex end, BusLane lane);
+
+	/**
+	 * Remove bus lanes along a straight stretch of road.
+	 * @param start One end of the stretch.
+	 * @param end The other end, in a straight line from start.
+	 * @pre ScriptMap::IsValidTile(start) && ScriptMap::IsValidTile(end).
+	 * @game @pre ScriptCompanyMode::IsValid().
+	 * @return Whether the lanes have been/can be removed.
+	 * @api ai game
+	 */
+	static bool RemoveBusLane(TileIndex start, TileIndex end);
+
+	/**
+	 * Get the bus lane on a road tile.
+	 * @param tile The tile.
+	 * @return The lane, BL_NONE if there is none.
+	 * @api ai game
+	 */
+	static BusLane GetBusLane(TileIndex tile);
+
+	/**
+	 * Paint give-way markings at one of your bus stops: buses pull out of it ahead of the queue.
+	 * @param tile The bus stop.
+	 * @pre ScriptMap::IsValidTile(tile).
+	 * @game @pre ScriptCompanyMode::IsValid().
+	 * @return Whether the markings have been/can be painted.
+	 * @api ai game
+	 */
+	static bool BuildGiveWayStop(TileIndex tile);
+
+	/**
+	 * Does a bus stop have give-way markings?
+	 * @param tile The tile.
+	 * @return True if it has.
+	 * @api ai game
+	 */
+	static bool HasGiveWayStop(TileIndex tile);
+
+	/**
+	 * Switch the bus signals of traffic lights on or off: buses get green a moment
+	 * before the rest, and smart lights turn green early for a waiting bus.
+	 * @param tile The junction with traffic lights.
+	 * @param on Whether buses get priority.
+	 * @pre ScriptMap::IsValidTile(tile).
+	 * @game @pre ScriptCompanyMode::IsValid().
+	 * @return Whether the bus signals have been/can be changed.
+	 * @api ai game
+	 */
+	static bool SetTrafficLightBusPriority(TileIndex tile, bool on);
+
+	/**
+	 * Do traffic lights have bus signals?
+	 * @param tile The junction.
+	 * @return True if they have.
+	 * @api ai game
+	 */
+	static bool HasTrafficLightBusPriority(TileIndex tile);
 
 	/**
 	 * Builds traffic lights at a road junction (a road tile with three or four road pieces).

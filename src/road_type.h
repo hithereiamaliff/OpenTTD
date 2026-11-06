@@ -17,6 +17,7 @@ using RoadTypeLabel = Label<struct RoadTypeLabelTag>;
 
 static const RoadTypeLabel ROADTYPE_LABEL_ROAD{"ROAD"};
 static const RoadTypeLabel ROADTYPE_LABEL_TRAM{"ELRL"};
+static const RoadTypeLabel ROADTYPE_LABEL_BUS{"CBUS"}; ///< City fork's bus-only road.
 
 /**
  * The different roadtypes we support
@@ -25,6 +26,7 @@ enum RoadType : uint8_t {
 	ROADTYPE_BEGIN   = 0,    ///< Used for iterations
 	ROADTYPE_ROAD    = 0,    ///< Basic road type
 	ROADTYPE_TRAM    = 1,    ///< Trams
+	ROADTYPE_BUS     = 2,    ///< City fork: bus-only road, for buses only
 	ROADTYPE_END     = 63,   ///< Used for iterations
 	INVALID_ROADTYPE = 63,   ///< flag for invalid roadtype
 };

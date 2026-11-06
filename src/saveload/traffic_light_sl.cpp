@@ -34,6 +34,7 @@ static const SaveLoad _traffic_light_desc[] = {
 	SaveLoad::Variable<VarFileType::Bool>("clearing", SLE_OBJECT_ADDRESS(TrafficLight, clearing)),
 	SaveLoad::Variable<VarFileType::U16>("phase_ticks", SLE_OBJECT_ADDRESS(TrafficLight, phase_ticks)),
 	SaveLoad::Variable<VarFileType::U16>("gap_ticks", SLE_OBJECT_ADDRESS(TrafficLight, gap_ticks)),
+	SaveLoad::Variable<VarFileType::Bool>("bus_priority", SLE_OBJECT_ADDRESS(TrafficLight, bus_priority)),
 };
 
 /** Traffic lights at road junctions. */

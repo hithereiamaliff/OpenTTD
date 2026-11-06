@@ -53,6 +53,7 @@
 #include "tunnelbridge_cmd.h"
 #include "traffic_light_cmd.h"
 #include "stop_charger_cmd.h"
+#include "bus_priority_cmd.h"
 #include "town_zoning_cmd.h"
 #include "line_cmd.h"
 #include "fare_cmd.h"

@@ -29,6 +29,7 @@ enum TrafficLightWidgets : WidgetID {
 	WID_TL_OFFSET_INCREASE,    ///< Later in the cycle.
 	WID_TL_OFFSET,             ///< Position in the cycle of fixed lights.
 	WID_TL_STATUS,             ///< What the lights show right now.
+	WID_TL_BUS_PRIORITY,       ///< Bus signals on or off.
 };
 
 #endif /* WIDGETS_TRAFFIC_LIGHT_WIDGET_H */

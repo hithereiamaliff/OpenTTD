@@ -38,9 +38,9 @@ static constexpr uint8_t ROAD_CONGESTION_MAX = 7;
 
 void UpdateRoadCongestion(TileIndex tile, const Town *t);
 uint8_t GetTownTrafficTarget(TileIndex tile, const Town *t);
-int GetRoadCongestionSpeedLimit(TileIndex tile);
+int GetRoadCongestionSpeedLimit(TileIndex tile, bool bus = false);
 int GetRoadCongestionSpeedLimitKmh(uint8_t level);
-uint GetRoadCongestionPenalty(TileIndex tile);
+uint GetRoadCongestionPenalty(TileIndex tile, bool bus = false);
 uint GetTownCarReduction(const Town *t);
 bool TownTrafficWaitsAt(TileIndex junction, Axis axis, bool longest_green_over);
 

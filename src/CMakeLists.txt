@@ -96,6 +96,10 @@ add_files(
     bridge_map.cpp
     bridge_map.h
     bridge_type.h
+    bus_priority.cpp
+    bus_priority.h
+    bus_priority_cmd.h
+    bus_priority_gui.cpp
     build_vehicle_gui.cpp
     cachecheck.cpp
     cargo_type.h

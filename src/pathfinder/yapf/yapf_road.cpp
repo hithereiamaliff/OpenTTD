@@ -105,8 +105,8 @@ protected:
 			cost = YAPF_TILE_CORNER_LENGTH + Yapf().PfGetSettings().road_curve_penalty;
 		}
 
-		/* Roads congested with town traffic take longer. */
-		cost += GetRoadCongestionPenalty(tile);
+		/* Roads congested with town traffic take longer; less so for buses on bus lanes. */
+		cost += GetRoadCongestionPenalty(tile, Yapf().GetVehicle()->IsBus());
 
 		/* Junctions with traffic lights, and junctions where traffic is held up, take time. */
 		if (IsRoadJunctionTile(tile)) {

@@ -401,7 +401,15 @@ static constexpr SpriteID SPR_CITY_BUSES = SPR_TRAFFIC_LIGHTS_BASE + 79; ///< Ci
 static constexpr SpriteID SPR_DEPOT_YARD_BASE = SPR_TRAFFIC_LIGHTS_BASE + 191; ///< Depot yards: ground markings and facilities (10 sprites, see depot_yard.cpp).
 static constexpr SpriteID SPR_STOP_CHARGER_X = SPR_TRAFFIC_LIGHTS_BASE + 201; ///< Charger over a bus stop on a road along X; along Y follows.
 static constexpr SpriteID SPR_IMG_STOP_CHARGER = SPR_TRAFFIC_LIGHTS_BASE + 203; ///< Icon of the stop charger tool.
-static constexpr uint16_t TRAFFIC_LIGHTS_SPRITE_COUNT = 204;
+static constexpr SpriteID SPR_BUS_PRIORITY_BASE = SPR_TRAFFIC_LIGHTS_BASE + 204; ///< Bus lanes (all day along X, Y; peak along X, Y), bus-only road (X, Y), give-way markings at stops (X, Y): 8 ground sprites.
+static constexpr SpriteID SPR_IMG_BUS_PRIORITY = SPR_TRAFFIC_LIGHTS_BASE + 212; ///< Icon of the road toolbar button that opens the bus priority toolbar.
+static constexpr SpriteID SPR_IMG_BUS_LANE = SPR_TRAFFIC_LIGHTS_BASE + 213; ///< Icon of the all-day bus lane tool.
+static constexpr SpriteID SPR_IMG_BUS_LANE_PEAK = SPR_TRAFFIC_LIGHTS_BASE + 214; ///< Icon of the peak bus lane tool.
+static constexpr SpriteID SPR_IMG_GIVE_WAY = SPR_TRAFFIC_LIGHTS_BASE + 215; ///< Icon of the give-way markings tool.
+static constexpr SpriteID SPR_IMG_BUS_SIGNAL = SPR_TRAFFIC_LIGHTS_BASE + 216; ///< Icon of the bus signal tool.
+static constexpr SpriteID SPR_BUS_SIGNAL_LIT = SPR_TRAFFIC_LIGHTS_BASE + 217; ///< "B" lamp on a traffic light post, lit.
+static constexpr SpriteID SPR_BUS_SIGNAL_DARK = SPR_TRAFFIC_LIGHTS_BASE + 218; ///< "B" lamp on a traffic light post, dark.
+static constexpr uint16_t TRAFFIC_LIGHTS_SPRITE_COUNT = 219;
 
 static const SpriteID SPR_NEWGRFS_BASE = SPR_TRAFFIC_LIGHTS_BASE + TRAFFIC_LIGHTS_SPRITE_COUNT;
 

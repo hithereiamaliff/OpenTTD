@@ -391,6 +391,9 @@ enum class Commands : uint8_t {
 	SetTownTransitSchemes, ///< set a town's resident pass and concession schemes (game scripts)
 	BuildStopCharger, ///< build a charger for electric buses over a bus stop
 	RemoveStopCharger, ///< remove the charger of a bus stop
+	BuildBusLane, ///< paint or remove bus lanes along a road
+	SetGiveWayStop, ///< paint or remove give-way markings at a bus stop
+	SetTrafficLightBusPriority, ///< switch bus signals of traffic lights on or off
 
 	End, ///< @important Must ALWAYS be on the end of this list!! (period)
 };

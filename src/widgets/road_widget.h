@@ -30,6 +30,7 @@ enum RoadToolbarWidgets : WidgetID {
 	WID_ROT_TRAFFIC_LIGHTS, ///< Build or remove traffic lights (roads only, not trams).
 	WID_ROT_TRAFFIC_OVERLAY, ///< Toggle colouring roads by traffic (roads only, not trams).
 	WID_ROT_STOP_CHARGER, ///< Build or remove a charger for electric buses over a bus stop (roads only, not trams).
+	WID_ROT_BUS_PRIORITY, ///< Open the bus priority toolbar (roads only, not trams).
 };
 
 /** Widgets of the #BuildRoadDepotWindow class. */

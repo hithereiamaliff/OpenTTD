@@ -268,6 +268,22 @@ void RoadVehUpdateCache(RoadVehicle *v, bool same_length)
 
 	uint max_speed = GetVehicleProperty(v, PROP_ROADVEH_SPEED, 0);
 	v->vcache.cached_max_speed = (max_speed != 0) ? max_speed * 4 : RoadVehInfo(v->engine_type)->max_speed;
+
+	/* A refit can turn a bus into a lorry or back: only buses use bus-only roads. */
+	v->compatible_roadtypes = GetRoadVehicleCompatibleRoadTypes(v);
+	for (RoadVehicle *u = v->Next(); u != nullptr; u = u->Next()) u->compatible_roadtypes = v->compatible_roadtypes;
+}
+
+/**
+ * The road types a road vehicle can drive on: those its road type powers, and bus-only roads for buses.
+ * @param front The vehicle (front).
+ * @return The road types.
+ */
+RoadTypes GetRoadVehicleCompatibleRoadTypes(const RoadVehicle *front)
+{
+	RoadTypes rts = GetRoadTypeInfo(front->roadtype)->powered_roadtypes;
+	if (rts.Test(ROADTYPE_ROAD) && front->IsBus()) rts.Set(ROADTYPE_BUS);
+	return rts;
 }
 
 /**
@@ -280,10 +296,12 @@ void RoadVehUpdateCache(RoadVehicle *v, bool same_length)
  */
 CommandCost CmdBuildRoadVehicle(DoCommandFlags flags, TileIndex tile, const Engine *e, Vehicle **ret)
 {
-	/* Check that the vehicle can drive on the road in question */
+	/* Check that the vehicle can drive on the road in question; buses also on bus-only roads. */
 	RoadType rt = e->VehInfo<RoadVehicleInfo>().roadtype;
 	const RoadTypeInfo *rti = GetRoadTypeInfo(rt);
-	if (!HasTileAnyRoadType(tile, rti->powered_roadtypes)) return CommandCost(STR_ERROR_DEPOT_WRONG_DEPOT_TYPE);
+	RoadTypes usable = rti->powered_roadtypes;
+	if (usable.Test(ROADTYPE_ROAD) && IsValidCargoType(e->GetDefaultCargoType()) && IsCargoInClass(e->GetDefaultCargoType(), CargoClass::Passengers)) usable.Set(ROADTYPE_BUS);
+	if (!HasTileAnyRoadType(tile, usable)) return CommandCost(STR_ERROR_DEPOT_WRONG_DEPOT_TYPE);
 
 	if (flags.Test(DoCommandFlag::Execute)) {
 		const RoadVehicleInfo *rvi = &e->VehInfo<RoadVehicleInfo>();
@@ -329,7 +347,7 @@ CommandCost CmdBuildRoadVehicle(DoCommandFlags flags, TileIndex tile, const Engi
 		v->SetFrontEngine();
 
 		v->roadtype = rt;
-		v->compatible_roadtypes = rti->powered_roadtypes;
+		v->compatible_roadtypes = GetRoadVehicleCompatibleRoadTypes(v);
 		v->gcache.cached_veh_length = VEHICLE_LENGTH;
 
 		if (e->flags.Test(EngineFlag::ExclusivePreview)) v->vehicle_flags.Set(VehicleFlag::BuiltAsPrototype);
@@ -506,7 +524,7 @@ inline int RoadVehicle::GetCurrentMaxSpeed() const
 	}
 
 	/* Town traffic: everyone crawls along congested roads. */
-	max_speed = std::min(max_speed, GetRoadCongestionSpeedLimit(this->tile));
+	max_speed = std::min(max_speed, GetRoadCongestionSpeedLimit(this->tile, this->IsBus()));
 
 	/* An electric bus with a flat battery crawls to a depot. */
 	if (this->battery_charge == 0 && IsBatteryFlat(this)) max_speed = std::min<int>(max_speed, FLAT_BATTERY_SPEED);

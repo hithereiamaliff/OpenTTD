@@ -48,6 +48,8 @@ static constexpr uint16_t TRAFFIC_LIGHT_MIN_TIME = 18; ///< Shortest green that 
 static constexpr uint16_t TRAFFIC_LIGHT_MAX_TIME = 1480; ///< Longest green that can be set (20 days).
 static constexpr uint16_t TRAFFIC_LIGHT_DEFAULT_GREEN = 450; ///< Default (longest) green per road.
 static constexpr uint16_t TRAFFIC_LIGHT_DEFAULT_MIN_GREEN = 90; ///< Default shortest green of smart lights.
+static constexpr uint16_t TRAFFIC_LIGHT_BUS_HEAD_START = 10; ///< Bus signals: buses get green this long before the rest, at the end of the all-red time.
+static constexpr uint TRAFFIC_LIGHT_BUS_LOOKAHEAD = 2; ///< Bus signals: smart lights keep the green for a bus this many tiles or less before the junction.
 
 /** The traffic lights controlling one road junction. */
 struct TrafficLight {
@@ -58,6 +60,7 @@ struct TrafficLight {
 	uint16_t green_y = TRAFFIC_LIGHT_DEFAULT_GREEN; ///< Green for the road along the Y axis: longest green for smart lights, green time for fixed ones.
 	uint16_t min_green = TRAFFIC_LIGHT_DEFAULT_MIN_GREEN; ///< Smart lights: shortest green.
 	uint16_t offset = 0; ///< Fixed lights: how far into the cycle they are when the tick counter is a multiple of the cycle length.
+	bool bus_priority = false; ///< Bus signals: buses get a head start; smart lights cut the green short for a waiting bus and keep it for one about to cross.
 
 	uint8_t green_axis = 0; ///< #Axis that has (or, while clearing, last had) right of way.
 	bool clearing = false; ///< All directions are red while the junction clears.
@@ -66,9 +69,11 @@ struct TrafficLight {
 
 	/* Not saved: these only live within a single game tick. */
 	uint8_t demand = 0; ///< Bit per #Axis: a vehicle is waiting at a red light.
+	uint8_t bus_demand = 0; ///< Bit per #Axis: a bus is waiting at a red light.
 	bool entered = false; ///< A vehicle entered the junction on green this tick.
 
 	bool IsGreenFor(Axis axis) const;
+	bool IsGreenForBus(Axis axis) const;
 	TrafficLightLamp GetLamp(Axis axis) const;
 
 	/**
@@ -95,6 +100,7 @@ TrafficLight *GetTrafficLight(TileIndex tile);
 TrackdirBits GetTrafficLightRedTrackdirs(TileIndex tile);
 bool TrafficLightShowsGreen(TileIndex tile, Axis axis);
 TrafficLightLamp GetTrafficLightLamp(TileIndex tile, Axis axis);
+int GetTrafficLightBusLamp(TileIndex tile, Axis axis);
 
 void TrafficLightsOnRoadChanged(TileIndex tile);
 void ChangeTrafficLightOwner(Owner old_owner, Owner new_owner);

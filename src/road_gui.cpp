@@ -48,6 +48,7 @@
 #include "widgets/road_widget.h"
 #include "traffic_light_cmd.h"
 #include "stop_charger_cmd.h"
+#include "bus_priority.h"
 #include "traffic_light.h"
 #include "road_traffic.h"
 
@@ -605,6 +606,13 @@ struct BuildRoadToolbarWindow : Window {
 
 	void OnClick([[maybe_unused]] Point pt, WidgetID widget, [[maybe_unused]] int click_count) override
 	{
+		if (widget == WID_ROT_BUS_PRIORITY) {
+			/* Another toolbar, not a building tool. */
+			ShowBusPriorityToolbar();
+			SndClickBeep();
+			return;
+		}
+
 		if (widget == WID_ROT_TRAFFIC_OVERLAY) {
 			/* A switch, not a building tool: leave the current tool alone. */
 			ShowRoadTrafficOverlay(!IsRoadTrafficOverlayShown());
@@ -613,7 +621,7 @@ struct BuildRoadToolbarWindow : Window {
 			return;
 		}
 
-		bool started;
+		bool started = false;
 		_remove_button_clicked = false;
 		_one_way_button_clicked = false;
 
@@ -1009,6 +1017,7 @@ struct BuildRoadToolbarWindow : Window {
 		Hotkey('S', "build_traffic_lights", WID_ROT_TRAFFIC_LIGHTS),
 		Hotkey('O', "traffic_overlay", WID_ROT_TRAFFIC_OVERLAY),
 		Hotkey('G', "stop_charger", WID_ROT_STOP_CHARGER),
+		Hotkey('Y', "bus_priority", WID_ROT_BUS_PRIORITY),
 		Hotkey(WKC_L_BRACKET, "prev_roadtype", to_underlying(SpecialListHotkeys::PreviousItem)),
 		Hotkey(WKC_R_BRACKET, "next_roadtype", to_underlying(SpecialListHotkeys::NextItem)),
 		Hotkey(WKC_L_BRACKET | WKC_CTRL, "first_roadtype", to_underlying(SpecialListHotkeys::FirstItem)),
@@ -1069,6 +1078,8 @@ static constexpr std::initializer_list<NWidgetPart> _nested_build_road_widgets =
 						SetFill(0, 1), SetToolbarMinimalSize(1), SetSpriteTip(SPR_IMG_TRAFFIC_OVERLAY, STR_ROAD_TOOLBAR_TOOLTIP_TRAFFIC_OVERLAY),
 		NWidget(WWT_IMGBTN, Colours::DarkGreen, WID_ROT_STOP_CHARGER),
 						SetFill(0, 1), SetToolbarMinimalSize(1), SetSpriteTip(SPR_IMG_STOP_CHARGER, STR_ROAD_TOOLBAR_TOOLTIP_BUILD_STOP_CHARGER),
+		NWidget(WWT_PUSHIMGBTN, Colours::DarkGreen, WID_ROT_BUS_PRIORITY),
+						SetFill(0, 1), SetToolbarMinimalSize(1), SetSpriteTip(SPR_IMG_BUS_PRIORITY, STR_ROAD_TOOLBAR_TOOLTIP_BUS_PRIORITY),
 		NWidget(WWT_IMGBTN, Colours::DarkGreen, WID_ROT_BUILD_BRIDGE),
 						SetFill(0, 1), SetToolbarMinimalSize(2), SetSpriteTip(SPR_IMG_BRIDGE, STR_ROAD_TOOLBAR_TOOLTIP_BUILD_ROAD_BRIDGE),
 		NWidget(WWT_IMGBTN, Colours::DarkGreen, WID_ROT_BUILD_TUNNEL),

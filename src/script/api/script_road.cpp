@@ -21,6 +21,7 @@
 #include "../../depot_yard.h"
 #include "../../stop_charger.h"
 #include "../../stop_charger_cmd.h"
+#include "../../bus_priority_cmd.h"
 #include "../../depot_map.h"
 #include "../../object_cmd.h"
 #include "../../object_map.h"
@@ -730,6 +731,55 @@ static bool NeighbourHasReachableRoad(::RoadType rt, TileIndex start_tile, DiagD
 /* static */ bool ScriptRoad::HasStopCharger(TileIndex tile)
 {
 	return ::IsValidTile(tile) && ::HasStopCharger(tile);
+}
+
+/* static */ bool ScriptRoad::BuildBusLane(TileIndex start, TileIndex end, BusLane lane)
+{
+	EnforceCompanyModeValid(false);
+	EnforcePrecondition(false, ::IsValidTile(start) && ::IsValidTile(end));
+	EnforcePrecondition(false, lane == BL_ALL_DAY || lane == BL_PEAK);
+
+	return ScriptObject::Command<Commands::BuildBusLane>::Do(end, start, static_cast<::BusLane>(lane), false);
+}
+
+/* static */ bool ScriptRoad::RemoveBusLane(TileIndex start, TileIndex end)
+{
+	EnforceCompanyModeValid(false);
+	EnforcePrecondition(false, ::IsValidTile(start) && ::IsValidTile(end));
+
+	return ScriptObject::Command<Commands::BuildBusLane>::Do(end, start, ::BusLane::AllDay, true);
+}
+
+/* static */ ScriptRoad::BusLane ScriptRoad::GetBusLane(TileIndex tile)
+{
+	if (!::IsValidTile(tile)) return BL_NONE;
+	return static_cast<BusLane>(::GetBusLane(tile));
+}
+
+/* static */ bool ScriptRoad::BuildGiveWayStop(TileIndex tile)
+{
+	EnforceCompanyModeValid(false);
+	EnforcePrecondition(false, ::IsValidTile(tile));
+
+	return ScriptObject::Command<Commands::SetGiveWayStop>::Do(tile, false);
+}
+
+/* static */ bool ScriptRoad::HasGiveWayStop(TileIndex tile)
+{
+	return ::IsValidTile(tile) && ::HasGiveWayStop(tile);
+}
+
+/* static */ bool ScriptRoad::SetTrafficLightBusPriority(TileIndex tile, bool on)
+{
+	EnforceCompanyModeValid(false);
+	EnforcePrecondition(false, ::IsValidTile(tile));
+
+	return ScriptObject::Command<Commands::SetTrafficLightBusPriority>::Do(tile, on);
+}
+
+/* static */ bool ScriptRoad::HasTrafficLightBusPriority(TileIndex tile)
+{
+	return ::IsValidTile(tile) && ::GetTrafficLightBusLamp(tile, ::Axis::X) >= 0;
 }
 
 /* static */ bool ScriptRoad::BuildTrafficLights(TileIndex tile)

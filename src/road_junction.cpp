@@ -316,9 +316,11 @@ bool RoadVehicleMayEnterTile(RoadVehicle *v, TileIndex tile, DiagDirection enter
 	if (HasTrafficLight(tile)) {
 		TrafficLight *tl = GetTrafficLight(tile);
 		if (tl == nullptr) return true;
-		if (!tl->IsGreenFor(axis)) {
+		const bool bus = v->IsBus();
+		if (!(bus ? tl->IsGreenForBus(axis) : tl->IsGreenFor(axis))) {
 			/* Red lights are never ignored; they switch after a while anyway. */
 			SetBit(tl->demand, to_underlying(axis));
+			if (bus) SetBit(tl->bus_demand, to_underlying(axis));
 			return false;
 		}
 		if (give_way && v->blocked_ctr < GIVE_WAY_PATIENCE) {

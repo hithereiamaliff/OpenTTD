@@ -41,6 +41,7 @@
 #include "city_services.h"
 #include "depot_yard.h"
 #include "stop_charger.h"
+#include "bus_priority.h"
 #include "station_map.h"
 #include "object_map.h"
 
@@ -225,6 +226,14 @@ public:
 				this->landinfo_data.push_back(GetString(STR_LAND_AREA_INFORMATION_TOWN_TRAFFIC, level, PackVelocity(kmh, VehicleType::Road)));
 			}
 		}
+
+		/* Bus priority */
+		switch (GetBusLane(this->tile)) {
+			case BusLane::AllDay: this->landinfo_data.push_back(GetString(STR_LAND_AREA_INFORMATION_BUS_LANE)); break;
+			case BusLane::Peak: this->landinfo_data.push_back(GetString(STR_LAND_AREA_INFORMATION_BUS_LANE_PEAK)); break;
+			default: break;
+		}
+		if (HasGiveWayStop(this->tile)) this->landinfo_data.push_back(GetString(STR_LAND_AREA_INFORMATION_GIVE_WAY));
 
 		/* Chargers at bus stops */
 		if (IsTileType(this->tile, TileType::Station) && IsAnyRoadStopTile(this->tile) && HasStopCharger(this->tile)) {

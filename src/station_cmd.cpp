@@ -62,6 +62,7 @@
 #include "linkgraph/refresh.h"
 #include "station_cmd.h"
 #include "stop_charger.h"
+#include "bus_priority.h"
 #include "waypoint_cmd.h"
 #include "landscape_cmd.h"
 #include "rail_cmd.h"
@@ -2442,6 +2443,8 @@ static CommandCost RemoveGenericRoadStop(DoCommandFlags flags, const TileArea &r
 			}
 			road_bits = AxisToRoadBits(GetDriveThroughStopAxis(cur_tile));
 		}
+		/* A bus lane through the stop stays with the road. */
+		const BusLane lane = GetBusLane(cur_tile);
 
 		CommandCost ret;
 		if (road_waypoint) {
@@ -2460,6 +2463,7 @@ static CommandCost RemoveGenericRoadStop(DoCommandFlags flags, const TileArea &r
 		if (flags.Test(DoCommandFlag::Execute) && (road_type[RoadTramType::Road] != INVALID_ROADTYPE || road_type[RoadTramType::Tram] != INVALID_ROADTYPE)) {
 			MakeRoadNormal(cur_tile, road_bits, road_type[RoadTramType::Road], road_type[RoadTramType::Tram], ClosestTownFromTile(cur_tile, UINT_MAX)->index,
 					road_owner[RoadTramType::Road], road_owner[RoadTramType::Tram]);
+			RestoreBusLane(cur_tile, lane);
 
 			/* Update company infrastructure counts. */
 			int count = road_bits.Count();
@@ -3510,6 +3514,8 @@ static void DrawTile_Station(TileInfo *ti)
 		total_offset = 0;
 	}
 
+	/* Bus lanes, bus-only roads and give-way markings on the road through the stop. */
+	if (IsDriveThroughStopTile(ti->tile)) DrawBusPriorityStop(ti);
 	DrawRailTileSeq(ti, t, TransparencyOption::Buildings, total_offset, relocation, palette);
 	if (IsAnyRoadStop(ti->tile) && HasStopCharger(ti->tile)) DrawStopCharger(ti);
 	DrawBridgeMiddle(ti, GetStationBlockedPillars(bridgeable_info, GetStationGfx(ti->tile)));

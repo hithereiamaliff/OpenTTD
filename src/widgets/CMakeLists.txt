@@ -5,6 +5,7 @@ add_files(
     bootstrap_widget.h
     bridge_widget.h
     build_vehicle_widget.h
+    bus_priority_widget.h
     cheat_widget.h
     city_services_widget.h
     company_widget.h

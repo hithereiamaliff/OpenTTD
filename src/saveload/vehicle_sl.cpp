@@ -455,7 +455,7 @@ void AfterLoadVehiclesPhase2(bool part_of_load)
 					rv->gcache.last_speed = rv->cur_speed; // update displayed road vehicle speed
 
 					rv->roadtype = Engine::Get(rv->engine_type)->VehInfo<RoadVehicleInfo>().roadtype;
-					rv->compatible_roadtypes = GetRoadTypeInfo(rv->roadtype)->powered_roadtypes;
+					rv->compatible_roadtypes = GetRoadVehicleCompatibleRoadTypes(rv);
 					RoadTramType rtt = GetRoadTramType(rv->roadtype);
 					for (RoadVehicle *u = rv; u != nullptr; u = u->Next()) {
 						u->roadtype = rv->roadtype;

@@ -19,7 +19,9 @@
 #include "economy_func.h"
 #include "map_func.h"
 #include "road_map.h"
+#include "roadveh.h"
 #include "track_func.h"
+#include "vehicle_func.h"
 #include "viewport_func.h"
 #include "window_func.h"
 #include "timer/timer_game_tick.h"
@@ -43,6 +45,19 @@ static constexpr DiagDirection ALL_DIAGDIRS[] = {DiagDirection::NE, DiagDirectio
 bool TrafficLight::IsGreenFor(Axis axis) const
 {
 	return !this->clearing && this->green_axis == to_underlying(axis);
+}
+
+/**
+ * Does a bus have right of way along an axis? With bus signals buses get
+ * green #TRAFFIC_LIGHT_BUS_HEAD_START ticks before the rest of the traffic.
+ * @param axis The road through the junction.
+ * @return True if a bus may enter.
+ */
+bool TrafficLight::IsGreenForBus(Axis axis) const
+{
+	if (this->IsGreenFor(axis)) return true;
+	if (!this->bus_priority || !this->clearing || this->green_axis == to_underlying(axis)) return false;
+	return this->phase_ticks + TRAFFIC_LIGHT_BUS_HEAD_START >= TRAFFIC_LIGHT_CLEARANCE;
 }
 
 /**
@@ -95,6 +110,19 @@ TrackdirBits GetTrafficLightRedTrackdirs(TileIndex tile)
 		if (!tl->IsGreenFor(DiagDirToAxis(dir))) red |= DiagdirReachesTrackdirs(dir);
 	}
 	return red;
+}
+
+/**
+ * Get the bus signal of traffic lights for traffic along an axis.
+ * @param tile The junction tile.
+ * @param axis The road through the junction.
+ * @return -1 without bus signals, 1 when buses may go, 0 when they may not.
+ */
+int GetTrafficLightBusLamp(TileIndex tile, Axis axis)
+{
+	const TrafficLight *tl = GetTrafficLight(tile);
+	if (tl == nullptr || !tl->bus_priority) return -1;
+	return tl->IsGreenForBus(axis) ? 1 : 0;
 }
 
 /**
@@ -181,10 +209,39 @@ void AfterLoadTrafficLights()
 		tl.green_y = Clamp(tl.green_y, TRAFFIC_LIGHT_MIN_TIME, TRAFFIC_LIGHT_MAX_TIME);
 		tl.min_green = Clamp(tl.min_green, TRAFFIC_LIGHT_MIN_TIME, std::min(tl.green_x, tl.green_y));
 		tl.demand = 0;
+		tl.bus_demand = 0;
 		tl.entered = false;
 		SetTrafficLight(it->first, true);
 		++it;
 	}
+}
+
+/**
+ * Is a bus about to cross a junction? Looks for buses driving towards it on
+ * the last #TRAFFIC_LIGHT_BUS_LOOKAHEAD tiles before it, from both sides.
+ * Buses standing at a stop or in a depot there don't count.
+ * @param junction The junction tile.
+ * @param axis The road through the junction.
+ * @return True if a bus is on its way in.
+ */
+static bool IsBusApproaching(TileIndex junction, Axis axis)
+{
+	for (DiagDirection side : {AxisToDiagDir(axis), ReverseDiagDir(AxisToDiagDir(axis))}) {
+		const DiagDirection towards = ReverseDiagDir(side);
+		TileIndex tile = junction;
+		for (uint i = 0; i < TRAFFIC_LIGHT_BUS_LOOKAHEAD; i++) {
+			tile = TileAddByDiagDir(tile, side);
+			if (!IsValidTile(tile)) break;
+			bool found = HasVehicleOnTile(tile, [towards](const Vehicle *v) {
+				if (v->type != VehicleType::Road) return false;
+				const RoadVehicle *front = RoadVehicle::From(v)->First();
+				return front->IsBus() && !front->IsInDepot() && front->cur_speed > 0 &&
+						!front->current_order.IsType(OT_LOADING) && DirToDiagDir(front->direction) == towards;
+			});
+			if (found) return true;
+		}
+	}
+	return false;
 }
 
 /**
@@ -233,10 +290,17 @@ bool TrafficLight::Update()
 
 		/* Switch when someone waits on the other road, the green road had its
 		 * shortest green, and its traffic stopped or it used up its longest green. */
+		const Axis green = static_cast<Axis>(this->green_axis);
+		const uint16_t longest = this->GetGreenTime(green);
 		bool other_waiting = HasBit(this->demand, to_underlying(other)) ||
-				TownTrafficWaitsAt(this->tile, other, this->phase_ticks >= this->GetGreenTime(static_cast<Axis>(this->green_axis)));
-		if (other_waiting && this->phase_ticks >= this->min_green &&
-				(this->gap_ticks >= TRAFFIC_LIGHT_GAP || this->phase_ticks >= this->GetGreenTime(static_cast<Axis>(this->green_axis)))) {
+				TownTrafficWaitsAt(this->tile, other, this->phase_ticks >= longest);
+		/* Bus signals: a bus waiting on the other road cuts the green short, after half the shortest green... */
+		bool bus_waiting = this->bus_priority && HasBit(this->bus_demand, to_underlying(other));
+		uint16_t shortest = bus_waiting ? std::max<uint16_t>(TRAFFIC_LIGHT_MIN_TIME, this->min_green / 2) : this->min_green;
+		if (other_waiting && this->phase_ticks >= shortest &&
+				(bus_waiting || this->gap_ticks >= TRAFFIC_LIGHT_GAP || this->phase_ticks >= longest) &&
+				/* ... and a bus about to cross on the green road keeps it, up to the longest green. */
+				(bus_waiting || !this->bus_priority || this->phase_ticks >= longest || !IsBusApproaching(this->tile, green))) {
 			this->clearing = true;
 			this->phase_ticks = 0;
 		}
@@ -253,6 +317,7 @@ void OnTick_TrafficLights()
 		bool changed = tl.Update();
 
 		tl.demand = 0;
+		tl.bus_demand = 0;
 		tl.entered = false;
 		if (changed) Debug(Facility::Misc, Severity::Debug2, "Traffic light {}x{}: {}", TileX(tile), TileY(tile), tl.clearing ? "all red" : (tl.green_axis == to_underlying(Axis::X) ? "green X" : "green Y"));
 		/* Redraw for every change of colour, also from amber to red. */
@@ -324,6 +389,31 @@ static CommandCost CheckTrafficLightOwnership(const TrafficLight &tl)
 {
 	if (tl.owner == OWNER_NONE || tl.owner == OWNER_TOWN) return CommandCost();
 	return CheckOwnership(tl.owner);
+}
+
+/**
+ * Switch the bus signals of traffic lights on or off.
+ * @param flags Operation to perform.
+ * @param tile The junction tile.
+ * @param on Whether buses get priority.
+ * @return The cost of this operation or an error.
+ */
+CommandCost CmdSetTrafficLightBusPriority(DoCommandFlags flags, TileIndex tile, bool on)
+{
+	if (!IsValidTile(tile) || !IsNormalRoadTile(tile) || !HasTrafficLight(tile)) return CommandCost(STR_ERROR_NO_TRAFFIC_LIGHTS);
+	TrafficLight *tl = GetTrafficLight(tile);
+	if (tl == nullptr) return CommandCost(STR_ERROR_NO_TRAFFIC_LIGHTS);
+
+	CommandCost ret = CheckTrafficLightOwnership(*tl);
+	if (ret.Failed()) return ret;
+	if (tl->bus_priority == on) return CommandCost(on ? STR_ERROR_ALREADY_BUILT : STR_ERROR_BUS_SIGNAL_NONE);
+
+	if (flags.Test(DoCommandFlag::Execute)) {
+		tl->bus_priority = on;
+		MarkTileDirtyByTile(tile);
+		InvalidateWindowData(WindowClass::TrafficLight, tile.base());
+	}
+	return CommandCost(ExpensesType::Construction, on ? GetPrice(Price::BuildObject, 25, nullptr) : Money{0});
 }
 
 /**

@@ -9,6 +9,7 @@
 
 #include "stdafx.h"
 #include "town_traffic.h"
+#include "bus_priority.h"
 #include "cargotype.h"
 #include "city_services_type.h"
 #include "house.h"
@@ -129,6 +130,8 @@ uint8_t GetTownTrafficTarget(TileIndex tile, const Town *t)
 	uint setting = _settings_game.economy.town_traffic;
 	if (t == nullptr || setting == 0 || setting >= std::size(SETTING_FACTOR)) return 0;
 	if (!HasTileRoadType(tile, RoadTramType::Road)) return 0;
+	/* Town traffic doesn't use bus-only roads. */
+	if (GetRoadTypeRoad(tile) == ROADTYPE_BUS) return 0;
 
 	/* Far outside the town there is nothing to make traffic. */
 	uint town_radius_sq = t->cache.squared_town_zone_radius[to_underlying(HouseZone::TownEdge)];
@@ -201,26 +204,30 @@ int GetRoadCongestionSpeedLimitKmh(uint8_t level)
 
 /**
  * Highest speed of road vehicles on a road tile because of town traffic.
+ * Bus lanes and give-way markings help buses (see bus_priority.cpp).
  * @param tile The tile.
+ * @param bus Whether the vehicle is a bus.
  * @return The speed in internal road vehicle units (km-ish/h * 2), or INT_MAX when there is no limit.
  */
-int GetRoadCongestionSpeedLimit(TileIndex tile)
+int GetRoadCongestionSpeedLimit(TileIndex tile, bool bus)
 {
 	if (!IsTileType(tile, TileType::Road) || IsRoadDepot(tile)) return INT_MAX;
-	int kmh = GetRoadCongestionSpeedLimitKmh(GetRoadCongestion(tile));
+	int kmh = GetRoadCongestionSpeedLimitKmh(GetCongestionLevelFor(tile, bus));
 	return kmh == 0 ? INT_MAX : kmh * 2;
 }
 
 /**
  * Extra pathfinder cost of driving over a road tile because of town traffic.
+ * Bus lanes and give-way markings help buses (see bus_priority.cpp).
  * @param tile The tile.
+ * @param bus Whether the vehicle is a bus.
  * @return The penalty, in pathfinder cost units (100 is one tile).
  */
-uint GetRoadCongestionPenalty(TileIndex tile)
+uint GetRoadCongestionPenalty(TileIndex tile, bool bus)
 {
 	static constexpr uint PENALTY[ROAD_CONGESTION_MAX + 1] = {0, 0, 10, 25, 45, 75, 120, 180};
 	if (!IsTileType(tile, TileType::Road) || IsRoadDepot(tile)) return 0;
-	return PENALTY[GetRoadCongestion(tile)] * _settings_game.pf.yapf.road_congestion_penalty / 100;
+	return PENALTY[GetCongestionLevelFor(tile, bus)] * _settings_game.pf.yapf.road_congestion_penalty / 100;
 }
 
 /**

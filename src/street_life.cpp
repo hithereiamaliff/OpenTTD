@@ -181,10 +181,12 @@ static bool IsStreetTile(TileIndex tile)
 	switch (GetTileType(tile)) {
 		case TileType::Road:
 			if (IsRoadDepot(tile) || !HasTileRoadType(tile, RoadTramType::Road)) return false;
+			/* Town traffic stays off bus-only roads. */
+			if (GetRoadTypeRoad(tile) == ROADTYPE_BUS) return false;
 			return !IsNormalRoad(tile) || !HasRoadWorks(tile);
 
 		case TileType::Station:
-			return (IsDriveThroughStopTile(tile) || IsRoadWaypoint(tile)) && HasTileRoadType(tile, RoadTramType::Road);
+			return (IsDriveThroughStopTile(tile) || IsRoadWaypoint(tile)) && HasTileRoadType(tile, RoadTramType::Road) && GetRoadTypeRoad(tile) != ROADTYPE_BUS;
 
 		default:
 			return false;
