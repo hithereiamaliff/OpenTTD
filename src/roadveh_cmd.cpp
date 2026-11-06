@@ -11,6 +11,8 @@
 #include "bridge.h"
 #include "roadveh.h"
 #include "city_bus.h"
+#include "depot_yard.h"
+#include "stop_charger.h"
 #include "command_func.h"
 #include "error_func.h"
 #include "news_func.h"
@@ -345,6 +347,9 @@ CommandCost CmdBuildRoadVehicle(DoCommandFlags flags, TileIndex tile, const Engi
 		}
 		RoadVehUpdateCache(v);
 		InitBattery(v);
+		/* A new vehicle is based at the depot it was bought in. */
+		v->home_depot = GetDepotIndex(tile);
+		OnDepotHomesChanged();
 		/* Initialize cached values for realistic acceleration. */
 		if (_settings_game.vehicle.roadveh_acceleration_model != AccelerationModel::Original) v->CargoChanged();
 
@@ -1618,7 +1623,11 @@ static bool RoadVehController(RoadVehicle *v)
 	ProcessOrders(v);
 	v->HandleLoading();
 
-	if (v->current_order.IsType(OT_LOADING)) return true;
+	if (v->current_order.IsType(OT_LOADING)) {
+		/* Electric buses top up under a stop's charger. */
+		if (v->battery_charge != 0 || IsElectricBus(v)) ChargeAtStop(v);
+		return true;
+	}
 
 	if (v->IsInDepot()) {
 		/* Check if we should wait here for unbunching. */
@@ -1683,7 +1692,8 @@ Money RoadVehicle::GetRunningCost() const
 	uint cost_factor = GetVehicleProperty(this, PROP_ROADVEH_RUNNING_COST_FACTOR, e->VehInfo<RoadVehicleInfo>().running_cost);
 	if (cost_factor == 0) return 0;
 
-	return GetPrice(e->VehInfo<RoadVehicleInfo>().running_cost_class, cost_factor, e->GetGRF());
+	/* The home depot's yard makes running dearer (no room) or cheaper (own fuel, solar roofs). */
+	return GetPrice(e->VehInfo<RoadVehicleInfo>().running_cost_class, cost_factor, e->GetGRF()) * GetHomeDepotRunningCostPercent(this) / 100;
 }
 
 bool RoadVehicle::Tick()
@@ -1717,6 +1727,16 @@ static void CheckIfRoadVehNeedsService(RoadVehicle *v)
 	}
 
 	uint max_penalty = _settings_game.pf.yapf.maximum_go_to_depot_penalty;
+
+	/* Go home for service when home isn't far. */
+	if (TileIndex home = GetHomeDepotTile(v); home != INVALID_TILE && DistanceManhattan(v->tile, home) <= HOME_DEPOT_REACH && !v->vehicle_flags.Test(VehicleFlag::PathfinderLost)) {
+		if (v->current_order.IsType(OT_GOTO_DEPOT) && v->dest_tile == home) return;
+		v->gv_flags.Set(GroundVehicleFlag::SuppressImplicitOrders);
+		v->current_order.MakeGoToDepot(GetDepotIndex(home), OrderDepotTypeFlag::Service);
+		v->SetDestTile(home);
+		SetWindowWidgetDirty(WindowClass::VehicleView, v->index, WID_VV_START_STOP);
+		return;
+	}
 
 	FindDepotData rfdd = FindClosestRoadDepot(v, max_penalty);
 	/* Only go to the depot if it is not too far out of our way. */
@@ -1752,18 +1772,26 @@ static void CheckIfRoadVehNeedsService(RoadVehicle *v)
  */
 static void CheckRoadVehBattery(RoadVehicle *v)
 {
-	if (!IsElectricBus(v)) return;
-
-	if (v->IsChainInDepot()) {
-		ChargeBatteryInDepot(v);
-		return;
-	}
+	/* Buses in a depot charge there (see ChargeBusesInDepots). */
+	if (!IsElectricBus(v) || v->IsChainInDepot()) return;
 
 	if (GetBatteryPercent(v) >= BATTERY_SEEK_DEPOT_PERCENT) return;
 	if (v->current_order.IsType(OT_GOTO_DEPOT) || v->current_order.IsType(OT_LOADING)) return;
 
-	/* A bus running low looks for a depot not far out of its way; with a flat battery any depot will do. */
+	/* A bus running low goes home when it gets there easily. */
 	const bool flat = IsBatteryFlat(v);
+	if (TileIndex home = GetHomeDepotTile(v); !flat && home != INVALID_TILE && !v->vehicle_flags.Test(VehicleFlag::PathfinderLost)) {
+		uint distance = DistanceManhattan(v->tile, home);
+		if (distance <= HOME_DEPOT_REACH && GetBatteryTilesLeft(v) >= distance * 3 / 2 + 4) {
+			v->gv_flags.Set(GroundVehicleFlag::SuppressImplicitOrders);
+			v->current_order.MakeGoToDepot(GetDepotIndex(home), OrderDepotTypeFlag::Service);
+			v->SetDestTile(home);
+			SetWindowWidgetDirty(WindowClass::VehicleView, v->index, WID_VV_START_STOP);
+			return;
+		}
+	}
+
+	/* Otherwise a depot not far out of its way; with a flat battery any depot will do. */
 	const uint max_penalty = flat ? 0 : _settings_game.pf.yapf.maximum_go_to_depot_penalty * 4;
 	FindDepotData rfdd = FindClosestRoadDepot(v, max_penalty);
 	if (rfdd.best_length == UINT_MAX || (!flat && rfdd.best_length > max_penalty)) return;

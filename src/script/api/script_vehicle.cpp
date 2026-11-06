@@ -19,6 +19,7 @@
 #include "../../command_func.h"
 #include "../../roadveh.h"
 #include "../../city_bus.h"
+#include "../../depot_yard.h"
 #include "../../train.h"
 #include "../../vehicle_func.h"
 #include "../../aircraft.h"
@@ -488,6 +489,15 @@
 	const Vehicle *v = ::Vehicle::Get(vehicle_id);
 	if (v->type != ::VehicleType::Road || !::IsElectricBus(::RoadVehicle::From(v))) return -1;
 	return ::GetBatteryPercent(::RoadVehicle::From(v));
+}
+
+/* static */ TileIndex ScriptVehicle::GetHomeDepot(VehicleID vehicle_id)
+{
+	if (!IsPrimaryVehicle(vehicle_id)) return INVALID_TILE;
+
+	const Vehicle *v = ::Vehicle::Get(vehicle_id);
+	if (v->type != ::VehicleType::Road) return INVALID_TILE;
+	return ::GetHomeDepotTile(::RoadVehicle::From(v));
 }
 
 /* static */ SQInteger ScriptVehicle::GetBatteryHealth(VehicleID vehicle_id)

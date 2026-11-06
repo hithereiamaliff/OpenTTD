@@ -473,6 +473,28 @@ public:
 	static TileIndex GetCompanyHQ(ScriptCompany::CompanyID company);
 
 	/**
+	 * Set your company's staff budget for road vehicles: 0 for none (staff are part of the
+	 * running costs), 1 lean pay (6% cheaper to run, 25% faster wear), 2 standard pay,
+	 * 3 generous pay (6% dearer, 15% slower wear). With a staff budget, depots need staff
+	 * buildings for the vehicles based there (see ScriptRoad::DF_STAFF_BUILDING).
+	 * @param budget The staff budget, 0 to 3.
+	 * @pre budget >= 0 && budget <= 3.
+	 * @game @pre ScriptCompanyMode::IsValid().
+	 * @return True if the staff budget has been changed.
+	 * @api ai game
+	 */
+	static bool SetStaffBudget(SQInteger budget);
+
+	/**
+	 * Get a company's staff budget for road vehicles.
+	 * @param company The company to check.
+	 * @pre ResolveCompanyID(company) != COMPANY_INVALID.
+	 * @return The staff budget, 0 (none) to 3 (generous pay), or -1 for an invalid company.
+	 * @api ai game
+	 */
+	static SQInteger GetStaffBudget(ScriptCompany::CompanyID company);
+
+	/**
 	 * Set whether autorenew is enabled for your company.
 	 * @param autorenew The new autorenew status.
 	 * @game @pre ScriptCompanyMode::IsValid().

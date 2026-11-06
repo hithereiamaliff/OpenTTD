@@ -13,6 +13,7 @@
 #include "script_tile.hpp"
 #include "../squirrel_helper_type.hpp"
 #include "../../station_type.h"
+#include "../../depot_yard_type.h"
 
 /**
  * Class that handles all road related functions.
@@ -84,6 +85,24 @@ public:
 		BT_DEPOT,      ///< Build a road depot
 		BT_BUS_STOP,   ///< Build a bus stop
 		BT_TRUCK_STOP, ///< Build a truck stop
+	};
+
+	/**
+	 * Facilities of a depot yard. They go next to a road depot, or next to
+	 * another facility of its yard, and serve the vehicles based at the depot:
+	 * where they were bought, or the depot they were last stopped in.
+	 */
+	enum DepotFacility {
+		DF_BUS_PARK          = ::to_underlying(::DepotFacility::BusPark),         ///< Room for 8 vehicles.
+		DF_SOLAR_BUS_PARK    = ::to_underlying(::DepotFacility::SolarBusPark),    ///< Room for 8 vehicles; powers 6 electric buses (15% cheaper to run).
+		DF_MULTI_STOREY_PARK = ::to_underlying(::DepotFacility::MultiStoreyPark), ///< Room for 24 vehicles.
+		DF_CHARGING_BAY      = ::to_underlying(::DepotFacility::ChargingBay),     ///< Two chargers of 180 kWh a day, room for 2 vehicles.
+		DF_FAST_CHARGING_BAY = ::to_underlying(::DepotFacility::FastChargingBay), ///< Two chargers of 500 kWh a day, room for 2 vehicles.
+		DF_SUBSTATION        = ::to_underlying(::DepotFacility::Substation),      ///< 3,000 kWh a day more for the chargers.
+		DF_REPAIR_BAY        = ::to_underlying(::DepotFacility::RepairBay),       ///< Keeps 20 vehicles in shape.
+		DF_WASH_FUEL_LANE    = ::to_underlying(::DepotFacility::WashFuelLane),    ///< Fuels 50 vehicles (8% cheaper to run).
+		DF_STAFF_BUILDING    = ::to_underlying(::DepotFacility::StaffBuilding),   ///< Staff room for 40 vehicles.
+		DF_INVALID           = -1, ///< Not a depot facility.
 	};
 
 	/**
@@ -558,6 +577,75 @@ public:
 	 * @return 0 (traffic flows freely) to 7 (jammed), or -1 if the tile isn't a road tile (depots aren't either).
 	 */
 	static SQInteger GetCongestion(TileIndex tile);
+
+	/**
+	 * Build a depot facility next to one of your road depots or its yard.
+	 * @param tile The tile to build it on.
+	 * @param facility The facility.
+	 * @pre ScriptMap::IsValidTile(tile).
+	 * @pre facility is a depot facility other than DF_INVALID.
+	 * @game @pre ScriptCompanyMode::IsValid().
+	 * @exception ScriptError::ERR_AREA_NOT_CLEAR
+	 * @exception ScriptError::ERR_NOT_ENOUGH_CASH
+	 * @return Whether the facility has been/can be built.
+	 * @api ai game
+	 */
+	static bool BuildDepotFacility(TileIndex tile, DepotFacility facility);
+
+	/**
+	 * Get the depot facility on a tile.
+	 * @param tile The tile.
+	 * @return The facility, DF_INVALID if there is none.
+	 * @api ai game
+	 */
+	static DepotFacility GetDepotFacility(TileIndex tile);
+
+	/**
+	 * How many vehicles fit in a road depot and its yard.
+	 * @param depot The depot tile.
+	 * @return The places, or -1 if the tile isn't a road depot.
+	 * @api ai game
+	 */
+	static SQInteger GetDepotYardPlaces(TileIndex depot);
+
+	/**
+	 * How many road vehicles are based at a road depot.
+	 * @param depot The depot tile.
+	 * @return The vehicles, or -1 if the tile isn't a road depot.
+	 * @api ai game
+	 */
+	static SQInteger GetDepotYardVehicles(TileIndex depot);
+
+	/**
+	 * Build a fast charger over one of your bus stops. Electric buses top up
+	 * while they stand there, and one below 40% waits until it gets there.
+	 * @param tile The bus stop.
+	 * @pre ScriptMap::IsValidTile(tile).
+	 * @game @pre ScriptCompanyMode::IsValid().
+	 * @exception ScriptError::ERR_ALREADY_BUILT
+	 * @exception ScriptError::ERR_NOT_ENOUGH_CASH
+	 * @return Whether the charger has been/can be built.
+	 * @api ai game
+	 */
+	static bool BuildStopCharger(TileIndex tile);
+
+	/**
+	 * Remove the charger of one of your bus stops.
+	 * @param tile The bus stop.
+	 * @pre ScriptMap::IsValidTile(tile).
+	 * @game @pre ScriptCompanyMode::IsValid().
+	 * @return Whether the charger has been/can be removed.
+	 * @api ai game
+	 */
+	static bool RemoveStopCharger(TileIndex tile);
+
+	/**
+	 * Does a bus stop have a charger?
+	 * @param tile The tile.
+	 * @return True if it has.
+	 * @api ai game
+	 */
+	static bool HasStopCharger(TileIndex tile);
 
 	/**
 	 * Builds traffic lights at a road junction (a road tile with three or four road pieces).

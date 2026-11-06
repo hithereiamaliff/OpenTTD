@@ -38,7 +38,6 @@ struct CityBusSpec {
 
 static constexpr uint BATTERY_SEEK_DEPOT_PERCENT = 25; ///< Below this charge an electric bus heads for a depot.
 static constexpr uint BATTERY_LEAVE_DEPOT_PERCENT = 95; ///< An electric bus in a depot stays until it is charged this far.
-static constexpr uint DEPOT_CHARGE_KWH_PER_DAY = 90; ///< What a plain road depot charges a day.
 static constexpr uint BATTERY_FADE_PERCENT_PER_YEAR = 2; ///< Battery capacity lost each year of age.
 static constexpr uint BATTERY_MIN_HEALTH_PERCENT = 60; ///< Batteries never fade below this.
 static constexpr uint FLAT_BATTERY_SPEED = 30; ///< Top speed with a flat battery, in internal road vehicle units (15 km/h).
@@ -62,6 +61,5 @@ bool IsChargingInDepot(const RoadVehicle *v);
 
 void InitBattery(RoadVehicle *v);
 void UseBattery(RoadVehicle *v, uint steps);
-void ChargeBatteryInDepot(RoadVehicle *v);
 
 #endif /* CITY_BUS_H */

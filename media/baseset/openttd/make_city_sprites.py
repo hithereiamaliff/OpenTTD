@@ -47,7 +47,7 @@ BROWN, BROWN_DARK = nearest((150, 90, 40)), nearest((90, 50, 20))
 YELLOW = nearest((252, 220, 0))
 TREE, TREE_DARK = nearest((60, 150, 40)), nearest((30, 90, 20))
 
-W, H = 512, 460
+W, H = 512, 600
 sheet = Image.new("P", (W, H), T)
 sheet.putpalette(pal)
 px = sheet.load()
@@ -733,6 +733,216 @@ for kind in SL.BUSES:
         sprites.append((x0, y0, img.width, img.height, -ox, -oy, f"{kind} {d}"))
 
 assert len(sprites) == 191, len(sprites)
+
+# Depot yards: two ground markings (parking, charging bays) and the buildings
+# and fittings of the facilities, in the order of the YardSprite enum in depot_yard.cpp.
+ASPHALT, KERB = rgb_index((78, 78, 82)), rgb_index((165, 165, 160))
+LINE_WHITE = rgb_index((236, 236, 236))
+EV_GREEN = rgb_index((60, 150, 70))
+CONCRETE = (175, 175, 170)
+DARK_OPEN = rgb_index((38, 38, 42))
+STEEL = (130, 132, 138)
+CC_BAND = 0xC9  # company colour, recoloured on the owner's buildings
+
+
+def yard_edge(x, y):
+    return x < 0.6 or y < 0.6 or x > 15.4 or y > 15.4
+
+
+def park_ground(x, y):
+    """Four parking lanes along X, divided by white lines."""
+    if yard_edge(x, y):
+        return KERB
+    for yy in (4, 8, 12):
+        if abs(y - yy) < 0.3 and 1.2 <= x <= 14.8:
+            return LINE_WHITE
+    if abs(x - 1.2) < 0.25 and 0.6 <= y <= 15.4:
+        return LINE_WHITE
+    return ASPHALT
+
+
+def bay_ground(x, y):
+    """Two charging bays along X, painted green at the chargers' end."""
+    if yard_edge(x, y):
+        return KERB
+    if abs(y - 8) < 0.3 and 1.2 <= x <= 12.8:
+        return LINE_WHITE
+    if 10.5 <= x <= 12.6 and (1.4 <= y <= 6.6 or 9.4 <= y <= 14.6):
+        return EV_GREEN
+    return ASPHALT
+
+
+yard = []
+g = Building()
+g.ground(park_ground)
+yard.append((g, "yard: park ground"))
+
+g = Building()
+g.ground(bay_ground)
+yard.append((g, "yard: charging bay ground"))
+
+# Solar roof over a bus park: four posts and a canopy of panels, its edge in company colour.
+b = Building()
+PANEL, PANEL_LINE = rgb_index((35, 55, 105)), rgb_index((120, 140, 185))
+for (px_, py_) in ((1.2, 1.2), (1.2, 14.8), (14.8, 1.2), (14.8, 14.8)):
+    b.box(px_ - 0.3, py_ - 0.3, px_ + 0.3, py_ + 0.3, 0, 12, STEEL, STEEL)
+b.box(0.4, 0.4, 15.6, 15.6, 12, 13.5, (200, 200, 205), (200, 200, 205),
+      sw=lambda u, v: CC_BAND, se=lambda u, v: CC_BAND,
+      roof=lambda x, y: PANEL_LINE if (x % 3.8 < 0.35 or y % 2.6 < 0.3) else PANEL)
+yard.append((b, "yard: solar roof"))
+
+# Multi-storey bus park: concrete decks with open sides, a stair tower in company colour.
+b = Building()
+def decks(u, v):
+    if int(v) % 8 < 2:
+        return None  # slab edge, wall colour
+    if u % 3.0 < 0.45:
+        return rgb_index((150, 150, 145))  # column
+    return DARK_OPEN
+b.box(1, 1, 15, 15, 0, 26, CONCRETE, (150, 150, 150), sw=decks, se=decks,
+      roof=lambda x, y: LINE_WHITE if (abs(y - 5) < 0.25 or abs(y - 10) < 0.25) and 2 < x < 14 else rgb_index((105, 105, 108)))
+b.box(11.5, 11.5, 15, 15, 26, 31, (190, 60, 50), (150, 150, 150), sw=lambda u, v: CC_BAND, se=lambda u, v: CC_BAND)
+yard.append((b, "yard: multi-storey park"))
+
+# Chargers of a charging bay: two white pedestals with a company colour band and a screen.
+b = Building()
+def pedestal(u, v):
+    if 6 <= v < 7.5:
+        return CC_BAND
+    if 3.5 <= v < 5.5 and 0.2 <= u <= 1.0:
+        return rgb_index((30, 40, 60))
+    return None
+for py_ in (3.0, 11.0):
+    b.box(13.8, py_, 14.9, py_ + 1.4, 0, 9, (235, 235, 238), (200, 200, 205), sw=pedestal, se=pedestal)
+yard.append((b, "yard: chargers"))
+
+# Fast chargers: a gantry over the bays with two pantographs, a cabinet at the side.
+b = Building()
+for py_ in (0.8, 15.2):
+    b.box(14.6, py_ - 0.35, 15.3, py_ + 0.35, 0, 15, STEEL, STEEL)
+b.box(13.2, 0.4, 15.4, 15.6, 13, 15, (210, 210, 210), (210, 210, 210), sw=lambda u, v: CC_BAND, se=lambda u, v: CC_BAND)
+for py_ in (4.0, 12.0):
+    b.box(12.6, py_ - 0.9, 13.4, py_ + 0.9, 10.5, 13, (40, 40, 44), (40, 40, 44))
+b.box(14.4, 7.0, 15.6, 9.0, 0, 8, (225, 225, 228), (190, 190, 195), sw=pedestal)
+yard.append((b, "yard: fast chargers"))
+
+# Substation: gravel inside a fence, two transformers with fins, a busbar on insulators, a control house.
+b = Building()
+GRAVEL = rgb_index((150, 140, 125))
+b.ground(lambda x, y: KERB if yard_edge(x, y) else GRAVEL)
+fins = lambda u, v: rgb_index((60, 62, 66)) if u % 1.0 < 0.35 and v > 1 else None
+for py_ in (2.5, 8.5):
+    b.box(3.5, py_, 7.5, py_ + 4, 0, 9, (95, 98, 104), (120, 122, 128), sw=fins, se=fins)
+for py_ in (3.0, 7.0, 11.0, 14.0):
+    b.pole(9.2, py_, 0, 12, flag=False)
+b.box(8.9, 2.6, 9.5, 14.4, 12, 13, STEEL, STEEL)
+b.box(10.5, 10.5, 14.8, 14.8, 0, 10, CONCRETE, (150, 150, 150),
+      sw=lambda u, v: rgb_index((60, 70, 90)) if 1.5 <= u <= 2.5 and v < 6 else (CC_BAND if v >= 8 else None))
+FENCE = rgb_index((150, 155, 160))
+for (x0, y0, x1, y1) in ((0.3, 0.3, 15.7, 0.6), (0.3, 0.3, 0.6, 15.7)):
+    b.box(x0, y0, x1, y1, 0, 5, STEEL, STEEL, sw=lambda u, v: FENCE if u % 0.8 < 0.3 else None)
+yard.append((b, "yard: substation"))
+
+# Repair bay: a workshop shed with a roller door and a company colour band.
+b = Building()
+b.ground(lambda x, y: KERB if yard_edge(x, y) else rgb_index((120, 120, 118)))
+ROLLER = rgb_index((185, 185, 180))
+def shed_se(u, v):
+    if 1.5 <= u <= 8.0 and v < 12:
+        return ROLLER if int(v) % 2 == 0 else rgb_index((150, 150, 146))
+    if v >= 14:
+        return CC_BAND
+    return None
+def shed_sw(u, v):
+    if v >= 14:
+        return CC_BAND
+    if 6 <= v < 10 and u % 3 < 1.8:
+        return GLASS
+    return None
+b.box(1.5, 1.5, 14.5, 14.5, 0, 17, (140, 155, 170), (95, 100, 108), sw=shed_sw, se=shed_se,
+      roof=lambda x, y: rgb_index((120, 124, 130)) if int(x * 2) % 2 == 0 else None)
+yard.append((b, "yard: repair bay"))
+
+# Wash and fuel lane: a canopy over a lane with two pumps and a bus wash portal.
+b = Building()
+def lane_ground(x, y):
+    if yard_edge(x, y):
+        return KERB
+    if (abs(y - 4.5) < 0.25 or abs(y - 11.5) < 0.25) and 1 <= x <= 15:
+        return rgb_index((230, 200, 40))
+    return ASPHALT
+b.ground(lane_ground)
+for (px_, py_) in ((4.5, 2.0), (4.5, 14.0), (12.0, 2.0), (12.0, 14.0)):
+    b.box(px_ - 0.3, py_ - 0.3, px_ + 0.3, py_ + 0.3, 0, 12, STEEL, STEEL)
+b.box(4.0, 1.5, 12.5, 14.5, 12, 14, (235, 235, 238), (225, 225, 228), sw=lambda u, v: CC_BAND, se=lambda u, v: CC_BAND)
+for py_ in (2.3, 13.0):
+    b.box(8.0, py_, 9.0, py_ + 0.9, 0, 6, (200, 40, 35), (150, 30, 25))
+b.box(1.2, 5.0, 2.6, 11.0, 0, 11, (60, 62, 70), (60, 62, 70))
+b.box(1.5, 5.6, 2.3, 10.4, 1, 9, (50, 110, 200), (40, 90, 170))
+yard.append((b, "yard: wash and fuel lane"))
+
+# Staff building: two storeys with windows, a company colour band, a bench and a tree.
+b = Building()
+b.ground(lambda x, y: KERB if yard_edge(x, y) else rgb_index((120, 150, 90)))
+def staff_face(u, v):
+    if v >= 13:
+        return CC_BAND
+    if (2.5 <= v < 5.5 or 8 <= v < 11) and u % 2.4 < 1.4:
+        return GLASS
+    return None
+def staff_se(u, v):
+    if 4.2 <= u <= 5.8 and v < 6:
+        return rgb_index((90, 60, 35))
+    return staff_face(u, v)
+b.box(2.5, 2.5, 12.5, 12.5, 0, 15, (230, 220, 195), (190, 180, 155), sw=staff_face, se=staff_se)
+b.box(5, 5, 7.5, 7.5, 15, 17.5, (170, 170, 170), (140, 140, 140))
+b.tree(14.0, 4.0, size=3.0, height=6)
+yard.append((b, "yard: staff building"))
+
+for i, (bld, name) in enumerate(yard):
+    x0, y0 = (4 + (i % 7) * 72, 462) if i < 7 else (4 + (i - 7) * 72, 530)
+    w = bld.emit(x0, y0, name)
+    assert w <= 70, (name, w)
+
+assert len(sprites) == 201, len(sprites)
+
+# Charger over a bus stop: a gantry across the road with a pantograph over each lane,
+# for a road along X and along Y; then the road toolbar icon.
+for axis, x0 in (('x', 220), ('y', 292)):
+    b = Building()
+    def at(u, w):
+        """u along the road, w across it."""
+        return (u, w) if axis == 'x' else (w, u)
+    for w in (0.7, 15.3):
+        cx, cy = at(8.0, w)
+        b.box(cx - 0.35, cy - 0.35, cx + 0.35, cy + 0.35, 0, 15, STEEL, STEEL)
+    ax0, ay0 = at(7.3, 0.4)
+    ax1, ay1 = at(8.7, 15.6)
+    b.box(min(ax0, ax1), min(ay0, ay1), max(ax0, ax1), max(ay0, ay1), 13, 15, (210, 210, 210), (210, 210, 210),
+          sw=lambda u, v: CC_BAND, se=lambda u, v: CC_BAND)
+    for w in (5.0, 11.0):
+        px0, py0 = at(7.5, w - 0.9)
+        px1, py1 = at(8.5, w + 0.9)
+        b.box(min(px0, px1), min(py0, py1), max(px0, px1), max(py0, py1), 10.5, 13, (40, 40, 44), (40, 40, 44))
+    b.emit(x0, 530, f"stop charger {axis}")
+
+icon(366, 530, [
+    "........KKKK....",
+    ".......KYYYK....",
+    "......KYYYK.....",
+    ".....KYYYK......",
+    "....KYYYYKKKK...",
+    "...KYYYYYYYYK...",
+    "...KKKKYYYYK....",
+    "......KYYYK.....",
+    ".....KYYYK......",
+    "....KYYK........",
+    "...KYYK.........",
+    "...KYK..........",
+    "...KK...........",
+], {'K': BLACK, 'Y': YELLOW}, "icon stop charger")
+
+assert len(sprites) == 204, len(sprites)
 sheet.save(f"{SRC}/city.png", optimize=True)
 
 header = """// This file is part of OpenTTD.
@@ -752,6 +962,9 @@ header = """// This file is part of OpenTTD.
 //   73-78: street life people: light and dark skin; walking (two steps) and standing
 //   79-190: city buses, 8 directions each: minibus, midibus, 12 m, double-deck, articulated front and rear;
 //           the same electric; BRT front and rear
+//   191-200: depot yards: park and charging bay ground, solar roof, multi-storey park, chargers, fast chargers,
+//            substation, repair bay, wash and fuel lane, staff building
+//   201-203: charger over a bus stop (road along X, along Y), icon of the stop charger tool
 //
    -1 * 0\t 0C "City fork graphics"
    -1 * 3\t 05 1C %02X

@@ -1604,6 +1604,12 @@ STR_CONFIG_SETTING_AUTORENEW_MONTHS_VALUE_AFTER                 :{COMMA} month{P
 
 STR_CONFIG_SETTING_AUTORENEW_MONEY                              :Autorenew minimum needed money for renew: {STRING2}
 STR_CONFIG_SETTING_AUTORENEW_MONEY_HELPTEXT                     :Minimal amount of money that must remain in the bank before considering auto-renewing vehicles
+STR_CONFIG_SETTING_STAFF_BUDGET                                 :Staff budget for road vehicles: {STRING2}
+STR_CONFIG_SETTING_STAFF_BUDGET_HELPTEXT                        :Off: staff are simply part of the running costs. Otherwise you choose their pay: lean pay makes road vehicles 6% cheaper to run but they wear 25% faster and break down more; generous pay costs 6% more and they wear 15% slower. With a staff budget, depots also need staff buildings: a depot has staff rooms for 10 vehicles, each staff building in its yard for 40 more, and the vehicles based at a depot without room for their staff wear up to 25% faster
+STR_CONFIG_SETTING_STAFF_BUDGET_OFF                             :Off
+STR_CONFIG_SETTING_STAFF_BUDGET_LEAN                            :Lean pay
+STR_CONFIG_SETTING_STAFF_BUDGET_STANDARD                        :Standard pay
+STR_CONFIG_SETTING_STAFF_BUDGET_GENEROUS                        :Generous pay
 
 STR_CONFIG_SETTING_ERRMSG_DURATION                              :Duration of error message: {STRING2}
 STR_CONFIG_SETTING_ERRMSG_DURATION_HELPTEXT                     :Duration for displaying error messages in a red window. Note that some (critical) error messages are not closed automatically after this time, but must be closed manually
@@ -3027,6 +3033,7 @@ STR_ROAD_TOOLBAR_TOOLTIP_BUILD_TRUCK_LOADING_BAY                :{BLACK}Build lo
 STR_ROAD_TOOLBAR_TOOLTIP_BUILD_CARGO_TRAM_STATION               :{BLACK}Build freight tram station. Ctrl+Click to select another station to join. Also press Shift to show cost estimate only
 STR_ROAD_TOOLBAR_TOOLTIP_TOGGLE_ONE_WAY_ROAD                    :{BLACK}Activate/Deactivate one way roads
 STR_ROAD_TOOLBAR_TOOLTIP_TRAFFIC_OVERLAY                        :{BLACK}Show road traffic: colour roads by how much traffic is held up there (green flows, yellow some waiting, orange slow, red jammed)
+STR_ROAD_TOOLBAR_TOOLTIP_BUILD_STOP_CHARGER                     :{BLACK}Build a fast charger over a bus stop: electric buses top up while they stand there, and one below 40% waits until it gets there. Ctrl+Click removes the charger
 STR_ROAD_TOOLBAR_TOOLTIP_BUILD_TRAFFIC_LIGHTS                   :{BLACK}Build traffic lights at a road junction, or click lights to change their timings. Ctrl+Click to remove them. Also press Shift to show cost estimate only
 
 # Zoning toolbar
@@ -3299,6 +3306,9 @@ STR_LAND_AREA_INFORMATION_HOUSE_KIND_HOME                       :a home
 STR_LAND_AREA_INFORMATION_HOUSE_KIND_BUSINESS                   :a business
 STR_LAND_AREA_INFORMATION_HOUSE_KIND_PUBLIC                     :a public building
 STR_LAND_AREA_INFORMATION_CITY_SERVICE                          :{BLACK}Reaches: {LTBLUE}{NUM} tiles around{BLACK}, upkeep: {LTBLUE}{CURRENCY_LONG}{BLACK} a year
+STR_LAND_AREA_INFORMATION_DEPOT_YARD                            :{BLACK}Depot yard of: {LTBLUE}{DEPOT}{BLACK}; upkeep {CURRENCY_LONG} a year
+STR_LAND_AREA_INFORMATION_DEPOT_YARD_NONE                       :{BLACK}Depot yard of: {LTBLUE}no depot{BLACK} (not next to one); upkeep {CURRENCY_LONG} a year
+STR_LAND_AREA_INFORMATION_STOP_CHARGER                          :{BLACK}Charger for electric buses: {LTBLUE}{NUM} kWh a day{BLACK}; upkeep {CURRENCY_LONG} a year
 STR_LAND_AREA_INFORMATION_CITY_SERVICES_HERE                    :{BLACK}City services here: {LTBLUE}{RAW_STRING}
 STR_LAND_AREA_INFORMATION_LANDINFO_COORDS                       :{BLACK}Coordinates: {LTBLUE}{NUM} x {NUM} x {NUM}
 STR_LAND_AREA_INFORMATION_LANDINFO_INDEX                        :{BLACK}Tile index: {LTBLUE}{NUM} ({HEX})
@@ -4695,6 +4705,7 @@ STR_VEHICLE_STATUS_LOADING_UNLOADING                            :{LTBLUE}Loading
 STR_VEHICLE_STATUS_LEAVING                                      :{LTBLUE}Leaving
 STR_VEHICLE_STATUS_WAITING_UNBUNCHING                           :{LTBLUE}Waiting to unbunch
 STR_VEHICLE_STATUS_CHARGING                                     :{LTBLUE}Charging: {NUM}%
+STR_VEHICLE_STATUS_WAITING_FOR_CHARGER                          :{ORANGE}Waiting for a charger: {NUM}%
 STR_VEHICLE_STATUS_CRASHED                                      :{RED}Crashed!
 STR_VEHICLE_STATUS_BROKEN_DOWN                                  :{RED}Broken down
 STR_VEHICLE_STATUS_STOPPED                                      :{RED}Stopped
@@ -4753,6 +4764,8 @@ STR_VEHICLE_INFO_FEEDER_CARGO_VALUE                             :{BLACK}Transfer
 STR_VEHICLE_DETAILS_BATTERY                                     :{BLACK}Battery: {LTBLUE}{NUM}%{BLACK} of {NUM} kWh (health {NUM}%), {NUM} tiles left
 STR_VEHICLE_DETAILS_BATTERY_AIRCON                              :{BLACK}Battery: {LTBLUE}{NUM}%{BLACK} of {NUM} kWh (health {NUM}%), {NUM} tiles left (air-con +{NUM}%)
 STR_VEHICLE_DETAILS_BATTERY_HEATING                             :{BLACK}Battery: {LTBLUE}{NUM}%{BLACK} of {NUM} kWh (health {NUM}%), {NUM} tiles left (heating +{NUM}%)
+STR_VEHICLE_DETAILS_HOME_DEPOT                                  :{BLACK}Home depot: {LTBLUE}{DEPOT}
+STR_VEHICLE_DETAILS_HOME_DEPOT_NONE                             :{BLACK}Home depot: {LTBLUE}none yet{BLACK} (the next depot it enters)
 
 STR_VEHICLE_DETAILS_SERVICING_INTERVAL_DAYS                     :{BLACK}Servicing interval: {LTBLUE}{COMMA}{NBSP}days{BLACK}   {STRING1}
 STR_VEHICLE_DETAILS_SERVICING_INTERVAL_MINUTES                  :{BLACK}Servicing interval: {LTBLUE}{COMMA}{NBSP}minute{P "" s}{BLACK}   {STRING1}
@@ -5209,6 +5222,44 @@ STR_CITY_BUS_KENARI_CITY_12E                                    :Kenari City 12e
 STR_CITY_BUS_MERBOK_TWIN_DECKER_E                               :Merbok Twin Decker E
 STR_CITY_BUS_KENARI_BENDI_18E                                   :Kenari Bendi 18e
 STR_CITY_BUS_LAJU_BRT_18E                                       :Laju BRT 18e
+
+# City fork: depot yards (depot_yard.cpp)
+STR_DEPOT_FACILITY_BUS_PARK                                     :Bus park
+STR_DEPOT_FACILITY_BUS_PARK_TOOLTIP                             :{BLACK}Bus park: room for 8 vehicles{}Cost: {CURRENCY_LONG}, upkeep {CURRENCY_LONG} a year
+STR_DEPOT_FACILITY_SOLAR_BUS_PARK                               :Solar bus park
+STR_DEPOT_FACILITY_SOLAR_BUS_PARK_TOOLTIP                       :{BLACK}Bus park under a solar roof: room for 8 vehicles, and power that makes 6 electric buses based here run 15% cheaper{}Cost: {CURRENCY_LONG}, upkeep {CURRENCY_LONG} a year
+STR_DEPOT_FACILITY_MULTI_STOREY                                 :Multi-storey park
+STR_DEPOT_FACILITY_MULTI_STOREY_TOOLTIP                         :{BLACK}Multi-storey bus park: room for 24 vehicles on one tile{}Cost: {CURRENCY_LONG}, upkeep {CURRENCY_LONG} a year
+STR_DEPOT_FACILITY_CHARGING_BAY                                 :Charging bay
+STR_DEPOT_FACILITY_CHARGING_BAY_TOOLTIP                         :{BLACK}Charging bay: two chargers for electric buses, 180 kWh a day each, and room for 2 vehicles. A depot has two chargers of 60 kWh a day of its own{}Cost: {CURRENCY_LONG}, upkeep {CURRENCY_LONG} a year
+STR_DEPOT_FACILITY_FAST_CHARGING_BAY                            :Fast charging bay
+STR_DEPOT_FACILITY_FAST_CHARGING_BAY_TOOLTIP                    :{BLACK}Fast charging bay: two chargers of 500 kWh a day each, and room for 2 vehicles. Needs a substation to run at full power{}Cost: {CURRENCY_LONG}, upkeep {CURRENCY_LONG} a year
+STR_DEPOT_FACILITY_SUBSTATION                                   :Substation
+STR_DEPOT_FACILITY_SUBSTATION_TOOLTIP                           :{BLACK}Substation: adds 3,000 kWh a day to the depot's grid connection (600 kWh a day without one), which all its chargers share{}Cost: {CURRENCY_LONG}, upkeep {CURRENCY_LONG} a year
+STR_DEPOT_FACILITY_REPAIR_BAY                                   :Repair bay
+STR_DEPOT_FACILITY_REPAIR_BAY_TOOLTIP                           :{BLACK}Repair bay: a workshop that keeps 20 more vehicles in shape (the depot itself manages 5). When there are more, the vehicles based here wear up to 50% faster and break down more{}Cost: {CURRENCY_LONG}, upkeep {CURRENCY_LONG} a year
+STR_DEPOT_FACILITY_WASH_FUEL                                    :Wash and fuel lane
+STR_DEPOT_FACILITY_WASH_FUEL_TOOLTIP                            :{BLACK}Wash and fuel lane: bulk fuel makes up to 50 vehicles based here (not the electric ones) run 8% cheaper, and keeps them clean{}Cost: {CURRENCY_LONG}, upkeep {CURRENCY_LONG} a year
+STR_DEPOT_FACILITY_STAFF                                        :Staff building
+STR_DEPOT_FACILITY_STAFF_TOOLTIP                                :{BLACK}Staff building: canteen and lounge for the staff of 40 vehicles (the depot itself has room for 10). Needed when your company has a staff budget (company settings){}Cost: {CURRENCY_LONG}, upkeep {CURRENCY_LONG} a year
+STR_DEPOT_YARD_CAPTION                                          :{WHITE}{DEPOT}: yard
+STR_DEPOT_YARD_LOCATION_TOOLTIP                                 :{BLACK}Centre the main view on the depot. Ctrl+Click opens a new viewport on its location
+STR_DEPOT_YARD_PLACES                                           :{BLACK}Vehicles based here: {NUM} of {NUM} places
+STR_DEPOT_YARD_OVERFLOW                                         :{ORANGE}{NUM} park on the street: running costs +{NUM}%
+STR_DEPOT_YARD_CHARGERS                                         :{BLACK}Chargers: {NUM}, giving {NUM} kWh a day; grid connection {NUM} kWh a day
+STR_DEPOT_YARD_CHARGING_NOW                                     :{BLACK}Charging now: {NUM}, waiting for a charger: {NUM}
+STR_DEPOT_YARD_REPAIRS                                          :{BLACK}Workshops keep {NUM} vehicles in shape
+STR_DEPOT_YARD_REPAIRS_SHORT                                    :{BLACK}Workshops keep {NUM} vehicles in shape: {ORANGE}the vehicles based here wear {NUM}% faster
+STR_DEPOT_YARD_FUEL                                             :{BLACK}Wash and fuel: {NUM} vehicles; their running costs -{NUM}%
+STR_DEPOT_YARD_SOLAR                                            :{BLACK}Solar roofs: power for {NUM} electric buses; their running costs -{NUM}%
+STR_DEPOT_YARD_STAFF                                            :{BLACK}Staff rooms for {NUM} vehicles; {STRING}
+STR_DEPOT_YARD_STAFF_SHORT                                      :{BLACK}Staff rooms for {NUM} vehicles; {STRING}: {ORANGE}the vehicles based here wear {NUM}% faster
+STR_DEPOT_YARD_UPKEEP                                           :{BLACK}Upkeep of the yard: {CURRENCY_LONG} a year
+STR_DEPOT_YARD_HINT                                             :{GRAY}Build facilities next to the depot, or next to its other facilities. A vehicle is based at the depot it was bought in, or the depot it was last stopped in; it goes there for service and charging
+STR_DEPOT_YARD_BUTTON                                           :Yard
+STR_DEPOT_YARD_BUTTON_TOOLTIP                                   :{BLACK}Show the depot's yard: parking, chargers, workshops and the vehicles based here
+STR_ERROR_CAN_T_BUILD_DEPOT_FACILITY                            :{WHITE}Can't build this depot facility here...
+STR_ERROR_DEPOT_FACILITY_NEXT_TO_DEPOT                          :{WHITE}... it must be next to one of your road depots or its yard
 STR_ERROR_CAN_T_BID                                             :{WHITE}Can't bid...
 STR_ERROR_CAN_T_END_CONTRACT                                    :{WHITE}Can't end the contract...
 STR_NEWS_TRANSIT_TENDER                                         :{BIG_FONT}{BLACK}{TOWN} invites tenders to run {RAW_STRING} under a 5-year contract (8 years with electric buses): the town keeps the fares and pays a monthly fee. The line costs {CURRENCY_LONG} a month; bid in the town's transit window by {DATE_LONG}
@@ -5647,6 +5698,10 @@ STR_ERROR_NO_SUITABLE_ROAD                                      :no suitable roa
 STR_ERROR_NO_SUITABLE_TRAMWAY                                   :no suitable tramway
 STR_ERROR_CAN_T_BUILD_TRAFFIC_LIGHTS                            :Can't build traffic lights here...
 STR_ERROR_CAN_T_REMOVE_TRAFFIC_LIGHTS                           :Can't remove traffic lights from here...
+STR_ERROR_CAN_T_BUILD_STOP_CHARGER                              :{WHITE}Can't build a charger here...
+STR_ERROR_CAN_T_REMOVE_STOP_CHARGER                             :{WHITE}Can't remove the charger here...
+STR_ERROR_STOP_CHARGER_BUS_STOP_ONLY                            :{WHITE}... chargers go over bus stops
+STR_ERROR_STOP_CHARGER_NONE                                     :{WHITE}... there is no charger here
 STR_ERROR_TRAFFIC_LIGHTS_NEED_JUNCTION                          :traffic lights need a road junction
 STR_ERROR_ALREADY_HAS_TRAFFIC_LIGHTS                            :... junction already has traffic lights
 STR_ERROR_NO_TRAFFIC_LIGHTS                                     :there are no traffic lights here

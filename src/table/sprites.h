@@ -398,7 +398,10 @@ static constexpr SpriteID SPR_IMG_LINES_MAP = SPR_TRAFFIC_LIGHTS_BASE + 40; ///<
 static constexpr SpriteID SPR_STREET_LIFE_VEHICLES = SPR_TRAFFIC_LIGHTS_BASE + 41; ///< Street life: car, van, lorry, motorbike; 8 directions each (32 sprites).
 static constexpr SpriteID SPR_STREET_LIFE_PEOPLE = SPR_TRAFFIC_LIGHTS_BASE + 73; ///< Street life people: light and dark skin; walking (two steps) and standing (6 sprites).
 static constexpr SpriteID SPR_CITY_BUSES = SPR_TRAFFIC_LIGHTS_BASE + 79; ///< City buses, 8 directions each: minibus, midibus, 12 m, double-deck, articulated front/rear; the same electric; BRT front/rear (112 sprites).
-static constexpr uint16_t TRAFFIC_LIGHTS_SPRITE_COUNT = 191;
+static constexpr SpriteID SPR_DEPOT_YARD_BASE = SPR_TRAFFIC_LIGHTS_BASE + 191; ///< Depot yards: ground markings and facilities (10 sprites, see depot_yard.cpp).
+static constexpr SpriteID SPR_STOP_CHARGER_X = SPR_TRAFFIC_LIGHTS_BASE + 201; ///< Charger over a bus stop on a road along X; along Y follows.
+static constexpr SpriteID SPR_IMG_STOP_CHARGER = SPR_TRAFFIC_LIGHTS_BASE + 203; ///< Icon of the stop charger tool.
+static constexpr uint16_t TRAFFIC_LIGHTS_SPRITE_COUNT = 204;
 
 static const SpriteID SPR_NEWGRFS_BASE = SPR_TRAFFIC_LIGHTS_BASE + TRAFFIC_LIGHTS_SPRITE_COUNT;
 

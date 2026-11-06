@@ -15,9 +15,12 @@
 //   73-78: street life people: light and dark skin; walking (two steps) and standing
 //   79-190: city buses, 8 directions each: minibus, midibus, 12 m, double-deck, articulated front and rear;
 //           the same electric; BRT front and rear
+//   191-200: depot yards: park and charging bay ground, solar roof, multi-storey park, chargers, fast chargers,
+//            substation, repair bay, wash and fuel lane, staff building
+//   201-203: charger over a bus stop (road along X, along Y), icon of the stop charger tool
 //
    -1 * 0	 0C "City fork graphics"
-   -1 * 3	 05 1C BF
+   -1 * 3	 05 1C CC
    -1 sprites/city.png 8bpp    4    4   4  17   -1  -16 normal
    -1 sprites/city.png 8bpp   12    4   4  17   -1  -16 normal
    -1 sprites/city.png 8bpp   20    4   4  17   -1  -16 normal
@@ -209,3 +212,16 @@
    -1 sprites/city.png 8bpp  368  428  19  16   -9  -11 normal
    -1 sprites/city.png 8bpp  396  428  20  12  -10   -9 normal
    -1 sprites/city.png 8bpp  424  428  19  16   -9  -11 normal
+   -1 sprites/city.png 8bpp    4  462  62  32  -30    0 normal
+   -1 sprites/city.png 8bpp   76  462  62  32  -30    0 normal
+   -1 sprites/city.png 8bpp  148  462  60  42  -29  -12 normal
+   -1 sprites/city.png 8bpp  220  462  56  54  -27  -24 normal
+   -1 sprites/city.png 8bpp  292  462  21  19  -23    8 normal
+   -1 sprites/city.png 8bpp  364  462  35  32  -29   -1 normal
+   -1 sprites/city.png 8bpp  436  462  62  36  -30   -4 normal
+   -1 sprites/city.png 8bpp    4  530  62  46  -30  -14 normal
+   -1 sprites/city.png 8bpp   76  530  62  40  -30   -8 normal
+   -1 sprites/city.png 8bpp  148  530  62  42  -30  -10 normal
+   -1 sprites/city.png 8bpp  220  530  34  31  -16   -7 normal
+   -1 sprites/city.png 8bpp  292  530  34  31  -16   -7 normal
+   -1 sprites/city.png 8bpp  366  530  16  13    0    0 normal

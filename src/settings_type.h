@@ -703,6 +703,7 @@ struct CompanySettings {
 	uint32_t engine_renew_money = 0; ///< minimum amount of money before autorenew is used
 	bool renew_keep_length = false; ///< sell some wagons if after autoreplace the train is longer than before
 	VehicleDefaultSettings vehicle{}; ///< default settings for vehicles
+	uint8_t staff_budget = 0; ///< City fork: pay of the road vehicles' staff, see #StaffBudget (0 = no staff budgets).
 };
 
 /** Container for AI and Game script configuration. */

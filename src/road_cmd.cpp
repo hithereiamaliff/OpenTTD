@@ -17,6 +17,7 @@
 #include "company_func.h"
 #include "pathfinder/yapf/yapf_cache.h"
 #include "depot_base.h"
+#include "depot_yard.h"
 #include "newgrf.h"
 #include "autoslope.h"
 #include "tunnelbridge_map.h"
@@ -1189,6 +1190,7 @@ CommandCost CmdBuildRoadDepot(DoCommandFlags flags, TileIndex tile, RoadType rt,
 			Depot *dep = Depot::Create(tile);
 			MakeRoadDepot(tile, _current_company, dep->index, dir, rt);
 			MakeDefaultName(dep);
+			OnDepotYardsChanged();
 
 			/* A road depot has two road bits. */
 			UpdateCompanyRoadInfrastructure(rt, _current_company, ROAD_DEPOT_TRACKBIT_FACTOR);
@@ -2442,6 +2444,7 @@ static void ChangeTileOwner_Road(TileIndex tile, Owner old_owner, Owner new_owne
 						SetRoadOwner(tile, rtt, new_owner);
 					}
 				}
+				OnDepotYardsChanged();
 			}
 		}
 		return;

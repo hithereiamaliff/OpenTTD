@@ -11,6 +11,8 @@
 #include "core/backup_type.hpp"
 #include "roadveh.h"
 #include "city_bus.h"
+#include "depot_base.h"
+#include "depot_yard.h"
 #include "window_gui.h"
 #include "strings_func.h"
 #include "vehicle_func.h"
@@ -116,6 +118,15 @@ void DrawRoadVehDetails(const Vehicle *v, const Rect &r)
 		} else {
 			DrawString(r.left, r.right, y, GetString(IsHvacHeating() ? STR_VEHICLE_DETAILS_BATTERY_HEATING : STR_VEHICLE_DETAILS_BATTERY_AIRCON, percent, kwh, health, tiles, hvac));
 		}
+	}
+
+	/* Where the vehicle is based. */
+	y += GetCharacterHeight(FontSize::Normal);
+	DepotID home = GetHomeDepot(rv);
+	if (Depot::IsValidID(home)) {
+		DrawString(r.left, r.right, y, GetString(STR_VEHICLE_DETAILS_HOME_DEPOT, VehicleType::Road, home));
+	} else {
+		DrawString(r.left, r.right, y, GetString(STR_VEHICLE_DETAILS_HOME_DEPOT_NONE));
 	}
 }
 

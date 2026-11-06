@@ -11,6 +11,8 @@
 #include "line.h"
 #include "error.h"
 #include "roadveh.h"
+#include "depot_yard.h"
+#include "stop_charger.h"
 #include "ship.h"
 #include "spritecache.h"
 #include "timetable.h"
@@ -830,6 +832,9 @@ void Vehicle::PreDestructor()
 {
 	if (CleaningPool()) return;
 
+	/* One vehicle fewer based at its depot. */
+	if (this->type == VehicleType::Road && this->IsFrontEngine()) OnDepotHomesChanged();
+
 	if (Station::IsValidID(this->last_station_visited)) {
 		Station *st = Station::Get(this->last_station_visited);
 		st->loading_vehicles.remove(this);
@@ -1329,9 +1334,11 @@ void CheckVehicleBreakdown(Vehicle *v)
 	/* With Reduced breakdowns, vehicles (un)loading at stations don't lose reliability. */
 	if (_settings_game.difficulty.vehicle_breakdowns == VehicleBreakdowns::Reduced && v->current_order.IsType(OT_LOADING)) return;
 
-	/* Decrease reliability. */
+	/* Decrease reliability; road vehicles wear faster when their depot's workshops can't keep up. */
 	int rel_old = v->reliability;
-	v->reliability = Clamp(rel_old - v->reliability_spd_dec, 0, Engine::Get(v->engine_type)->reliability);
+	int decrease = v->reliability_spd_dec;
+	if (v->type == VehicleType::Road) decrease = decrease * static_cast<int>(GetHomeDepotWearPercent(RoadVehicle::From(v))) / 100;
+	v->reliability = Clamp(rel_old - decrease, 0, Engine::Get(v->engine_type)->reliability);
 	if ((rel_old >> 8) != (v->reliability >> 8)) SetWindowDirty(WindowClass::VehicleDetails, v->index);
 
 	/* Some vehicles lose reliability but won't break down. */
@@ -1613,6 +1620,9 @@ void VehicleEnterDepot(Vehicle *v)
 	v->vehstatus.Set(VehState::Hidden);
 	v->cur_speed = 0;
 
+	/* A road vehicle without a home (it lost it, or comes from an old game) is based at the first depot it enters. */
+	if (v->type == VehicleType::Road && RoadVehicle::From(v)->home_depot == DepotID::Invalid()) SetHomeDepot(RoadVehicle::From(v), GetDepotIndex(v->tile));
+
 	VehicleServiceInDepot(v);
 
 	/* Store that the vehicle entered a depot this tick */
@@ -1663,6 +1673,8 @@ void VehicleEnterDepot(Vehicle *v)
 		if (v->current_order.GetDepotActionType().Test(OrderDepotActionFlag::Halt)) {
 			/* Vehicles are always stopped on entering depots. Do not restart this one. */
 			_vehicles_to_autoreplace[v->index] = false;
+			/* A road vehicle stopped in a depot is based there from now on. */
+			if (v->type == VehicleType::Road) SetHomeDepot(RoadVehicle::From(v), GetDepotIndex(v->tile));
 			/* Invalidate last_loading_station. As the link from the station
 			 * before the stop to the station after the stop can't be predicted
 			 * we shouldn't construct it when the vehicle visits the next stop. */
@@ -2464,6 +2476,9 @@ void Vehicle::HandleLoading(bool mode)
 
 			/* Lines that keep even spacing hold their vehicles at the first stop. */
 			if (MustHoldForLineSpacing(this)) return;
+
+			/* An electric bus running low charges under a stop's charger before it goes on. */
+			if (MustWaitToCharge(this)) return;
 
 			this->PlayLeaveStationSound();
 

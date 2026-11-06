@@ -9,6 +9,7 @@
 
 #include "stdafx.h"
 #include "city_services.h"
+#include "depot_yard.h"
 #include "bridge.h"
 #include "landscape.h"
 #include "command_func.h"
@@ -135,6 +136,7 @@ void BuildObject(ObjectType type, TileIndex tile, CompanyID owner, Town *town, u
 	Object::IncTypeCount(type);
 	if (spec->flags.Test(ObjectFlag::Animation)) TriggerObjectAnimation(o, ObjectAnimationTrigger::Built, spec);
 	if (IsCityServiceObjectType(type)) OnCityServicesChanged();
+	if (IsDepotFacilityObjectType(type)) OnDepotYardsChanged();
 }
 
 /**
@@ -216,7 +218,13 @@ CommandCost CmdBuildObject(DoCommandFlags flags, TileIndex tile, ObjectType type
 {
 	CommandCost cost(ExpensesType::Construction);
 
-	if (type >= ObjectSpec::Count() && !IsCityServiceObjectType(type)) return CMD_ERROR;
+	if (type >= ObjectSpec::Count() && !IsCityServiceObjectType(type) && !IsDepotFacilityObjectType(type)) return CMD_ERROR;
+	/* Depot facilities go next to one of the company's road depots, or next to its other facilities. */
+	if (IsDepotFacilityObjectType(type)) {
+		if (!Company::IsValidID(_current_company)) return CMD_ERROR;
+		CommandCost ret = CheckDepotFacilityLocation(tile, _current_company);
+		if (ret.Failed()) return ret;
+	}
 	const ObjectSpec *spec = ObjectSpec::Get(type);
 	if (_game_mode == GameMode::Normal && !spec->IsAvailable() && !_generating_world) return CMD_ERROR;
 	if ((_game_mode == GameMode::Editor || _generating_world) && !spec->WasEverAvailable()) return CMD_ERROR;
@@ -388,6 +396,7 @@ CommandCost CmdBuildObject(DoCommandFlags flags, TileIndex tile, ObjectType type
 
 	cost.AddCost(spec->GetBuildCost() * build_object_size);
 	if (IsCityServiceObjectType(type)) cost.AddCost(GetCityServiceBuildCost(GetCityServiceOfObjectType(type)));
+	if (IsDepotFacilityObjectType(type)) cost.AddCost(GetDepotFacilityBuildCost(GetDepotFacilityOfObjectType(type)));
 	return cost;
 }
 
@@ -464,6 +473,8 @@ static void DrawTile_Object(TileInfo *ti)
 
 	if (IsCityServiceObjectType(type)) {
 		DrawCityServiceTile(ti, type);
+	} else if (IsDepotFacilityObjectType(type)) {
+		DrawDepotFacilityTile(ti, type);
 	} else if (type < NEW_OBJECT_OFFSET) {
 		const DrawTileSprites *dts = nullptr;
 		Owner to = GetTileOwner(ti->tile);
@@ -522,6 +533,7 @@ static void ReallyClearObjectTile(Object *o)
 {
 	Object::DecTypeCount(o->type);
 	if (IsCityServiceObjectType(o->type)) OnCityServicesChanged();
+	if (IsDepotFacilityObjectType(o->type)) OnDepotYardsChanged();
 	for (TileIndex tile_cur : o->location) {
 		DeleteNewGRFInspectWindow(GrfSpecFeature::Objects, tile_cur.base());
 
@@ -962,6 +974,7 @@ static void ChangeTileOwner_Object(TileIndex tile, Owner old_owner, Owner new_ow
 	ObjectType type = GetObjectType(tile);
 	if ((type == OBJECT_OWNED_LAND || type >= NEW_OBJECT_OFFSET) && new_owner != INVALID_OWNER) {
 		SetTileOwner(tile, new_owner);
+		if (IsDepotFacilityObjectType(type)) OnDepotYardsChanged();
 		if (GetWaterClass(tile) == WaterClass::Canal) {
 			Company::Get(old_owner)->infrastructure.water--;
 			Company::Get(new_owner)->infrastructure.water++;

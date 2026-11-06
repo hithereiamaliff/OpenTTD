@@ -18,6 +18,12 @@
 #include "../../newgrf_roadstop.h"
 #include "../../traffic_light.h"
 #include "../../traffic_light_cmd.h"
+#include "../../depot_yard.h"
+#include "../../stop_charger.h"
+#include "../../stop_charger_cmd.h"
+#include "../../depot_map.h"
+#include "../../object_cmd.h"
+#include "../../object_map.h"
 #include "../../script/squirrel_helper_type.hpp"
 
 #include "../../safeguards.h"
@@ -674,6 +680,56 @@ static bool NeighbourHasReachableRoad(::RoadType rt, TileIndex start_tile, DiagD
 	if (!::IsValidTile(tile) || !::IsTileType(tile, TileType::Road) || ::IsRoadDepot(tile)) return -1;
 
 	return ::GetRoadCongestion(tile);
+}
+
+/* static */ bool ScriptRoad::BuildDepotFacility(TileIndex tile, DepotFacility facility)
+{
+	EnforceCompanyModeValid(false);
+	EnforcePrecondition(false, ::IsValidTile(tile));
+	EnforcePrecondition(false, facility >= DF_BUS_PARK && facility <= DF_STAFF_BUILDING);
+
+	return ScriptObject::Command<Commands::BuildObject>::Do(tile, ::GetObjectTypeOfDepotFacility(static_cast<::DepotFacility>(facility)), 0);
+}
+
+/* static */ ScriptRoad::DepotFacility ScriptRoad::GetDepotFacility(TileIndex tile)
+{
+	if (!::IsValidTile(tile) || !::IsTileType(tile, TileType::Object)) return DF_INVALID;
+	ObjectType type = ::GetObjectType(tile);
+	if (!::IsDepotFacilityObjectType(type)) return DF_INVALID;
+	return static_cast<DepotFacility>(::GetDepotFacilityOfObjectType(type));
+}
+
+/* static */ SQInteger ScriptRoad::GetDepotYardPlaces(TileIndex depot)
+{
+	if (!::IsValidTile(depot) || !::IsRoadDepotTile(depot)) return -1;
+	return ::GetDepotYard(::GetDepotIndex(depot)).places;
+}
+
+/* static */ SQInteger ScriptRoad::GetDepotYardVehicles(TileIndex depot)
+{
+	if (!::IsValidTile(depot) || !::IsRoadDepotTile(depot)) return -1;
+	return ::GetDepotYard(::GetDepotIndex(depot)).homed;
+}
+
+/* static */ bool ScriptRoad::BuildStopCharger(TileIndex tile)
+{
+	EnforceCompanyModeValid(false);
+	EnforcePrecondition(false, ::IsValidTile(tile));
+
+	return ScriptObject::Command<Commands::BuildStopCharger>::Do(tile);
+}
+
+/* static */ bool ScriptRoad::RemoveStopCharger(TileIndex tile)
+{
+	EnforceCompanyModeValid(false);
+	EnforcePrecondition(false, ::IsValidTile(tile));
+
+	return ScriptObject::Command<Commands::RemoveStopCharger>::Do(tile);
+}
+
+/* static */ bool ScriptRoad::HasStopCharger(TileIndex tile)
+{
+	return ::IsValidTile(tile) && ::HasStopCharger(tile);
 }
 
 /* static */ bool ScriptRoad::BuildTrafficLights(TileIndex tile)

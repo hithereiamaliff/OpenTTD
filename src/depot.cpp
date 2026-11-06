@@ -9,6 +9,8 @@
 
 #include "stdafx.h"
 #include "depot_base.h"
+#include "depot_yard.h"
+#include "road_map.h"
 #include "order_backup.h"
 #include "order_func.h"
 #include "window_func.h"
@@ -39,6 +41,9 @@ Depot::~Depot()
 
 	/* Clear the depot from all order-lists */
 	RemoveOrderFromAllVehicles(OT_GOTO_DEPOT, this->index);
+
+	/* Vehicles based here find a new home. */
+	if (IsRoadDepotTile(this->xy)) ForgetHomeDepot(this->index);
 
 	/* Delete the depot-window */
 	CloseWindowById(WindowClass::VehicleDepot, this->xy);

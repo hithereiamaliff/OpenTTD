@@ -47,6 +47,7 @@
 
 #include "widgets/road_widget.h"
 #include "traffic_light_cmd.h"
+#include "stop_charger_cmd.h"
 #include "traffic_light.h"
 #include "road_traffic.h"
 
@@ -347,6 +348,10 @@ static bool RoadToolbar_CtrlChanged(Window *w)
 		ToggleRoadButton_Remove(w);
 		return true;
 	}
+	if (w->GetWidget<NWidgetCore>(WID_ROT_STOP_CHARGER) != nullptr && w->IsWidgetLowered(WID_ROT_STOP_CHARGER)) {
+		ToggleRoadButton_Remove(w);
+		return true;
+	}
 
 	return false;
 }
@@ -511,6 +516,7 @@ struct BuildRoadToolbarWindow : Window {
 			case WID_ROT_TRUCK_STATION:
 			case WID_ROT_BUILD_WAYPOINT:
 			case WID_ROT_TRAFFIC_LIGHTS:
+			case WID_ROT_STOP_CHARGER:
 				if (RoadTypeIsRoad(this->roadtype)) this->DisableWidget(WID_ROT_ONE_WAY);
 				this->SetWidgetDisabledState(WID_ROT_REMOVE, !this->IsWidgetLowered(clicked_widget));
 				break;
@@ -559,6 +565,7 @@ struct BuildRoadToolbarWindow : Window {
 			case WID_ROT_BUILD_TUNNEL: return GetRoadTypeInfo(this->roadtype)->cursor.tunnel;
 			case WID_ROT_CONVERT_ROAD: return GetRoadTypeInfo(this->roadtype)->cursor.convert_road;
 			case WID_ROT_TRAFFIC_LIGHTS: return ANIMCURSOR_BUILDSIGNALS;
+			case WID_ROT_STOP_CHARGER: return SPR_CURSOR_BUS_STATION;
 			default: NOT_REACHED();
 		}
 	}
@@ -583,6 +590,7 @@ struct BuildRoadToolbarWindow : Window {
 			case WID_ROT_BUILD_TUNNEL: return HT_SPECIAL;
 			case WID_ROT_CONVERT_ROAD: return HT_RECT | HT_DIAGONAL;
 			case WID_ROT_TRAFFIC_LIGHTS: return HT_RECT;
+			case WID_ROT_STOP_CHARGER: return HT_RECT;
 			default: NOT_REACHED();
 		}
 	}
@@ -761,6 +769,14 @@ struct BuildRoadToolbarWindow : Window {
 					Command<Commands::RemoveTrafficLight>::Post(STR_ERROR_CAN_T_REMOVE_TRAFFIC_LIGHTS, CcPlaySound_CONSTRUCTION_OTHER, tile);
 				} else {
 					Command<Commands::BuildTrafficLight>::Post(STR_ERROR_CAN_T_BUILD_TRAFFIC_LIGHTS, CcPlaySound_CONSTRUCTION_OTHER, tile);
+				}
+				break;
+
+			case WID_ROT_STOP_CHARGER:
+				if (_remove_button_clicked) {
+					Command<Commands::RemoveStopCharger>::Post(STR_ERROR_CAN_T_REMOVE_STOP_CHARGER, CcPlaySound_CONSTRUCTION_OTHER, tile);
+				} else {
+					Command<Commands::BuildStopCharger>::Post(STR_ERROR_CAN_T_BUILD_STOP_CHARGER, CcPlaySound_CONSTRUCTION_OTHER, tile);
 				}
 				break;
 
@@ -992,6 +1008,7 @@ struct BuildRoadToolbarWindow : Window {
 		Hotkey('C', "convert", WID_ROT_CONVERT_ROAD),
 		Hotkey('S', "build_traffic_lights", WID_ROT_TRAFFIC_LIGHTS),
 		Hotkey('O', "traffic_overlay", WID_ROT_TRAFFIC_OVERLAY),
+		Hotkey('G', "stop_charger", WID_ROT_STOP_CHARGER),
 		Hotkey(WKC_L_BRACKET, "prev_roadtype", to_underlying(SpecialListHotkeys::PreviousItem)),
 		Hotkey(WKC_R_BRACKET, "next_roadtype", to_underlying(SpecialListHotkeys::NextItem)),
 		Hotkey(WKC_L_BRACKET | WKC_CTRL, "first_roadtype", to_underlying(SpecialListHotkeys::FirstItem)),
@@ -1050,6 +1067,8 @@ static constexpr std::initializer_list<NWidgetPart> _nested_build_road_widgets =
 						SetFill(0, 1), SetToolbarMinimalSize(1), SetSpriteTip(SPR_IMG_TRAFFIC_LIGHTS, STR_ROAD_TOOLBAR_TOOLTIP_BUILD_TRAFFIC_LIGHTS),
 		NWidget(WWT_IMGBTN, Colours::DarkGreen, WID_ROT_TRAFFIC_OVERLAY),
 						SetFill(0, 1), SetToolbarMinimalSize(1), SetSpriteTip(SPR_IMG_TRAFFIC_OVERLAY, STR_ROAD_TOOLBAR_TOOLTIP_TRAFFIC_OVERLAY),
+		NWidget(WWT_IMGBTN, Colours::DarkGreen, WID_ROT_STOP_CHARGER),
+						SetFill(0, 1), SetToolbarMinimalSize(1), SetSpriteTip(SPR_IMG_STOP_CHARGER, STR_ROAD_TOOLBAR_TOOLTIP_BUILD_STOP_CHARGER),
 		NWidget(WWT_IMGBTN, Colours::DarkGreen, WID_ROT_BUILD_BRIDGE),
 						SetFill(0, 1), SetToolbarMinimalSize(2), SetSpriteTip(SPR_IMG_BRIDGE, STR_ROAD_TOOLBAR_TOOLTIP_BUILD_ROAD_BRIDGE),
 		NWidget(WWT_IMGBTN, Colours::DarkGreen, WID_ROT_BUILD_TUNNEL),

@@ -9,6 +9,7 @@
 
 #include "stdafx.h"
 #include "city_services.h"
+#include "depot_yard.h"
 #include "company_base.h"
 #include "company_func.h"
 #include "debug.h"
@@ -62,6 +63,7 @@ size_t ObjectSpec::Count()
 
 	assert(index < NUM_OBJECTS);
 	if (IsCityServiceObjectType(index)) return GetCityServiceObjectSpec(index);
+	if (IsDepotFacilityObjectType(index)) return GetDepotFacilityObjectSpec(index);
 	if (index >= _object_specs.size()) return &empty;
 	return &_object_specs[index];
 }
@@ -112,6 +114,7 @@ bool ObjectSpec::IsAvailable() const
 uint ObjectSpec::Index() const
 {
 	if (IsCityServiceObjectSpec(this)) return GetCityServiceObjectSpecIndex(this);
+	if (IsDepotFacilityObjectSpec(this)) return GetDepotFacilityObjectSpecIndex(this);
 	return this - _object_specs.data();
 }
 

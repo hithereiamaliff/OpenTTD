@@ -9,6 +9,7 @@
 
 #include "stdafx.h"
 #include "roadveh.h"
+#include "depot_yard.h"
 #include "news_func.h"
 #include "airport.h"
 #include "command_func.h"
@@ -648,6 +649,11 @@ CommandCost CmdStartStopVehicle(DoCommandFlags flags, VehicleID veh_id, bool eva
 
 	if (flags.Test(DoCommandFlag::Execute)) {
 		if (v->IsStoppedInDepot() && !flags.Test(DoCommandFlag::AutoReplace)) DeleteVehicleNews(veh_id, AdviceType::VehicleWaiting);
+
+		/* A road vehicle stopped in a depot is based there from now on. */
+		if (v->type == VehicleType::Road && !v->vehstatus.Test(VehState::Stopped) && !flags.Test(DoCommandFlag::AutoReplace) && RoadVehicle::From(v)->IsChainInDepot()) {
+			SetHomeDepot(RoadVehicle::From(v), GetDepotIndex(v->tile));
+		}
 
 		v->vehstatus.Flip(VehState::Stopped);
 		if (v->type != VehicleType::Train) v->cur_speed = 0; // trains can stop 'slowly'

@@ -11,6 +11,7 @@ add_files(
     console_widget.h
     date_widget.h
     depot_widget.h
+    depot_yard_widget.h
     dock_widget.h
     dropdown_widget.h
     engine_widget.h

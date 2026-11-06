@@ -39,6 +39,9 @@
 #include "town_traffic.h"
 #include "town_zoning.h"
 #include "city_services.h"
+#include "depot_yard.h"
+#include "stop_charger.h"
+#include "station_map.h"
 #include "object_map.h"
 
 #include "widgets/misc_widget.h"
@@ -220,6 +223,22 @@ public:
 				this->landinfo_data.push_back(GetString(STR_LAND_AREA_INFORMATION_TOWN_TRAFFIC_FREE, level));
 			} else {
 				this->landinfo_data.push_back(GetString(STR_LAND_AREA_INFORMATION_TOWN_TRAFFIC, level, PackVelocity(kmh, VehicleType::Road)));
+			}
+		}
+
+		/* Chargers at bus stops */
+		if (IsTileType(this->tile, TileType::Station) && IsAnyRoadStopTile(this->tile) && HasStopCharger(this->tile)) {
+			this->landinfo_data.push_back(GetString(STR_LAND_AREA_INFORMATION_STOP_CHARGER, STOP_CHARGER_KWH, GetStopChargerYearlyUpkeep()));
+		}
+
+		/* Depot facilities */
+		if (IsTileType(this->tile, TileType::Object) && IsDepotFacilityObjectType(GetObjectType(this->tile))) {
+			DepotFacility facility = GetDepotFacilityOfObjectType(GetObjectType(this->tile));
+			DepotID depot = GetDepotOfFacility(this->tile);
+			if (depot == DepotID::Invalid()) {
+				this->landinfo_data.push_back(GetString(STR_LAND_AREA_INFORMATION_DEPOT_YARD_NONE, GetDepotFacilityYearlyUpkeep(facility)));
+			} else {
+				this->landinfo_data.push_back(GetString(STR_LAND_AREA_INFORMATION_DEPOT_YARD, VehicleType::Road, depot, GetDepotFacilityYearlyUpkeep(facility)));
 			}
 		}
 

@@ -275,18 +275,3 @@ void UseBattery(RoadVehicle *v, uint steps)
 	}
 	SetWindowDirty(WindowClass::VehicleDetails, v->index);
 }
-
-/**
- * Charge a bus standing in a depot, once a day.
- * @param v The bus (front section), in a depot.
- */
-void ChargeBatteryInDepot(RoadVehicle *v)
-{
-	const uint32_t capacity = GetBatteryCapacityWh(v);
-	if (capacity == 0 || v->battery_charge >= capacity) return;
-
-	if (v->battery_charge == 0) DeleteVehicleNews(v->index, AdviceType::BatteryFlat);
-	v->battery_charge = static_cast<uint32_t>(std::min<uint64_t>(capacity, static_cast<uint64_t>(v->battery_charge) + DEPOT_CHARGE_KWH_PER_DAY * 1000));
-	SetWindowDirty(WindowClass::VehicleDetails, v->index);
-	SetWindowDirty(WindowClass::VehicleView, v->index);
-}

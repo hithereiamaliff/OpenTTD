@@ -785,6 +785,12 @@ enum class WindowClass : uint16_t {
 	 */
 	TransitAuthority,
 
+	/**
+	 * Depot yard window; %Window numbers:
+	 *   - #DepotID = #DepotYardWidgets
+	 */
+	DepotYard,
+
 	Invalid = 0xFFFF, ///< Invalid window.
 };
 

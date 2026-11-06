@@ -159,6 +159,10 @@ add_files(
     depot_gui.cpp
     depot_map.h
     depot_type.h
+    depot_yard.cpp
+    depot_yard.h
+    depot_yard_gui.cpp
+    depot_yard_type.h
     direction_func.h
     direction_type.h
     disaster_vehicle.cpp
@@ -498,6 +502,9 @@ add_files(
     station_layout_type.h
     station_map.h
     station_type.h
+    stop_charger.cpp
+    stop_charger.h
+    stop_charger_cmd.h
     statusbar_gui.cpp
     statusbar_gui.h
     stdafx.h

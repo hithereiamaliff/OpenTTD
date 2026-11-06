@@ -622,6 +622,16 @@ public:
 	static SQInteger GetBatteryHealth(VehicleID vehicle_id);
 
 	/**
+	 * Get the depot a road vehicle is based at: where it was bought, or the depot it was last stopped in.
+	 * It goes there for service and charging when that isn't far.
+	 * @param vehicle_id The vehicle to check.
+	 * @pre IsPrimaryVehicle(vehicle_id).
+	 * @return The depot tile, or ScriptMap::TILE_INVALID if it isn't a road vehicle or has no home yet.
+	 * @api ai game
+	 */
+	static TileIndex GetHomeDepot(VehicleID vehicle_id);
+
+	/**
 	 * Get the maximum allowed distance between two orders for a vehicle.
 	 * The distance returned is a vehicle-type specific distance independent from other
 	 * map distances, you may use the result of this function to compare it

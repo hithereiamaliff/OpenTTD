@@ -662,10 +662,11 @@ Batteries:
 - Below 25% a bus heads for a depot not far out of its way (four times the
   service detour), unless it is loading. A flat battery makes it crawl at
   15 km/h to the nearest depot, with a news message.
-- In a depot a bus charges 90 kWh a day (a 12 m bus from 25% to 95% in about
-  three days) and leaves at 95%; its status reads "Charging: 72%". The
-  vehicle details show charge, size, health, tiles left and air-con or
-  heating. Charging bays and chargers at end stops come with part 6.
+- In a depot a bus charges and leaves at 95%; its status reads "Charging:
+  72%". (Part 5 gave every depot 90 kWh a day per bus; part 6 replaced that
+  with the depot's own two chargers of 60 kWh a day plus its charging bays.)
+  The vehicle details show charge, size, health, tiles left and air-con or
+  heating.
 - Towns add up to 10 quality points to tenders for electric lines, and lines
   at least half electric get 8-year contracts instead of 5 (part 4's "longer
   e-bus terms"; e-bus quotas are left for later).
@@ -703,6 +704,101 @@ Tests (test AI BusTest; save `city-bus-demo.csav`):
   crawled at 15 km/h and recovered once the depot was back.
 - Tenders: an all-electric line won an 8-year contract (2021-08 to 2029-07),
   a line with 6 of 13 buses electric a 5-year one.
+- Autoreplace from the diesel to the electric models works, the articulated
+  ones too (Kenari Bendi 18 to 18e, a different rear section); the new buses
+  start with a full battery.
+
+## Done: transit part 6, depots
+
+### Depot yards (step 1)
+
+- A road depot's yard is the facilities its owner builds next to it, or next
+  to its other facilities (a facility between two yards goes to the nearer
+  depot). Build them from the depot window's new **Yard** button; the yard
+  window shows what the yard offers and the vehicles based there.
+
+| Facility | Cost | Upkeep a year | What it does |
+|---|---|---|---|
+| Bus park | 2,000 | 200 | room for 8 vehicles |
+| Solar bus park | 6,000 | 320 | room for 8; powers 6 electric buses based here: they run 15% cheaper |
+| Multi-storey park | 20,000 | 1,600 | room for 24 vehicles |
+| Charging bay | 6,000 | 800 | two chargers of 180 kWh a day, room for 2 |
+| Fast charging bay | 16,000 | 2,000 | two chargers of 500 kWh a day, room for 2 |
+| Substation | 12,000 | 1,200 | 3,000 kWh a day more for the chargers |
+| Repair bay | 8,000 | 1,600 | keeps 20 vehicles in shape |
+| Wash and fuel lane | 6,000 | 1,200 | bulk fuel for 50 vehicles: they run 8% cheaper (not electric ones) |
+| Staff building | 8,000 | 1,200 | staff rooms for 40 vehicles (with a staff budget) |
+
+  Costs at base prices; upkeep is paid monthly as property maintenance.
+- A depot itself has room for 4 vehicles, two chargers of 60 kWh a day, a
+  grid connection of 600 kWh a day, a workshop for 5 and staff rooms for 10.
+- **Home depots**: a road vehicle is based at the depot it was bought in, or
+  the depot it was last stopped in (a vehicle from an older game at the first
+  depot it enters; autoreplace keeps the home). It goes home for service and
+  to charge when home is at most 48 tiles away (and, to charge, when its
+  battery gets it there with room to spare), so a far home means empty runs.
+  The vehicle details show the home depot.
+- What the yard means for the vehicles based there:
+  - more vehicles than places: the rest park on the street, up to 15% higher
+    running costs;
+  - more vehicles than the workshops look after: up to 50% faster wear (more
+    breakdowns; nothing without breakdowns);
+  - fuel lanes and solar roofs lower running costs as above.
+- **Charging**: once a day the electric buses standing in a depot get its
+  chargers, emptiest battery first and fastest charger first; together they
+  draw at most the grid connection, shared out when they would draw more.
+  The others wait ("Waiting for a charger"). Charging buses stand at the
+  charging bays, other buses in the depot on the bus parks, all drawn.
+- Saved: the home depot with the battery (chunk BATT, all road vehicles with
+  either); yards are worked out from the map and the vehicles again.
+- Object types: the facilities use reserved object types after the city
+  services (OBJECT_DEPOT_FACILITY_FIRST), like those.
+
+### Chargers at stops (step 2)
+
+- A road toolbar tool (lightning icon, hotkey G; Ctrl+Click removes) puts a
+  charger over one of your bus stops: 10,000, upkeep 1,000 a year. Electric
+  buses standing there get 200 kWh a day, tick by tick, and one below 40%
+  waits under it until it gets there. Drawn as a gantry with a pantograph
+  over each lane; saved in chunk STCH; removed with the stop.
+
+### Staff budgets (step 3)
+
+- A company setting, off by default ("Staff budget for road vehicles"):
+  lean pay makes road vehicles 6% cheaper to run but they wear 25% faster;
+  generous pay costs 6% more and they wear 15% slower. With a staff budget
+  depots also need staff rooms (10 in the depot, 40 per staff building);
+  vehicles based at a depot without room for their staff wear up to 25%
+  faster. Shown in the yard window when on.
+
+Script API: `ScriptRoad.BuildDepotFacility`, `GetDepotFacility`,
+`GetDepotYardPlaces`, `GetDepotYardVehicles`, `BuildStopCharger`,
+`RemoveStopCharger`, `HasStopCharger` (with `DF_*` facility values);
+`ScriptVehicle.GetHomeDepot`; `ScriptCompany.SetStaffBudget`, `GetStaffBudget`.
+
+Code: `src/depot_yard*.{h,cpp}`, `src/stop_charger*.{h,cpp}`, chunks in
+`src/saveload/city_bus_sl.cpp`; hooks in `object_cmd.cpp`, `newgrf_object.cpp`,
+`road_cmd.cpp`, `depot.cpp`, `station_cmd.cpp`, `vehicle.cpp`, `vehicle_cmd.cpp`,
+`autoreplace_cmd.cpp`, `roadveh_cmd.cpp`, `depot_gui.cpp`, `road_gui.cpp`,
+`roadveh_gui.cpp`, `vehicle_gui.cpp`, `misc_gui.cpp`, company settings.
+
+Tests (test AI BusTest settings `yard`, `park`, `stopcharge`, `staff`; saves
+`city-yard-demo.csav`, `city-stopcharger-demo.csav`):
+
+- 99/99 unit tests; the vanilla, bundled and fork demo saves load, save and
+  reload.
+- A full yard next to the test depot: 48 places for 13 buses; electric buses
+  ran at 85% of their standard running costs (solar), diesel ones at 92%
+  (fuel lane); all based at the depot.
+- Six electric buses with only the depot's own chargers were in the depot in
+  5-16% of samples; with a fast charging bay and a substation, in none
+  (charged within a day).
+- Chargers over both end stops, no yard: the electric buses stayed between
+  50% and full (81-94% on average) and stopped going to the depot to charge.
+- 13 buses at a bare depot: running costs 110% without a staff budget (the
+  street parking), 104% with lean pay, 116% with generous pay.
+- Parked buses show on the bus parks and under the solar roof; the charger
+  gantries show over the stops after saving and loading.
 
 ## Roadmap
 

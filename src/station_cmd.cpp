@@ -61,6 +61,7 @@
 #include "linkgraph/linkgraph_base.h"
 #include "linkgraph/refresh.h"
 #include "station_cmd.h"
+#include "stop_charger.h"
 #include "waypoint_cmd.h"
 #include "landscape_cmd.h"
 #include "rail_cmd.h"
@@ -2308,6 +2309,7 @@ static CommandCost RemoveRoadStop(TileIndex tile, DoCommandFlags flags, int repl
 		}
 
 		delete cur_stop;
+		OnRoadStopRemoved(tile);
 
 		/* Make sure no vehicle is going to the old roadstop. Narrow the search to any road vehicles with an order to
 		 * this station, then look for any currently heading to the tile. */
@@ -3509,6 +3511,7 @@ static void DrawTile_Station(TileInfo *ti)
 	}
 
 	DrawRailTileSeq(ti, t, TransparencyOption::Buildings, total_offset, relocation, palette);
+	if (IsAnyRoadStop(ti->tile) && HasStopCharger(ti->tile)) DrawStopCharger(ti);
 	DrawBridgeMiddle(ti, GetStationBlockedPillars(bridgeable_info, GetStationGfx(ti->tile)));
 }
 

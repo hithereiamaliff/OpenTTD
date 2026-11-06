@@ -17,6 +17,7 @@
 #include "viewport_func.h"
 #include "command_func.h"
 #include "depot_base.h"
+#include "depot_yard.h"
 #include "spritecache_type.h"
 #include "strings_func.h"
 #include "sound_func.h"
@@ -83,6 +84,9 @@ static constexpr std::initializer_list<NWidgetPart> _nested_train_depot_widgets 
 		NWidget(WWT_PUSHTXTBTN, Colours::Grey, WID_D_VEHICLE_LIST), SetAspect(WidgetDimensions::ASPECT_VEHICLE_ICON), SetFill(0, 1),
 		NWidget(WWT_PUSHIMGBTN, Colours::Grey, WID_D_STOP_ALL), SetSpriteTip(SPR_FLAG_VEH_STOPPED), SetAspect(WidgetDimensions::ASPECT_VEHICLE_FLAG), SetFill(0, 1),
 		NWidget(WWT_PUSHIMGBTN, Colours::Grey, WID_D_START_ALL), SetSpriteTip(SPR_FLAG_VEH_RUNNING), SetAspect(WidgetDimensions::ASPECT_VEHICLE_FLAG), SetFill(0, 1),
+		NWidget(NWID_SELECTION, Colours::Invalid, WID_D_SHOW_YARD),
+			NWidget(WWT_PUSHTXTBTN, Colours::Grey, WID_D_YARD), SetFill(0, 1), SetStringTip(STR_DEPOT_YARD_BUTTON, STR_DEPOT_YARD_BUTTON_TOOLTIP),
+		EndContainer(),
 		NWidget(WWT_RESIZEBOX, Colours::Grey),
 	EndContainer(),
 };
@@ -297,6 +301,8 @@ struct DepotWindow : Window {
 		if (type == VehicleType::Train) this->GetWidget<NWidgetCore>(WID_D_MATRIX)->SetMatrixDimension(1, 0 /* auto-scale */);
 		this->GetWidget<NWidgetStacked>(WID_D_SHOW_H_SCROLL)->SetDisplayedPlane(type == VehicleType::Train ? 0 : SZSP_HORIZONTAL);
 		this->GetWidget<NWidgetStacked>(WID_D_SHOW_SELL_CHAIN)->SetDisplayedPlane(type == VehicleType::Train ? 0 : SZSP_NONE);
+		/* Only road depots have a yard. */
+		this->GetWidget<NWidgetStacked>(WID_D_SHOW_YARD)->SetDisplayedPlane(type == VehicleType::Road ? 0 : SZSP_NONE);
 		this->SetupWidgetData(type);
 		this->FinishInitNested(tile);
 
@@ -841,6 +847,10 @@ struct DepotWindow : Window {
 			case WID_D_RENAME: // Rename button
 				ShowQueryString(GetString(STR_DEPOT_NAME, this->type, Depot::GetByTile(TileIndex(this->window_number))->index), STR_DEPOT_RENAME_DEPOT_CAPTION,
 					MAX_LENGTH_DEPOT_NAME_CHARS, this, CS_ALPHANUMERAL, {QueryStringFlag::EnableDefault, QueryStringFlag::LengthIsInChars});
+				break;
+
+			case WID_D_YARD:
+				ShowDepotYardWindow(GetDepotIndex(TileIndex(this->window_number)));
 				break;
 
 			case WID_D_STOP_ALL:

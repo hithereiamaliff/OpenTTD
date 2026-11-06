@@ -394,6 +394,20 @@ static const FarePolicy *GetScriptFare(ScriptCompany::CompanyID company, ScriptC
 	return (loc == 0) ? INVALID_TILE : loc;
 }
 
+/* static */ bool ScriptCompany::SetStaffBudget(SQInteger budget)
+{
+	EnforceCompanyModeValid(false);
+	EnforcePrecondition(false, budget >= 0 && budget <= 3);
+	return ScriptObject::Command<Commands::ChangeCompanySetting>::Do("company.staff_budget", static_cast<int32_t>(budget));
+}
+
+/* static */ SQInteger ScriptCompany::GetStaffBudget(ScriptCompany::CompanyID company)
+{
+	company = ResolveCompanyID(company);
+	if (company == ScriptCompany::COMPANY_INVALID) return -1;
+	return ::Company::Get(ScriptCompany::FromScriptCompanyID(company))->settings.staff_budget;
+}
+
 /* static */ bool ScriptCompany::SetAutoRenewStatus(bool autorenew)
 {
 	EnforceCompanyModeValid(false);
