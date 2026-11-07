@@ -1845,6 +1845,85 @@ Tests:
   there, 510 come to work here"); the commuter traffic map with the
   expressway red and land info on it (2,008 cars a day).
 
+## Done: M4 part 2, Malaysian and Singaporean town buildings
+
+The owner asked for high rises and building types that show how a city
+develops, after Malaysia and Singapore, the fork's theme. A new setting,
+**Town buildings** (Settings, Environment, Towns, before Town budgets and
+ordinances): **Malaysian and Singaporean** (default), OpenTTD's, or Both.
+It counts in the temperate and sub-tropical climates; the others keep
+OpenTTD's buildings.
+
+| Building | Built from | Where in town | Town of at least | People | Colours |
+|---|---|---|---|---|---|
+| Kampung house: timber, on stilts, zinc roof, a coconut palm | 1900 to 1985 | edge, outskirts, outer suburbs | (not over 20,000) | 14 | timber |
+| Terrace (link) houses: three two-storey units, tiled roofs, porches | 1950 | edge to inner suburbs | - | 36 | light |
+| Shophouses: three storeys, five-foot way, shutters, signboards | 1900 | outer suburbs to centre | - | 60 | bright |
+| Walk-up flats: five storeys, open corridors | 1955 | outer, inner suburbs | - | 70 | bright |
+| HDB slab block: twelve storeys on a void deck, two tiles long (along X or Y) | 1965 | outer suburbs to centre | 1,000 | 200 | bright |
+| Office block: concrete, ribbon windows | 1965 | inner suburbs, centre | 1,500 | 140 | own |
+| HDB point block: twenty storeys | 1975 | outer suburbs to centre | 2,500 | 160 | bright |
+| Condominium: glass balconies, pool deck on a podium | 1990 | inner suburbs, centre | 4,000 | 180 | quiet |
+| Shopping mall: four storeys, glass atrium, two by two tiles | 1985 | inner suburbs, centre | 6,000 | 240 | quiet |
+| Glass office tower: curtain wall, set-back crown, mast | 1985 | centre | 8,000 | 220 | own |
+| Mixed development: shopping podium with roof garden, residential tower with a sky garden | 1995 | inner suburbs, centre | 12,000 | 200 | quiet |
+| Landmark tower: tapering steel and glass, a spire; one a town | 1998 | centre | 40,000 | 255 | own |
+| Mosque: white walls, golden dome, minaret | 1900 | edge to inner suburbs | one each 6,000 people | 6 | own |
+| Chinese temple: red walls, two-tier orange roof | 1900 | outer suburbs to centre | one each 6,000 people | 5 | own |
+
+- **How a town develops**: by year (the table), by zone (as OpenTTD's: a
+  bigger town has a bigger centre and inner suburbs), by town size (the
+  taller ones only in bigger towns) and by land value (part 14: dear land
+  near the centre, good stations, parks and city services draws the dense
+  ones). Towns rebuild old houses as they grow, as in OpenTTD, so the
+  kampungs give way to terraces and the shophouses and terraces to blocks
+  and towers; the blocks and towers stand at least 25 to 60 years.
+- **Colours**: each building gets one of eight facade colours (company
+  colour ramps) by where it stands: pastel houses, bright HDB blocks and
+  shophouses, quieter towers.
+- **New games**: a generated town grows from a village, so its centre would
+  keep the small buildings it began with; once generated, about half the
+  houses of its centre and inner suburbs are rebuilt the way a town of its
+  size builds them, so the tall ones stand in the middle.
+- **Old games**: towns keep their buildings; what they build and rebuild
+  from now on is Malaysian and Singaporean. OpenTTD's churches, parks and
+  stadiums stay, and the houses that take food or water (towns in the
+  desert need them); statues and fountains aren't built any more. NewGRF
+  houses are always built.
+- Built-in house types with the last 64 house IDs (4032 on; NewGRF houses
+  get the ones below), drawn by `make_city_sprites.py` (sprites 250-272:
+  three stages of construction and 20 buildings and parts). Saves keep the
+  house types; nothing new in the save but the setting.
+- Code: `src/city_houses.{h,cpp}`; hooks in `newgrf_house.cpp` (the house
+  list, NewGRF houses below), `town_cmd.cpp` (drawing, which houses a town
+  builds, new towns' centres), `town_gui.cpp` (the house picker),
+  `town_zoning.cpp` (homes, businesses and public buildings for zoning and
+  commuting), the settings tables.
+
+Tests:
+
+- A new 256 by 256 game in 2020 (seed 42): the biggest towns have 10,429,
+  10,002, 9,910 and 9,245 people, about as many as with OpenTTD's
+  buildings (10,500, 10,000, 9,500). Restricting the dense ones to big towns
+  at first left them at a quarter of that (towns grow from villages while
+  they are generated); hence the lower thresholds and the rebuilt centres.
+- 22 years from 1950 with the fastest town growth: in 1972 the map has 273
+  kampung houses, 396 terraces, 443 shophouses, 23 walk-up flats, 7 HDB
+  slab blocks and 53 office blocks, with 21 mosques and 13 temples; the
+  biggest town grew from 5,507 to 9,884 people.
+- 22 years from 2020: in 2042, 642 terraces, 213 shophouses, 69 walk-up
+  flats, 74 HDB slab and 92 point blocks, 49 condominiums, 155 office
+  blocks, 26 glass towers, 4 malls and 11 mixed developments; no kampungs.
+  The biggest town grew from 12,179 to 18,767 people; none reached 40,000
+  for a landmark tower.
+- With OpenTTD's buildings, the baseline runs give identical monthly
+  results; 99/99 unit tests; all 43 test saves (with the new
+  `city-malaysia-demo.csav`, `city-malaysia-1972-demo.csav` and
+  `city-malaysia-2042-demo.csav`) load, save and reload.
+- Screenshots: Funnford's centre in 2020 (10,600 people) and Fewood (1,770);
+  Mendinghattan in 1972 (shophouse rows, office blocks, a mosque and a
+  temple) and Funnford in 2042 (18,700 people, a city of towers).
+
 ## Roadmap
 
 Sizes are rough: S = one session, M = a few, L = many, XL = a project in itself.
@@ -1853,15 +1932,14 @@ Sizes are rough: S = one session, M = a few, L = many, XL = a project in itself.
 |---|---|---|---|---|
 | M2 | Traffic realism | Done: give way, light settings, traffic map and overlay, amber, routing around jams. | — | |
 | M3 | Zoning | Done: zones, town growth follows them, homes/jobs line in the town window, zones in land info. | — | |
-| M4 | City services and happiness | Part 1 done: police, fire, clinic, school and park with coverage, happiness, growth, ratings and upkeep. Later: bigger buildings (hospital, university), services that also make passengers. | L | |
+| M4 | City services and happiness | Part 1 done: police, fire, clinic, school and park with coverage, happiness, growth, ratings and upkeep. Part 2 done: Malaysian and Singaporean town buildings, from kampungs and shophouses to HDB blocks, condominiums and towers, by year, zone, town size and land value. Left: bigger city services (hospital, university, stadium) that serve a whole town and draw commuters and passengers. | M | |
 | M5 | Town car traffic | Done: commuters drive between homes and jobs along real roads, in their town and up to four towns around, or take transit when it is quick enough; traffic follows their routes, also between towns; transit takes cars off them (see M5, commuting, and part 2). | — | |
 | M6 | City budget and ordinances | Done: towns collect taxes and spend them on transit, running the town and ordinances; they set their own tax rates and bring in ordinances (transit fund, parking limits, low-emission zone, car-free centre, tree planting, transit-oriented development); companies propose them. | — | The owner's call: towns decide, companies lobby. |
 | M7 | Land value and pollution | Done as transit part 14: traffic, diesel vehicles and industry pollute; parks, services and good stations raise land value; map views, tints and lines show both; towns build to fit. | — | |
 | M8 | Utilities | Power and water networks. | XL | Probably skip, or keep it light (arctic/tropic towns already need food/water). |
 
-Recommended order: M4's bigger buildings next (hospital, university,
-stadium: services that also make passengers and commuters), then M8 only if
-wanted.
+Recommended order: M4 part 3 next, bigger city services (hospital,
+university, stadium); M8 only if wanted.
 
 ## Getting it onto the owner's computer (Windows)
 
@@ -1887,7 +1965,7 @@ Savegame locations (files end in `.sav`; autosaves are in `save/autosave`):
 ## Open questions for the owner
 
 1. Can you share one of your saves, so it can be tested before you play it?
-2. Which milestone next? Recommendation: M4 part 2, bigger city buildings
-   (hospital, university, stadium) that serve a whole town and draw
-   commuters and passengers.
+2. Which milestone next? Recommendation: M4 part 3, a hospital, a
+   university and a stadium that serve a whole town and draw commuters and
+   passengers.
 3. A name for the fork.

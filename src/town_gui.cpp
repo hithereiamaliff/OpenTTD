@@ -51,6 +51,7 @@
 
 #include "widgets/town_widget.h"
 #include "town_traffic.h"
+#include "city_houses.h"
 #include "commuting.h"
 #include "environment.h"
 #include "town_budget.h"
@@ -1484,6 +1485,10 @@ void InitializeTownGui()
 void DrawHouseInGUI(int x, int y, HouseID house_id, int view)
 {
 	auto draw = [](int x, int y, HouseID house_id, int view) {
+		if (IsCityHouse(house_id)) {
+			DrawCityHouseInGUI(x, y, house_id, view);
+			return;
+		}
 		if (house_id >= NEW_HOUSE_OFFSET) {
 			/* Houses don't necessarily need new graphics. If they don't have a
 			 * spritegroup associated with them, then the sprite for the substitute

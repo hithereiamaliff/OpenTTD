@@ -427,7 +427,9 @@ static constexpr SpriteID SPR_SCREEN_DOORS_Y_FAR = SPR_TRAFFIC_LIGHTS_BASE + 246
 static constexpr SpriteID SPR_SCREEN_DOORS_Y_NEAR = SPR_TRAFFIC_LIGHTS_BASE + 247; ///< Platform screen doors on the near platform of a railway station along Y.
 static constexpr SpriteID SPR_IMG_POLLUTION_MAP = SPR_TRAFFIC_LIGHTS_BASE + 248; ///< Icon of the air pollution view of the map.
 static constexpr SpriteID SPR_IMG_LAND_VALUE_MAP = SPR_TRAFFIC_LIGHTS_BASE + 249; ///< Icon of the land value view of the map.
-static constexpr uint16_t TRAFFIC_LIGHTS_SPRITE_COUNT = 250;
+static constexpr SpriteID SPR_CITY_HOUSE_CONSTRUCTION = SPR_TRAFFIC_LIGHTS_BASE + 250; ///< A Malaysian or Singaporean house under construction, three stages.
+static constexpr SpriteID SPR_CITY_HOUSE_BASE = SPR_TRAFFIC_LIGHTS_BASE + 253; ///< Malaysian and Singaporean houses, see CITY_HOUSE_LOOKS in city_houses.cpp (20 sprites).
+static constexpr uint16_t TRAFFIC_LIGHTS_SPRITE_COUNT = 273;
 
 static const SpriteID SPR_NEWGRFS_BASE = SPR_TRAFFIC_LIGHTS_BASE + TRAFFIC_LIGHTS_SPRITE_COUNT;
 

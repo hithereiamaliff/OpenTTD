@@ -12,6 +12,7 @@
 #include "landscape.h"
 #include "newgrf_badge.h"
 #include "newgrf_house.h"
+#include "city_houses.h"
 #include "newgrf_spritegroup.h"
 #include "newgrf_town.h"
 #include "company_func.h"
@@ -28,7 +29,7 @@
 static BuildingCounts<uint32_t> _building_counts{};
 static std::vector<HouseClassMapping> _class_mapping{};
 
-HouseOverrideManager _house_mngr(NEW_HOUSE_OFFSET, NUM_HOUSES, INVALID_HOUSE_ID);
+HouseOverrideManager _house_mngr(NEW_HOUSE_OFFSET, CITY_HOUSE_OFFSET, INVALID_HOUSE_ID); // City fork: the last IDs are its own houses.
 
 /**
  * Retrieve the grf file associated with a house.
@@ -87,6 +88,9 @@ void ResetHouses()
 
 	/* Copy default houses. */
 	_house_specs.insert(std::end(_house_specs), std::begin(_original_house_specs), std::end(_original_house_specs));
+
+	/* City fork: the Malaysian and Singaporean houses. */
+	AddCityHouseSpecs();
 
 	/* Reset any overrides that have been set. */
 	_house_mngr.ResetOverride();

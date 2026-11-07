@@ -640,6 +640,7 @@ struct EconomySettings {
 	uint8_t town_traffic; ///< how much traffic towns make on their roads, @see TownTrafficSetting
 	uint8_t rush_hours; ///< how long a day of the city clock lasts, @see CityClockSetting
 	uint8_t environment; ///< how strong air pollution is; off switches pollution and land value off, @see EnvironmentSetting
+	uint8_t town_building_style; ///< which buildings towns build: OpenTTD's, Malaysian and Singaporean, or both, @see TownBuildingStyle
 	bool town_budgets; ///< towns keep budgets and bring in ordinances
 	bool commuting; ///< towns work out where their people work and how they get there; traffic follows their routes
 	uint8_t larger_towns; ///< the number of cities to build. These start off larger and grow twice as fast

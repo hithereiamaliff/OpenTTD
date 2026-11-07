@@ -47,7 +47,7 @@ BROWN, BROWN_DARK = nearest((150, 90, 40)), nearest((90, 50, 20))
 YELLOW = nearest((252, 220, 0))
 TREE, TREE_DARK = nearest((60, 150, 40)), nearest((30, 90, 20))
 
-W, H = 512, 980
+W, H = 512, 1960
 sheet = Image.new("P", (W, H), T)
 sheet.putpalette(pal)
 px = sheet.load()
@@ -1426,7 +1426,361 @@ icon(320, 934, [
     "................",
 ], {'R': rgb_index((190, 50, 40)), 'W': rgb_index((235, 225, 200)), 'B': rgb_index((60, 110, 200)), 'D': rgb_index((120, 70, 30)), 'G': rgb_index((40, 170, 60))}, "icon land value map")
 
-assert len(sprites) == 250, len(sprites)
+
+# ---------------------------------------------------------------------------
+# Malaysian and Singaporean town buildings (city_houses.cpp), from sprite 250 on:
+# three stages of construction, then the finished buildings in the order of
+# CityHouseSprite in city_houses.cpp. Facades painted in the company colour
+# range get a colour per building from the game (STRUCT recolour palettes).
+# The game marks up to 200 pixels above a tile for redrawing, so no building is
+# taller than that.
+
+CC = list(range(0xC6, 0xCE))  # recoloured range, dark to light
+
+
+def cc(level):
+    return CC[max(0, min(7, int(level)))]
+
+
+def grid(storey, glass, frame=None, period=1.6, frac=(0.2, 0.8), base=0.0, top=None, low=1.3, sill=0.6):
+    """Windows on a face: a floor line every storey, a window in each bay."""
+    def fn(u, v):
+        if v < base or (top is not None and v >= top):
+            return None
+        lv = (v - base) % storey
+        if frame is not None and lv < 0.9:
+            return frame
+        f = (u % period) / period
+        if frac[0] <= f < frac[1] and low <= lv < storey - sill:
+            return glass
+        return None
+    return fn
+
+
+def bands(storey, colour, base=0.0, top=None, lo=0.0, hi=1.0):
+    """A band at the same height in every storey (corridor parapets, balconies)."""
+    def fn(u, v):
+        if v < base or (top is not None and v >= top):
+            return None
+        lv = (v - base) % storey
+        return colour if lo <= lv < hi else None
+    return fn
+
+
+def strip(u0, u1, colour, v0=0, v1=999):
+    def fn(u, v):
+        return colour if u0 <= u < u1 and v0 <= v < v1 else None
+    return fn
+
+
+def pillars(period, width, v1, colour, gap):
+    """An open ground floor: pillars every period, dark space between."""
+    def fn(u, v):
+        if v >= v1:
+            return None
+        return colour if (u % period) < width else gap
+    return fn
+
+
+def dome(b, cx, cy, z0, r, h, rgb):
+    """A dome over the circle of radius r (tile units) around (cx, cy), h pixels high."""
+    sx, sy = 32 + 2 * (cy - cx), cx + cy - z0
+    for py in range(math.floor(sy - h) - 1, math.ceil(sy + r) + 1):
+        for px_ in range(math.floor(sx - 2 * r) - 1, math.ceil(sx + 2 * r) + 1):
+            dx, dy = (px_ + 0.5 - sx) / (2 * r), (py + 0.5 - sy)
+            if dy <= 0:
+                inside = dx * dx + (dy / h) ** 2 <= 1
+            else:
+                inside = dx * dx + (dy / r) ** 2 <= 1
+            if inside:
+                f = 1.05 - 0.45 * (dx + 0.3) - (0.25 if dy > 0 else 0)
+                b.set(px_, py, rgb_index(rgb, max(0.45, min(1.25, f))))
+
+
+def post(b, x, y, z0, z1, colour):
+    sx, sy = round(32 + 2 * (y - x)), round(x + y)
+    for z in range(z0, z1):
+        b.set(sx, sy - z, colour)
+
+
+CONCRETE = (200, 196, 186)
+PAVING_DARK = rgb_index((70, 70, 75))
+FRAME = rgb_index((235, 235, 235))
+DARK_GLASS = rgb_index((45, 60, 80))
+SKY_GLASS = rgb_index((120, 170, 200))
+TERRACOTTA = (176, 82, 52)
+houses_x, houses_y = 4, 990
+
+
+def house(b, name, w=72, h=240):
+    """Place a finished sprite on the house rows of the sheet."""
+    global houses_x, houses_y
+    width = max(p[0] for p in b.pix) - min(p[0] for p in b.pix) + 1
+    if houses_x + width > W - 2:
+        houses_x, houses_y = 4, houses_y + h
+    b.emit(houses_x, houses_y, name)
+    houses_x += width + 4
+
+
+# Construction: a slab with piles, a concrete frame, a taller frame with a crane.
+c0 = Building()
+c0.box(2, 2, 14, 14, 0, 3, CONCRETE, (170, 170, 165), roof=lambda x, y: rgb_index((120, 115, 110)) if (int(x * 1.5) + int(y * 1.5)) % 4 == 0 else None)
+house(c0, "construction 0")
+c1 = Building()
+scaffold = rgb_index((210, 170, 60))
+c1.box(3, 3, 13, 13, 0, 22, (150, 150, 150), (130, 130, 130),
+       sw=combine(lambda u, v: scaffold if (u % 2.0) < 0.35 or (v % 5) < 0.8 else None, lambda u, v: rgb_index((60, 60, 65)) if (v % 5) >= 1.5 else None),
+       se=combine(lambda u, v: scaffold if (u % 2.0) < 0.35 or (v % 5) < 0.8 else None, lambda u, v: rgb_index((60, 60, 65)) if (v % 5) >= 1.5 else None))
+house(c1, "construction 1")
+c2 = Building()
+c2.box(3, 3, 13, 13, 0, 44, (150, 150, 150), (130, 130, 130),
+       sw=combine(lambda u, v: scaffold if (u % 2.0) < 0.35 or (v % 5) < 0.8 else None, lambda u, v: rgb_index((60, 60, 65)) if (v % 5) >= 1.5 else None),
+       se=combine(lambda u, v: scaffold if (u % 2.0) < 0.35 or (v % 5) < 0.8 else None, lambda u, v: rgb_index((60, 60, 65)) if (v % 5) >= 1.5 else None))
+crane = rgb_index((235, 190, 40))
+post(c2, 4, 12, 44, 64, crane)
+for i in range(18):
+    sx, sy = round(32 + 2 * (12 - 4)) - 8 + i, round(4 + 12) - 64 + (1 if i % 5 == 0 else 0)
+    c2.set(sx, sy, crane)
+for z in range(56, 64):
+    c2.set(round(32 + 2 * (12 - 4)) + 7, round(4 + 12) - z, rgb_index((80, 80, 80)))
+house(c2, "construction 2")
+
+# Kampung house: a timber house on stilts with a rusty zinc roof and a verandah, and a coconut palm.
+k = Building()
+timber, timber_dark = (150, 100, 55), (110, 70, 35)
+for (x, y) in ((4.3, 4.3), (11.7, 4.3), (4.3, 10.7), (11.7, 10.7), (8, 10.7), (11.7, 7.5)):
+    k.box(x - 0.35, y - 0.35, x + 0.35, y + 0.35, 0, 5, timber_dark, timber_dark)
+k.box(4, 4, 12, 11, 5, 13, timber, timber_dark,
+      sw=combine(strip(2.5, 4.5, rgb_index((60, 35, 20)), 1.5, 6), lambda u, v: rgb_index((120, 78, 40)) if int(v) % 2 == 0 else None),
+      se=combine(strip(1.5, 3.0, rgb_index((60, 35, 20)), 1.5, 6), strip(5.0, 6.5, rgb_index((60, 35, 20)), 1.5, 6), lambda u, v: rgb_index((120, 78, 40)) if int(v) % 2 == 0 else None))
+k.box(12, 5, 14.5, 10, 5, 6, timber_dark, timber)
+for (i, (y0, y1)) in enumerate(((3.2, 11.8), (4.2, 10.8), (5.2, 9.8), (6.2, 8.8))):
+    k.box(3.2, y0, 12.8, y1, 13 + 2 * i, 15 + 2 * i, (150, 70, 45), (165, 85, 55), shade=0.62)
+k.box(13, 5.5, 14.5, 9.5, 6, 11, timber, (165, 85, 55))
+palm = rgb_index((60, 150, 50))
+post(k, 1.5, 13.5, 0, 16, rgb_index((120, 95, 60)))
+sx, sy = round(32 + 2 * (13.5 - 1.5)), round(1.5 + 13.5) - 16
+for (dx, dy) in ((-5, 2), (-4, 1), (-3, 0), (-2, 0), (-1, 0), (1, 0), (2, 0), (3, 0), (4, 1), (5, 2), (-2, 1), (2, 1), (-1, -1), (1, -1), (0, -1), (-3, 2), (3, 2)):
+    k.set(sx + dx, sy + dy, palm)
+house(k, "kampung house")
+
+# Terrace houses: a row of three two-storey link houses with tiled roofs, porches and gates.
+t = Building()
+t_wall = lambda u, v: None
+door = rgb_index((90, 55, 30))
+def terrace_front(u, v):
+    unit = u % 4.0
+    if v < 6.5 and 1.0 <= unit < 1.9:
+        return door
+    if v < 6.5 and 2.4 <= unit < 3.4 and 2 <= v < 5:
+        return DARK_GLASS
+    if 8 <= v < 12.5 and 0.8 <= unit < 3.2:
+        return DARK_GLASS if v < 11.5 else FRAME
+    if unit < 0.25:
+        return rgb_index((205, 200, 190))
+    return cc(6) if v < 7 else cc(7)
+t.box(2, 3, 14, 12, 0, 14, (230, 225, 210), TERRACOTTA, sw=lambda u, v: cc(5) if v < 7 else cc(6), se=terrace_front)
+for (i, (y0, y1)) in enumerate(((2.4, 12.6), (3.9, 11.1), (5.4, 9.6))):
+    t.box(1.6, y0, 14.4, y1, 14 + 2 * i, 16 + 2 * i, TERRACOTTA, (190, 95, 60), shade=0.7)
+for x0 in (2.2, 6.2, 10.2):
+    t.box(x0, 12, x0 + 3.4, 13.6, 6.5, 7.3, (190, 95, 60), (200, 105, 70))
+for x0 in (2.0, 6.0, 10.0):
+    t.box(x0, 14.6, x0 + 1.4, 15.0, 0, 3, (120, 120, 125), (150, 150, 155))
+    t.box(x0 + 2.8, 14.6, x0 + 4.0, 15.0, 0, 3, (120, 120, 125), (150, 150, 155))
+house(t, "terrace houses")
+
+# Walk-up flats: five storeys with open corridors along the front and water tanks on the roof.
+f = Building()
+f.box(2, 3, 14, 13, 0, 30, (226, 216, 190), (150, 150, 150),
+      sw=combine(strip(0, 1.2, cc(5)), grid(6, DARK_GLASS, rgb_index((205, 195, 170)), period=2.0)),
+      se=combine(bands(6, FRAME, lo=1.0, hi=2.0), bands(6, rgb_index((95, 85, 70)), lo=2.0, hi=3.4), grid(6, DARK_GLASS, period=2.0, low=3.4, sill=0.6), strip(5.4, 6.6, cc(4))),
+      roof=lambda x, y: cc(6) if x < 2.6 or y < 3.6 or x > 13.4 or y > 12.4 else None)
+f.box(4, 5, 6, 7, 30, 34, (190, 190, 195), (210, 210, 215))
+f.box(10, 6, 12, 8, 30, 33, (190, 190, 195), (210, 210, 215))
+house(f, "walk-up flats")
+
+# HDB slab blocks: twelve storeys with corridors along the long side, a void deck on pillars,
+# a colourful end wall and a lift motor room on the roof; two tiles long, along X and along Y.
+def slab_part(axis, part):
+    b = Building()
+    storey, top = 4.6, 6 + 12 * 4.6
+    corridor = combine(bands(storey, cc(7), base=6, lo=0.9, hi=1.9), bands(storey, rgb_index((80, 80, 85)), base=6, lo=1.9, hi=2.9),
+                       grid(storey, DARK_GLASS, period=1.4, frac=(0.25, 0.65), base=6, low=2.9, sill=0.4),
+                       pillars(2.3, 0.5, 6, rgb_index((215, 215, 210)), rgb_index((55, 55, 60))))
+    end = combine(pillars(2.0, 0.6, 6, rgb_index((215, 215, 210)), rgb_index((55, 55, 60))),
+                  strip(1.6, 4.2, cc(6), 6, top), strip(4.2, 6.4, cc(3), 6, top))
+    back = combine(pillars(2.3, 0.5, 6, rgb_index((215, 215, 210)), rgb_index((55, 55, 60))), grid(storey, DARK_GLASS, rgb_index((210, 205, 195)), period=1.4, frac=(0.3, 0.7), base=6))
+    if axis == 'x':
+        x0, x1 = (1, 16) if part == 0 else (0, 15)
+        b.box(x0, 4, x1, 12, 0, top, (232, 228, 215), (140, 140, 140), sw=end if part == 1 else back, se=corridor,
+              roof=lambda x, y: cc(5) if y < 4.6 or y > 11.4 else None)
+        if part == 0:
+            b.box(6, 6, 9, 10, top, top + 6, (215, 210, 200), (150, 150, 150), sw=strip(0.5, 3.5, cc(6), 2, 5))
+        else:
+            b.box(5, 5.5, 8, 7.5, top, top + 4, (190, 190, 195), (215, 215, 220))
+    else:
+        y0, y1 = (1, 16) if part == 0 else (0, 15)
+        b.box(4, y0, 12, y1, 0, top, (232, 228, 215), (140, 140, 140), sw=corridor, se=end if part == 1 else back,
+              roof=lambda x, y: cc(5) if x < 4.6 or x > 11.4 else None)
+        if part == 0:
+            b.box(6, 6, 10, 9, top, top + 6, (215, 210, 200), (150, 150, 150), se=strip(0.5, 3.5, cc(6), 2, 5))
+        else:
+            b.box(5.5, 5, 7.5, 8, top, top + 4, (190, 190, 195), (215, 215, 220))
+    return b
+for axis in ('x', 'y'):
+    for part in (0, 1):
+        house(slab_part(axis, part), f"HDB slab {axis} {part}")
+
+# HDB point block: a twenty-storey tower with colourful corner columns and a void deck.
+pb = Building()
+storey, top = 4.6, 6 + 19 * 4.6
+pb_face = combine(pillars(2.5, 0.6, 6, rgb_index((215, 215, 210)), rgb_index((55, 55, 60))),
+                  strip(0, 1.4, cc(6), 6, top), strip(8.6, 10, cc(4), 6, top),
+                  bands(storey, cc(7), base=6, lo=0.0, hi=0.8),
+                  grid(storey, DARK_GLASS, period=1.8, frac=(0.25, 0.75), base=6, low=1.4, sill=0.5))
+pb.box(3, 3, 13, 13, 0, top, (236, 232, 222), (140, 140, 140), sw=pb_face, se=pb_face,
+       roof=lambda x, y: cc(5) if x < 3.7 or y < 3.7 or x > 12.3 or y > 12.3 else None)
+pb.box(6, 6, 10, 10, top, top + 7, (220, 215, 205), (150, 150, 150), sw=strip(0.5, 3.5, cc(6), 3, 6), se=strip(0.5, 3.5, cc(6), 3, 6))
+house(pb, "HDB point block")
+
+# Condominium: a slender glass tower with balconies on a podium with a pool deck.
+co = Building()
+pool, deck = rgb_index((70, 160, 215)), rgb_index((200, 185, 150))
+def pool_deck(x, y):
+    if 2 <= x <= 4.6 and 2 <= y <= 14:
+        return pool if 2.3 <= x <= 4.3 and 2.3 <= y <= 13.7 else rgb_index((235, 235, 235))
+    if x < 1.6 or y < 1.6 or x > 14.4 or y > 14.4:
+        return rgb_index((150, 150, 150))
+    return deck if (int(x * 2) + int(y * 2)) % 7 else rgb_index((70, 140, 60))
+co.box(1, 1, 15, 15, 0, 10, (205, 205, 210), (190, 175, 145), sw=pillars(1.6, 0.9, 10, rgb_index((190, 190, 195)), rgb_index((50, 50, 55))),
+       se=pillars(1.6, 0.9, 10, rgb_index((190, 190, 195)), rgb_index((50, 50, 55))), roof=pool_deck)
+c_storey, c_top = 4.4, 10 + 26 * 4.4
+c_face = combine(strip(0, 0.8, cc(5), 10, c_top), bands(c_storey, FRAME, lo=0.0, hi=1.0), bands(c_storey, rgb_index((160, 200, 220)), lo=1.0, hi=1.6),
+                 grid(c_storey, SKY_GLASS, period=1.2, frac=(0.1, 0.9), low=1.6, sill=0.3))
+co.box(6, 3, 13, 10, 10, c_top, (240, 240, 240), (170, 170, 175), sw=c_face, se=c_face)
+co.box(7, 4, 12, 9, c_top, c_top + 6, (230, 230, 235), (150, 150, 150), sw=strip(0, 5, cc(6), 4, 6), se=strip(0, 5, cc(6), 4, 6))
+house(co, "condominium")
+
+# Shophouses: a row of three-storey shophouses with a five-foot way, shuttered windows and signboards.
+sh = Building()
+signs = [rgb_index((200, 40, 30)), rgb_index((240, 200, 40)), rgb_index((40, 110, 190))]
+def shop_front(u, v):
+    unit = int(u // 4.6)
+    uu = u % 4.6
+    if v < 6:
+        if uu < 0.6:
+            return rgb_index((225, 220, 205))
+        return rgb_index((50, 45, 45)) if v < 5.2 else rgb_index((90, 80, 70))
+    if 6 <= v < 7.6 and 0.8 <= uu < 3.8:
+        return signs[unit % 3]
+    if 9 <= v < 12.5 or 14 <= v < 17.5:
+        if 0.8 <= uu < 1.8 or 2.8 <= uu < 3.8:
+            return rgb_index((60, 110, 70)) if int(v) % 2 else rgb_index((80, 140, 90))
+    if uu < 0.25:
+        return rgb_index((240, 235, 225))
+    return cc(7 - unit % 3)
+sh.box(1, 2, 15, 13, 0, 19, (235, 225, 205), TERRACOTTA, sw=lambda u, v: cc(5) if v >= 6 else rgb_index((70, 60, 55)), se=shop_front)
+for (i, (y0, y1)) in enumerate(((1.4, 13.6), (3.6, 11.4), (5.8, 9.2))):
+    sh.box(0.6, y0, 15.4, y1, 19 + 2 * i, 21 + 2 * i, TERRACOTTA, (195, 100, 65), shade=0.7)
+house(sh, "shophouses")
+
+# Office block of the 1970s: concrete with ribbon windows and a plant room on the roof.
+ob = Building()
+ob_face = combine(bands(4.5, rgb_index((40, 50, 60)), lo=1.2, hi=3.2), lambda u, v: rgb_index((175, 170, 160)) if (u % 2.5) < 0.3 else None)
+ob.box(3, 3, 13, 13, 0, 72, (205, 200, 188), (150, 150, 150), sw=ob_face, se=ob_face)
+ob.box(5, 5, 10, 9, 72, 79, (190, 185, 175), (140, 140, 140))
+house(ob, "office block")
+
+# Glass office tower: a blue-green curtain wall with a set-back crown and a mast.
+gt = Building()
+mull = rgb_index((170, 205, 210))
+gt_face = combine(lambda u, v: mull if (u % 1.0) < 0.18 else None, bands(4.5, rgb_index((90, 140, 150)), lo=0, hi=0.7))
+gt.box(3.5, 3.5, 12.5, 12.5, 0, 146, (70, 125, 140), (120, 130, 135), sw=gt_face, se=gt_face, shade=0.65)
+gt.box(5, 5, 11, 11, 146, 160, (85, 140, 155), (150, 160, 165), sw=gt_face, se=gt_face, shade=0.65)
+post(gt, 8, 8, 160, 178, rgb_index((200, 200, 205)))
+house(gt, "glass office tower")
+
+# Shopping mall: two by two tiles, four storeys with a glass atrium and signs in its colours.
+def mall_part(px_, py_):
+    b = Building()
+    ox, oy = 16 * px_, 16 * py_
+    x0, x1 = max(1, ox) - ox, min(31, ox + 16) - ox
+    y0, y1 = max(1, oy) - oy, min(31, oy + 16) - oy
+    def face(u, v, along):
+        g = u + along
+        if v < 7:
+            if 12 <= g <= 18:
+                return SKY_GLASS if v < 6 else FRAME
+            return rgb_index((200, 195, 185)) if (g % 3.0) < 0.5 else DARK_GLASS
+        if 17 <= v < 23 and 4 <= g % 14 < 10:
+            return cc(6) if v < 22 else cc(4)
+        return None
+    def roof(x, y):
+        gx, gy = x + ox, y + oy
+        if 13 <= gx <= 19 and 4 <= gy <= 28:
+            return SKY_GLASS if (int(gy) % 2) else rgb_index((200, 220, 230))
+        if gx < 2 or gy < 2 or gx > 30 or gy > 30:
+            return cc(5)
+        return None
+    b.box(x0, y0, x1, y1, 0, 26, (225, 220, 210), (175, 175, 175),
+          sw=lambda u, v: face(u, v, oy + y0), se=lambda u, v: face(u, v, ox + x0), roof=roof)
+    return b
+for (px_, py_) in ((0, 0), (0, 1), (1, 0), (1, 1)):
+    house(mall_part(px_, py_), f"mall {px_} {py_}")
+
+# Landmark tower: a tapering steel and glass tower with a spire.
+lt = Building()
+steel = lambda u, v: rgb_index((215, 220, 225)) if (u % 0.8) < 0.3 else None
+lt_face = combine(steel, bands(4.0, rgb_index((120, 135, 150)), lo=0, hi=0.6))
+for (i, (a, z0, z1)) in enumerate(((3, 0, 64), (4, 64, 120), (5, 120, 160), (6, 160, 176))):
+    lt.box(a, a, 16 - a, 16 - a, z0, z1, (150, 160, 170), (190, 195, 200), sw=lt_face, se=lt_face, shade=0.7)
+post(lt, 8, 8, 176, 196, rgb_index((230, 230, 235)))
+house(lt, "landmark tower")
+
+# Mixed development: a shopping podium with a roof garden and a residential tower over it.
+md = Building()
+def podium_face(u, v):
+    if v < 6:
+        return SKY_GLASS if (u % 3.0) > 0.5 else FRAME
+    if 9 <= v < 14 and 2 <= u % 7 < 6:
+        return cc(6)
+    return None
+md.box(1, 1, 15, 15, 0, 16, (222, 218, 208), (90, 150, 70), sw=podium_face, se=podium_face,
+       roof=lambda x, y: rgb_index((70, 140, 60)) if (int(x) + int(y)) % 3 else rgb_index((95, 165, 80)))
+m_face = combine(bands(4.4, FRAME, lo=0, hi=0.9), grid(4.4, SKY_GLASS, period=1.4, frac=(0.15, 0.85), low=0.9, sill=0.3), strip(0, 1.0, cc(5)),
+                 lambda u, v: rgb_index((70, 150, 60)) if 52 <= v < 56 else None)
+md.box(5, 4, 12, 11, 16, 106, (238, 238, 238), (160, 160, 165), sw=m_face, se=m_face)
+house(md, "mixed development")
+
+# Mosque: white walls with arched windows, a golden dome and a minaret.
+mo = Building()
+arch = lambda u, v: rgb_index((40, 110, 70)) if (u % 2.4) > 0.9 and 3 <= v < 9 and not (v > 8 and (u % 2.4) in (0.9, 2.4)) else None
+mo.box(3, 3, 13, 13, 0, 13, (240, 238, 230), (225, 222, 210), sw=arch, se=arch,
+       roof=lambda x, y: rgb_index((40, 110, 70)) if x < 3.6 or y < 3.6 or x > 12.4 or y > 12.4 else None)
+dome(mo, 8, 8, 13, 3.6, 14, (220, 180, 50))
+mo.set(round(32), round(16 - 13 - 14) - 1, rgb_index((230, 200, 60)))
+mo.set(round(32), round(16 - 13 - 14) - 2, rgb_index((230, 200, 60)))
+mo.box(1.6, 12, 3.4, 13.8, 0, 36, (240, 238, 230), (225, 222, 210), sw=strip(0, 2, rgb_index((40, 110, 70)), 28, 30), se=strip(0, 2, rgb_index((40, 110, 70)), 28, 30))
+dome(mo, 2.5, 12.9, 36, 1.0, 4, (220, 180, 50))
+house(mo, "mosque")
+
+# Chinese temple: red walls, a two-tier orange roof with upturned ends, lanterns and an incense burner.
+te = Building()
+temple_red = (185, 45, 35)
+te.box(3, 4, 13, 12, 0, 11, temple_red, (200, 120, 40),
+       se=combine(strip(4, 6, rgb_index((60, 30, 20)), 0, 7), strip(1, 2, rgb_index((240, 200, 60)), 5, 8), strip(8, 9, rgb_index((240, 200, 60)), 5, 8)),
+       sw=strip(2, 6, rgb_index((150, 35, 30)), 3, 8))
+te.box(2, 3, 14, 13, 11, 13, (205, 125, 40), (215, 140, 50), shade=0.65)
+te.box(3.5, 4.5, 12.5, 11.5, 13, 16, temple_red, (205, 125, 40))
+te.box(3, 4, 13, 12, 16, 18, (205, 125, 40), (225, 150, 55), shade=0.65)
+te.box(4, 7.3, 12, 8.7, 18, 19.5, (230, 170, 60), (240, 190, 70))
+for (x, y, z) in ((2, 3, 13), (14, 13, 13), (2, 13, 13), (3, 4, 18), (13, 12, 18)):
+    sx, sy = round(32 + 2 * (y - x)), round(x + y) - z
+    te.set(sx, sy - 1, rgb_index((240, 200, 60)))
+te.box(7.4, 13.6, 8.6, 14.8, 0, 3, (120, 90, 50), (150, 110, 60))
+house(te, "Chinese temple")
+
+assert len(sprites) == 273, len(sprites)
 sheet.save(f"{SRC}/city.png", optimize=True)
 
 header = """// This file is part of OpenTTD.
@@ -1460,10 +1814,15 @@ header = """// This file is part of OpenTTD.
 //   242-243: roof over the bus stops of a bus interchange, and of an integrated transport hub
 //   244-247: platform screen doors: railway along X far and near platform, along Y far and near platform
 //   248-249: icons: air pollution and land value views of the map
+//   250-252: a house under construction, three stages
+//   253-272: Malaysian and Singaporean town buildings: kampung house, terrace houses, walk-up flats,
+//            HDB slab block (along X: two parts, along Y: two parts), HDB point block, condominium,
+//            shophouses, office block, glass office tower, shopping mall (four parts), landmark tower,
+//            mixed development, mosque, Chinese temple
 //
    -1 * 0\t 0C "City fork graphics"
-   -1 * 3\t 05 1C %02X
-""" % len(sprites)
+   -1 * 5\t 05 1C FF %02X %02X
+""" % (len(sprites) & 0xFF, len(sprites) >> 8)
 with open(f"{SRC}/city.nfo", "w") as f:
     f.write(header)
     for (x, y, w, h, xr, yr, name) in sprites:

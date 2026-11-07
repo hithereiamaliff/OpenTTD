@@ -2185,6 +2185,11 @@ STR_CONFIG_SETTING_AIR_POLLUTION_OFF                            :Off
 STR_CONFIG_SETTING_AIR_POLLUTION_LIGHT                          :Light pollution
 STR_CONFIG_SETTING_AIR_POLLUTION_NORMAL                         :Normal pollution
 STR_CONFIG_SETTING_AIR_POLLUTION_HEAVY                          :Heavy pollution
+STR_CONFIG_SETTING_TOWN_BUILDING_STYLE                          :Town buildings: {STRING2}
+STR_CONFIG_SETTING_TOWN_BUILDING_STYLE_HELPTEXT                 :What towns build in the temperate and sub-tropical climates. Malaysian and Singaporean: kampung houses on stilts and rows of shophouses first; terrace houses from 1950, walk-up flats from 1955, HDB slab blocks from 1965 and point blocks from 1975 in the suburbs and around the centre; office blocks from 1965, glass towers and shopping malls from 1985, mixed developments from 1995 and condominiums from 1990 near the centre, and a landmark tower in a city of 40,000 people; mosques and Chinese temples among them. Towns put the tall ones where land is dear (near the centre, good stations, parks and city services) and rebuild old houses into newer kinds as they grow. OpenTTD's public buildings, and those that take food or water, stay. Changing it changes only what towns build from now on
+STR_CONFIG_SETTING_TOWN_BUILDING_STYLE_ORIGINAL                 :OpenTTD's
+STR_CONFIG_SETTING_TOWN_BUILDING_STYLE_MALAYSIAN                :Malaysian and Singaporean
+STR_CONFIG_SETTING_TOWN_BUILDING_STYLE_BOTH                     :Both
 STR_CONFIG_SETTING_TOWN_BUDGETS                                 :Town budgets and ordinances: {STRING2}
 STR_CONFIG_SETTING_TOWN_BUDGETS_HELPTEXT                        :Towns collect taxes, more from bigger towns and dearer land. A quarter goes to transit (the transit budget for contracts, passes and concessions), 60% to running the town; the rest pays for ordinances or builds reserves. Towns cut taxes when they have money put by and raise them when they run short; high taxes make a town less happy and slow its growth.{}Towns bring in ordinances when their problems call for them and they can afford them: parking limits, a low-emission zone, a car-free centre, tree planting, transit-oriented development, a transit fund. Companies can propose them in the town's Budget window.{}Off: no budgets and no ordinances; transit budgets as before
 STR_CONFIG_SETTING_COMMUTING                                    :Commuting: {STRING2}
@@ -6269,6 +6274,20 @@ STR_TOWN_BUILDING_NAME_IGLOO_1                                  :Igloo
 STR_TOWN_BUILDING_NAME_TEPEES_1                                 :Tepees
 STR_TOWN_BUILDING_NAME_TEAPOT_HOUSE_1                           :Teapot-House
 STR_TOWN_BUILDING_NAME_PIGGY_BANK_1                             :Piggy-Bank
+STR_TOWN_BUILDING_NAME_KAMPUNG_HOUSE                            :Kampung house
+STR_TOWN_BUILDING_NAME_TERRACE_HOUSES                           :Terrace houses
+STR_TOWN_BUILDING_NAME_WALK_UP_FLATS                            :Walk-up flats
+STR_TOWN_BUILDING_NAME_HDB_BLOCK                                :HDB block
+STR_TOWN_BUILDING_NAME_HDB_POINT_BLOCK                          :HDB point block
+STR_TOWN_BUILDING_NAME_CONDOMINIUM                              :Condominium
+STR_TOWN_BUILDING_NAME_SHOPHOUSES                               :Shophouses
+STR_TOWN_BUILDING_NAME_OFFICE_BLOCK_KL                          :Office block
+STR_TOWN_BUILDING_NAME_GLASS_TOWER                              :Glass office tower
+STR_TOWN_BUILDING_NAME_SHOPPING_MALL                            :Shopping mall
+STR_TOWN_BUILDING_NAME_LANDMARK_TOWER                           :Landmark tower
+STR_TOWN_BUILDING_NAME_MIXED_DEVELOPMENT                        :Mixed development
+STR_TOWN_BUILDING_NAME_MOSQUE                                   :Mosque
+STR_TOWN_BUILDING_NAME_CHINESE_TEMPLE                           :Chinese temple
 
 ##id 0x4800
 # industry names

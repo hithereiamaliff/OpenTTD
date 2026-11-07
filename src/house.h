@@ -27,6 +27,8 @@ static const uint8_t TOWN_HOUSE_COMPLETED = 3;
 static const uint HOUSE_NO_CLASS      = 0;
 static const HouseID NEW_HOUSE_OFFSET = 110; ///< Offset for new houses.
 static const HouseID NUM_HOUSES       = 4096; ///< Total number of houses.
+/** City fork: the Malaysian and Singaporean houses take the last IDs; NewGRF houses get those below (see city_houses.cpp). */
+static const HouseID CITY_HOUSE_OFFSET = NUM_HOUSES - 64;
 static const HouseID INVALID_HOUSE_ID = UINT16_MAX;
 
 static const HouseID NUM_HOUSES_PER_GRF = NUM_HOUSES; ///< Number of supported houses per NewGRF.
@@ -153,5 +155,15 @@ inline HouseID GetTranslatedHouseID(HouseID hid)
 
 void ShowBuildHousePicker(struct Window *);
 HouseZones GetClimateMaskForLandscape();
+
+/**
+ * Is a house type one of the city fork's Malaysian and Singaporean houses?
+ * @param house_id The house type.
+ * @return True if it is.
+ */
+inline bool IsCityHouse(HouseID house_id)
+{
+	return house_id >= CITY_HOUSE_OFFSET;
+}
 
 #endif /* HOUSE_H */

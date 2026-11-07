@@ -832,6 +832,7 @@ SettingsContainer &GetSettingsTree()
 				towns->Add(new SettingEntry("economy.town_traffic"));
 				towns->Add(new SettingEntry("economy.rush_hours"));
 				towns->Add(new SettingEntry("economy.environment"));
+				towns->Add(new SettingEntry("economy.town_building_style"));
 				towns->Add(new SettingEntry("economy.town_budgets"));
 				towns->Add(new SettingEntry("economy.commuting"));
 				towns->Add(new SettingEntry("economy.allow_town_roads"));

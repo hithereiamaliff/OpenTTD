@@ -121,6 +121,8 @@ add_files(
     city_bus.h
     city_clock.cpp
     city_clock.h
+    city_houses.cpp
+    city_houses.h
     city_services.cpp
     city_services.h
     commuting.cpp

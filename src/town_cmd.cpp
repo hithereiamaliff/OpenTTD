@@ -10,6 +10,7 @@
 #include "stdafx.h"
 #include "bridge.h"
 #include "city_clock.h"
+#include "city_houses.h"
 #include "commuting.h"
 #include "misc/history_type.hpp"
 #include "misc/history_func.hpp"
@@ -265,6 +266,11 @@ static TownDrawTileProc * const _town_draw_tile_procs[1] = {
 static void DrawTile_Town(TileInfo *ti)
 {
 	HouseID house_id = GetHouseType(ti->tile);
+
+	if (IsCityHouse(house_id)) {
+		DrawCityHouseTile(ti, house_id);
+		return;
+	}
 
 	if (house_id >= NEW_HOUSE_OFFSET) {
 		/* Houses don't necessarily need new graphics. If they don't have a
@@ -606,7 +612,7 @@ static void TileLoop_Town(TileIndex tile)
 
 	/* NewHouseTileLoop returns false if Callback 21 succeeded, i.e. the house
 	 * doesn't exist any more, so don't continue here. */
-	if (house_id >= NEW_HOUSE_OFFSET && !NewHouseTileLoop(tile)) return;
+	if (house_id >= NEW_HOUSE_OFFSET && !IsCityHouse(house_id) && !NewHouseTileLoop(tile)) return;
 
 	if (!IsHouseCompleted(tile)) {
 		/* Construction is not completed, so we advance a construction stage. */
@@ -2446,6 +2452,35 @@ uint GetDefaultTownsForMapSize()
 }
 
 /**
+ * City fork: a town just generated with Malaysian and Singaporean buildings
+ * grew from a village, so its centre holds the small buildings it began with
+ * and its tall ones stand at the edge. Rebuild about half the houses of its
+ * centre and inner suburbs the way a town of its size builds them, so the
+ * tall ones stand in the middle.
+ * @param t The town.
+ */
+static void RedevelopGeneratedTown(Town *t)
+{
+	if (static_cast<TownBuildingStyle>(_settings_game.economy.town_building_style) == TownBuildingStyle::Original) return;
+	const uint radius = IntSqrt(t->cache.squared_town_zone_radius[to_underlying(HouseZone::TownInnerSuburb)]);
+	if (radius == 0) return;
+	std::vector<TileIndex> tiles;
+	TileArea area(t->xy, 1, 1);
+	area.Expand(radius);
+	for (TileIndex tile : area) {
+		if (!IsTileType(tile, TileType::House) || GetTownIndex(tile) != t->index || !IsHouseCompleted(tile)) continue;
+		if (!HouseSpec::Get(GetHouseType(tile))->building_flags.Any(BUILDING_HAS_1_TILE)) continue;
+		const HouseZone zone = GetTownRadiusGroup(t, tile);
+		if (zone == HouseZone::TownCentre || zone == HouseZone::TownInnerSuburb) tiles.push_back(tile);
+	}
+	for (TileIndex tile : tiles) {
+		if (!IsTileType(tile, TileType::House) || !Chance16(1, 2) || !CanDeleteHouse(tile)) continue;
+		ClearTownHouse(t, tile);
+		TryBuildTownHouse(t, tile, {TownExpandMode::Buildings});
+	}
+}
+
+/**
  * Generate a number of towns with a given layout.
  * This function is used by the Random Towns button in Scenario Editor as well as in world generation.
  * @param layout The road layout to build.
@@ -2495,6 +2530,9 @@ bool GenerateTowns(TownLayout layout, std::optional<uint> number)
 
 	/* Build the town k-d tree again to make sure it's well balanced */
 	RebuildTownKdtree();
+
+	/* City fork: Malaysian and Singaporean towns get their tall buildings in the middle. */
+	for (Town *t : Town::Iterate()) RedevelopGeneratedTown(t);
 
 	if (current_number != 0) return true;
 
@@ -2893,6 +2931,8 @@ static bool TryBuildTownHouse(Town *t, TileIndex tile, TownExpandModes modes)
 	for (const auto &hs : HouseSpec::Specs()) {
 		/* No businesses in residential zones, no homes in commercial zones. */
 		if (!TownZoneAllowsHouse(planned_zone, hs)) continue;
+		/* OpenTTD's buildings, Malaysian and Singaporean ones or both, and the rarer of those only where they fit. */
+		if (!IsHouseAllowedByTownStyle(hs) || !CanTownBuildCityHouse(t, hs)) continue;
 
 		/* Verify that the candidate house spec matches the current tile status. Land zoned for
 		 * shops and offices gets them wherever it is in town, as long as the climate fits. */

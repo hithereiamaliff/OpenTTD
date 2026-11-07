@@ -29,9 +29,14 @@
 //   242-243: roof over the bus stops of a bus interchange, and of an integrated transport hub
 //   244-247: platform screen doors: railway along X far and near platform, along Y far and near platform
 //   248-249: icons: air pollution and land value views of the map
+//   250-252: a house under construction, three stages
+//   253-272: Malaysian and Singaporean town buildings: kampung house, terrace houses, walk-up flats,
+//            HDB slab block (along X: two parts, along Y: two parts), HDB point block, condominium,
+//            shophouses, office block, glass office tower, shopping mall (four parts), landmark tower,
+//            mixed development, mosque, Chinese temple
 //
    -1 * 0	 0C "City fork graphics"
-   -1 * 3	 05 1C FA
+   -1 * 5	 05 1C FF 11 01
    -1 sprites/city.png 8bpp    4    4   4  17   -1  -16 normal
    -1 sprites/city.png 8bpp   12    4   4  17   -1  -16 normal
    -1 sprites/city.png 8bpp   20    4   4  17   -1  -16 normal
@@ -282,3 +287,26 @@
    -1 sprites/city.png 8bpp  111  934  33  21  -22    4 normal
    -1 sprites/city.png 8bpp  300  934  16  14    0    0 normal
    -1 sprites/city.png 8bpp  320  934  16  14    0    0 normal
+   -1 sprites/city.png 8bpp    4  990  48  27  -23    1 normal
+   -1 sprites/city.png 8bpp   56  990  40  42  -19  -16 normal
+   -1 sprites/city.png 8bpp  100  990  46  74  -19  -48 normal
+   -1 sprites/city.png 8bpp  150  990  49  34  -18  -11 normal
+   -1 sprites/city.png 8bpp  203  990  50  42  -23  -13 normal
+   -1 sprites/city.png 8bpp  257  990  44  52  -21  -25 normal
+   -1 sprites/city.png 8bpp  305  990  46  84  -23  -56 normal
+   -1 sprites/city.png 8bpp  355  990  46  84  -21  -57 normal
+   -1 sprites/city.png 8bpp  405  990  46  84  -21  -56 normal
+   -1 sprites/city.png 8bpp  455  990  46  84  -23  -57 normal
+   -1 sprites/city.png 8bpp    4 1230  40 114  -19  -88 normal
+   -1 sprites/city.png 8bpp   48 1230  56 149  -27 -119 normal
+   -1 sprites/city.png 8bpp  108 1230  54  47  -27  -19 normal
+   -1 sprites/city.png 8bpp  166 1230  40  95  -19  -69 normal
+   -1 sprites/city.png 8bpp  210 1230  36 186  -17 -161 normal
+   -1 sprites/city.png 8bpp  250 1230  60  56  -29  -24 normal
+   -1 sprites/city.png 8bpp  314 1230  60  56  -31  -25 normal
+   -1 sprites/city.png 8bpp  378 1230  60  56  -27  -25 normal
+   -1 sprites/city.png 8bpp  442 1230  60  56  -29  -26 normal
+   -1 sprites/city.png 8bpp    4 1470  40 205  -19 -179 normal
+   -1 sprites/city.png 8bpp   48 1470  56 127  -27  -97 normal
+   -1 sprites/city.png 8bpp  108 1470  44  51  -19  -25 normal
+   -1 sprites/city.png 8bpp  156 1470  45  37  -21  -12 normal
