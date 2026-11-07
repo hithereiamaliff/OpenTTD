@@ -27,6 +27,8 @@
 #include "zoom_func.h"
 #include "timer/timer.h"
 #include "timer/timer_game_calendar.h"
+#include "timer/timer_game_tick.h"
+#include "city_clock.h"
 #include "timer/timer_window.h"
 
 #include "widgets/statusbar_widget.h"
@@ -85,6 +87,8 @@ struct StatusBarWindow : Window {
 		switch (widget) {
 			case WID_S_LEFT:
 				d = GetStringBoundingBox(GetString(STR_JUST_DATE_LONG, GetParamMaxValue(TimerGameCalendar::DateAtStartOfYear(CalendarTime::MAX_YEAR).base())));
+				/* With the city clock, the time of day follows the date. */
+				if (IsCityClockOn()) d = GetStringBoundingBox(GetString(STR_STATUSBAR_DATE_AND_CITY_TIME, GetParamMaxValue(TimerGameCalendar::DateAtStartOfYear(CalendarTime::MAX_YEAR).base()), 88, 2, 88, 2));
 				break;
 
 			case WID_S_RIGHT: {
@@ -109,8 +113,12 @@ struct StatusBarWindow : Window {
 		tr.top = CentreBounds(r.top, r.bottom, GetCharacterHeight(FontSize::Normal));
 		switch (widget) {
 			case WID_S_LEFT:
-				/* Draw the date */
-				DrawString(tr, GetString(STR_JUST_DATE_LONG, TimerGameCalendar::date), TextColour::White, AlignmentH::Centre);
+				/* Draw the date, and the time of the city clock (orange in the rush hours). */
+				if (int minute = GetCityMinuteOfDay(); minute >= 0) {
+					DrawString(tr, GetString(IsRushHour() ? STR_STATUSBAR_DATE_AND_RUSH_HOUR : STR_STATUSBAR_DATE_AND_CITY_TIME, TimerGameCalendar::date, minute / 60, 2, minute % 60, 2), TextColour::White, AlignmentH::Centre);
+				} else {
+					DrawString(tr, GetString(STR_JUST_DATE_LONG, TimerGameCalendar::date), TextColour::White, AlignmentH::Centre);
+				}
 				break;
 
 			case WID_S_RIGHT: {
@@ -207,6 +215,11 @@ struct StatusBarWindow : Window {
 
 	const IntervalTimer<TimerGameCalendar> daily_interval = {{TimerGameCalendar::Trigger::Day, TimerGameCalendar::Priority::None}, [this](auto) {
 		this->SetWidgetDirty(WID_S_LEFT);
+	}};
+
+	/** The time of the city clock moves on within the day. */
+	const IntervalTimer<TimerGameTick> city_clock_interval = {{TimerGameTick::Priority::None, 8}, [this](auto) {
+		if (IsCityClockOn()) this->SetWidgetDirty(WID_S_LEFT);
 	}};
 };
 

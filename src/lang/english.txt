@@ -872,6 +872,8 @@ STR_STATUSBAR_COMPANY_NAME                                      :{SILVER}- -  {C
 STR_STATUSBAR_PAUSED                                            :{YELLOW}*  *  PAUSED  *  *
 STR_STATUSBAR_PAUSED_LINK_GRAPH                                 :{ORANGE}*  *  PAUSED (waiting for link graph update) *  *
 STR_STATUSBAR_AUTOSAVE                                          :{RED}AUTOSAVE
+STR_STATUSBAR_DATE_AND_CITY_TIME                                :{WHITE}{DATE_LONG}  {ZEROFILL_NUM}:{ZEROFILL_NUM}
+STR_STATUSBAR_DATE_AND_RUSH_HOUR                                :{WHITE}{DATE_LONG}  {ORANGE}{ZEROFILL_NUM}:{ZEROFILL_NUM}
 STR_STATUSBAR_SAVING_GAME                                       :{RED}*  *  SAVING GAME  *  *
 
 STR_STATUSBAR_SPECTATOR                                         :{WHITE}(spectator)
@@ -2151,6 +2153,11 @@ STR_CONFIG_SETTING_TOWN_TRAFFIC_OFF                             :Off
 STR_CONFIG_SETTING_TOWN_TRAFFIC_LIGHT                           :Light
 STR_CONFIG_SETTING_TOWN_TRAFFIC_NORMAL                          :Normal
 STR_CONFIG_SETTING_TOWN_TRAFFIC_HEAVY                           :Heavy
+STR_CONFIG_SETTING_RUSH_HOURS                                   :City clock with rush hours: {STRING2}
+STR_CONFIG_SETTING_RUSH_HOURS_HELPTEXT                          :Runs a clock through the day in towns, shown next to the date. In the rush hours (06:00-09:00 and 16:00-19:00) twice as many people look for a bus and the roads are busier; at night and in the evening fewer travel and the roads are quieter. Peak bus lanes are for buses in the rush hours only. Lines can park some of their vehicles between the rush hours to save running costs, or run only in them (see the line window).{}A day per year keeps pace with the vehicles: a rush hour lasts about 45 days. A day per month is faster to watch, but a rush hour then lasts only about 4 days, so only lines with short round trips can park vehicles between them.{}Off: the same all day, as in OpenTTD
+STR_CONFIG_SETTING_RUSH_HOURS_OFF                               :Off
+STR_CONFIG_SETTING_RUSH_HOURS_YEAR                              :A day per year
+STR_CONFIG_SETTING_RUSH_HOURS_MONTH                             :A day per month (fast)
 
 STR_CONFIG_SETTING_LARGER_TOWNS                                 :Proportion of towns that will become cities: {STRING2}
 STR_CONFIG_SETTING_LARGER_TOWNS_HELPTEXT                        :Amount of towns which will become a city, thus a town which starts out larger and grows faster
@@ -3043,7 +3050,7 @@ STR_ROAD_TOOLBAR_TOOLTIP_BUS_PRIORITY                           :{BLACK}Bus prio
 STR_ROAD_TOOLBAR_TOOLTIP_TOLLS                                  :{BLACK}Tolls: toll plazas on your expressways, free-flow gantries and your toll prices. Expressways are a road type of their own (road construction menu)
 STR_BUS_PRIORITY_CAPTION                                        :{WHITE}Bus Priority
 STR_BUS_PRIORITY_LANE_TOOLTIP                                   :{BLACK}Paint bus lanes, all day: drag along a road. Buses drive past town traffic at full speed; the other traffic, a lane short, is slower. Ctrl+Drag removes bus lanes
-STR_BUS_PRIORITY_LANE_PEAK_TOOLTIP                              :{BLACK}Paint bus lanes for the peak hours: drag along a road. Buses get through town traffic faster (two congestion levels less), and the other traffic keeps its lanes. Ctrl+Drag removes bus lanes
+STR_BUS_PRIORITY_LANE_PEAK_TOOLTIP                              :{BLACK}Paint bus lanes for the peak hours: drag along a road. Buses get through town traffic faster (two congestion levels less), and the other traffic keeps its lanes. With the city clock on (Settings), they are bus lanes in the rush hours only, open to all the rest of the day. Ctrl+Drag removes bus lanes
 STR_BUS_PRIORITY_GIVE_WAY_TOOLTIP                               :{BLACK}Paint give-way markings at a bus stop: buses pull out of the stop ahead of the queue, as town traffic gives way to them on the roads next to it. Ctrl+Click removes them
 STR_BUS_PRIORITY_BUS_SIGNAL_TOOLTIP                             :{BLACK}Give traffic lights bus signals: buses get green a moment before the rest of the traffic; smart lights also turn green early for a waiting bus and stay green for a bus about to cross. Click a junction with traffic lights; Ctrl+Click switches the bus signals off
 STR_BUS_PRIORITY_BUSWAY_TOOLTIP                                 :{BLACK}Build a kerbed busway in the middle of the road: drag along a road, town roads too. Buses drive past town traffic at full speed and kerbs keep the traffic out, so it counts as a busway for the BRT score; the other traffic, a lane short, is slower. Ctrl+Drag removes it
@@ -5205,6 +5212,22 @@ STR_LINE_FARE_COMPANYS                                          :(company's)
 STR_LINE_CONTRACT                                               :{BLACK}Contract with {TOWN}: {ORANGE}{STRING}{BLACK}, {CURRENCY_SHORT} a month until {DATE_SHORT}
 STR_LINE_CONTRACT_GROSS                                         :the town keeps the fares
 STR_LINE_CONTRACT_FREE                                          :free line
+STR_LINE_SERVICE                                                :{BLACK}Service: {LTBLUE}{RAW_STRING}
+STR_LINE_SERVICE_ON_DEMAND                                      :{BLACK}Service: {LTBLUE}on demand{BLACK}, {LTBLUE}{RAW_STRING}
+STR_LINE_SERVICE_ALL_DAY                                        :all vehicles all day
+STR_LINE_SERVICE_CLOCK_OFF                                      :all vehicles all day{BLACK} (the city clock is off)
+STR_LINE_SERVICE_TOO_SHORT                                      :all vehicles all day{BLACK}: the time between rush hours is too short for its round trip
+STR_LINE_SERVICE_OFFPEAK                                        :{NUM} vehicle{P "" s} between rush hours{BLACK}, {LTBLUE}{NUM}{BLACK} waiting in a depot now
+STR_LINE_SERVICE_PEAK_ONLY                                      :rush hours only{BLACK}, {LTBLUE}{NUM}{BLACK} waiting in a depot now
+STR_LINE_OFFPEAK_BUTTON_ALL                                     :{BLACK}Off-peak: all run
+STR_LINE_OFFPEAK_BUTTON_KEEP                                    :{BLACK}Off-peak: {NUM} running
+STR_LINE_OFFPEAK_BUTTON_PEAK_ONLY                               :{BLACK}Rush hours only
+STR_LINE_OFFPEAK_TOOLTIP                                        :{BLACK}How many of the line's vehicles keep running between the rush hours of the city clock. When a rush hour ends the others, emptiest first, go to a depot, cost nothing to run while they wait there, and set out again when the next one starts. Rush hours only makes a peak shuttle. Needs the city clock (Settings, Environment, Towns)
+STR_LINE_OFFPEAK_ALL                                            :All vehicles all day
+STR_LINE_OFFPEAK_KEEP                                           :{NUM} vehicle{P "" s} between rush hours
+STR_LINE_OFFPEAK_PEAK_ONLY                                      :Rush hours only
+STR_LINE_ON_DEMAND_BUTTON                                       :{BLACK}On demand
+STR_LINE_ON_DEMAND_TOOLTIP                                      :{BLACK}Run the line on demand, like a demand-responsive van service: after each stop a vehicle heads for the stop of the line where the most people wait, or that waited longest, nearer ones first, instead of taking the stops in order. Suits a few small vehicles serving a quiet area
 STR_FARES_CAPTION                                               :{WHITE}{COMPANY} - Passenger fares
 STR_FARES_TABLE_TOOLTIP                                         :{BLACK}Click a fare, price, concession or pass to change it. A journey pays one fare however often riders change. Riders weigh what they pay against the classic fare: paying less raises the passenger rating where they board, paying more lowers it (about 120% earns the most). Lines can have their own fare (line window)
 STR_FARES_HEADER_MODE                                           :{BLACK}Transport

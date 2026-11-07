@@ -399,6 +399,14 @@ static void TownFoundingChanged(int32_t)
 	}
 }
 
+/** The city clock was switched on or off, or its day got longer or shorter: the time shows in the status bar and the line window. */
+static void RushHoursChanged(int32_t)
+{
+	if (Window *w = FindWindowById(WindowClass::Statusbar, 0); w != nullptr) w->ReInit();
+	InvalidateWindowClassesData(WindowClass::Line);
+	MarkWholeScreenDirty();
+}
+
 static void ZoomMinMaxChanged(int32_t)
 {
 	ConstrainAllViewportsZoom();

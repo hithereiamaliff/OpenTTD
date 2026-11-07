@@ -12,6 +12,7 @@ add_files(
     bus_priority_sl.cpp
     road_pricing_sl.cpp
     city_bus_sl.cpp
+    city_clock_sl.cpp
     city_services_sl.cpp
     company_sl.cpp
     depot_sl.cpp

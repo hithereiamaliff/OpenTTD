@@ -10,6 +10,7 @@
 #include "stdafx.h"
 #include "line.h"
 #include "brt.h"
+#include "city_clock.h"
 #include "satisfaction.h"
 #include "line_cmd.h"
 #include "command_func.h"
@@ -250,6 +251,21 @@ struct LineWindow : Window {
 			lines.emplace_back();
 		}
 
+		/* When it runs: all day, or fewer vehicles between the rush hours; and whether on demand. */
+		std::string service;
+		if (line.offpeak_vehicles == UINT8_MAX) {
+			service = GetString(STR_LINE_SERVICE_ALL_DAY);
+		} else if (!IsCityClockOn()) {
+			service = GetString(STR_LINE_SERVICE_CLOCK_OFF);
+		} else if (!CanLineParkBetweenPeaks(list)) {
+			service = GetString(STR_LINE_SERVICE_TOO_SHORT);
+		} else if (line.offpeak_vehicles == 0) {
+			service = GetString(STR_LINE_SERVICE_PEAK_ONLY, CountOffPeakParked(list));
+		} else {
+			service = GetString(STR_LINE_SERVICE_OFFPEAK, line.offpeak_vehicles, CountOffPeakParked(list));
+		}
+		lines.push_back(GetString(line.on_demand ? STR_LINE_SERVICE_ON_DEMAND : STR_LINE_SERVICE, service));
+
 		Money profit_this_year = 0, profit_last_year = 0;
 		for (const Vehicle *v = list->GetFirstSharedVehicle(); v != nullptr; v = v->NextShared()) {
 			profit_this_year += v->GetDisplayProfitThisYear();
@@ -260,7 +276,7 @@ struct LineWindow : Window {
 	}
 
 	/** Number of lines in the info panel, below the badge row. */
-	static constexpr uint INFO_LINES = 13;
+	static constexpr uint INFO_LINES = 14;
 
 	void UpdateWidgetSize(WidgetID widget, Dimension &size, [[maybe_unused]] const Dimension &padding, [[maybe_unused]] Dimension &fill, [[maybe_unused]] Dimension &resize) override
 	{
@@ -271,6 +287,13 @@ struct LineWindow : Window {
 
 	std::string GetWidgetString(WidgetID widget, StringID stringid) const override
 	{
+		if (widget == WID_LN_OFFPEAK) {
+			const OrderList *list = this->GetList();
+			const uint8_t keep = list == nullptr ? UINT8_MAX : list->line.offpeak_vehicles;
+			if (keep == UINT8_MAX) return GetString(STR_LINE_OFFPEAK_BUTTON_ALL);
+			if (keep == 0) return GetString(STR_LINE_OFFPEAK_BUTTON_PEAK_ONLY);
+			return GetString(STR_LINE_OFFPEAK_BUTTON_KEEP, keep);
+		}
 		if (widget != WID_LN_CAPTION) return this->Window::GetWidgetString(widget, stringid);
 
 		const OrderList *list = this->GetList();
@@ -359,6 +382,24 @@ struct LineWindow : Window {
 				ShowDropDownList(this, MakeFarePriceDropDown(true), list->line.fare_price, WID_LN_FARE_PRICE);
 				break;
 
+			case WID_LN_OFFPEAK: {
+				/* All vehicles, one fewer than the line has down to one, or rush hours only. */
+				const uint8_t keep = list->line.offpeak_vehicles;
+				const uint most = std::max<uint>(std::min<uint>(list->GetNumVehicles(), 100), keep == UINT8_MAX ? 0 : keep + 1);
+				DropDownList dlist;
+				dlist.push_back(MakeDropDownListStringItem(STR_LINE_OFFPEAK_ALL, UINT8_MAX));
+				for (uint n = most - (most > 0 ? 1 : 0); n >= 1; n--) {
+					dlist.push_back(MakeDropDownListStringItem(GetString(STR_LINE_OFFPEAK_KEEP, n), n));
+				}
+				dlist.push_back(MakeDropDownListStringItem(STR_LINE_OFFPEAK_PEAK_ONLY, 0));
+				ShowDropDownList(this, std::move(dlist), keep, WID_LN_OFFPEAK);
+				break;
+			}
+
+			case WID_LN_ON_DEMAND:
+				Command<Commands::SetLineProperty>::Post(STR_ERROR_CAN_T_CHANGE_LINE, v->index, LineProperty::OnDemand, list->line.on_demand ? 0 : 1, {});
+				break;
+
 			case WID_LN_VEHICLES:
 				ShowVehicleListWindow(v);
 				break;
@@ -385,6 +426,7 @@ struct LineWindow : Window {
 			case WID_LN_COLOUR: property = LineProperty::Colour; break;
 			case WID_LN_FARE: property = LineProperty::FareScheme; break;
 			case WID_LN_FARE_PRICE: property = LineProperty::FarePrice; break;
+			case WID_LN_OFFPEAK: property = LineProperty::OffPeakVehicles; break;
 			default: return;
 		}
 		Command<Commands::SetLineProperty>::Post(STR_ERROR_CAN_T_CHANGE_LINE, list->GetFirstSharedVehicle()->index, property, static_cast<uint32_t>(index), {});
@@ -423,7 +465,8 @@ struct LineWindow : Window {
 			return;
 		}
 		bool mine = this->owner == _local_company;
-		this->SetWidgetsDisabledState(!mine, WID_LN_NUMBER, WID_LN_NAME, WID_LN_COLOUR, WID_LN_TARGET);
+		this->SetWidgetsDisabledState(!mine, WID_LN_NUMBER, WID_LN_NAME, WID_LN_COLOUR, WID_LN_TARGET, WID_LN_OFFPEAK, WID_LN_ON_DEMAND);
+		this->SetWidgetLoweredState(WID_LN_ON_DEMAND, list->line.on_demand);
 		this->SetWidgetsDisabledState(!mine || GetLineContract(list) != nullptr, WID_LN_FARE, WID_LN_FARE_PRICE);
 		this->SetWidgetDisabledState(WID_LN_HOLD, !mine || list->line.target_gap <= 0);
 		this->SetWidgetLoweredState(WID_LN_HOLD, list->line.hold_for_spacing);
@@ -460,6 +503,10 @@ static constexpr std::initializer_list<NWidgetPart> _nested_line_widgets = {
 	NWidget(NWID_HORIZONTAL, NWidContainerFlag::EqualSize),
 		NWidget(WWT_DROPDOWN, Colours::Grey, WID_LN_FARE), SetFill(1, 0), SetStringTip(STR_LINE_FARE_BUTTON, STR_LINE_FARE_TOOLTIP),
 		NWidget(WWT_DROPDOWN, Colours::Grey, WID_LN_FARE_PRICE), SetFill(1, 0), SetStringTip(STR_LINE_FARE_PRICE_BUTTON, STR_LINE_FARE_PRICE_TOOLTIP),
+	EndContainer(),
+	NWidget(NWID_HORIZONTAL, NWidContainerFlag::EqualSize),
+		NWidget(WWT_DROPDOWN, Colours::Grey, WID_LN_OFFPEAK), SetFill(1, 0), SetStringTip(STR_LINE_OFFPEAK_BUTTON_ALL, STR_LINE_OFFPEAK_TOOLTIP),
+		NWidget(WWT_TEXTBTN, Colours::Grey, WID_LN_ON_DEMAND), SetFill(1, 0), SetStringTip(STR_LINE_ON_DEMAND_BUTTON, STR_LINE_ON_DEMAND_TOOLTIP),
 	EndContainer(),
 	NWidget(NWID_HORIZONTAL, NWidContainerFlag::EqualSize),
 		NWidget(WWT_PUSHTXTBTN, Colours::Grey, WID_LN_VEHICLES), SetFill(1, 0), SetStringTip(STR_LINE_VEHICLES_BUTTON, STR_LINE_VEHICLES_TOOLTIP),

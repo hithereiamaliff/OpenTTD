@@ -9,6 +9,7 @@
 
 #include "stdafx.h"
 #include "bridge.h"
+#include "city_clock.h"
 #include "misc/history_type.hpp"
 #include "misc/history_func.hpp"
 #include "road.h"
@@ -526,6 +527,10 @@ static void TownGenerateCargo(Town *t, CargoType cargo, uint amount, StationFind
 
 	/* Scale by cargo scale setting. */
 	amount = ScaleByCargoScale(amount, true);
+	if (amount == 0) return;
+
+	/* More people travel in the rush hours of the city clock, fewer at night. */
+	ScalePassengersForCityTime(cargo, amount);
 	if (amount == 0) return;
 
 	/* Actually generate cargo and update town statistics. */

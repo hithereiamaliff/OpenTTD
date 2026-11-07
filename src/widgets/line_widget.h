@@ -24,6 +24,8 @@ enum LineWidgets : WidgetID {
 	WID_LN_TIMETABLE, ///< Show the line's timetable.
 	WID_LN_FARE, ///< Choose the line's own fare scheme.
 	WID_LN_FARE_PRICE, ///< Choose the line's own price level.
+	WID_LN_OFFPEAK, ///< Choose how many vehicles run between the rush hours of the city clock.
+	WID_LN_ON_DEMAND, ///< Toggle running the line on demand.
 };
 
 /** Widgets of the #DeparturesWindow class. */

@@ -1173,6 +1173,106 @@ save `city-satisfaction-demo.csav`):
   waiting 95, crowding 100, punctuality 19, fares 75, condition 87, comfort
   85), the station's ratings view, the town window.
 
+## Done: transit part 12, rush hours and on-demand lines
+
+A **city clock** (setting "City clock with rush hours" under Environment,
+Towns; off by default, stored in the save, can be changed during a game)
+runs a city day per game year or per game month. The time shows next to
+the date in the status bar, orange in the rush hours.
+
+| Time | Part of the day | Passengers from houses | Town traffic |
+|---|---|---|---|
+| 00:00-06:00 | night | 30% | 2 levels less |
+| 06:00-09:00 | morning rush hour | 200% | 1 level more |
+| 09:00-16:00 | day | 100% | as set by the town |
+| 16:00-19:00 | evening rush hour | 180% | 1 level more |
+| 19:00-24:00 | evening | 60% | 1 level less |
+
+- Over a whole day passengers come to about 97% of the steady amount.
+  Traffic changes only on roads that have some; it applies to speeds, the
+  pathfinder, the traffic overlay, street life, land info, traffic lights
+  and the script API's congestion level. The stored level stays the
+  town's daily level, so town economics don't swing with the clock.
+- **A day per year** keeps pace with the vehicles: a rush hour lasts about
+  45 days and a bus round trip is a city half-hour or so. **A day per
+  month** is faster to watch, but a rush hour then lasts about 4 days,
+  shorter than most round trips.
+- **Peak bus lanes**: with the clock on they are bus lanes in the rush hours
+  only (like all-day lanes then) and open to all the rest of the day. With
+  the clock off they work as in part 7.
+- **Off-peak service** (line window, new "Off-peak" dropdown): all vehicles
+  all day, a number of vehicles between the rush hours, or rush hours only
+  (a peak shuttle). When a rush hour ends, the others go, emptiest first, to
+  the nearest depot and stop there: no running costs, and no "waiting in
+  depot" news. When the next rush hour starts they set out again; any still
+  on their way to the depot turn back. A line parks vehicles only when the
+  stretch until the next rush hour lasts at least two of its round trips,
+  otherwise they would spend it driving to the depot and back; with a day
+  per month only short lines park. The line window's "Service" line says
+  how many wait in a depot, or that the stretches are too short for the
+  line. Renewed or replaced vehicles keep waiting, ones their owner starts
+  again just run, and the time spent waiting doesn't count as travel time
+  (or the line's round trip would seem far longer).
+- **On-demand lines** (line window, new "On demand" button): after each stop
+  a vehicle heads for the stop of its line where the most passengers it can
+  take wait, less the room on the line's other vehicles already heading
+  there, where its passengers want to get off (with cargo distribution), or
+  that waited longest for a pickup; nearer ones first. Stops on the way
+  don't become implicit orders, and "Even spacing" doesn't hold its
+  vehicles.
+- Saved: the setting by name; a line's off-peak number and on-demand switch
+  in LINE; the vehicles waiting for the next rush hour in a new chunk PEAK.
+- Script API: `ScriptDate.GetCityTime`, `IsRushHour`;
+  `ScriptOrder.SetLineOffPeakVehicles`, `GetLineOffPeakVehicles`,
+  `GetLineVehiclesWaitingForPeak`, `SetLineOnDemand`, `IsLineOnDemand`;
+  `ScriptRoad.GetCongestion` now gives the level at this time of day.
+- Code: `src/city_clock.{h,cpp}`, `src/saveload/city_clock_sl.cpp`; hooks in
+  `town_cmd.cpp` (passengers), `bus_priority.cpp` (traffic, peak lanes),
+  `road_traffic.cpp`, `street_life.cpp`, `town_traffic.cpp`, `misc_gui.cpp`,
+  `vehicle.cpp` (on-demand next stop, depot news, deleted vehicles),
+  `vehicle_base.h` (next stations), `autoreplace_cmd.cpp`, `line.cpp`,
+  `line_gui.cpp`, `statusbar_gui.cpp`, the settings tables.
+
+Tests (test AI PeakTest; 3 years each; Kinningbury, 10,400 people, with 6
+Merbok Twin Decker buses on part 7's 16-tile line, a day per year):
+
+| | Night | Morning rush | Day | Evening rush | Evening | Clock off |
+|---|---|---|---|---|---|---|
+| Town traffic in the centre (average level) | 0.9 | 3.9 | 2.8 | 3.8 | 1.8 | 2.8 |
+| Passengers waiting at the two stops | 19 | 167 | 100 | 175 | 71 | 112 |
+
+| Off-peak service | Buses out between rush hours | Running costs 2021 | Riders 2021 | Satisfaction |
+|---|---|---|---|---|
+| All day | 6 | 11,905 | 2,447 | 55% |
+| 2 between rush hours | 2 (night, day, evening) | 6,384 (-46%) | 2,575 | 69% |
+| Rush hours only | 0 | 3,321 (-71%) | 754 | 49% |
+
+- With the clock off the same line carried 3,186 riders: peaky demand is
+  harder to serve with the same buses. Parking 4 of them off-peak carried
+  more people than running all 6, as fewer buses bunched.
+- A day per month: the line (round trip 28 days) kept all 6 running, as the
+  stretches between rush hours are too short for it.
+
+| On-demand (6 stops around the centre) | Fixed loop | On demand |
+|---|---|---|
+| Kinningbury, 3 buses | 7,968 riders, 52% | 9,177 riders, 72% |
+| Grubourne (4,500 people), 2 buses | 3,503 riders, 63% | 5,531 riders, 69% |
+| Different stops the buses head for at a time | 1.7 and 1.0 (they bunch) | 3.0 and 1.9 |
+
+- A save with 4 buses parked (`city-rushhour-demo.csav`) reloads with them
+  still waiting; all 6 set out at 06:04.
+- With the clock off, part 11's baseline run gives identical monthly
+  results; 99/99 unit tests; all 35 test saves load, save and reload.
+- The first try used a day per month as the main option: buses spent the
+  whole stretch driving to the depot and back, and the rush-hours-only line
+  never finished a trip. Hence a day per year first and the round-trip
+  rule. A bus's waiting time also counted as travel time, which made the
+  round trip look like 60+ days and stopped parking in the day; fixed.
+- Screenshots: status bar "Apr 28th, 2022 07:43" (time in orange); the
+  line window with "Service: 2 vehicles between rush hours, 4 waiting in a
+  depot now", the Off-peak list and the On demand button; the setting with
+  its three values.
+
 ## Roadmap
 
 Sizes are rough: S = one session, M = a few, L = many, XL = a project in itself.

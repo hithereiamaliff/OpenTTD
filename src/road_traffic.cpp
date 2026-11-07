@@ -16,6 +16,7 @@
 
 #include "stdafx.h"
 #include "road_traffic.h"
+#include "city_clock.h"
 #include "network/network.h"
 #include "order_type.h"
 #include "road_map.h"
@@ -119,7 +120,7 @@ RoadTrafficLevel GetRoadTrafficLevel(TileIndex tile)
 		RoadTrafficLevel::Slow, RoadTrafficLevel::Slow, RoadTrafficLevel::Jammed, RoadTrafficLevel::Jammed,
 	};
 	RoadTrafficLevel level = GetVehicleTrafficLevel(tile);
-	if (IsTileType(tile, TileType::Road) && !IsRoadDepot(tile)) level = std::max(level, TOWN_TRAFFIC_LEVEL[GetRoadCongestion(tile)]);
+	if (IsTileType(tile, TileType::Road) && !IsRoadDepot(tile)) level = std::max(level, TOWN_TRAFFIC_LEVEL[AdjustCongestionForCityTime(GetRoadCongestion(tile))]);
 	return level;
 }
 

@@ -9,6 +9,7 @@
 
 #include "stdafx.h"
 #include "debug.h"
+#include "city_clock.h"
 #include "landscape.h"
 #include "error.h"
 #include "gui.h"
@@ -223,7 +224,7 @@ public:
 
 		/* Town traffic */
 		if (_settings_game.economy.town_traffic != to_underlying(TownTrafficSetting::Off) && IsTileType(this->tile, TileType::Road) && !IsRoadDepot(this->tile) && HasTileRoadType(this->tile, RoadTramType::Road)) {
-			uint8_t level = GetRoadCongestion(this->tile);
+			uint8_t level = AdjustCongestionForCityTime(GetRoadCongestion(this->tile));
 			int kmh = GetRoadCongestionSpeedLimitKmh(level);
 			if (kmh == 0) {
 				this->landinfo_data.push_back(GetString(STR_LAND_AREA_INFORMATION_TOWN_TRAFFIC_FREE, level));

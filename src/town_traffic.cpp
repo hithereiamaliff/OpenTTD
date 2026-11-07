@@ -9,6 +9,7 @@
 
 #include "stdafx.h"
 #include "town_traffic.h"
+#include "city_clock.h"
 #include "bus_priority.h"
 #include "road_pricing.h"
 #include "cargotype.h"
@@ -253,7 +254,7 @@ bool TownTrafficWaitsAt(TileIndex junction, Axis axis, bool longest_green_over)
 	for (DiagDirection side : {AxisToDiagDir(axis), ReverseDiagDir(AxisToDiagDir(axis))}) {
 		TileIndex tile = TileAddByDiagDir(junction, side);
 		if (!IsValidTile(tile) || !IsTileType(tile, TileType::Road) || IsRoadDepot(tile) || !HasTileRoadType(tile, RoadTramType::Road)) continue;
-		level = std::max<int>(level, GetRoadCongestion(tile));
+		level = std::max<int>(level, AdjustCongestionForCityTime(GetRoadCongestion(tile)));
 	}
 	if (level >= 1) return true;
 	if (level < 0 || !longest_green_over) return false;

@@ -582,7 +582,9 @@ public:
 	/**
 	 * How congested a road tile is with town traffic. Road vehicles drive
 	 * slower on congested roads: from level 2 on, at most 70, 55, 42, 32, 22
-	 * and 14 km/h.
+	 * and 14 km/h. With the city clock (setting economy.rush_hours) it is the
+	 * level at this time of day: a level more in the rush hours, one less in
+	 * the evening and two less at night.
 	 * @param tile The tile to check.
 	 * @pre ScriptMap::IsValidTile(tile).
 	 * @return 0 (traffic flows freely) to 7 (jammed), or -1 if the tile isn't a road tile (depots aren't either).

@@ -30,6 +30,8 @@
 #include "../../object_map.h"
 #include "../../script/squirrel_helper_type.hpp"
 
+#include "../../city_clock.h"
+
 #include "../../safeguards.h"
 
 /* static */ ScriptRoad::RoadVehicleType ScriptRoad::GetRoadVehicleTypeForCargo(CargoType cargo_type)
@@ -683,7 +685,7 @@ static bool NeighbourHasReachableRoad(::RoadType rt, TileIndex start_tile, DiagD
 {
 	if (!::IsValidTile(tile) || !::IsTileType(tile, TileType::Road) || ::IsRoadDepot(tile)) return -1;
 
-	return ::GetRoadCongestion(tile);
+	return ::AdjustCongestionForCityTime(::GetRoadCongestion(tile));
 }
 
 /* static */ bool ScriptRoad::BuildDepotFacility(TileIndex tile, DepotFacility facility)

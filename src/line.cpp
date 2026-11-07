@@ -10,6 +10,7 @@
 #include "stdafx.h"
 #include "line.h"
 #include "brt.h"
+#include "city_clock.h"
 #include "satisfaction.h"
 #include "line_cmd.h"
 #include "command_func.h"
@@ -148,7 +149,7 @@ void OnLineVehicleDeparts(Vehicle *v, uint8_t occupancy)
 bool MustHoldForLineSpacing(const Vehicle *v)
 {
 	const OrderList *list = v->orders;
-	if (list == nullptr || !list->line.hold_for_spacing || list->line.target_gap <= 0 || list->line.last_departure == 0) return false;
+	if (list == nullptr || !list->line.hold_for_spacing || list->line.on_demand || list->line.target_gap <= 0 || list->line.last_departure == 0) return false;
 
 	VehicleOrderID first = GetLineFirstStop(list);
 	if (first == INVALID_VEH_ORDER_ID || v->cur_real_order_index != first) return false;
@@ -222,6 +223,12 @@ CommandCost CmdSetLineProperty(DoCommandFlags flags, VehicleID veh_id, LinePrope
 		case LineProperty::FarePrice:
 			if (value != 0 && (value < FARE_PRICE_MIN || value > FARE_PRICE_MAX)) return CMD_ERROR;
 			break;
+		case LineProperty::OffPeakVehicles:
+			if (value > UINT8_MAX) return CMD_ERROR;
+			break;
+		case LineProperty::OnDemand:
+			if (value > 1) return CMD_ERROR;
+			break;
 		default:
 			return CMD_ERROR;
 	}
@@ -236,8 +243,12 @@ CommandCost CmdSetLineProperty(DoCommandFlags flags, VehicleID veh_id, LinePrope
 			case LineProperty::HoldForSpacing: line.hold_for_spacing = value != 0; break;
 			case LineProperty::FareScheme: line.fare_scheme = static_cast<FareScheme>(value); break;
 			case LineProperty::FarePrice: line.fare_price = static_cast<uint16_t>(value); break;
+			case LineProperty::OffPeakVehicles: line.offpeak_vehicles = static_cast<uint8_t>(value); break;
+			case LineProperty::OnDemand: line.on_demand = value != 0; break;
 			default: NOT_REACHED();
 		}
+		/* Between the peaks, the line keeps its new number of vehicles running right away. */
+		if (property == LineProperty::OffPeakVehicles) ApplyOffPeakVehicles(v->orders);
 		SetWindowDirty(WindowClass::Line, v->orders->index.base());
 		InvalidateWindowClassesData(GetWindowClassForVehicleType(v->type), 0);
 		InvalidateWindowClassesData(WindowClass::VehicleTimetable, 0);

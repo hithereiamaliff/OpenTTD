@@ -78,6 +78,9 @@ struct LineInfo {
 	uint8_t satisfaction = SATISFACTION_UNKNOWN; ///< How satisfied its passengers were last month, 0 to 100.
 	std::array<uint8_t, to_underlying(SatisfactionPart::End)> satisfaction_parts{}; ///< The parts of it, 0 to 100 each.
 
+	uint8_t offpeak_vehicles = UINT8_MAX; ///< Vehicles that keep running between the peaks of the city clock; UINT8_MAX for all of them.
+	bool on_demand = false; ///< Its vehicles pick their next stop by demand instead of running the stops in order.
+
 	/**
 	 * Remember the gap before a departure from the first stop.
 	 * @param gap Ticks since the previous departure.
@@ -99,6 +102,8 @@ enum class LineProperty : uint8_t {
 	HoldForSpacing, ///< Whether to hold vehicles at the first stop; uses the value.
 	FareScheme, ///< The line's own fare scheme; uses the value, FareScheme::Inherit for the company's.
 	FarePrice, ///< The line's own price level in percent; uses the value, 0 for the company's.
+	OffPeakVehicles, ///< Vehicles kept running between the peaks of the city clock; uses the value, UINT8_MAX for all.
+	OnDemand, ///< Whether vehicles pick their next stop by demand; uses the value.
 	End, ///< End marker.
 };
 

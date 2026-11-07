@@ -10,6 +10,7 @@
 #include "../../stdafx.h"
 #include "script_date.hpp"
 #include "../../timer/timer_game_economy.h"
+#include "../../city_clock.h"
 
 #include <time.h>
 
@@ -65,4 +66,14 @@
 	time_t t;
 	time(&t);
 	return t;
+}
+
+/* static */ SQInteger ScriptDate::GetCityTime()
+{
+	return ::GetCityMinuteOfDay();
+}
+
+/* static */ bool ScriptDate::IsRushHour()
+{
+	return ::IsRushHour();
 }

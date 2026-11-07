@@ -24,6 +24,7 @@
 #include "../../line.h"
 #include "../../line_cmd.h"
 #include "../../brt.h"
+#include "../../city_clock.h"
 #include "../../transit_authority.h"
 #include "../../transit_authority_cmd.h"
 #include "../../string_func.h"
@@ -803,6 +804,23 @@ static const OrderList *GetScriptLine(VehicleID vehicle_id)
 	return ScriptObject::Command<Commands::SetLineProperty>::Do(vehicle_id, LineProperty::FarePrice, static_cast<uint32_t>(price), {});
 }
 
+/* static */ bool ScriptOrder::SetLineOffPeakVehicles(VehicleID vehicle_id, SQInteger vehicles)
+{
+	EnforceCompanyModeValid(false);
+	EnforcePrecondition(false, ScriptVehicle::IsPrimaryVehicle(vehicle_id));
+	EnforcePrecondition(false, vehicles >= -1 && vehicles < UINT8_MAX);
+
+	return ScriptObject::Command<Commands::SetLineProperty>::Do(vehicle_id, LineProperty::OffPeakVehicles, vehicles == -1 ? UINT8_MAX : static_cast<uint32_t>(vehicles), {});
+}
+
+/* static */ bool ScriptOrder::SetLineOnDemand(VehicleID vehicle_id, bool on_demand)
+{
+	EnforceCompanyModeValid(false);
+	EnforcePrecondition(false, ScriptVehicle::IsPrimaryVehicle(vehicle_id));
+
+	return ScriptObject::Command<Commands::SetLineProperty>::Do(vehicle_id, LineProperty::OnDemand, on_demand ? 1 : 0, {});
+}
+
 /**
  * The open tender for a vehicle's line.
  * @param vehicle_id The vehicle.
@@ -914,6 +932,25 @@ static const TransitContract *GetScriptLineTender(VehicleID vehicle_id)
 	const OrderList *list = GetScriptLine(vehicle_id);
 	if (list == nullptr || list->line.satisfaction == SATISFACTION_UNKNOWN || part < 0 || part >= ::to_underlying(SatisfactionPart::End)) return -1;
 	return list->line.satisfaction_parts[part];
+}
+
+/* static */ SQInteger ScriptOrder::GetLineOffPeakVehicles(VehicleID vehicle_id)
+{
+	const OrderList *list = GetScriptLine(vehicle_id);
+	if (list == nullptr || list->line.offpeak_vehicles == UINT8_MAX) return -1;
+	return list->line.offpeak_vehicles;
+}
+
+/* static */ SQInteger ScriptOrder::GetLineVehiclesWaitingForPeak(VehicleID vehicle_id)
+{
+	const OrderList *list = GetScriptLine(vehicle_id);
+	return list == nullptr ? -1 : ::CountOffPeakParked(list);
+}
+
+/* static */ bool ScriptOrder::IsLineOnDemand(VehicleID vehicle_id)
+{
+	const OrderList *list = GetScriptLine(vehicle_id);
+	return list != nullptr && list->line.on_demand;
 }
 
 /* static */ SQInteger ScriptOrder::GetLineAverageGap(VehicleID vehicle_id)

@@ -9,6 +9,7 @@
 
 #include "stdafx.h"
 #include "street_life.h"
+#include "city_clock.h"
 #include "bus_priority.h"
 #include "core/random_func.hpp"
 #include "genworld.h"
@@ -227,7 +228,7 @@ static bool CanEnterStreet(TileIndex tile, DiagDirection moving)
 static uint16_t GetStreetDensity(TileIndex tile)
 {
 	static constexpr uint16_t BY_LEVEL[ROAD_CONGESTION_MAX + 1] = {30, 60, 100, 140, 180, 230, 280, 340};
-	uint8_t level = (IsTileType(tile, TileType::Road) && !IsRoadDepot(tile)) ? GetRoadCongestion(tile) : 0;
+	uint8_t level = (IsTileType(tile, TileType::Road) && !IsRoadDepot(tile)) ? AdjustCongestionForCityTime(GetRoadCongestion(tile)) : 0;
 
 	const Town *t = ClosestTownFromTile(tile, UINT_MAX);
 	HouseZone zone = (t == nullptr) ? HouseZone::TownEdge : GetTownRadiusGroup(t, tile);

@@ -23,6 +23,7 @@
 
 #include "stdafx.h"
 #include "bus_priority.h"
+#include "city_clock.h"
 #include "bus_priority_cmd.h"
 #include "brt.h"
 #include "command_func.h"
@@ -141,17 +142,19 @@ static bool IsNextToGiveWayStop(TileIndex tile)
 }
 
 /**
- * How congested a road tile is for a road vehicle, with bus lanes and give-way markings.
+ * How congested a road tile is for a road vehicle now, with the time of the city clock, bus lanes and give-way markings.
  * @param tile A road tile (no depot).
  * @param bus Whether the vehicle is a bus.
  * @return The congestion level, 0 to #ROAD_CONGESTION_MAX.
  */
 uint8_t GetCongestionLevelFor(TileIndex tile, bool bus)
 {
-	uint8_t level = GetRoadCongestion(tile);
+	uint8_t level = AdjustCongestionForCityTime(GetRoadCongestion(tile));
 	if (level == 0 || (_bus_lanes.empty() && _give_way_stops.empty())) return level;
 
 	BusLane lane = GetBusLane(tile);
+	/* With the city clock, peak bus lanes are bus lanes in the rush hours and open to all the rest of the day. */
+	if (lane == BusLane::Peak && IsCityClockOn()) lane = IsRushHour() ? BusLane::AllDay : BusLane::None;
 	if (bus) {
 		if (lane == BusLane::AllDay || lane == BusLane::Busway || IsNextToGiveWayStop(tile)) return 0;
 		if (lane == BusLane::Peak) return level > 2 ? level - 2 : 0;

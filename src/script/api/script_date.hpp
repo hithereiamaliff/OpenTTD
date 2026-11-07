@@ -111,6 +111,20 @@ public:
 	 * @note This uses the clock of the host system, which can skew or be set back. Use with caution.
 	 */
 	static SQInteger GetSystemTime();
+
+	/**
+	 * Get the time of day of the city clock (setting economy.rush_hours), which
+	 * runs a day per game month or per game year.
+	 * @return Minutes since midnight, 0 to 1439, or -1 when the city clock is off.
+	 */
+	static SQInteger GetCityTime();
+
+	/**
+	 * Is it rush hour on the city clock, 06:00 to 09:00 or 16:00 to 19:00?
+	 * Then twice as many people travel and the roads are busier.
+	 * @return True in the rush hours; false between them or when the city clock is off.
+	 */
+	static bool IsRushHour();
 };
 
 #endif /* SCRIPT_DATE_HPP */

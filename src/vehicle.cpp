@@ -11,6 +11,7 @@
 #include "line.h"
 #include "error.h"
 #include "roadveh.h"
+#include "city_clock.h"
 #include "depot_yard.h"
 #include "stop_charger.h"
 #include "ship.h"
@@ -834,6 +835,8 @@ void Vehicle::PreDestructor()
 
 	/* One vehicle fewer based at its depot. */
 	if (this->type == VehicleType::Road && this->IsFrontEngine()) OnDepotHomesChanged();
+	/* It no longer waits for the next rush hour. */
+	if (this->IsPrimaryVehicle()) ForgetOffPeakVehicle(this);
 
 	if (Station::IsValidID(this->last_station_visited)) {
 		Station *st = Station::Get(this->last_station_visited);
@@ -1683,11 +1686,13 @@ void VehicleEnterDepot(Vehicle *v)
 			/* Clear unbunching data. */
 			v->ResetDepotUnbunching();
 
-			/* Announce that the vehicle is waiting to players and AIs. */
-			if (v->owner == _local_company) {
-				AddVehicleAdviceNewsItem(AdviceType::VehicleWaiting, GetEncodedString(STR_NEWS_TRAIN_IS_WAITING + to_underlying(v->type), v->index), v->index);
+			/* Announce that the vehicle is waiting to players and AIs; not when it only waits for the next rush hour. */
+			if (!IsWaitingForPeak(v)) {
+				if (v->owner == _local_company) {
+					AddVehicleAdviceNewsItem(AdviceType::VehicleWaiting, GetEncodedString(STR_NEWS_TRAIN_IS_WAITING + to_underlying(v->type), v->index), v->index);
+				}
+				AI::NewEvent(v->owner, new ScriptEventVehicleWaitingInDepot(v->index));
 			}
-			AI::NewEvent(v->owner, new ScriptEventVehicleWaitingInDepot(v->index));
 		}
 
 		/* If we've entered our unbunching depot, record the round trip duration. */
@@ -2498,6 +2503,9 @@ void Vehicle::HandleLoading(bool mode)
 
 		default: return;
 	}
+
+	/* An on-demand vehicle picks its next stop itself. */
+	if (ChooseOnDemandStop(this)) return;
 
 	this->IncrementImplicitOrderIndex();
 }

@@ -30,6 +30,7 @@
 #include "train_cmd.h"
 #include "vehicle_cmd.h"
 #include "script/api/script_event_types.hpp"
+#include "city_clock.h"
 #include "depot_yard.h"
 #include "roadveh.h"
 
@@ -443,6 +444,8 @@ static CommandCost CopyHeadSpecificThings(Vehicle *old_head, Vehicle *new_head, 
 		/* Copy other things which cannot be copied by a command and which shall not stay reset from the build vehicle command */
 		new_head->CopyVehicleConfigAndStatistics(old_head);
 		if (new_head->type == VehicleType::Road) SetHomeDepot(RoadVehicle::From(new_head), RoadVehicle::From(old_head)->home_depot);
+		/* A vehicle renewed while it waits for the next rush hour sets out then too. */
+		ReplaceOffPeakVehicle(old_head, new_head);
 		GroupStatistics::AddProfitLastYear(new_head);
 
 		/* Switch vehicle windows/news to the new vehicle, so they are not closed/deleted when the old vehicle is sold */

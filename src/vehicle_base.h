@@ -162,6 +162,8 @@ struct MutableSpriteCache {
 typedef Pool<Vehicle, VehicleID, 512> VehiclePool;
 extern VehiclePool _vehicle_pool;
 
+void GetOnDemandNextStations(const Vehicle *v, std::vector<StationID> &next_station);
+
 /* Some declarations of functions, so we can make them friendly */
 struct GroundVehicleCache;
 struct LoadgameState;
@@ -746,6 +748,11 @@ public:
 	inline void GetNextStoppingStation(std::vector<StationID> &next_station) const
 	{
 		if (this->orders == nullptr) return;
+		/* An on-demand vehicle may go to any other stop of its line. */
+		if (this->orders->line.on_demand) {
+			GetOnDemandNextStations(this, next_station);
+			return;
+		}
 		this->orders->GetNextStoppingStation(next_station, this);
 	}
 

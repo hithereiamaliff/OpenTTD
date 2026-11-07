@@ -681,6 +681,32 @@ public:
 	static bool SetLineFarePrice(VehicleID vehicle_id, SQInteger price);
 
 	/**
+	 * Set how many of a line's vehicles keep running between the rush hours
+	 * of the city clock. When a rush hour ends, the others go to a depot and
+	 * wait there, without running costs, until the next one starts.
+	 * @param vehicle_id Any vehicle of the line.
+	 * @param vehicles The number of vehicles (up to 254), 0 to run in the rush hours only, or -1 for all vehicles all day.
+	 * @pre ScriptVehicle::IsPrimaryVehicle(vehicle_id).
+	 * @pre vehicles >= -1 && vehicles <= 254.
+	 * @game @pre ScriptCompanyMode::IsValid().
+	 * @return Whether it has been/can be set.
+	 * @note It only has an effect while the city clock (setting economy.rush_hours) is on.
+	 */
+	static bool SetLineOffPeakVehicles(VehicleID vehicle_id, SQInteger vehicles);
+
+	/**
+	 * Set whether a line runs on demand: after each stop its vehicles head
+	 * for the stop of the line where the most passengers wait, or that waited
+	 * longest, nearer ones first, instead of taking the stops in order.
+	 * @param vehicle_id Any vehicle of the line.
+	 * @param on_demand Whether to run on demand.
+	 * @pre ScriptVehicle::IsPrimaryVehicle(vehicle_id).
+	 * @game @pre ScriptCompanyMode::IsValid().
+	 * @return Whether it has been/can be set.
+	 */
+	static bool SetLineOnDemand(VehicleID vehicle_id, bool on_demand);
+
+	/**
 	 * Is a town inviting tenders for a vehicle's line?
 	 * @param vehicle_id Any vehicle of the line.
 	 * @return The town, or an invalid town (see ScriptTown::IsValidTown) if there is no open tender.
@@ -791,6 +817,30 @@ public:
 	 * @return The part from 0 to 100, or -1 if the vehicle or part is invalid or it isn't known yet.
 	 */
 	static SQInteger GetLineSatisfactionPart(VehicleID vehicle_id, SQInteger part);
+
+	/**
+	 * Get how many of a line's vehicles keep running between the rush hours of the city clock.
+	 * @param vehicle_id Any vehicle of the line.
+	 * @pre ScriptVehicle::IsPrimaryVehicle(vehicle_id).
+	 * @return The number of vehicles, 0 for the rush hours only, or -1 for all vehicles all day (or an invalid vehicle).
+	 */
+	static SQInteger GetLineOffPeakVehicles(VehicleID vehicle_id);
+
+	/**
+	 * Get how many of a line's vehicles wait in a depot for the next rush hour now.
+	 * @param vehicle_id Any vehicle of the line.
+	 * @pre ScriptVehicle::IsPrimaryVehicle(vehicle_id).
+	 * @return The number of vehicles, or -1 if the vehicle is invalid.
+	 */
+	static SQInteger GetLineVehiclesWaitingForPeak(VehicleID vehicle_id);
+
+	/**
+	 * Does a line run on demand?
+	 * @param vehicle_id Any vehicle of the line.
+	 * @pre ScriptVehicle::IsPrimaryVehicle(vehicle_id).
+	 * @return True if it does; false if not or the vehicle is invalid.
+	 */
+	static bool IsLineOnDemand(VehicleID vehicle_id);
 
 	/**
 	 * Get the average time between a line's recent departures from its first stop.

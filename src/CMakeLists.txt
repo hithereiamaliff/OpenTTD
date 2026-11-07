@@ -119,6 +119,8 @@ add_files(
     cheat_type.h
     city_bus.cpp
     city_bus.h
+    city_clock.cpp
+    city_clock.h
     city_services.cpp
     city_services.h
     city_services_gui.cpp
