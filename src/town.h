@@ -20,6 +20,13 @@
 #include "cargo_type.h"
 #include "city_services_type.h"
 
+/** The air where a town's people live and what their land is worth, updated monthly (see environment.cpp). */
+struct TownEnvironment {
+	uint16_t api = 0; ///< Air pollutant index where its people live, weighted by population.
+	uint8_t land_value = 0; ///< Land value where its people live, 0 to 100, weighted by population.
+	bool unhealthy = false; ///< Its air was unhealthy last month (for the news when it turns so).
+};
+
 template <typename T>
 struct BuildingCounts {
 	std::vector<T> id_count{};
@@ -197,6 +204,7 @@ struct Town : TownPool::PoolItem<&_town_pool> {
 
 	CityServiceCoverage service_coverage{}; ///< City fork: share of the population near each city service, updated monthly.
 	TownTransit transit{}; ///< City fork: the town's transit authority (saved in chunk TTRA).
+	TownEnvironment environment{}; ///< City fork: the air where its people live and what their land is worth (saved in chunk TENV).
 
 	uint8_t fund_buildings_months = 0; ///< fund buildings program in action?
 	uint8_t road_build_months = 0; ///< fund road reconstruction in action?

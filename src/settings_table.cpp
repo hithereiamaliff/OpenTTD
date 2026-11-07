@@ -33,6 +33,7 @@
 #include "elrail_func.h"
 #include "error.h"
 #include "town.h"
+#include "environment.h"
 #include "video/video_driver.hpp"
 #include "sound/sound_driver.hpp"
 #include "music/music_driver.hpp"
@@ -400,6 +401,11 @@ static void TownFoundingChanged(int32_t)
 }
 
 /** The city clock was switched on or off, or its day got longer or shorter: the time shows in the status bar and the line window. */
+static void EnvironmentChanged(int32_t)
+{
+	OnEnvironmentSettingChanged();
+}
+
 static void RushHoursChanged(int32_t)
 {
 	if (Window *w = FindWindowById(WindowClass::Statusbar, 0); w != nullptr) w->ReInit();

@@ -16,6 +16,7 @@
 #include "../../clear_map.h"
 #include "../../tree_map.h"
 #include "../../town.h"
+#include "../../environment.h"
 #include "../../landscape.h"
 #include "../../landscape_cmd.h"
 #include "../../terraform_cmd.h"
@@ -318,6 +319,18 @@
 	if (town == nullptr) return TownID::Invalid();
 
 	return town->index;
+}
+
+/* static */ SQInteger ScriptTile::GetPollution(TileIndex tile)
+{
+	if (!::IsValidTile(tile)) return -1;
+	return ::GetTilePollution(tile);
+}
+
+/* static */ SQInteger ScriptTile::GetLandValue(TileIndex tile)
+{
+	if (!::IsValidTile(tile)) return -1;
+	return ::GetTileLandValue(tile);
 }
 
 /* static */ TownID ScriptTile::GetClosestTown(TileIndex tile)

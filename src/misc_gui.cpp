@@ -40,6 +40,7 @@
 #include "town_traffic.h"
 #include "town_zoning.h"
 #include "city_services.h"
+#include "environment.h"
 #include "depot_yard.h"
 #include "stop_charger.h"
 #include "bus_priority.h"
@@ -297,6 +298,14 @@ public:
 				list += GetString(GetCityServiceShortName(static_cast<CityService>(s)));
 			}
 			this->landinfo_data.push_back(GetString(STR_LAND_AREA_INFORMATION_CITY_SERVICES_HERE, list));
+		}
+
+		/* The air here, and what the land is worth. */
+		if (IsEnvironmentKnown()) {
+			const uint api = GetTilePollution(this->tile);
+			const uint value = GetTileLandValue(this->tile);
+			this->landinfo_data.push_back(GetString(STR_LAND_AREA_INFORMATION_POLLUTION, api, GetAirQualityName(api)));
+			this->landinfo_data.push_back(GetString(STR_LAND_AREA_INFORMATION_LAND_VALUE, value, GetLandValueName(value)));
 		}
 
 		/* Build date */

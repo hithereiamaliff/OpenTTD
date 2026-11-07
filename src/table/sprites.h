@@ -425,7 +425,9 @@ static constexpr SpriteID SPR_SCREEN_DOORS_X_FAR = SPR_TRAFFIC_LIGHTS_BASE + 244
 static constexpr SpriteID SPR_SCREEN_DOORS_X_NEAR = SPR_TRAFFIC_LIGHTS_BASE + 245; ///< Platform screen doors on the near platform of a railway station along X.
 static constexpr SpriteID SPR_SCREEN_DOORS_Y_FAR = SPR_TRAFFIC_LIGHTS_BASE + 246; ///< Platform screen doors on the far platform of a railway station along Y.
 static constexpr SpriteID SPR_SCREEN_DOORS_Y_NEAR = SPR_TRAFFIC_LIGHTS_BASE + 247; ///< Platform screen doors on the near platform of a railway station along Y.
-static constexpr uint16_t TRAFFIC_LIGHTS_SPRITE_COUNT = 248;
+static constexpr SpriteID SPR_IMG_POLLUTION_MAP = SPR_TRAFFIC_LIGHTS_BASE + 248; ///< Icon of the air pollution view of the map.
+static constexpr SpriteID SPR_IMG_LAND_VALUE_MAP = SPR_TRAFFIC_LIGHTS_BASE + 249; ///< Icon of the land value view of the map.
+static constexpr uint16_t TRAFFIC_LIGHTS_SPRITE_COUNT = 250;
 
 static const SpriteID SPR_NEWGRFS_BASE = SPR_TRAFFIC_LIGHTS_BASE + TRAFFIC_LIGHTS_SPRITE_COUNT;
 

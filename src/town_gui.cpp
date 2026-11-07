@@ -51,6 +51,7 @@
 
 #include "widgets/town_widget.h"
 #include "town_traffic.h"
+#include "environment.h"
 #include "transit_authority.h"
 #include "town_zoning.h"
 #include "city_services.h"
@@ -442,6 +443,17 @@ public:
 			tr.top += GetCharacterHeight(FontSize::Normal);
 		}
 
+		/* The air where its people live, and what their land is worth. */
+		if (IsEnvironmentOn()) {
+			const TownEnvironment &env = this->town->environment;
+			if (IsEnvironmentKnown() && this->town->cache.population > 0) {
+				DrawString(tr, GetString(env.api > API_UNHEALTHY ? STR_TOWN_VIEW_ENVIRONMENT_UNHEALTHY : STR_TOWN_VIEW_ENVIRONMENT, env.api, GetAirQualityName(env.api), env.land_value, GetLandValueName(env.land_value)));
+			} else {
+				DrawString(tr, STR_TOWN_VIEW_ENVIRONMENT_UNKNOWN);
+			}
+			tr.top += GetCharacterHeight(FontSize::Normal);
+		}
+
 		StringID str_last_period = TimerGameEconomy::UsingWallclockUnits() ? STR_TOWN_VIEW_CARGO_LAST_MINUTE_MAX : STR_TOWN_VIEW_CARGO_LAST_MONTH_MAX;
 
 		for (auto tpe : {TownProductionEffect::Passengers, TownProductionEffect::Mail}) {
@@ -596,7 +608,7 @@ public:
 	 */
 	uint GetDesiredInfoHeight(int width) const
 	{
-		uint traffic_lines = _settings_game.economy.town_traffic != to_underlying(TownTrafficSetting::Off) ? 2 : 0;
+		uint traffic_lines = (_settings_game.economy.town_traffic != to_underlying(TownTrafficSetting::Off) ? 2 : 0) + (IsEnvironmentOn() ? 1 : 0);
 		uint aimed_height = static_cast<uint>(3 + traffic_lines + CargoSpec::town_production_cargoes[TownProductionEffect::Passengers].size() + CargoSpec::town_production_cargoes[TownProductionEffect::Mail].size()) * GetCharacterHeight(FontSize::Normal);
 		aimed_height += GetServiceRowHeight();
 

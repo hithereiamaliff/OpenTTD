@@ -50,6 +50,7 @@
 #include "hotkeys.h"
 #include "town_zoning.h"
 #include "city_services.h"
+#include "environment.h"
 #include "highscore.h"
 #include "goal_base.h"
 #include "goal_gui.h"
@@ -490,6 +491,8 @@ enum class TownMenuEntries {
 	ShowPlaceHouses, ///< Open house selection window.
 	ShowZoning, ///< Open the zoning toolbar.
 	ShowCityServices, ///< Open the city services toolbar.
+	ShowPollution, ///< Show air pollution over the land, or stop showing it.
+	ShowLandValue, ///< Show land value over the land, or stop showing it.
 };
 
 static CallBackFunction ToolbarTownClick(Window *w)
@@ -500,6 +503,10 @@ static CallBackFunction ToolbarTownClick(Window *w)
 	if (_settings_game.economy.place_houses != PlaceHouses::Forbidden) list.push_back(MakeDropDownListStringItem(STR_SCENEDIT_TOWN_MENU_PACE_HOUSE, TownMenuEntries::ShowPlaceHouses));
 	list.push_back(MakeDropDownListStringItem(STR_TOWN_MENU_ZONING, TownMenuEntries::ShowZoning));
 	list.push_back(MakeDropDownListStringItem(STR_TOWN_MENU_CITY_SERVICES, TownMenuEntries::ShowCityServices));
+	if (IsEnvironmentOn()) {
+		list.push_back(MakeDropDownListCheckedItem(GetEnvironmentOverlay() == EnvironmentOverlay::Pollution, STR_TOWN_MENU_POLLUTION_MAP, to_underlying(TownMenuEntries::ShowPollution)));
+		list.push_back(MakeDropDownListCheckedItem(GetEnvironmentOverlay() == EnvironmentOverlay::LandValue, STR_TOWN_MENU_LAND_VALUE_MAP, to_underlying(TownMenuEntries::ShowLandValue)));
+	}
 
 	PopupMainToolbarMenu(w, WID_TN_TOWNS, std::move(list), 0);
 
@@ -524,6 +531,8 @@ static CallBackFunction MenuClickTown(int index)
 			break;
 		case TownMenuEntries::ShowZoning: ShowTownZoningToolbar(); break;
 		case TownMenuEntries::ShowCityServices: ShowCityServicesToolbar(); break;
+		case TownMenuEntries::ShowPollution: ShowEnvironmentOverlay(EnvironmentOverlay::Pollution); break;
+		case TownMenuEntries::ShowLandValue: ShowEnvironmentOverlay(EnvironmentOverlay::LandValue); break;
 	}
 	return CallBackFunction::None;
 }

@@ -447,6 +447,22 @@ public:
 	static SQInteger GetTransitSatisfaction(TownID town_id);
 
 	/**
+	 * Get the air pollutant index where a town's people live, weighted by population, as of last month.
+	 * @param town_id The town.
+	 * @pre IsValidTown(town_id).
+	 * @return The index; 0 while not known or with pollution switched off, -1 for an invalid town.
+	 */
+	static SQInteger GetPollution(TownID town_id);
+
+	/**
+	 * Get the land value where a town's people live, from 0 to 100, weighted by population, as of last month.
+	 * @param town_id The town.
+	 * @pre IsValidTown(town_id).
+	 * @return The value; 0 while not known or with land value switched off, -1 for an invalid town.
+	 */
+	static SQInteger GetLandValue(TownID town_id);
+
+	/**
 	 * Get the railway station of the feeder line a town asks for: a bus line
 	 * with a stop at or next to the station and one by the houses
 	 * (GetFeederOfferTile), leaving 4 times a month or more, gets a contract.

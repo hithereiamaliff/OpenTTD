@@ -1429,6 +1429,122 @@ a road across the tracks; it also runs the feeder lines towns ask for):
   -20%, boarding +10%"; the station's ratings view; Trinborough's Transit
   window with "Line F2: feeder contract, 547 a month until June 2025".
 
+## Done: transit part 14, land value and pollution
+
+The roadmap's M7. A new setting, **Air pollution and land value** (Settings,
+Environment, Towns, after the city clock): Off, Light pollution, Normal
+pollution (default) or Heavy pollution. Off works as in OpenTTD.
+
+**Air pollution.** Once a month the map is surveyed in cells of 4 by 4
+tiles. The air is measured on Malaysia's and Singapore's air pollutant
+index (Malaysia's API, Singapore's PSI): good up to 50, moderate up to 100,
+unhealthy up to 200, very unhealthy up to 300, then hazardous.
+
+| Source | Pollution a month (units) |
+|---|---|
+| Road tile with town traffic | 3 x its congestion level squared (level 4: 48, level 7: 147) |
+| Diesel bus | 80 where it is at the month's end |
+| Lorry or van | 120 |
+| Diesel train / steam train | 120 / 200 |
+| Ship | 60 |
+| Aircraft at or over an airport | 150 |
+| Processing plant or power station tile (factories, refineries, steel mills, sawmills...) | 150 at normal production, more or less with it |
+| Mine or oil well tile | 60 |
+| Farms, forests, plantations, banks, water towers, toy shops | none |
+| Electric buses, trams and trolleybuses under wires, electric trains | none |
+| A tree / a cell a park reaches | takes up 3 / 40 |
+
+The wind spreads pollution over about two cells around (two passes of a 3
+by 3 average); the index is 15/32 of the net units and follows the sources
+over a few months. Light and Heavy make the sources 60% and 150%.
+
+**Land value**, 0 to 100 a cell, also monthly:
+
+| Part | Value |
+|---|---|
+| Town centre / inner suburb / outer suburb / outskirts / edge | 56 / 48 / 40 / 34 / 30; countryside 10 |
+| Town size | +3 a doubling of the population above 1,000, at most +15 |
+| Police, fire, clinic, school reaching it | +4 each |
+| A park reaching it | +8 |
+| A good passenger station reaching it | up to +12 for a railway station, +5 for a bus or tram stop, by its passenger rating; +4 at a transport hub or BRT station |
+| Water in the cell | +5 |
+| Industry in the cell | -5 |
+| Air pollution | minus a fifth of the index, at most -50 |
+
+**Effects:**
+
+- **Happiness**: a point less per 10 of a town's index above 50 (where its
+  people live), at most 15.
+- **Growth**: polluted towns take longer between new houses, a percent per 6
+  above 50, at most 25%.
+- **What towns build** (new houses and the ones towns rebuild): on land
+  worth 30 to 59, most of an ordinary town, as in OpenTTD. Dearer land makes
+  homes and offices with more people a tile likelier, up to 3.5 times; land
+  under 30 (dirty air, industry, far out) does the same for small houses.
+  Public buildings are left alone.
+- **Towns' opinion of companies**: each month a town whose air is moderate
+  or worse thinks less of companies whose diesel road vehicles and trains
+  are in it (about 2 rating points a bus, at most 30, down to Poor); one
+  that runs only clean ones there (3 or more) gains 10 a month up to Good.
+- **News** when a town's air turns unhealthy ("Haze over Kinningbury!");
+  the air has to clear (under 90) before the next.
+
+**Seeing it:**
+
+- **Map** (F4): two new views at the bottom of its buttons, **Air
+  pollution** (a factory under smoke) and **Land value** (a house with an
+  arrow up), with legends.
+- **Towns menu**: **Air pollution map** and **Land value map** tint the land
+  in the main view in the same colours (again to hide).
+- **Town window**: "Air: API 72 (moderate); land value 50 (medium)".
+- **Land info** (any tile): "Air pollution: API 113 (unhealthy)" and "Land
+  value: 45 of 100 (medium)".
+
+- Saved: the two maps in chunk ENVR, each town's figures in TENV. Old saves
+  start without them; the first month works them out.
+- Script API: `ScriptTile.GetPollution`, `GetLandValue`;
+  `ScriptTown.GetPollution`, `GetLandValue`.
+- Code: `src/environment.{h,cpp}`, `src/saveload/environment_sl.cpp`; hooks
+  in `town_cmd.cpp` (building choice, growth), `city_services.cpp`
+  (happiness), `smallmap_gui.cpp`, `viewport.cpp`, `toolbar_gui.cpp`,
+  `town_gui.cpp`, `misc_gui.cpp`; sprites 248-249.
+- Cost: the survey walks the whole map once a month: about 10 ms on a 1024
+  by 1024 map, 40-50 ms on 2048 by 2048 (a quarter of a second on the
+  largest maps).
+
+Tests (test AI EnvDump logs the biggest towns and the whole map monthly;
+BusTest's 13-bus line through Kinningbury, 10,500 people, mid-2021):
+
+| Kinningbury | Town's index | Centre | Land value | Town's view of the bus company |
+|---|---|---|---|---|
+| Normal, 13 diesel buses | 48 | 75 (moderate) | 53 | Excellent |
+| Normal, 13 electric buses | 34 | 51 | 55 | Outstanding |
+| Heavy, diesel | 72 | 103 (unhealthy) | 50 | Excellent |
+| Heavy, electric | 47 | 71 | 53 | Outstanding |
+
+- The dirtiest cell on the map is next to Shorningwell's oil refinery: 106
+  (Normal), 161 (Heavy). Under Normal pollution 98% of the map's cells are
+  good, 2% moderate.
+- What towns build (test AI SvcTest: a town of 1,100 people funded to grow
+  for 6 years, with and without its city services; people at the end):
+
+| Town | Setting on | Off |
+|---|---|---|
+| Without services, three maps | 3,448 / 2,818 / 3,057 | 3,410 / 2,770 / 3,348 |
+| With all services (land value 75, centre 84), two maps | 3,903 / 4,515 | 3,528 / 2,877 |
+
+  Ordinary towns grow as before (within the runs' spread); towns with city
+  services build bigger homes and offices. The first version weighed every
+  building by land value and grew ordinary towns 29% denser (or 12% smaller
+  once the edges counted as cheap land); land of medium value now builds as
+  in OpenTTD.
+- With the setting off, part 13's baseline run gives identical monthly
+  results; 99/99 unit tests; all 37 test saves (with the new
+  `city-pollution-demo.csav`, Heavy pollution) load, save and reload.
+- Screenshots: the main view tinted by air pollution over Kinningbury's
+  centre; the map's Air pollution and Land value views; the town window;
+  land info on a statue (API 113, land value 45).
+
 ## Roadmap
 
 Sizes are rough: S = one session, M = a few, L = many, XL = a project in itself.
@@ -1440,11 +1556,10 @@ Sizes are rough: S = one session, M = a few, L = many, XL = a project in itself.
 | M4 | City services and happiness | Part 1 done: police, fire, clinic, school and park with coverage, happiness, growth, ratings and upkeep. Later: bigger buildings (hospital, university), services that also make passengers. | L | |
 | M5 | Town car traffic | Towns send private cars between homes and workplaces. Good public transport takes cars off the road. | XL | The most SimCity-like part; performance-sensitive on big maps. |
 | M6 | City budget and ordinances | Per-town budget (taxes from population, spending on services and roads) and ordinances (transit subsidy, parking limits and so on). | L | Needs a design call: the player stays a transport company, or also acts as mayor. |
-| M7 | Land value and pollution | Industries, stations and traffic pollute; parks and services raise land value; overlays show both. Affects which buildings appear. | M–L | Pairs well with M3 and M4. |
+| M7 | Land value and pollution | Done as transit part 14: traffic, diesel vehicles and industry pollute; parks, services and good stations raise land value; map views, tints and lines show both; towns build to fit. | — | |
 | M8 | Utilities | Power and water networks. | XL | Probably skip, or keep it light (arctic/tropic towns already need food/water). |
 
-Recommended order: M7 next (pollution lowers happiness, parks and services
-raise land value), then M6 and M5.
+Recommended order: M6 next (town budgets and ordinances), then M5.
 
 ## Getting it onto the owner's computer (Windows)
 
@@ -1470,6 +1585,6 @@ Savegame locations (files end in `.sav`; autosaves are in `save/autosave`):
 ## Open questions for the owner
 
 1. Can you share one of your saves, so it can be tested before you play it?
-2. Which milestone next? Recommendation: M7 (land value and pollution),
-   which ties into happiness and zoning.
+2. Which milestone next? Recommendation: M6 (city budget and ordinances),
+   now that towns have transit budgets, happiness, pollution and land value.
 3. A name for the fork.

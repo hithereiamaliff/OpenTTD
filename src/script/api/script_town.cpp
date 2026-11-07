@@ -30,6 +30,7 @@
 #include "../../object_map.h"
 
 #include "../../transit_authority.h"
+#include "../../environment.h"
 #include "../../transit_authority_cmd.h"
 #include "../../safeguards.h"
 
@@ -276,6 +277,18 @@
 	if (!IsValidTown(town_id)) return INVALID_TILE;
 	const TransitContract *offer = GetTownFeederOffer(town_id);
 	return offer == nullptr ? INVALID_TILE : offer->target;
+}
+
+/* static */ SQInteger ScriptTown::GetPollution(TownID town_id)
+{
+	if (!IsValidTown(town_id)) return -1;
+	return IsEnvironmentKnown() ? ::Town::Get(town_id)->environment.api : 0;
+}
+
+/* static */ SQInteger ScriptTown::GetLandValue(TownID town_id)
+{
+	if (!IsValidTown(town_id)) return -1;
+	return IsEnvironmentKnown() ? ::Town::Get(town_id)->environment.land_value : 0;
 }
 
 /* static */ SQInteger ScriptTown::GetTransitSatisfaction(TownID town_id)

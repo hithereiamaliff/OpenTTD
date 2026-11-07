@@ -200,6 +200,8 @@ add_files(
     engine_gui.cpp
     engine_gui.h
     engine_type.h
+    environment.cpp
+    environment.h
     error.h
     error.cpp
     error_func.h

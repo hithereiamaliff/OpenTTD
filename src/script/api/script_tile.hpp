@@ -531,6 +531,26 @@ public:
 	static TownID GetClosestTown(TileIndex tile);
 
 	/**
+	 * Get the air pollutant index where a tile is (on Malaysia's and
+	 * Singapore's scale: good up to 50, moderate up to 100, unhealthy up to
+	 * 200, very unhealthy up to 300, then hazardous). Worked out monthly for
+	 * cells of 4 by 4 tiles.
+	 * @param tile The tile.
+	 * @pre ScriptMap::IsValidTile(tile).
+	 * @return The index; 0 while not known or with pollution switched off, -1 for an invalid tile.
+	 */
+	static SQInteger GetPollution(TileIndex tile);
+
+	/**
+	 * Get the land value where a tile is, from 0 to 100. Worked out monthly
+	 * for cells of 4 by 4 tiles.
+	 * @param tile The tile.
+	 * @pre ScriptMap::IsValidTile(tile).
+	 * @return The value; 0 while not known or with land value switched off, -1 for an invalid tile.
+	 */
+	static SQInteger GetLandValue(TileIndex tile);
+
+	/**
 	 * Get the baseprice of building/clearing various tile-related things.
 	 * @param build_type the type to build
 	 * @return The baseprice of building or removing the given object.

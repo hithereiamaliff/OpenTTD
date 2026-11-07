@@ -9,6 +9,7 @@
 
 #include "stdafx.h"
 #include "city_clock.h"
+#include "environment.h"
 #include "landscape.h"
 #include "news_func.h"
 #include "ai/ai.hpp"
@@ -172,6 +173,7 @@ void InitializeGame(uint size_x, uint size_y, bool reset_date, bool reset_settin
 	InitializeBrt();
 	InitializeRoadPricing();
 	InitializeCityClock();
+	InitializeEnvironment();
 
 	InitializeCompanies();
 	AI::Initialize();

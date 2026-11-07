@@ -69,6 +69,7 @@
 #include "timer/timer_game_tick.h"
 #include "town_zoning.h"
 #include "city_services.h"
+#include "environment.h"
 
 #include "table/strings.h"
 #include "table/town_land.h"
@@ -2896,7 +2897,8 @@ static bool TryBuildTownHouse(Town *t, TileIndex tile, TownExpandModes modes)
 			if (t->cache.building_counts.id_count[hs.Index()] == UINT16_MAX) continue;
 		}
 
-		uint cur_prob = hs.probability;
+		/* Towns build what fits the value of the land. */
+		uint cur_prob = ScaleHouseProbabilityByLandValue(hs.probability, hs, tile);
 		probability_max += cur_prob;
 		probs.emplace_back(hs.Index(), cur_prob);
 	}
@@ -3949,6 +3951,8 @@ static uint GetNormalGrowthRate(Town *t)
 
 	/* City services make towns happier, and happy towns grow faster. */
 	m = m * (100 - GetTownServiceGrowthBonus(t)) / 100;
+	/* Polluted air makes them grow slower. */
+	m = m * (100 + GetTownPollutionGrowthPenalty(t)) / 100;
 
 	return TownTicksToGameTicks(m / (t->cache.num_houses / 50 + 1));
 }

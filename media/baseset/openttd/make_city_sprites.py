@@ -1390,6 +1390,43 @@ for axis in ('x', 'y'):
         psd_x += b.emit(psd_x, 934, f"screen doors {axis} {'near' if near else 'far'}") + 4
 
 assert len(sprites) == 248, len(sprites)
+
+# Icons of the map's air pollution view (a factory under a cloud of smoke) and land value view
+# (a house with an arrow going up).
+icon(300, 934, [
+    "..........SSS...",
+    "........SSSSSS..",
+    ".......SSSSSSSS.",
+    "........SSSSSS..",
+    "..........KK....",
+    "..........KK....",
+    "..........KK....",
+    "..RR......KK....",
+    "..RR...RR.KK....",
+    ".RRRR.RRRRKK....",
+    ".RRRRRRRRRRRRR..",
+    ".RYYRRYYRRYYRR..",
+    ".RRRRRRRRRRRRR..",
+    "................",
+], {'S': rgb_index((150, 150, 150)), 'K': rgb_index((60, 60, 60)), 'R': rgb_index((170, 70, 50)), 'Y': rgb_index((240, 210, 80))}, "icon pollution map")
+icon(320, 934, [
+    "............G...",
+    "...........GGG..",
+    "....RR....GGGGG.",
+    "...RRRR.....G...",
+    "..RRRRRR....G...",
+    ".RRRRRRRR...G...",
+    "..WWWWWW....G...",
+    "..WBBWWW........",
+    "..WBBWDW........",
+    "..WWWWDW........",
+    "..WWWWWW........",
+    "................",
+    "................",
+    "................",
+], {'R': rgb_index((190, 50, 40)), 'W': rgb_index((235, 225, 200)), 'B': rgb_index((60, 110, 200)), 'D': rgb_index((120, 70, 30)), 'G': rgb_index((40, 170, 60))}, "icon land value map")
+
+assert len(sprites) == 250, len(sprites)
 sheet.save(f"{SRC}/city.png", optimize=True)
 
 header = """// This file is part of OpenTTD.
@@ -1422,6 +1459,7 @@ header = """// This file is part of OpenTTD.
 //   239-241: icons: tolls, toll plaza, free-flow gantry
 //   242-243: roof over the bus stops of a bus interchange, and of an integrated transport hub
 //   244-247: platform screen doors: railway along X far and near platform, along Y far and near platform
+//   248-249: icons: air pollution and land value views of the map
 //
    -1 * 0\t 0C "City fork graphics"
    -1 * 3\t 05 1C %02X

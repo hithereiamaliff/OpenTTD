@@ -9,6 +9,7 @@
 
 #include "stdafx.h"
 #include "line.h"
+#include "environment.h"
 #include "order_base.h"
 #include "core/backup_type.hpp"
 #include "clear_map.h"
@@ -135,6 +136,26 @@ static const LegendAndColour _legend_traffic[] = {
 	{.end = true},
 };
 
+static const LegendAndColour _legend_pollution[] = {
+	{.legend = STR_SMALLMAP_LEGENDA_AIR_GOOD, .colour = PC_LIGHT_BLUE},
+	{.legend = STR_SMALLMAP_LEGENDA_AIR_MODERATE, .colour = PC_GREEN},
+	{.legend = STR_SMALLMAP_LEGENDA_AIR_UNHEALTHY, .colour = PC_YELLOW},
+
+	{.legend = STR_SMALLMAP_LEGENDA_AIR_VERY_UNHEALTHY, .colour = PC_ORANGE, .col_break = true},
+	{.legend = STR_SMALLMAP_LEGENDA_AIR_HAZARDOUS, .colour = PC_RED},
+	{.end = true},
+};
+
+static const LegendAndColour _legend_land_value[] = {
+	{.legend = STR_SMALLMAP_LEGENDA_LAND_VALUE_VERY_HIGH, .colour = PC_WHITE},
+	{.legend = STR_SMALLMAP_LEGENDA_LAND_VALUE_HIGH, .colour = PC_GREEN},
+	{.legend = STR_SMALLMAP_LEGENDA_LAND_VALUE_MEDIUM, .colour = PC_YELLOW},
+
+	{.legend = STR_SMALLMAP_LEGENDA_LAND_VALUE_LOW, .colour = PC_FIELDS, .col_break = true},
+	{.legend = STR_SMALLMAP_LEGENDA_LAND_VALUE_VERY_LOW, .colour = PC_DARK_GREY},
+	{.end = true},
+};
+
 static const LegendAndColour _legend_vegetation[] = {
 	{.legend = STR_SMALLMAP_LEGENDA_ROUGH_LAND, .colour = PC_ROUGH_LAND},
 	{.legend = STR_SMALLMAP_LEGENDA_GRASS_LAND, .colour = PC_GRASS_LAND},
@@ -255,6 +276,8 @@ enum class SmallMapType : uint8_t {
 	Owners, ///< Owners legend.
 	Traffic, ///< Road traffic legend.
 	Lines, ///< Network map of lines.
+	Pollution, ///< Air pollution legend.
+	LandValue, ///< Land value legend.
 	End, ///< End marker.
 };
 
@@ -269,6 +292,8 @@ static const EnumIndexArray<std::span<const LegendAndColour>, SmallMapType, Smal
 	_legend_land_owners,
 	_legend_traffic,
 	_legend_lines,
+	_legend_pollution,
+	_legend_land_value,
 };
 
 #define MKCOLOUR(x)         TO_LE32(x)
@@ -589,6 +614,43 @@ static inline uint32_t GetSmallMapTrafficPixels(TileIndex tile, TileType t)
 	/* Ground colour */
 	const SmallMapColourScheme &cs = _heightmap_schemes[_settings_client.gui.smallmap_land_colour];
 	return ApplyMask(cs.default_colour, GetMaskPixelsForTileType(tile, t, _smallmap_contours_andor));
+}
+
+/**
+ * Return the colour a tile would be displayed with in the small map in mode
+ * "Pollution": the air pollutant index of where it is, in the colours the
+ * index is published in; water as water. Plain land until it is known.
+ *
+ * @param tile The tile of which we would like to get the colour.
+ * @param t    Effective tile type of the tile (see #SmallMapWindow::GetTileColours).
+ * @return The colour of tile in the small map in mode "Pollution"
+ */
+static inline uint32_t GetSmallMapPollutionPixels(TileIndex tile, TileType t)
+{
+	if (t == TileType::Water) return MKCOLOUR_XXXX(PC_WATER);
+	if (!IsEnvironmentKnown()) {
+		const SmallMapColourScheme &cs = _heightmap_schemes[_settings_client.gui.smallmap_land_colour];
+		return ApplyMask(cs.default_colour, GetMaskPixelsForTileType(tile, t, _smallmap_contours_andor));
+	}
+	return MKCOLOUR_XXXX(GetPollutionColour(GetTilePollution(tile)));
+}
+
+/**
+ * Return the colour a tile would be displayed with in the small map in mode
+ * "Land value": what the land is worth; water as water. Plain land until it is known.
+ *
+ * @param tile The tile of which we would like to get the colour.
+ * @param t    Effective tile type of the tile (see #SmallMapWindow::GetTileColours).
+ * @return The colour of tile in the small map in mode "Land value"
+ */
+static inline uint32_t GetSmallMapLandValuePixels(TileIndex tile, TileType t)
+{
+	if (t == TileType::Water) return MKCOLOUR_XXXX(PC_WATER);
+	if (!IsEnvironmentKnown()) {
+		const SmallMapColourScheme &cs = _heightmap_schemes[_settings_client.gui.smallmap_land_colour];
+		return ApplyMask(cs.default_colour, GetMaskPixelsForTileType(tile, t, _smallmap_contours_andor));
+	}
+	return MKCOLOUR_XXXX(GetLandValueColour(GetTileLandValue(tile)));
 }
 
 /**
@@ -1473,6 +1535,12 @@ protected:
 			case SmallMapType::Lines:
 				return GetSmallMapLinkStatsPixels(tile, et);
 
+			case SmallMapType::Pollution:
+				return GetSmallMapPollutionPixels(tile, et);
+
+			case SmallMapType::LandValue:
+				return GetSmallMapLandValuePixels(tile, et);
+
 			default: NOT_REACHED();
 		}
 	}
@@ -1866,6 +1934,8 @@ public:
 			case WID_SM_OWNERS:     // Show land owners
 			case WID_SM_TRAFFIC:    // Show road traffic
 			case WID_SM_LINES:      // Show the network map of lines
+			case WID_SM_POLLUTION:  // Show air pollution
+			case WID_SM_LAND_VALUE: // Show land value
 				this->SwitchMapType(static_cast<SmallMapType>(widget - WID_SM_CONTOUR));
 				SndClickBeep();
 				break;
@@ -2062,6 +2132,8 @@ class NWidgetSmallmapButtons : public NWidgetContainer {
 		{WID_SM_INDUSTRIES, WWT_IMGBTN, SPR_IMG_INDUSTRY, STR_SMALLMAP_TOOLTIP_SHOW_INDUSTRIES_ON_MAP},
 		{WID_SM_TRAFFIC, WWT_IMGBTN, SPR_IMG_TRAFFIC_OVERLAY, STR_SMALLMAP_TOOLTIP_SHOW_TRAFFIC_ON_MAP},
 		{WID_SM_LINES, WWT_IMGBTN, SPR_IMG_LINES_MAP, STR_SMALLMAP_TOOLTIP_SHOW_LINES_ON_MAP},
+		{WID_SM_POLLUTION, WWT_IMGBTN, SPR_IMG_POLLUTION_MAP, STR_SMALLMAP_TOOLTIP_SHOW_POLLUTION_ON_MAP},
+		{WID_SM_LAND_VALUE, WWT_IMGBTN, SPR_IMG_LAND_VALUE_MAP, STR_SMALLMAP_TOOLTIP_SHOW_LAND_VALUE_ON_MAP},
 	};
 
 	uint num_buttons; ///< The number of buttons excluding spacers.

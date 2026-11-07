@@ -98,6 +98,7 @@
 
 #include "widgets/vehicle_widget.h"
 #include "town_zoning.h"
+#include "environment.h"
 #include "city_services.h"
 
 #include "table/strings.h"
@@ -966,6 +967,18 @@ static void DrawCityServiceOverlay(const TileInfo *ti)
 	DrawSelectionSprite(SPR_TILE_OVERLAY_BASE + SlopeToSpriteOffset(ti->tileh), GetCityServicePalette(service), ti, 0, FoundationPart::Normal);
 }
 
+/**
+ * Tint a tile by its air pollution or land value, while the main view shows one of them.
+ * @param ti The tile, after drawing it.
+ */
+static void DrawEnvironmentOverlay(const TileInfo *ti)
+{
+	if (GetEnvironmentOverlay() == EnvironmentOverlay::None || !IsValidTile(ti->tile) || IsHalftileSlope(ti->tileh)) return;
+	const PaletteID pal = GetEnvironmentOverlayPalette(ti->tile);
+	if (pal == PAL_NONE) return;
+	DrawSelectionSprite(SPR_TILE_OVERLAY_BASE + SlopeToSpriteOffset(ti->tileh), pal, ti, 0, FoundationPart::Normal);
+}
+
 static bool IsPartOfAutoLine(int px, int py)
 {
 	px -= _thd.selstart.x;
@@ -1346,6 +1359,7 @@ static void ViewportAddLandscape()
 					DrawTileSelection(&_cur_ti);
 					DrawTownZoneOverlay(&_cur_ti);
 					DrawCityServiceOverlay(&_cur_ti);
+					DrawEnvironmentOverlay(&_cur_ti);
 				}
 			}
 		}
