@@ -19,8 +19,10 @@
 #include "dropdown_type.h"
 #include "line.h"
 #include "order_base.h"
+#include "station_base.h"
 #include "strings_func.h"
 #include "town.h"
+#include "viewport_func.h"
 #include "window_func.h"
 #include "window_gui.h"
 #include "zoom_func.h"
@@ -34,7 +36,7 @@
 /** Why tenders and contracts ended, in words. */
 static constexpr StringID TRANSIT_END_REASONS[] = {
 	STR_TRANSIT_END_EXPIRED, STR_TRANSIT_END_LOST, STR_TRANSIT_END_NO_BID, STR_TRANSIT_END_EXPIRED, STR_TRANSIT_END_REVIEW,
-	STR_TRANSIT_END_BY_COMPANY, STR_TRANSIT_END_NO_SERVICE, STR_TRANSIT_END_LINE_GONE,
+	STR_TRANSIT_END_BY_COMPANY, STR_TRANSIT_END_NO_SERVICE, STR_TRANSIT_END_LINE_GONE, STR_TRANSIT_END_STATION_GONE, STR_TRANSIT_END_NO_TAKER,
 };
 static_assert(std::size(TRANSIT_END_REASONS) == to_underlying(TransitContractEnd::End));
 
@@ -110,8 +112,18 @@ struct TransitAuthorityWindow : Window {
 	 */
 	std::string GetRowTitle(const TransitContract &c) const
 	{
+		/* A feeder line the town asks for, before anyone runs it. */
+		if (c.type == TransitContractType::Feeder && c.line == OrderListID::Invalid()) {
+			if (c.state == TransitContractState::Tender) return GetString(STR_TRANSIT_ROW_FEEDER_WANTED, c.station, DistanceManhattan(c.target, Station::IsValidID(c.station) ? Station::Get(c.station)->xy : c.target), c.end);
+			return GetString(STR_TRANSIT_ROW_FEEDER_ENDED, c.station, c.end, TRANSIT_END_REASONS[to_underlying(c.ended_why)]);
+		}
 		std::string line = GetTransitLineDescription(OrderList::GetIfValid(c.line));
-		StringID type = c.type == TransitContractType::FreeLine ? STR_TRANSIT_TYPE_FREE : STR_TRANSIT_TYPE_GROSS_COST;
+		StringID type;
+		switch (c.type) {
+			case TransitContractType::FreeLine: type = STR_TRANSIT_TYPE_FREE; break;
+			case TransitContractType::Feeder: type = STR_TRANSIT_TYPE_FEEDER; break;
+			default: type = STR_TRANSIT_TYPE_GROSS_COST; break;
+		}
 		switch (c.state) {
 			case TransitContractState::Tender: return GetString(STR_TRANSIT_ROW_TENDER, line, c.company, type, c.end);
 			case TransitContractState::Active: return GetString(STR_TRANSIT_ROW_ACTIVE, line, c.company, type, c.fee, c.end);
@@ -126,6 +138,7 @@ struct TransitAuthorityWindow : Window {
 	 */
 	std::string GetRowDetail(const TransitContract &c) const
 	{
+		if (IsFeederOffer(c)) return GetString(STR_TRANSIT_DETAIL_FEEDER_WANTED, c.cost_basis);
 		switch (c.state) {
 			case TransitContractState::Tender:
 				if (c.bid == UINT8_MAX) return GetString(STR_TRANSIT_DETAIL_TENDER_NO_BID, c.cost_basis);
@@ -250,6 +263,11 @@ struct TransitAuthorityWindow : Window {
 
 			case WID_TRA_LINE:
 				if (const TransitContract *c = this->GetSelected(); c != nullptr) {
+					/* A wanted feeder line: show the houses it should reach. */
+					if (IsFeederOffer(*c)) {
+						ScrollMainWindowToTile(c->target);
+						break;
+					}
 					const OrderList *list = OrderList::GetIfValid(c->line);
 					if (list != nullptr && list->GetFirstSharedVehicle() != nullptr) ShowLineWindow(list->GetFirstSharedVehicle());
 				}
@@ -281,7 +299,7 @@ struct TransitAuthorityWindow : Window {
 		bool mine = c != nullptr && c->company == _local_company;
 		this->SetWidgetDisabledState(WID_TRA_BID, !mine || c->state != TransitContractState::Tender);
 		this->SetWidgetDisabledState(WID_TRA_END, !mine || c->state != TransitContractState::Active);
-		this->SetWidgetDisabledState(WID_TRA_LINE, c == nullptr || OrderList::GetIfValid(c->line) == nullptr);
+		this->SetWidgetDisabledState(WID_TRA_LINE, c == nullptr || (OrderList::GetIfValid(c->line) == nullptr && !IsFeederOffer(*c)));
 		const Town *t = Town::Get(this->window_number);
 		this->SetWidgetDisabledState(WID_TRA_CHARGE, !Company::IsValidID(_local_company) || t->transit.congestion_charge);
 		this->SetDirty();

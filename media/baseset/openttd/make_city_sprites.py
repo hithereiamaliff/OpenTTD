@@ -47,7 +47,7 @@ BROWN, BROWN_DARK = nearest((150, 90, 40)), nearest((90, 50, 20))
 YELLOW = nearest((252, 220, 0))
 TREE, TREE_DARK = nearest((60, 150, 40)), nearest((30, 90, 20))
 
-W, H = 512, 930
+W, H = 512, 980
 sheet = Image.new("P", (W, H), T)
 sheet.putpalette(pal)
 px = sheet.load()
@@ -1351,6 +1351,45 @@ for i, hub in enumerate((False, True)):
     b.emit(220 + i * 72, 870, "interchange roof hub" if hub else "interchange roof")
 
 assert len(sprites) == 244, len(sprites)
+
+# Platform screen doors on the edge of the railway platforms, half height like those on
+# elevated MRT stations: glass panels between steel posts, and doors with a green light
+# over them; on the far and on the near platform (railway along X, then along Y). They
+# stand on the platform, 2 px above the ground.
+PSD_FRAME = (78, 84, 92)
+PSD_GLASS = (172, 200, 218)
+PSD_DOOR = (204, 224, 234)
+PSD_LIGHT = (70, 180, 90)
+PSD_HEIGHT = 5
+
+
+def psd_face(u, v):
+    if v >= PSD_HEIGHT - 1.0:
+        return rgb_index(PSD_FRAME)  # top rail
+    m = u % 4.0
+    if m < 0.3 or m > 3.7:
+        return rgb_index(PSD_FRAME)  # posts
+    if 1.3 <= m <= 2.9:
+        if v >= PSD_HEIGHT - 1.9:
+            return rgb_index(PSD_LIGHT)  # the light over the door
+        if abs(m - 2.1) < 0.12:
+            return rgb_index(PSD_FRAME)  # between the two leaves
+        return rgb_index(PSD_DOOR)
+    return rgb_index(PSD_GLASS)
+
+
+psd_x = 0
+for axis in ('x', 'y'):
+    for near in (False, True):
+        b = Building()
+        w0 = 11.0 if near else 4.6
+        if axis == 'x':
+            b.box(0, w0, 16, w0 + 0.4, 2, 2 + PSD_HEIGHT, PSD_FRAME, PSD_FRAME, se=psd_face)
+        else:
+            b.box(w0, 0, w0 + 0.4, 16, 2, 2 + PSD_HEIGHT, PSD_FRAME, PSD_FRAME, sw=psd_face)
+        psd_x += b.emit(psd_x, 934, f"screen doors {axis} {'near' if near else 'far'}") + 4
+
+assert len(sprites) == 248, len(sprites)
 sheet.save(f"{SRC}/city.png", optimize=True)
 
 header = """// This file is part of OpenTTD.
@@ -1382,6 +1421,7 @@ header = """// This file is part of OpenTTD.
 //   231-238: toll plazas: roof, far booth, near booth (road along X, then along Y); free-flow gantries (X, Y)
 //   239-241: icons: tolls, toll plaza, free-flow gantry
 //   242-243: roof over the bus stops of a bus interchange, and of an integrated transport hub
+//   244-247: platform screen doors: railway along X far and near platform, along Y far and near platform
 //
    -1 * 0\t 0C "City fork graphics"
    -1 * 3\t 05 1C %02X

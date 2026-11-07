@@ -13,6 +13,7 @@
 #include "city_clock.h"
 #include "satisfaction.h"
 #include "line_cmd.h"
+#include "metro.h"
 #include "command_func.h"
 #include "company_func.h"
 #include "core/string_consumer.hpp"
@@ -118,7 +119,7 @@ static TimerGameTick::Ticks TicksPerDisplayUnit()
  * @param ticks The duration.
  * @return The text.
  */
-static std::string FormatLineDuration(TimerGameTick::Ticks ticks)
+std::string FormatLineDuration(TimerGameTick::Ticks ticks)
 {
 	switch (_settings_client.gui.timetable_mode) {
 		case TimetableMode::Days: return GetString(STR_LINE_DURATION_DAYS, static_cast<int64_t>(ticks) * 10 / Ticks::DAY_TICKS, 1);
@@ -266,6 +267,28 @@ struct LineWindow : Window {
 		}
 		lines.push_back(GetString(line.on_demand ? STR_LINE_SERVICE_ON_DEMAND : STR_LINE_SERVICE, service));
 
+		/* Trains: with or without drivers, and what running without them needs. */
+		if (IsTrainLine(list)) {
+			if (line.driverless) {
+				lines.push_back(GetString(STR_LINE_DRIVERLESS_ON, 100 - DRIVERLESS_RUNNING_COST_PERCENT, DRIVERLESS_BOARDING_PERCENT - 100));
+			} else {
+				const StringID problem = GetDriverlessProblem(list);
+				uint stops = 0;
+				const uint doors = GetLineStopsWithScreenDoors(list, &stops);
+				if (problem == INVALID_STRING_ID) {
+					lines.push_back(GetString(STR_LINE_DRIVERLESS_READY, GetDriverlessFittingCost(list)));
+				} else if (problem == STR_ERROR_DRIVERLESS_NOT_ELECTRIC) {
+					lines.push_back(GetString(STR_LINE_DRIVERLESS_NEEDS, GetString(STR_LINE_DRIVERLESS_NEED_ELECTRIC)));
+				} else if (problem == STR_ERROR_DRIVERLESS_NO_SCREEN_DOORS) {
+					lines.push_back(GetString(STR_LINE_DRIVERLESS_NEEDS, GetString(STR_LINE_DRIVERLESS_NEED_DOORS, doors, stops)));
+				} else {
+					lines.push_back(GetString(STR_LINE_DRIVERLESS_NEEDS, GetString(STR_LINE_DRIVERLESS_NEED_NO_CROSSINGS, line.this_month.crossings + line.last_month.crossings)));
+				}
+			}
+		} else {
+			lines.emplace_back();
+		}
+
 		Money profit_this_year = 0, profit_last_year = 0;
 		for (const Vehicle *v = list->GetFirstSharedVehicle(); v != nullptr; v = v->NextShared()) {
 			profit_this_year += v->GetDisplayProfitThisYear();
@@ -276,7 +299,7 @@ struct LineWindow : Window {
 	}
 
 	/** Number of lines in the info panel, below the badge row. */
-	static constexpr uint INFO_LINES = 14;
+	static constexpr uint INFO_LINES = 15;
 
 	void UpdateWidgetSize(WidgetID widget, Dimension &size, [[maybe_unused]] const Dimension &padding, [[maybe_unused]] Dimension &fill, [[maybe_unused]] Dimension &resize) override
 	{
@@ -400,6 +423,14 @@ struct LineWindow : Window {
 				Command<Commands::SetLineProperty>::Post(STR_ERROR_CAN_T_CHANGE_LINE, v->index, LineProperty::OnDemand, list->line.on_demand ? 0 : 1, {});
 				break;
 
+			case WID_LN_DRIVERLESS:
+				Command<Commands::SetLineProperty>::Post(list->line.driverless ? STR_ERROR_CAN_T_CHANGE_LINE : STR_ERROR_CAN_T_RUN_DRIVERLESS, v->index, LineProperty::Driverless, list->line.driverless ? 0 : 1, {});
+				break;
+
+			case WID_LN_MAP:
+				ShowLineMapWindow(v);
+				break;
+
 			case WID_LN_VEHICLES:
 				ShowVehicleListWindow(v);
 				break;
@@ -467,6 +498,8 @@ struct LineWindow : Window {
 		bool mine = this->owner == _local_company;
 		this->SetWidgetsDisabledState(!mine, WID_LN_NUMBER, WID_LN_NAME, WID_LN_COLOUR, WID_LN_TARGET, WID_LN_OFFPEAK, WID_LN_ON_DEMAND);
 		this->SetWidgetLoweredState(WID_LN_ON_DEMAND, list->line.on_demand);
+		this->SetWidgetDisabledState(WID_LN_DRIVERLESS, !mine || !IsTrainLine(list));
+		this->SetWidgetLoweredState(WID_LN_DRIVERLESS, list->line.driverless);
 		this->SetWidgetsDisabledState(!mine || GetLineContract(list) != nullptr, WID_LN_FARE, WID_LN_FARE_PRICE);
 		this->SetWidgetDisabledState(WID_LN_HOLD, !mine || list->line.target_gap <= 0);
 		this->SetWidgetLoweredState(WID_LN_HOLD, list->line.hold_for_spacing);
@@ -507,11 +540,13 @@ static constexpr std::initializer_list<NWidgetPart> _nested_line_widgets = {
 	NWidget(NWID_HORIZONTAL, NWidContainerFlag::EqualSize),
 		NWidget(WWT_DROPDOWN, Colours::Grey, WID_LN_OFFPEAK), SetFill(1, 0), SetStringTip(STR_LINE_OFFPEAK_BUTTON_ALL, STR_LINE_OFFPEAK_TOOLTIP),
 		NWidget(WWT_TEXTBTN, Colours::Grey, WID_LN_ON_DEMAND), SetFill(1, 0), SetStringTip(STR_LINE_ON_DEMAND_BUTTON, STR_LINE_ON_DEMAND_TOOLTIP),
+		NWidget(WWT_TEXTBTN, Colours::Grey, WID_LN_DRIVERLESS), SetFill(1, 0), SetStringTip(STR_LINE_DRIVERLESS_BUTTON, STR_LINE_DRIVERLESS_TOOLTIP),
 	EndContainer(),
 	NWidget(NWID_HORIZONTAL, NWidContainerFlag::EqualSize),
 		NWidget(WWT_PUSHTXTBTN, Colours::Grey, WID_LN_VEHICLES), SetFill(1, 0), SetStringTip(STR_LINE_VEHICLES_BUTTON, STR_LINE_VEHICLES_TOOLTIP),
 		NWidget(WWT_PUSHTXTBTN, Colours::Grey, WID_LN_ORDERS), SetFill(1, 0), SetStringTip(STR_LINE_ORDERS_BUTTON, STR_LINE_ORDERS_TOOLTIP),
 		NWidget(WWT_PUSHTXTBTN, Colours::Grey, WID_LN_TIMETABLE), SetFill(1, 0), SetStringTip(STR_LINE_TIMETABLE_BUTTON, STR_LINE_TIMETABLE_TOOLTIP),
+		NWidget(WWT_PUSHTXTBTN, Colours::Grey, WID_LN_MAP), SetFill(1, 0), SetStringTip(STR_LINE_MAP_BUTTON, STR_LINE_MAP_TOOLTIP),
 	EndContainer(),
 };
 

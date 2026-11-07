@@ -59,6 +59,7 @@ enum class AdviceType : uint8_t {
 	VehicleUnprofitable, ///< The vehicle is costing you money.
 	VehicleWaiting, ///< The vehicle is waiting in the depot.
 	BatteryFlat, ///< The electric bus ran its battery flat.
+	DriverlessEnded, ///< The driverless line got its drivers back.
 
 	Invalid, ///< Invalid marker.
 };

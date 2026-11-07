@@ -9,6 +9,8 @@
 
 #include "stdafx.h"
 #include "interchange.h"
+#include "metro.h"
+#include "metro_cmd.h"
 #include "satisfaction.h"
 #include "interchange_cmd.h"
 #include "line.h"
@@ -875,6 +877,9 @@ static constexpr std::initializer_list<NWidgetPart> _nested_station_view_widgets
 		NWidget(WWT_TEXTBTN, Colours::Grey, WID_SV_CATCHMENT), SetMinimalSize(45, 12), SetResize(1, 0), SetFill(1, 1), SetStringTip(STR_BUTTON_CATCHMENT, STR_TOOLTIP_CATCHMENT),
 		NWidget(WWT_PUSHTXTBTN, Colours::Grey, WID_SV_DEPARTURES), SetMinimalSize(45, 12), SetResize(1, 0), SetFill(1, 1), SetStringTip(STR_STATION_VIEW_DEPARTURES_BUTTON, STR_STATION_VIEW_DEPARTURES_TOOLTIP),
 		NWidget(WWT_PUSHTXTBTN, Colours::Grey, WID_SV_INTERCHANGE), SetMinimalSize(45, 12), SetResize(1, 0), SetFill(1, 1), SetStringTip(STR_STATION_VIEW_INTERCHANGE_BUTTON, STR_STATION_VIEW_INTERCHANGE_TOOLTIP),
+		NWidget(NWID_SELECTION, Colours::Invalid, WID_SV_SCREEN_DOORS_SEL),
+			NWidget(WWT_PUSHTXTBTN, Colours::Grey, WID_SV_SCREEN_DOORS), SetMinimalSize(45, 12), SetResize(1, 0), SetFill(1, 1), SetStringTip(STR_STATION_VIEW_SCREEN_DOORS_BUTTON, STR_STATION_VIEW_SCREEN_DOORS_TOOLTIP),
+		EndContainer(),
 		NWidget(WWT_PUSHTXTBTN, Colours::Grey, WID_SV_TRAINS), SetAspect(WidgetDimensions::ASPECT_VEHICLE_ICON), SetFill(0, 1), SetStringTip(STR_TRAIN, STR_STATION_VIEW_SCHEDULED_TRAINS_TOOLTIP),
 		NWidget(WWT_PUSHTXTBTN, Colours::Grey, WID_SV_ROADVEHS), SetAspect(WidgetDimensions::ASPECT_VEHICLE_ICON), SetFill(0, 1), SetStringTip(STR_LORRY, STR_STATION_VIEW_SCHEDULED_ROAD_VEHICLES_TOOLTIP),
 		NWidget(WWT_PUSHTXTBTN, Colours::Grey, WID_SV_SHIPS), SetAspect(WidgetDimensions::ASPECT_VEHICLE_ICON), SetFill(0, 1), SetStringTip(STR_SHIP, STR_STATION_VIEW_SCHEDULED_SHIPS_TOOLTIP),
@@ -1367,6 +1372,7 @@ struct StationViewWindow : public Window {
 	{
 		this->CreateNestedTree();
 		this->GetWidget<NWidgetStacked>(WID_SV_CLOSE_AIRPORT_SEL)->SetDisplayedPlane(Station::Get(window_number)->facilities.Test(StationFacility::Airport) ? 0 : SZSP_NONE);
+		this->GetWidget<NWidgetStacked>(WID_SV_SCREEN_DOORS_SEL)->SetDisplayedPlane(Station::Get(window_number)->facilities.Test(StationFacility::Train) ? 0 : SZSP_NONE);
 		this->vscroll = this->GetScrollbar(WID_SV_SCROLLBAR);
 		/* Nested widget tree creation is done in two steps to ensure that this->GetWidget<NWidgetCore>(WID_SV_ACCEPTS_RATINGS) exists in UpdateWidgetSize(). */
 		this->FinishInitNested(window_number);
@@ -1478,6 +1484,7 @@ struct StationViewWindow : public Window {
 		extern const Station *_viewport_highlight_station;
 		this->SetWidgetDisabledState(WID_SV_CATCHMENT, st->facilities.None());
 		this->SetWidgetDisabledState(WID_SV_INTERCHANGE, st->owner != _local_company || st->interchange >= to_underlying(InterchangeLevel::Hub) || !st->facilities.Test(StationFacility::BusStop));
+		this->SetWidgetDisabledState(WID_SV_SCREEN_DOORS, st->owner != _local_company || st->screen_doors || !st->facilities.Test(StationFacility::Train));
 		this->SetWidgetLoweredState(WID_SV_CATCHMENT, _viewport_highlight_station == st);
 
 		this->DrawWidgets();
@@ -1977,6 +1984,20 @@ struct StationViewWindow : public Window {
 			tr.top += GetCharacterHeight(FontSize::Normal);
 		}
 
+		/* How crowded the railway platforms are. */
+		if (const uint places = GetStationPlatformPlaces(st); places > 0) {
+			const uint waiting = GetStationPassengersWaiting(st);
+			const uint percent = waiting * 100 / places;
+			const int penalty = GetPlatformCrowdingRatingPenalty(st);
+			StringID extra = st->screen_doors ? STR_STATION_VIEW_PLATFORMS_DOORS : (st->crowding > PLATFORM_CROWDED ? STR_STATION_VIEW_PLATFORMS_SLOW : STR_EMPTY);
+			if (penalty > 0) {
+				DrawString(tr.Indent(WidgetDimensions::scaled.hsep_indent, rtl), GetString(STR_STATION_VIEW_PLATFORMS_CROWDED, waiting, places, percent, penalty * 100 / 255, extra));
+			} else {
+				DrawString(tr.Indent(WidgetDimensions::scaled.hsep_indent, rtl), GetString(STR_STATION_VIEW_PLATFORMS, waiting, places, percent, extra));
+			}
+			tr.top += GetCharacterHeight(FontSize::Normal);
+		}
+
 		/* A bus interchange or transport hub. */
 		if (st->interchange != 0) {
 			StringID status;
@@ -2049,6 +2070,10 @@ struct StationViewWindow : public Window {
 
 			case WID_SV_DEPARTURES:
 				ShowDeparturesWindow(StationID(this->window_number));
+				break;
+
+			case WID_SV_SCREEN_DOORS:
+				Command<Commands::BuildScreenDoors>::Post(STR_ERROR_CAN_T_BUILD_SCREEN_DOORS, StationID(this->window_number));
 				break;
 
 			case WID_SV_INTERCHANGE: {

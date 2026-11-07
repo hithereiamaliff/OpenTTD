@@ -37,8 +37,10 @@ bool MustHoldForLineSpacing(const Vehicle *v);
 void OnLineRidersDelivered(const Vehicle *front, uint count);
 
 int DrawLineBadge(const Rect &r, const OrderList *list, bool rtl = false);
+std::string FormatLineDuration(TimerGameTick::Ticks ticks);
 uint GetLineBadgeWidth(const OrderList *list);
 void ShowLineWindow(const Vehicle *v);
+void ShowLineMapWindow(const Vehicle *v);
 void ShowDeparturesWindow(StationID station);
 
 #endif /* LINE_H */

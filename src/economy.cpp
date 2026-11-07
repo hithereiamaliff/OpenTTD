@@ -12,6 +12,7 @@
 #include "fare.h"
 #include "transit_authority.h"
 #include "brt.h"
+#include "metro.h"
 #include "roadveh.h"
 #include <ranges>
 #include "company_func.h"
@@ -1346,6 +1347,8 @@ static uint GetLoadAmount(Vehicle *v)
 
 	/* Fare gates and level platforms at BRT stations. */
 	if (v->type == VehicleType::Road) load_amount = CeilDiv(load_amount * GetBrtBoardingPercent(RoadVehicle::From(v->First())), 100);
+	/* Crowds on the platform, and the automatic doors of driverless trains. */
+	if (v->type == VehicleType::Train) load_amount = CeilDiv(load_amount * GetTrainBoardingPercent(v), 100);
 
 	/* Zero load amount breaks a lot of things. */
 	return std::max(1u, load_amount);

@@ -26,6 +26,16 @@ enum LineWidgets : WidgetID {
 	WID_LN_FARE_PRICE, ///< Choose the line's own price level.
 	WID_LN_OFFPEAK, ///< Choose how many vehicles run between the rush hours of the city clock.
 	WID_LN_ON_DEMAND, ///< Toggle running the line on demand.
+	WID_LN_DRIVERLESS, ///< Toggle running the line's trains without drivers.
+	WID_LN_MAP, ///< Show the line map.
+};
+
+/** Widgets of the #LineMapWindow class. */
+enum LineMapWidgets : WidgetID {
+	WID_LM_CAPTION, ///< Caption of the window.
+	WID_LM_SUMMARY, ///< The line's badge, name and how it runs.
+	WID_LM_MAP, ///< The map of its stops and vehicles.
+	WID_LM_SCROLLBAR, ///< Scrollbar of the map.
 };
 
 /** Widgets of the #DeparturesWindow class. */

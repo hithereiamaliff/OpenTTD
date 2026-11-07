@@ -13,6 +13,8 @@
 #include "company_type.h"
 #include "economy_type.h"
 #include "order_type.h"
+#include "station_type.h"
+#include "tile_type.h"
 #include "timer/timer_game_economy.h"
 #include "town_type.h"
 
@@ -20,6 +22,7 @@
 enum class TransitContractType : uint8_t {
 	GrossCost, ///< The town keeps the fares and pays a monthly fee (Singapore's BCM, BAS.MY).
 	FreeLine, ///< Riders ride free and the town pays a monthly fee (Penang's CAT, Bas Muafakat Johor).
+	Feeder, ///< A bus line the town asked for between a railway station and houses it doesn't reach; the town keeps the fares and pays a monthly fee (Rapid KL's MRT feeder buses).
 	End, ///< End marker.
 };
 
@@ -41,6 +44,8 @@ enum class TransitContractEnd : uint8_t {
 	EndedByCompany, ///< The company ended it early.
 	NoService, ///< The line stopped running.
 	LineGone, ///< The line no longer exists.
+	StationGone, ///< The railway station of a feeder line no longer exists.
+	NoTaker, ///< No company set up the feeder line the town asked for in time.
 	End, ///< End marker.
 };
 
@@ -49,7 +54,7 @@ struct TransitContract {
 	uint32_t id = 0; ///< Unique number.
 	TownID town = TownID::Invalid(); ///< The town.
 	CompanyID company = CompanyID::Invalid(); ///< The company running the line.
-	OrderListID line = OrderListID::Invalid(); ///< The line (its shared order list).
+	OrderListID line = OrderListID::Invalid(); ///< The line (its shared order list); invalid while a feeder line is wanted.
 	TransitContractType type = TransitContractType::GrossCost; ///< What kind of contract.
 	TransitContractState state = TransitContractState::Tender; ///< Its stage.
 	TransitContractEnd ended_why = TransitContractEnd::None; ///< Why it ended.
@@ -75,6 +80,8 @@ struct TransitContract {
 	Money fares = 0; ///< Fares collected for the town this month (gross-cost contracts).
 	Money last_fares = 0; ///< Fares collected for the town last month.
 	uint32_t last_riders = 0; ///< Riders last month.
+	StationID station = StationID::Invalid(); ///< Feeder lines: the railway station to feed.
+	TileIndex target = INVALID_TILE; ///< Feeder lines: the houses to link with it.
 };
 
 /** A town's transit authority. */

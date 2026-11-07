@@ -38,6 +38,7 @@
 #include "station_base.h"
 #include "station_func.h"
 #include "train.h"
+#include "metro.h"
 #include "train_cmd.h"
 #include "tunnelbridge_map.h"
 #include "misc_cmd.h"
@@ -3586,6 +3587,9 @@ bool TrainController(Train *v, Vehicle *nomove, bool reverse)
 				if (v->IsMovingFront()) {
 					first->wait_counter = 0;
 
+					/* Driverless lines can't cross roads. */
+					if (IsLevelCrossingTile(gp.new_tile)) OnTrainEntersLevelCrossing(first);
+
 					/* If we are approaching a crossing that is reserved, play the sound now. */
 					TileIndex crossing = TrainApproachingCrossingTile(v); // We know we are the moving front, so we can check v.
 					if (crossing != INVALID_TILE && HasCrossingReservation(crossing) && _settings_client.sound.ambient) SndPlayTileFx(SND_0E_LEVEL_CROSSING, crossing);
@@ -4192,6 +4196,8 @@ Money Train::GetRunningCost() const
 		cost += GetPrice(e->VehInfo<RailVehicleInfo>().running_cost_class, cost_factor, e->GetGRF());
 	} while ((v = v->GetNextVehicle()) != nullptr);
 
+	/* Driverless lines don't pay drivers. */
+	if (this->IsFrontEngine()) cost = cost * GetTrainRunningCostPercent(this) / 100;
 	return cost;
 }
 

@@ -399,6 +399,7 @@ enum class Commands : uint8_t {
 	SetTollPolicy, ///< change a company's toll level or scheme
 	ProposeCongestionCharge, ///< ask a town to bring in a congestion charge
 	UpgradeStation, ///< make a station a bus interchange or a transport hub
+	BuildScreenDoors, ///< fit platform screen doors along a station's railway platforms
 
 	End, ///< @important Must ALWAYS be on the end of this list!! (period)
 };

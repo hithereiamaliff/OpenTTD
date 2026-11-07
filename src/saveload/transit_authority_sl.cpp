@@ -80,6 +80,8 @@ static const SaveLoad _transit_contract_desc[] = {
 	SaveLoad::Variable<VarFileType::I64>("fares", SLE_OBJECT_ADDRESS(TransitContract, fares)),
 	SaveLoad::Variable<VarFileType::I64>("last_fares", SLE_OBJECT_ADDRESS(TransitContract, last_fares)),
 	SaveLoad::Variable<VarFileType::U32>("last_riders", SLE_OBJECT_ADDRESS(TransitContract, last_riders)),
+	SaveLoad::Variable<VarFileType::U16>("station", SLE_OBJECT_ADDRESS(TransitContract, station)),
+	SaveLoad::Variable<VarFileType::U32>("target", SLE_OBJECT_ADDRESS(TransitContract, target)),
 };
 
 /** Each town's transit figures, by town. */

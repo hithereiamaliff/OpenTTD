@@ -37,6 +37,8 @@ Money GetTownTransitAvailable(const Town *t);
 std::vector<TransitContract> &GetTransitContracts();
 TransitContract *GetTransitContract(uint32_t id);
 const TransitContract *GetLineContract(const OrderList *list);
+bool IsFeederOffer(const TransitContract &c);
+const TransitContract *GetTownFeederOffer(TownID town);
 std::string GetTransitLineDescription(const OrderList *list);
 Money GetTransitLineCostBasis(const OrderList *list);
 uint GetTransitLineQuality(const OrderList *list);

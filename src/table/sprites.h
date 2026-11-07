@@ -421,7 +421,11 @@ static constexpr SpriteID SPR_IMG_TOLL_PLAZA = SPR_TRAFFIC_LIGHTS_BASE + 240; //
 static constexpr SpriteID SPR_IMG_FREE_FLOW = SPR_TRAFFIC_LIGHTS_BASE + 241; ///< Icon of the free-flow gantry tool.
 static constexpr SpriteID SPR_INTERCHANGE_ROOF = SPR_TRAFFIC_LIGHTS_BASE + 242; ///< Roof over a bus stop of a bus interchange.
 static constexpr SpriteID SPR_INTERCHANGE_ROOF_HUB = SPR_TRAFFIC_LIGHTS_BASE + 243; ///< Roof over a bus stop of an integrated transport hub, with air-conditioning.
-static constexpr uint16_t TRAFFIC_LIGHTS_SPRITE_COUNT = 244;
+static constexpr SpriteID SPR_SCREEN_DOORS_X_FAR = SPR_TRAFFIC_LIGHTS_BASE + 244; ///< Platform screen doors on the far platform of a railway station along X.
+static constexpr SpriteID SPR_SCREEN_DOORS_X_NEAR = SPR_TRAFFIC_LIGHTS_BASE + 245; ///< Platform screen doors on the near platform of a railway station along X.
+static constexpr SpriteID SPR_SCREEN_DOORS_Y_FAR = SPR_TRAFFIC_LIGHTS_BASE + 246; ///< Platform screen doors on the far platform of a railway station along Y.
+static constexpr SpriteID SPR_SCREEN_DOORS_Y_NEAR = SPR_TRAFFIC_LIGHTS_BASE + 247; ///< Platform screen doors on the near platform of a railway station along Y.
+static constexpr uint16_t TRAFFIC_LIGHTS_SPRITE_COUNT = 248;
 
 static const SpriteID SPR_NEWGRFS_BASE = SPR_TRAFFIC_LIGHTS_BASE + TRAFFIC_LIGHTS_SPRITE_COUNT;
 

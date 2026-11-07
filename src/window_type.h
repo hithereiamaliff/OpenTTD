@@ -768,6 +768,12 @@ enum class WindowClass : uint16_t {
 	Line,
 
 	/**
+	 * Line map; %Window numbers:
+	 *   - #OrderListID = #LineMapWidgets
+	 */
+	LineMap,
+
+	/**
 	 * Departure board; %Window numbers:
 	 *   - #StationID = #DeparturesWidgets
 	 */

@@ -13,6 +13,7 @@
 #include "city_clock.h"
 #include "satisfaction.h"
 #include "line_cmd.h"
+#include "metro.h"
 #include "command_func.h"
 #include "company_func.h"
 #include "fare.h"
@@ -175,6 +176,7 @@ static const IntervalTimer<TimerGameEconomy> _economy_lines_monthly({TimerGameEc
 {
 	FaresMonthlyLoop();
 	TransitMonthlyLoop();
+	MetroMonthlyLoop();
 	for (OrderList *list : OrderList::Iterate()) {
 		list->line.last_month = list->line.this_month;
 		list->line.this_month = {};
@@ -201,6 +203,7 @@ CommandCost CmdSetLineProperty(DoCommandFlags flags, VehicleID veh_id, LinePrope
 	CommandCost ret = CheckOwnership(v->owner);
 	if (ret.Failed()) return ret;
 
+	CommandCost cost;
 	switch (property) {
 		case LineProperty::Number:
 			if (Utf8StringLength(text) > MAX_LENGTH_LINE_NUMBER_CHARS) return CMD_ERROR;
@@ -229,6 +232,15 @@ CommandCost CmdSetLineProperty(DoCommandFlags flags, VehicleID veh_id, LinePrope
 		case LineProperty::OnDemand:
 			if (value > 1) return CMD_ERROR;
 			break;
+		case LineProperty::Driverless:
+			if (value > 1) return CMD_ERROR;
+			if (value == 1 && !v->orders->line.driverless) {
+				/* Electric trains, screen doors at every stop, no level crossings; the trains are fitted for it. */
+				StringID problem = GetDriverlessProblem(v->orders);
+				if (problem != INVALID_STRING_ID) return CommandCost(problem);
+				cost = CommandCost(ExpensesType::NewVehicles, GetDriverlessFittingCost(v->orders));
+			}
+			break;
 		default:
 			return CMD_ERROR;
 	}
@@ -245,14 +257,20 @@ CommandCost CmdSetLineProperty(DoCommandFlags flags, VehicleID veh_id, LinePrope
 			case LineProperty::FarePrice: line.fare_price = static_cast<uint16_t>(value); break;
 			case LineProperty::OffPeakVehicles: line.offpeak_vehicles = static_cast<uint8_t>(value); break;
 			case LineProperty::OnDemand: line.on_demand = value != 0; break;
+			case LineProperty::Driverless: line.driverless = value != 0; break;
 			default: NOT_REACHED();
 		}
 		/* Between the peaks, the line keeps its new number of vehicles running right away. */
 		if (property == LineProperty::OffPeakVehicles) ApplyOffPeakVehicles(v->orders);
 		SetWindowDirty(WindowClass::Line, v->orders->index.base());
+		SetWindowDirty(WindowClass::LineMap, v->orders->index.base());
 		InvalidateWindowClassesData(GetWindowClassForVehicleType(v->type), 0);
 		InvalidateWindowClassesData(WindowClass::VehicleTimetable, 0);
+		/* Running costs change without drivers. */
+		if (property == LineProperty::Driverless) {
+			for (const Vehicle *u = v->orders->GetFirstSharedVehicle(); u != nullptr; u = u->NextShared()) SetWindowDirty(WindowClass::VehicleDetails, u->index);
+		}
 	}
 
-	return CommandCost();
+	return cost;
 }

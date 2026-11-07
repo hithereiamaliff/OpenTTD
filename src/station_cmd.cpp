@@ -11,6 +11,7 @@
 #include "fare.h"
 #include "brt.h"
 #include "interchange.h"
+#include "metro.h"
 #include "satisfaction.h"
 #include "core/flatset_type.hpp"
 #include "aircraft.h"
@@ -3524,6 +3525,8 @@ static void DrawTile_Station(TileInfo *ti)
 	if (IsDriveThroughStopTile(ti->tile)) DrawBusPriorityStop(ti);
 	/* A BRT station's platforms take the place of the stop's shelters. */
 	if (!IsDriveThroughStopTile(ti->tile) || !DrawBrtStation(ti)) DrawRailTileSeq(ti, t, TransparencyOption::Buildings, total_offset, relocation, palette);
+	/* Platform screen doors along the railway platforms. */
+	if (IsRailStationTile(ti->tile)) DrawScreenDoors(ti);
 	if (IsAnyRoadStop(ti->tile) && HasStopCharger(ti->tile)) DrawStopCharger(ti);
 	/* The roof of a bus interchange; BRT stations have their own. */
 	if (IsAnyRoadStop(ti->tile) && IsBusStop(ti->tile) && !HasBrtStation(ti->tile)) DrawInterchangeRoof(ti);
@@ -3990,6 +3993,9 @@ static void UpdateStationRating(Station *st)
 	byte_inc_sat(&st->time_since_load);
 	byte_inc_sat(&st->time_since_unload);
 
+	/* How crowded the railway platforms are, for the ratings, boarding and the riders' satisfaction. */
+	UpdateStationCrowding(st);
+
 	for (const CargoSpec *cs : CargoSpec::Iterate()) {
 		GoodsEntry *ge = &st->goods[cs->Index()];
 
@@ -4082,7 +4088,7 @@ static void UpdateStationRating(Station *st)
 		if (Company::IsValidID(st->owner) && st->town->statues.Test(st->owner)) rating += 26;
 
 		/* Riders weigh the fares of the vehicles leaving here. */
-		if (IsCargoInClass(cs->Index(), CargoClass::Passengers)) rating += GetStationFareRatingBonus(st) + GetStationBrtRatingBonus(st) + GetStationInterchangeRatingBonus(st) + GetStationSatisfactionRatingBonus(st);
+		if (IsCargoInClass(cs->Index(), CargoClass::Passengers)) rating += GetStationFareRatingBonus(st) + GetStationBrtRatingBonus(st) + GetStationInterchangeRatingBonus(st) + GetStationSatisfactionRatingBonus(st) - GetPlatformCrowdingRatingPenalty(st);
 
 		uint8_t age = ge->last_age;
 		if (age < 3) rating += 10;

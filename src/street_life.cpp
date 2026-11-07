@@ -15,6 +15,7 @@
 #include "genworld.h"
 #include "landscape.h"
 #include "map_func.h"
+#include "metro.h"
 #include "network/network.h"
 #include "openttd.h"
 #include "road.h"
@@ -613,6 +614,10 @@ static constexpr size_t MAX_PEDESTRIANS = 1500;
 static constexpr uint MAX_CROWD = 8;
 /** Waiting passengers per person drawn at a stop. */
 static constexpr uint PASSENGERS_PER_PERSON = 8;
+/** Most people drawn waiting on one tile of railway platform, both sides together. */
+static constexpr uint MAX_PLATFORM_CROWD = 12;
+/** Passengers per person drawn on a railway platform: a full platform shows the most. */
+static constexpr uint PLATFORM_PASSENGERS_PER_PERSON = PLATFORM_PLACES_PER_TILE / MAX_PLATFORM_CROWD;
 
 /**
  * Are people shown at all?
@@ -900,6 +905,14 @@ static void PedestriansTick()
  */
 static uint8_t GetStopCrowd(TileIndex tile)
 {
+	if (IsRailStationTile(tile)) {
+		/* This tile's share of the passengers on the platforms. */
+		const Station *st = Station::GetByTile(tile);
+		const uint places = GetStationPlatformPlaces(st);
+		if (places == 0) return 0;
+		const uint here = GetStationPassengersWaiting(st) * PLATFORM_PLACES_PER_TILE / places;
+		return static_cast<uint8_t>(std::min<uint>(MAX_PLATFORM_CROWD, CeilDiv(here, PLATFORM_PASSENGERS_PER_PERSON)));
+	}
 	if (!IsStationRoadStopTile(tile) || GetRoadStopType(tile) != RoadStopType::Bus) return 0;
 	const Station *st = Station::GetByTile(tile);
 	uint waiting = 0;
@@ -921,6 +934,16 @@ static uint8_t GetStopCrowd(TileIndex tile)
  */
 static StreetPoint GetCrowdPosition(TileIndex tile, uint i)
 {
+	if (IsRailStationTile(tile)) {
+		/* On the platforms on both sides of the track, spread along them. */
+		Axis axis = GetRailStationAxis(tile);
+		uint32_t hash = (tile.base() * 2654435761U) ^ (i * 40503U);
+		int32_t along = 3 * UNIT / 2 + static_cast<int32_t>(i / 2) * (12 * UNIT / 5) + static_cast<int32_t>(hash % (UNIT / 2));
+		int32_t across = (i % 2 == 0 ? 2 * UNIT : 25 * UNIT / 2) + static_cast<int32_t>((hash >> 8) % (3 * UNIT / 2));
+		int32_t lx = axis == Axis::X ? along : across;
+		int32_t ly = axis == Axis::X ? across : along;
+		return {static_cast<int32_t>(TileX(tile) * TILE_LENGTH) + lx, static_cast<int32_t>(TileY(tile) * TILE_LENGTH) + ly};
+	}
 	Axis axis = IsDriveThroughStopTile(tile) ? GetDriveThroughStopAxis(tile) : DiagDirToAxis(GetBayRoadStopDir(tile));
 	uint32_t hash = (tile.base() * 2654435761U) ^ (i * 40503U);
 	/* Two staggered rows at the kerb on the far side of the road, where the shelters don't hide them. */
@@ -962,7 +985,7 @@ static void FindVisibleRoads()
 		for (int y = y0; y <= y1; y++) {
 			for (int x = x0; x <= x1; x++) {
 				TileIndex tile = TileXY(x, y);
-				if (!IsStreetTile(tile) && !(people && IsBayRoadStopTile(tile))) continue;
+				if (!IsStreetTile(tile) && !(people && (IsBayRoadStopTile(tile) || IsRailStationTile(tile)))) continue;
 				Point pt = RemapCoords(x * TILE_SIZE + TILE_SIZE / 2, y * TILE_SIZE + TILE_SIZE / 2, TileHeight(tile) * TILE_HEIGHT);
 				bool inside = pt.x >= view.left && pt.x <= view.right && pt.y >= view.top && pt.y <= view.bottom;
 				bool near = pt.x >= view.left - VIEW_MARGIN && pt.x <= view.right + VIEW_MARGIN && pt.y >= view.top - VIEW_MARGIN && pt.y <= view.bottom + VIEW_MARGIN;
@@ -1167,12 +1190,14 @@ void ViewportAddStreetLife(DrawPixelInfo *dpi)
 		AddSortableSpriteToDraw(GetPedestrianSprite(p), GetColourPalette(p.colour), p.x / UNIT, p.y / UNIT, p.z, PERSON_BOUNDS);
 	}
 	for (const StopCrowd &c : _stop_crowds) {
-		if (!IsStationRoadStopTile(c.tile)) continue;
+		const bool platform = IsRailStationTile(c.tile);
+		if (!platform && !IsStationRoadStopTile(c.tile)) continue;
 		for (uint i = 0; i < c.people; i++) {
 			StreetPoint pos = GetCrowdPosition(c.tile, i);
 			uint32_t hash = (c.tile.base() * 2246822519U) ^ (i * 3266489917U);
 			SpriteID sprite = GetPersonSprite(static_cast<uint8_t>(hash & 1), 2);
-			int z = GetSlopePixelZ(pos.x / UNIT, pos.y / UNIT, true);
+			/* Railway platforms are raised a little above the ground. */
+			int z = GetSlopePixelZ(pos.x / UNIT, pos.y / UNIT, true) + (platform ? 2 : 0);
 			Rect rect = GetSpriteRectAt(sprite, pos.x, pos.y, z);
 			if (rect.right < l || rect.left > r || rect.bottom < t || rect.top > b) continue;
 			AddSortableSpriteToDraw(sprite, GetColourPalette(static_cast<Colours>((hash >> 8) % to_underlying(Colours::End))), pos.x / UNIT, pos.y / UNIT, z, PERSON_BOUNDS);

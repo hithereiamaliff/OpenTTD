@@ -17,6 +17,8 @@
 #include "../../town.h"
 #include "../../station_cmd.h"
 #include "../../interchange.h"
+#include "../../metro.h"
+#include "../../metro_cmd.h"
 #include "../../interchange_cmd.h"
 
 #include "../../safeguards.h"
@@ -272,6 +274,32 @@ template <bool Tfrom, bool Tvia>
 {
 	if (!IsValidStation(station_id)) return false;
 	return ::IsActiveTransportHub(::Station::Get(station_id));
+}
+
+/* static */ bool ScriptStation::BuildScreenDoors(StationID station_id)
+{
+	EnforceCompanyModeValid(false);
+	EnforcePrecondition(false, IsValidStation(station_id));
+
+	return ScriptObject::Command<Commands::BuildScreenDoors>::Do(station_id);
+}
+
+/* static */ bool ScriptStation::HasScreenDoors(StationID station_id)
+{
+	if (!IsValidStation(station_id)) return false;
+	return ::Station::Get(station_id)->screen_doors;
+}
+
+/* static */ SQInteger ScriptStation::GetPlatformPlaces(StationID station_id)
+{
+	if (!IsValidStation(station_id)) return -1;
+	return ::GetStationPlatformPlaces(::Station::Get(station_id));
+}
+
+/* static */ SQInteger ScriptStation::GetPlatformCrowding(StationID station_id)
+{
+	if (!IsValidStation(station_id)) return -1;
+	return ::Station::Get(station_id)->crowding;
 }
 
 /* static */ SQInteger ScriptStation::GetSatisfaction(StationID station_id)

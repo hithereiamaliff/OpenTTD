@@ -264,6 +264,20 @@
 	return ::Town::Get(town_id)->transit.charged_last_month;
 }
 
+/* static */ StationID ScriptTown::GetFeederOfferStation(TownID town_id)
+{
+	if (!IsValidTown(town_id)) return StationID::Invalid();
+	const TransitContract *offer = GetTownFeederOffer(town_id);
+	return offer == nullptr ? StationID::Invalid() : offer->station;
+}
+
+/* static */ TileIndex ScriptTown::GetFeederOfferTile(TownID town_id)
+{
+	if (!IsValidTown(town_id)) return INVALID_TILE;
+	const TransitContract *offer = GetTownFeederOffer(town_id);
+	return offer == nullptr ? INVALID_TILE : offer->target;
+}
+
 /* static */ SQInteger ScriptTown::GetTransitSatisfaction(TownID town_id)
 {
 	if (!IsValidTown(town_id)) return -1;

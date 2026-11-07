@@ -1286,6 +1286,149 @@ Merbok Twin Decker buses on part 7's 16-tile line, a day per year):
   depot now", the Off-peak list and the On demand button; the setting with
   its three values.
 
+## Done: transit part 13, metro and rail
+
+Four pieces for running trains like a metro: a map of each line, platforms
+that fill up, platform screen doors, driverless lines, and feeder buses the
+towns ask for. They work for any line, but platforms, doors and driverless
+running only concern railway stations and trains.
+
+**Line map.** The line window has a new **Map** button (bottom row, after
+Timetable). The map shows the line's stops from top to bottom in the line's
+colour, like the map above the doors of a metro train:
+
+- A line that goes out and comes back the same way (stops A B C D C B) shows
+  each stop once; any other line is a loop that ends in a dashed stretch and
+  "Back to" its first stop.
+- Under each stop: passengers waiting and, at railway stations, how full the
+  platforms are (red when crowded) and whether they have screen doors.
+- Stops where other passenger lines stop too get a ring and those lines'
+  badges, so you see where to change.
+- The vehicles are arrows beside the line, on the left on their way down and
+  on the right on their way back, placed by how far into each trip they are
+  (from the timetabled or estimated trip times). Refreshes twice a second.
+- Click a stop to scroll to it, Ctrl+click to open it; click a vehicle to
+  open it, Ctrl+click for its line.
+
+**Platform crowding.** Railway platforms hold 120 passengers a tile, plus
+30 for each bus or tram stop of the same station. Above that they are
+crowded:
+
+| Effect | Without screen doors | With screen doors |
+|---|---|---|
+| Boarding and getting off (trains) | 1% slower per 4% over, at most 30% | not slowed |
+| Passenger rating | 1 less per 3% over, at most 40 of 255 (16%) | half that |
+| Riders' satisfaction (crowding part) | the worse of crowded vehicles and crowded platforms (100 up to 70% full, a point less per percent above) | the same |
+
+- How crowded the platforms are is followed over the last ten days or so
+  (saved with the station). The station window's ratings view has a line
+  "Platforms: 637 waiting, room for 240 (265% full): passengers -7%, screen
+  doors".
+- People stand on the platforms in the main view, up to 12 a tile when they
+  are full (street life setting "people").
+- Stations without railway platforms aren't affected: bus stops keep their
+  street-side crowds from part 2.
+
+**Platform screen doors.** A new station window button, **Screen doors**
+(bottom row, after Interchange; only at stations with railway platforms):
+glass doors along the edges of all platforms, half height as on elevated
+MRT stations, with a green light over each door. About 1,800 a platform
+tile at base prices (60 times the object price), upkeep 120 a tile a year;
+the town pays half when its transit budget allows, as for interchanges.
+
+**Driverless lines.** A new **Driverless** button in the line window (next
+to On demand) for train lines, like Singapore's North East Line or Kuala
+Lumpur's Kelana Jaya Line:
+
+- Needs electric trains (electric, monorail or maglev engines), screen doors
+  at every station a passenger line stops at, and no level crossings this
+  month or last month. The line window says what is still missing
+  ("Trains: with drivers; driverless needs screen doors at every stop (1 of
+  2 have them)").
+- Fitting the trains costs a fifth of the price of their engines. Then
+  running costs are 20% lower and boarding is 10% faster (automatic doors).
+- A driverless train that enters a level crossing gets its drivers back at
+  once, with a message; so does a line that later buys a diesel train or
+  stops at a station without doors (checked monthly).
+- Level crossings that a line's trains enter are counted each month (saved
+  with the line).
+
+**Feeder contracts.** Towns with a railway station that passenger trains
+stopped at last month now and then (one chance in six a month, at most every
+18 months, if the budget allows a year of it) ask for a feeder bus between
+the station and houses 8 to 24 tiles away that no bus stop or station
+reaches, like Rapid KL's MRT feeder buses:
+
+- News: "Trinborough wants a feeder bus between Trinborough and houses 11
+  tiles away that no stop reaches: about ... a month for 5 years to the
+  first company whose bus line links them, by ..." (the estimate is two to
+  four buses' costs plus 20%, the deadline a year on). The town's Transit
+  window lists it as "Feeder wanted"; its Line button scrolls to the
+  houses.
+- Any company's bus line with a stop at the station or within 4 tiles of it
+  and a stop within reach of the houses, leaving its first stop 4 times a
+  month or more, gets the contract at the next month's end: the line's costs
+  plus 20%, 5 years, the town keeps the fares, paid by departures with the
+  same targets, reviews and extensions as part 4's contracts. It ends if the
+  line stops linking the station and the houses.
+- Requests nobody takes up end after a year.
+
+- Saved: lines' driverless flag and crossings in LINE; stations' screen
+  doors and crowding in FSTA; feeder requests and contracts in TCON (new
+  fields station and target, new contract type). Old saves start with
+  none.
+- Script API: `ScriptOrder.SetLineDriverless`, `IsLineDriverless`,
+  `GetLineDriverlessProblem` (DP_NONE, DP_NOT_TRAINS, DP_NOT_ELECTRIC,
+  DP_NO_SCREEN_DOORS, DP_LEVEL_CROSSINGS), `GetLineLevelCrossings`,
+  `IsLineFeeder`; `ScriptStation.BuildScreenDoors`, `HasScreenDoors`,
+  `GetPlatformPlaces`, `GetPlatformCrowding`; `ScriptTown.GetFeederOfferStation`,
+  `GetFeederOfferTile`.
+- Code: `src/metro.{h,cpp}`, `src/metro_cmd.h`, `src/line_map_gui.cpp`;
+  hooks in `station_cmd.cpp` (crowding, rating, drawing the doors),
+  `economy.cpp` (boarding speed), `train_cmd.cpp` (running costs, level
+  crossings), `line.cpp`, `line_gui.cpp`, `satisfaction.cpp`,
+  `street_life.cpp`, `station_gui.cpp`, `transit_authority*.cpp`; sprites
+  244-247.
+
+Tests (test AI MetroTest: one train per track on parallel tracks between
+Trinborough, 3,100 people, and Slundston, 7,300, 38 tiles apart; settings
+for tracks, platform length, wagons, a station in the town centre, bridges
+or level crossings, diesel, and the month to fit doors, go driverless, build
+a road across the tracks; it also runs the feeder lines towns ask for):
+
+- Driverless: refused at the start (no screen doors) and for diesel trains
+  even with doors. Doors at both stations (8 platform tiles) cost the
+  company 7,200 (the towns paid the other half); fitting 2 AsiaStar trains
+  40,312; running costs 7,030 -> 5,624 a year. A road across the tracks in
+  month 9: the next month the line ran with drivers again (2 crossings).
+- Crowding (one 40-seat train, 240 places at each station, rush hours on):
+
+| 2021 | Platforms at the end of the year | Passenger rating (average) | Riders |
+|---|---|---|---|
+| No screen doors | 320-340% | 59% | 920 |
+| Screen doors | 310-330% | 64% | 1,040 |
+| Screen doors and driverless | 160-195% | 70% | 1,102 |
+
+- Feeders: both towns asked within the first months; the AI's two-bus lines
+  (one stop joined to the railway station) were signed the month after at
+  547 a month and paid 349-547 a month by departures (2-4 a month, 3
+  asked), with 200-440 riders.
+- Trains spend 50-90% of their time at stations in these runs. That is how
+  OpenTTD loads: a train keeps loading while passengers trickle in, 40 ticks
+  a step, and a train longer than its platform loads at a quarter of the
+  speed (the AsiaStar has an engine at each end, so engine and wagon are
+  1.5 tiles long). The tests use platforms the trains fit.
+- A bus-only game (part 11's baseline run) gives identical monthly results;
+  towns without passenger trains don't roll for feeders, so nothing changes
+  for them. 99/99 unit tests; all 36 test saves (with the new
+  `city-metro-demo.csav`) load, save and reload.
+- Screenshots: the Slundston Woods platforms with screen doors, a train and
+  a crowd; the line map with the feeder line's badge at Trinborough and
+  "265% crowded" at Slundston Woods; a bus loop's map ending "Back to
+  Kinningbury"; the line window with "Trains: driverless, running costs
+  -20%, boarding +10%"; the station's ratings view; Trinborough's Transit
+  window with "Line F2: feeder contract, 547 a month until June 2025".
+
 ## Roadmap
 
 Sizes are rough: S = one session, M = a few, L = many, XL = a project in itself.

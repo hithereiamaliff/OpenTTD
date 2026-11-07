@@ -55,6 +55,7 @@ struct LineMonthStats {
 	uint32_t brt_stops = 0; ///< Stops made to load.
 	uint32_t brt_gated = 0; ///< Of those, at BRT stations.
 	uint32_t brt_level = 0; ///< Of those, by low-floor buses at BRT stations.
+	uint32_t crossings = 0; ///< Level crossings entered by the line's trains (see metro.cpp).
 };
 
 /** The line of a shared order list. */
@@ -80,6 +81,7 @@ struct LineInfo {
 
 	uint8_t offpeak_vehicles = UINT8_MAX; ///< Vehicles that keep running between the peaks of the city clock; UINT8_MAX for all of them.
 	bool on_demand = false; ///< Its vehicles pick their next stop by demand instead of running the stops in order.
+	bool driverless = false; ///< Its trains run without drivers (see metro.cpp).
 
 	/**
 	 * Remember the gap before a departure from the first stop.
@@ -104,6 +106,7 @@ enum class LineProperty : uint8_t {
 	FarePrice, ///< The line's own price level in percent; uses the value, 0 for the company's.
 	OffPeakVehicles, ///< Vehicles kept running between the peaks of the city clock; uses the value, UINT8_MAX for all.
 	OnDemand, ///< Whether vehicles pick their next stop by demand; uses the value.
+	Driverless, ///< Whether the trains run without drivers; uses the value.
 	End, ///< End marker.
 };
 

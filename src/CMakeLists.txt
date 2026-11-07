@@ -286,6 +286,7 @@ add_files(
     fare_gui.h
     fare_type.h
     line_gui.cpp
+    line_map_gui.cpp
     line_type.h
     league_base.h
     league_cmd.h
@@ -297,6 +298,9 @@ add_files(
     livery.h
     main_gui.cpp
     map.cpp
+    metro.cpp
+    metro.h
+    metro_cmd.h
     map_func.h
     map_type.h
     misc.cpp

@@ -962,6 +962,10 @@ STR_NEWS_VEHICLE_IS_GETTING_VERY_OLD_AND                        :{WHITE}{VEHICLE
 STR_NEWS_TRAIN_IS_STUCK                                         :{WHITE}{VEHICLE} can't find a path to continue
 STR_NEWS_VEHICLE_IS_LOST                                        :{WHITE}{VEHICLE} is lost
 STR_NEWS_VEHICLE_BATTERY_FLAT                                   :{WHITE}{VEHICLE} has run its battery flat and crawls to a depot to charge
+STR_NEWS_DRIVERLESS_ENDED                                       :{WHITE}The line of {VEHICLE} runs with drivers again: {STRING}
+STR_DRIVERLESS_ENDED_CROSSING                                   :its trains cross a road at a level crossing
+STR_DRIVERLESS_ENDED_SCREEN_DOORS                               :a station it stops at has no platform screen doors
+STR_DRIVERLESS_ENDED_TRAINS                                     :not all its trains have electric engines
 STR_NEWS_VEHICLE_UNPROFITABLE_YEAR                              :{WHITE}{VEHICLE}'s profit last year was {CURRENCY_LONG}
 STR_NEWS_VEHICLE_UNPROFITABLE_PERIOD                            :{WHITE}{VEHICLE}'s profit last period was {CURRENCY_LONG}
 STR_NEWS_AIRCRAFT_DEST_TOO_FAR                                  :{WHITE}{VEHICLE} can't get to the next destination because it is out of range
@@ -4124,6 +4128,10 @@ STR_STATION_VIEW_HUB_NO_RAIL                                    :{BLACK}Transpor
 STR_STATION_VIEW_INTERCHANGE_TOO_FEW                            :{BLACK}Bus interchange closed: {NUM} bus stops of {NUM} needed
 STR_STATION_VIEW_SATISFACTION_GOOD                              :{BLACK}Riders' satisfaction with the lines here: {GREEN}{NUM}%{BLACK}: passengers {GREEN}+{NUM}%
 STR_STATION_VIEW_SATISFACTION_BAD                               :{BLACK}Riders' satisfaction with the lines here: {RED}{NUM}%{BLACK}: passengers {RED}-{NUM}%
+STR_STATION_VIEW_PLATFORMS                                      :{BLACK}Platforms: {COMMA} waiting, room for {COMMA} ({NUM}% full){STRING}
+STR_STATION_VIEW_PLATFORMS_CROWDED                              :{BLACK}Platforms: {COMMA} waiting, room for {COMMA} ({RED}{NUM}% full{BLACK}): passengers {RED}-{NUM}%{BLACK}{STRING}
+STR_STATION_VIEW_PLATFORMS_DOORS                                :, screen doors
+STR_STATION_VIEW_PLATFORMS_SLOW                                 :, slow boarding
 
 STR_STATION_VIEW_GROUP                                          :{BLACK}Group by
 STR_STATION_VIEW_WAITING_STATION                                :Station: Waiting
@@ -4175,6 +4183,8 @@ STR_STATION_VIEW_DEPARTURES_TOOLTIP                             :{BLACK}Show the
 STR_STATION_VIEW_INTERCHANGE_BUTTON                             :Interchange
 STR_STATION_VIEW_HUB_BUTTON                                     :Transport hub
 STR_STATION_VIEW_INTERCHANGE_TOOLTIP                            :{BLACK}Make this station a bus interchange (it needs 6 bus stops; they get a roof): passengers rate it 8% better and a crowd waiting counts half. Then, with a railway station in it, an air-conditioned integrated transport hub: passengers rate it 16% better, its catchment is 2 tiles wider, and its town takes more cars off the road. The town pays half when its transit budget allows
+STR_STATION_VIEW_SCREEN_DOORS_BUTTON                            :Screen doors
+STR_STATION_VIEW_SCREEN_DOORS_TOOLTIP                           :{BLACK}Fit platform screen doors along all railway platforms of this station. Platforms hold 120 passengers a tile (30 more for each bus stop); above that they are crowded: boarding is slower and passengers rate the station lower. With screen doors boarding stays orderly and crowding counts half for the rating. Lines whose stops all have screen doors can run their electric trains without drivers. The town pays half when its transit budget allows
 
 # Waypoint/buoy view window
 STR_WAYPOINT_VIEW_CAPTION                                       :{WHITE}{WAYPOINT}
@@ -5228,6 +5238,29 @@ STR_LINE_OFFPEAK_KEEP                                           :{NUM} vehicle{P
 STR_LINE_OFFPEAK_PEAK_ONLY                                      :Rush hours only
 STR_LINE_ON_DEMAND_BUTTON                                       :{BLACK}On demand
 STR_LINE_ON_DEMAND_TOOLTIP                                      :{BLACK}Run the line on demand, like a demand-responsive van service: after each stop a vehicle heads for the stop of the line where the most people wait, or that waited longest, nearer ones first, instead of taking the stops in order. Suits a few small vehicles serving a quiet area
+STR_LINE_DRIVERLESS_BUTTON                                      :{BLACK}Driverless
+STR_LINE_DRIVERLESS_TOOLTIP                                     :{BLACK}Run the line's trains without drivers, like Singapore's North East Line or Kuala Lumpur's Kelana Jaya Line: running costs 20% lower and boarding 10% faster with automatic doors. Needs electric trains, platform screen doors at every station the line stops at, and no level crossings: a driverless train that meets one gets its drivers back. Fitting the trains costs a fifth of the price of their engines
+STR_LINE_DRIVERLESS_ON                                          :{BLACK}Trains: {LTBLUE}driverless{BLACK}, running costs {GREEN}-{NUM}%{BLACK}, boarding {GREEN}+{NUM}%
+STR_LINE_DRIVERLESS_READY                                       :{BLACK}Trains: with drivers; could run driverless (fitting {CURRENCY_SHORT})
+STR_LINE_DRIVERLESS_NEEDS                                       :{BLACK}Trains: with drivers; driverless needs {RAW_STRING}
+STR_LINE_DRIVERLESS_NEED_ELECTRIC                               :electric engines in all trains
+STR_LINE_DRIVERLESS_NEED_DOORS                                  :screen doors at every stop ({NUM} of {NUM} have them)
+STR_LINE_DRIVERLESS_NEED_NO_CROSSINGS                           :no level crossings ({NUM} crossed this month and last)
+STR_LINE_MAP_BUTTON                                             :{BLACK}Map
+STR_LINE_MAP_TOOLTIP                                            :{BLACK}Show the line map: its stops, the lines to change to, how crowded the platforms are and where its vehicles are
+STR_LINE_MAP_CAPTION                                            :{WHITE}Map of {RAW_STRING}
+STR_LINE_MAP_SUMMARY                                            :{BLACK}{COMMA} vehicle{P "" s}, one every {RAW_STRING}{RAW_STRING}
+STR_LINE_MAP_SUMMARY_NO_GAP                                     :{BLACK}{COMMA} vehicle{P "" s}{RAW_STRING}
+STR_LINE_MAP_DRIVERLESS                                         :, driverless
+STR_LINE_MAP_ON_DEMAND                                          :, on demand
+STR_LINE_MAP_NO_STOPS                                           :{BLACK}This line has no stops
+STR_LINE_MAP_STOP                                               :{BLACK}{STATION}
+STR_LINE_MAP_STOP_WAITING                                       :{BLACK}{COMMA} waiting
+STR_LINE_MAP_STOP_PLATFORMS                                     :{BLACK}{COMMA} waiting, platforms {GREEN}{NUM}%{BLACK}{STRING}
+STR_LINE_MAP_STOP_CROWDED                                       :{BLACK}{COMMA} waiting, platforms {RED}{NUM}% crowded{BLACK}{STRING}
+STR_LINE_MAP_STOP_DOORS                                         :, screen doors
+STR_LINE_MAP_BACK_TO                                            :Back to {STATION}
+STR_LINE_MAP_PANEL_TOOLTIP                                      :{BLACK}The line's stops from first to last; a ring marks stops where other lines (their badges) stop too. Arrows are the vehicles: on the left on their way down, on the right on their way back. Click a stop to show it, Ctrl+Click to open it. Click a vehicle to show it, Ctrl+Click for its line
 STR_FARES_CAPTION                                               :{WHITE}{COMPANY} - Passenger fares
 STR_FARES_TABLE_TOOLTIP                                         :{BLACK}Click a fare, price, concession or pass to change it. A journey pays one fare however often riders change. Riders weigh what they pay against the classic fare: paying less raises the passenger rating where they board, paying more lowers it (about 120% earns the most). Lines can have their own fare (line window)
 STR_FARES_HEADER_MODE                                           :{BLACK}Transport
@@ -5278,15 +5311,19 @@ STR_TRANSIT_CONCESSIONS                                         :{BLACK}Concessi
 STR_TRANSIT_NO_CONCESSIONS                                      :{BLACK}Concessions: not paid back by the town
 STR_TRANSIT_CONGESTION_CHARGE                                   :{BLACK}Congestion charge since {DATE_SHORT}: {NUM} company vehicle{P "" s} paid last month; {CURRENCY_LONG} last month, {CURRENCY_LONG} last year
 STR_TRANSIT_NO_CONGESTION_CHARGE                                :{BLACK}No congestion charge; roads in the centre are at congestion level {DECIMAL} on average
-STR_TRANSIT_LIST_TOOLTIP                                        :{BLACK}Tenders and contracts for lines in this town. Under a contract the town keeps the fares and pays a monthly fee; on a free line riders ride free and the town pays the fee. The fee shrinks with missed departures; regularity and punctuality earn up to 5% more or less. Click one to select it
-STR_TRANSIT_EMPTY                                               :{BLACK}No tenders or contracts yet. Now and then the town invites tenders for a line that serves it, those losing money first, if its budget allows
+STR_TRANSIT_LIST_TOOLTIP                                        :{BLACK}Tenders and contracts for lines in this town. Under a contract the town keeps the fares and pays a monthly fee; on a free line riders ride free and the town pays the fee. A feeder line links a railway station with houses no stop reaches: the first company to run one gets a contract. The fee shrinks with missed departures; regularity and punctuality earn up to 5% more or less. Click one to select it
+STR_TRANSIT_EMPTY                                               :{BLACK}No tenders or contracts yet. Now and then the town invites tenders for a line that serves it, those losing money first, or asks for a feeder bus to its railway station, if its budget allows
 STR_TRANSIT_TYPE_GROSS_COST                                     :contract
 STR_TRANSIT_TYPE_FREE                                           :free line
+STR_TRANSIT_TYPE_FEEDER                                         :feeder contract
 STR_TRANSIT_ROW_TENDER                                          :{BLACK}{RAW_STRING} ({COMPANY}): {YELLOW}tender{BLACK} for a {STRING} until {DATE_SHORT}
 STR_TRANSIT_ROW_ACTIVE                                          :{BLACK}{RAW_STRING} ({COMPANY}): {GREEN}{STRING}{BLACK}, {CURRENCY_LONG} a month until {DATE_SHORT}
 STR_TRANSIT_ROW_ENDED                                           :{BLACK}{RAW_STRING} ({COMPANY}): {SILVER}ended {DATE_SHORT}, {STRING}
+STR_TRANSIT_ROW_FEEDER_WANTED                                   :{BLACK}Feeder wanted: {STATION} to houses {NUM} tiles away, {YELLOW}open{BLACK} until {DATE_SHORT}
+STR_TRANSIT_ROW_FEEDER_ENDED                                    :{BLACK}Feeder to {STATION}: {SILVER}ended {DATE_SHORT}, {STRING}
 STR_TRANSIT_DETAIL_TENDER_NO_BID                                :{SILVER}The line costs {CURRENCY_LONG} a month. No bid yet
 STR_TRANSIT_DETAIL_TENDER                                       :{SILVER}The line costs {CURRENCY_LONG} a month. Your bid: {NUM}% margin, {CURRENCY_LONG} a month
+STR_TRANSIT_DETAIL_FEEDER_WANTED                                :{SILVER}About {CURRENCY_LONG} a month for 5 years to the first bus line with a stop at or next to the station and one by the houses (Line shows them), leaving 4 times a month or more
 STR_TRANSIT_DETAIL_STARTED                                      :{SILVER}Targets: {NUM} departures a month, extra wait at most {RAW_STRING}, 70% on time if timetabled
 STR_TRANSIT_DETAIL_ACTIVE                                       :{SILVER}Last month {NUM} departures ({NUM} wanted), extra wait {RAW_STRING}, {RAW_STRING}: paid {CURRENCY_SHORT} ({RAW_STRING}%). Targets met {NUM} of {NUM} months
 STR_TRANSIT_DETAIL_LOST                                         :{SILVER}Best rival: {NUM}% margin, quality {NUM}. You: {NUM}% margin, quality {NUM}
@@ -5299,12 +5336,14 @@ STR_TRANSIT_END_REVIEW                                          :too few riders 
 STR_TRANSIT_END_BY_COMPANY                                      :ended early by its operator
 STR_TRANSIT_END_NO_SERVICE                                      :the line stopped running
 STR_TRANSIT_END_LINE_GONE                                       :the line is gone
+STR_TRANSIT_END_STATION_GONE                                    :the railway station is gone
+STR_TRANSIT_END_NO_TAKER                                        :no one ran the line in time
 STR_TRANSIT_BID_BUTTON                                          :{BLACK}Bid
 STR_TRANSIT_BID_TOOLTIP                                         :{BLACK}Bid for the selected tender: a margin on top of the line's running costs and wear. Rival operators bid too; the town weighs quality (regularity, reliability and age of the vehicles) against price 60:40
 STR_TRANSIT_END_BUTTON                                          :{BLACK}End contract
 STR_TRANSIT_END_TOOLTIP                                         :{BLACK}End the selected contract early, for three months' fees
 STR_TRANSIT_LINE_BUTTON                                         :{BLACK}Line
-STR_TRANSIT_LINE_TOOLTIP                                        :{BLACK}Show the line of the selected tender or contract
+STR_TRANSIT_LINE_TOOLTIP                                        :{BLACK}Show the line of the selected tender or contract, or the houses a wanted feeder line should reach
 STR_TRANSIT_CHARGE_BUTTON                                       :Propose congestion charge
 STR_TRANSIT_CHARGE_TOOLTIP                                      :{BLACK}Campaign for a congestion charge: road vehicles except buses pay to drive into the centre and inner suburbs, town traffic there falls by about 30%, and the money goes to the town's transit budget. The town agrees from 5,000 people, when its centre is at congestion level 2 on average and it rates your company Good or better
 STR_TRANSIT_BID_MARGIN                                          :{NUM}% margin: {CURRENCY_LONG} a month
@@ -5370,6 +5409,8 @@ STR_NEWS_TRANSIT_TENDER                                         :{BIG_FONT}{BLAC
 STR_NEWS_TRANSIT_TENDER_FREE                                    :{BIG_FONT}{BLACK}{TOWN} invites tenders to run {RAW_STRING} as a free line for 5 years (8 with electric buses): riders ride free and the town pays a monthly fee. The line costs {CURRENCY_LONG} a month; bid in the town's transit window by {DATE_LONG}
 STR_NEWS_TRANSIT_WON                                            :{BIG_FONT}{BLACK}{TOWN} gives its contract for {RAW_STRING} to {COMPANY}: {CURRENCY_LONG} a month for {NUM} years
 STR_NEWS_TRANSIT_WON_FREE                                       :{BIG_FONT}{BLACK}{TOWN} makes {RAW_STRING} a free line run by {COMPANY}: {CURRENCY_LONG} a month for {NUM} years
+STR_NEWS_TRANSIT_FEEDER_WANTED                                  :{BIG_FONT}{BLACK}{TOWN} wants a feeder bus between {STATION} and houses {NUM} tiles away that no stop reaches: about {CURRENCY_LONG} a month for 5 years to the first company whose bus line links them, by {DATE_LONG}
+STR_NEWS_TRANSIT_FEEDER_SIGNED                                  :{BIG_FONT}{BLACK}{TOWN} signs a feeder contract for {RAW_STRING} with {COMPANY}: it links {STATION} with the town's houses for {CURRENCY_LONG} a month over {NUM} years
 STR_NEWS_TRANSIT_LOST                                           :{BIG_FONT}{BLACK}{TOWN} gives its contract for {RAW_STRING} to a rival operator ({NUM}% margin, quality {NUM}) over your bid ({NUM}% margin, quality {NUM}). Your line runs on its own account
 STR_NEWS_TRANSIT_NO_BID                                         :{BIG_FONT}{BLACK}{TOWN}'s tender for {RAW_STRING} closed without a bid from its operator
 STR_NEWS_TRANSIT_EXTENDED                                       :{BIG_FONT}{BLACK}{TOWN} extends the contract for {RAW_STRING} by {NUM} years for good service
@@ -5841,6 +5882,13 @@ STR_ERROR_CAN_T_BUILD_HUB                                       :{WHITE}Can't ma
 STR_ERROR_INTERCHANGE_TOO_FEW_STOPS                             :{WHITE}... it needs at least 6 bus stops
 STR_ERROR_HUB_NEEDS_INTERCHANGE                                 :{WHITE}... make it a bus interchange first
 STR_ERROR_HUB_NEEDS_RAILWAY                                     :{WHITE}... it needs a railway station in the same station
+STR_ERROR_CAN_T_BUILD_SCREEN_DOORS                              :{WHITE}Can't fit platform screen doors here...
+STR_ERROR_SCREEN_DOORS_NEED_PLATFORMS                           :{WHITE}... the station has no railway platforms
+STR_ERROR_CAN_T_RUN_DRIVERLESS                                  :{WHITE}Can't run this line without drivers...
+STR_ERROR_DRIVERLESS_ONLY_TRAINS                                :{WHITE}... only trains can run without drivers
+STR_ERROR_DRIVERLESS_NOT_ELECTRIC                               :{WHITE}... all its trains need electric engines
+STR_ERROR_DRIVERLESS_NO_SCREEN_DOORS                            :{WHITE}... every station it stops at needs platform screen doors
+STR_ERROR_DRIVERLESS_LEVEL_CROSSINGS                            :{WHITE}... its trains crossed roads at level crossings this month or last month
 STR_ERROR_CAN_T_CHANGE_BUS_SIGNAL                               :{WHITE}Can't change the bus signals here...
 STR_ERROR_BUS_SIGNAL_NONE                                       :{WHITE}... these traffic lights have no bus signals
 STR_ERROR_TRAFFIC_LIGHTS_NEED_JUNCTION                          :traffic lights need a road junction

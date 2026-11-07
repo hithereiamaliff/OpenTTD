@@ -707,6 +707,20 @@ public:
 	static bool SetLineOnDemand(VehicleID vehicle_id, bool on_demand);
 
 	/**
+	 * Set whether a line's trains run without drivers: running costs 20%
+	 * lower and boarding 10% faster. Needs electric trains, platform screen
+	 * doors at every station it stops at, and no level crossings this month
+	 * or last month; switching on costs a fifth of the price of the engines.
+	 * A driverless train that meets a level crossing gets its drivers back.
+	 * @param vehicle_id Any vehicle of the line.
+	 * @param driverless Whether to run without drivers.
+	 * @pre ScriptVehicle::IsPrimaryVehicle(vehicle_id).
+	 * @game @pre ScriptCompanyMode::IsValid().
+	 * @return Whether it has been/can be set.
+	 */
+	static bool SetLineDriverless(VehicleID vehicle_id, bool driverless);
+
+	/**
 	 * Is a town inviting tenders for a vehicle's line?
 	 * @param vehicle_id Any vehicle of the line.
 	 * @return The town, or an invalid town (see ScriptTown::IsValidTown) if there is no open tender.
@@ -841,6 +855,47 @@ public:
 	 * @return True if it does; false if not or the vehicle is invalid.
 	 */
 	static bool IsLineOnDemand(VehicleID vehicle_id);
+
+	/**
+	 * Do a line's trains run without drivers?
+	 * @param vehicle_id Any vehicle of the line.
+	 * @pre ScriptVehicle::IsPrimaryVehicle(vehicle_id).
+	 * @return True if they do; false if not or the vehicle is invalid.
+	 */
+	static bool IsLineDriverless(VehicleID vehicle_id);
+
+	/** What a line still needs to run without drivers. */
+	enum DriverlessProblem {
+		DP_NONE = 0, ///< Nothing: it can run without drivers.
+		DP_NOT_TRAINS = 1, ///< It isn't run with trains.
+		DP_NOT_ELECTRIC = 2, ///< Not all its trains have electric engines.
+		DP_NO_SCREEN_DOORS = 3, ///< Not every station it stops at has platform screen doors.
+		DP_LEVEL_CROSSINGS = 4, ///< Its trains crossed roads at level crossings this month or last month.
+	};
+
+	/**
+	 * Get what a line still needs to run without drivers.
+	 * @param vehicle_id Any vehicle of the line.
+	 * @pre ScriptVehicle::IsPrimaryVehicle(vehicle_id).
+	 * @return What is missing, DP_NONE if nothing is; DP_NOT_TRAINS for an invalid vehicle.
+	 */
+	static DriverlessProblem GetLineDriverlessProblem(VehicleID vehicle_id);
+
+	/**
+	 * Get how many level crossings a line's trains entered this month and last month.
+	 * @param vehicle_id Any vehicle of the line.
+	 * @pre ScriptVehicle::IsPrimaryVehicle(vehicle_id).
+	 * @return The number, or -1 if the vehicle is invalid.
+	 */
+	static SQInteger GetLineLevelCrossings(VehicleID vehicle_id);
+
+	/**
+	 * Does a line run under a town's feeder contract?
+	 * @param vehicle_id Any vehicle of the line.
+	 * @pre ScriptVehicle::IsPrimaryVehicle(vehicle_id).
+	 * @return True if it does; false if not or the vehicle is invalid.
+	 */
+	static bool IsLineFeeder(VehicleID vehicle_id);
 
 	/**
 	 * Get the average time between a line's recent departures from its first stop.

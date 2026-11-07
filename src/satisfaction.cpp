@@ -102,6 +102,30 @@ static uint8_t GetCrowdingScore(const LineMonthStats &stats)
 }
 
 /**
+ * How riders like the platforms of a line's railway stations: fine up to 70%
+ * of their places, a point less for each percent above (none at 170%).
+ * @param list The line.
+ * @return The score, or 100 if it doesn't stop at railway platforms.
+ */
+static uint8_t GetPlatformScore(const OrderList *list)
+{
+	std::vector<StationID> seen;
+	uint sum = 0, stations = 0;
+	for (const Order &order : list->GetOrders()) {
+		if (!order.IsType(OT_GOTO_STATION)) continue;
+		const StationID id = order.GetDestination().ToStationID();
+		if (std::ranges::find(seen, id) != seen.end()) continue;
+		seen.push_back(id);
+		const Station *st = Station::GetIfValid(id);
+		if (st == nullptr || st->train_station.IsEmpty()) continue;
+		sum += st->crowding;
+		stations++;
+	}
+	if (stations == 0) return 100;
+	return Score(100 - std::max(0, static_cast<int>(sum / stations) - 70));
+}
+
+/**
  * How satisfied passengers are with punctuality: the share of departures on
  * time with a timetable; otherwise how evenly spaced departures are, 30 points
  * less for each extra wait as long as the wait with even spacing.
@@ -176,7 +200,8 @@ static void UpdateLineSatisfaction(OrderList *list)
 
 	auto &parts = line.satisfaction_parts;
 	parts[to_underlying(SatisfactionPart::Waiting)] = GetWaitingScore(list);
-	parts[to_underlying(SatisfactionPart::Crowding)] = GetCrowdingScore(line.last_month);
+	/* Crowded vehicles, or crowded railway platforms, whichever is worse. */
+	parts[to_underlying(SatisfactionPart::Crowding)] = std::min(GetCrowdingScore(line.last_month), GetPlatformScore(list));
 	parts[to_underlying(SatisfactionPart::Punctuality)] = GetPunctualityScore(list);
 	parts[to_underlying(SatisfactionPart::Fare)] = GetFareScore(first);
 	parts[to_underlying(SatisfactionPart::Condition)] = Score(static_cast<int>(reliability * 100 / (vehicles * 0xFFFF)));

@@ -319,6 +319,46 @@ public:
 	static SQInteger GetSatisfaction(StationID station_id);
 
 	/**
+	 * Fit platform screen doors along all railway platforms of a station.
+	 * Boarding then stays orderly on crowded platforms, crowding counts half
+	 * for the rating, and lines can run without drivers.
+	 * @param station_id The station.
+	 * @pre IsValidStation(station_id).
+	 * @game @pre ScriptCompanyMode::IsValid().
+	 * @exception ScriptError::ERR_ALREADY_BUILT
+	 * @return Whether the doors have been/can be fitted.
+	 */
+	static bool BuildScreenDoors(StationID station_id);
+
+	/**
+	 * Does a station have platform screen doors?
+	 * @param station_id The station.
+	 * @pre IsValidStation(station_id).
+	 * @return True if it has.
+	 */
+	static bool HasScreenDoors(StationID station_id);
+
+	/**
+	 * Get how many passengers fit comfortably on a station's platforms: 120
+	 * a tile of railway platform and 30 a bus or tram stop.
+	 * @param station_id The station.
+	 * @pre IsValidStation(station_id).
+	 * @return The places; 0 for stations without railway platforms, -1 for an invalid station.
+	 */
+	static SQInteger GetPlatformPlaces(StationID station_id);
+
+	/**
+	 * Get how crowded a station's railway platforms were over the last days:
+	 * passengers waiting in percent of the places. Above 100 they are
+	 * crowded: boarding is slower (unless there are screen doors) and
+	 * passengers rate the station lower.
+	 * @param station_id The station.
+	 * @pre IsValidStation(station_id).
+	 * @return The crowding in percent, or -1 for an invalid station.
+	 */
+	static SQInteger GetPlatformCrowding(StationID station_id);
+
+	/**
 	 * Toggle the open/closed state of an airport.
 	 * @param station_id The airport to modify.
 	 * @game @pre ScriptCompanyMode::IsValid().

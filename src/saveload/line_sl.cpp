@@ -40,7 +40,8 @@
 	SaveLoad::Variable<VarFileType::U32>(prefix ".brt_signals", SLE_OBJECT_ADDRESS(LineInfo, member.brt_signals)), \
 	SaveLoad::Variable<VarFileType::U32>(prefix ".brt_stops", SLE_OBJECT_ADDRESS(LineInfo, member.brt_stops)), \
 	SaveLoad::Variable<VarFileType::U32>(prefix ".brt_gated", SLE_OBJECT_ADDRESS(LineInfo, member.brt_gated)), \
-	SaveLoad::Variable<VarFileType::U32>(prefix ".brt_level", SLE_OBJECT_ADDRESS(LineInfo, member.brt_level))
+	SaveLoad::Variable<VarFileType::U32>(prefix ".brt_level", SLE_OBJECT_ADDRESS(LineInfo, member.brt_level)), \
+	SaveLoad::Variable<VarFileType::U32>(prefix ".crossings", SLE_OBJECT_ADDRESS(LineInfo, member.crossings))
 
 static const SaveLoad _line_desc[] = {
 	SaveLoad::String("number", SLE_OBJECT_ADDRESS(LineInfo, number), StringValidationSetting::AllowControlCode),
@@ -60,6 +61,7 @@ static const SaveLoad _line_desc[] = {
 	SaveLoad::Array<VarFileType::U8, to_underlying(SatisfactionPart::End)>("satisfaction_parts", SLE_OBJECT_ADDRESS(LineInfo, satisfaction_parts)),
 	SaveLoad::Variable<VarFileType::U8>("offpeak_vehicles", SLE_OBJECT_ADDRESS(LineInfo, offpeak_vehicles)),
 	SaveLoad::Variable<VarFileType::Bool>("on_demand", SLE_OBJECT_ADDRESS(LineInfo, on_demand)),
+	SaveLoad::Variable<VarFileType::Bool>("driverless", SLE_OBJECT_ADDRESS(LineInfo, driverless)),
 };
 
 #undef LINE_MONTH_FIELDS

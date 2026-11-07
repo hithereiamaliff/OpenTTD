@@ -25,9 +25,12 @@
 #include "../../line_cmd.h"
 #include "../../brt.h"
 #include "../../city_clock.h"
+#include "../../metro.h"
 #include "../../transit_authority.h"
 #include "../../transit_authority_cmd.h"
 #include "../../string_func.h"
+
+#include "../../table/strings.h"
 
 #include "../../safeguards.h"
 
@@ -821,6 +824,14 @@ static const OrderList *GetScriptLine(VehicleID vehicle_id)
 	return ScriptObject::Command<Commands::SetLineProperty>::Do(vehicle_id, LineProperty::OnDemand, on_demand ? 1 : 0, {});
 }
 
+/* static */ bool ScriptOrder::SetLineDriverless(VehicleID vehicle_id, bool driverless)
+{
+	EnforceCompanyModeValid(false);
+	EnforcePrecondition(false, ScriptVehicle::IsPrimaryVehicle(vehicle_id));
+
+	return ScriptObject::Command<Commands::SetLineProperty>::Do(vehicle_id, LineProperty::Driverless, driverless ? 1 : 0, {});
+}
+
 /**
  * The open tender for a vehicle's line.
  * @param vehicle_id The vehicle.
@@ -951,6 +962,37 @@ static const TransitContract *GetScriptLineTender(VehicleID vehicle_id)
 {
 	const OrderList *list = GetScriptLine(vehicle_id);
 	return list != nullptr && list->line.on_demand;
+}
+
+/* static */ bool ScriptOrder::IsLineDriverless(VehicleID vehicle_id)
+{
+	const OrderList *list = GetScriptLine(vehicle_id);
+	return list != nullptr && list->line.driverless;
+}
+
+/* static */ ScriptOrder::DriverlessProblem ScriptOrder::GetLineDriverlessProblem(VehicleID vehicle_id)
+{
+	const OrderList *list = GetScriptLine(vehicle_id);
+	if (list == nullptr) return DP_NOT_TRAINS;
+	const StringID problem = ::GetDriverlessProblem(list);
+	if (problem == INVALID_STRING_ID) return DP_NONE;
+	if (problem == STR_ERROR_DRIVERLESS_NOT_ELECTRIC) return DP_NOT_ELECTRIC;
+	if (problem == STR_ERROR_DRIVERLESS_NO_SCREEN_DOORS) return DP_NO_SCREEN_DOORS;
+	if (problem == STR_ERROR_DRIVERLESS_LEVEL_CROSSINGS) return DP_LEVEL_CROSSINGS;
+	return DP_NOT_TRAINS;
+}
+
+/* static */ SQInteger ScriptOrder::GetLineLevelCrossings(VehicleID vehicle_id)
+{
+	const OrderList *list = GetScriptLine(vehicle_id);
+	return list == nullptr ? -1 : list->line.this_month.crossings + list->line.last_month.crossings;
+}
+
+/* static */ bool ScriptOrder::IsLineFeeder(VehicleID vehicle_id)
+{
+	const OrderList *list = GetScriptLine(vehicle_id);
+	const TransitContract *contract = list == nullptr ? nullptr : GetLineContract(list);
+	return contract != nullptr && contract->type == TransitContractType::Feeder;
 }
 
 /* static */ SQInteger ScriptOrder::GetLineAverageGap(VehicleID vehicle_id)

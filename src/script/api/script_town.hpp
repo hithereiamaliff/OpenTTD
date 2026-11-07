@@ -447,6 +447,24 @@ public:
 	static SQInteger GetTransitSatisfaction(TownID town_id);
 
 	/**
+	 * Get the railway station of the feeder line a town asks for: a bus line
+	 * with a stop at or next to the station and one by the houses
+	 * (GetFeederOfferTile), leaving 4 times a month or more, gets a contract.
+	 * @param town_id The town.
+	 * @pre IsValidTown(town_id).
+	 * @return The station, or an invalid station if the town asks for none.
+	 */
+	static StationID GetFeederOfferStation(TownID town_id);
+
+	/**
+	 * Get the houses the feeder line a town asks for should reach.
+	 * @param town_id The town.
+	 * @pre IsValidTown(town_id).
+	 * @return The tile in the middle of the houses, or an invalid tile if the town asks for no feeder line.
+	 */
+	static TileIndex GetFeederOfferTile(TownID town_id);
+
+	/**
 	 * Find out if the town is a city.
 	 * @param town_id The town to check.
 	 * @pre IsValidTown(town_id).

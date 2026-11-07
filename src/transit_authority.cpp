@@ -21,6 +21,9 @@
 #include "economy_func.h"
 #include "fare.h"
 #include "line.h"
+#include "map_func.h"
+#include "satisfaction.h"
+#include "town_map.h"
 #include "news_func.h"
 #include "order_base.h"
 #include "station_base.h"
@@ -63,7 +66,26 @@ static constexpr uint EARLY_END_MONTHS = 3;
 /** Ended contracts stay in the list this long, in days; a town doesn't tender the line again for twice that. */
 static constexpr int KEEP_ENDED_DAYS = 365;
 
+/** A town asks for a feeder line with a chance of one in this a month. */
+static constexpr uint FEEDER_CHANCE = 6;
+/** A town asks for a new feeder line at most this often, in days. */
+static constexpr int FEEDER_PAUSE_DAYS = 540;
+/** How long a town waits for someone to run the feeder line it asked for, in days. */
+static constexpr int FEEDER_OFFER_DAYS = 365;
+/** Margin a town pays on top of the costs of a feeder line, in percent. */
+static constexpr uint FEEDER_MARGIN = 20;
+/** A feeder line needs a stop at most this far from the railway station, in tiles. */
+static constexpr uint FEEDER_STATION_REACH = 4;
+/** The houses a feeder line is wanted for are this far from the railway station, in tiles. */
+static constexpr uint FEEDER_MIN_DISTANCE = 8;
+static constexpr uint FEEDER_MAX_DISTANCE = 24;
+/** Departures a month a feeder line needs before the town signs. */
+static constexpr uint FEEDER_MIN_DEPARTURES = 4;
+
 static std::vector<TransitContract> _transit_contracts; ///< All tenders and contracts.
+
+static bool LineFeedsStation(const OrderList *list, StationID station, TileIndex target);
+static bool IsFeederStationThere(const TransitContract &c);
 static uint32_t _next_transit_contract = 1; ///< Number of the next contract.
 
 /**
@@ -143,6 +165,29 @@ const TransitContract *GetLineContract(const OrderList *list)
 	if (list == nullptr || _transit_contracts.empty()) return nullptr;
 	for (const TransitContract &c : _transit_contracts) {
 		if (c.state == TransitContractState::Active && c.line == list->index) return &c;
+	}
+	return nullptr;
+}
+
+/**
+ * Is this a town's open request for a feeder line, that no line runs yet?
+ * @param c The tender or contract.
+ * @return True if it is.
+ */
+bool IsFeederOffer(const TransitContract &c)
+{
+	return c.type == TransitContractType::Feeder && c.state == TransitContractState::Tender && c.line == OrderListID::Invalid();
+}
+
+/**
+ * A town's open request for a feeder line.
+ * @param town The town.
+ * @return The request, or nullptr if there is none.
+ */
+const TransitContract *GetTownFeederOffer(TownID town)
+{
+	for (const TransitContract &c : _transit_contracts) {
+		if (c.town == town && IsFeederOffer(c)) return &c;
 	}
 	return nullptr;
 }
@@ -387,6 +432,19 @@ static void RunContractMonth(TransitContract &c, TimerGameEconomy::Date today)
 	Town *t = Town::Get(c.town);
 	const LineInfo &line = list->line;
 
+	/* A feeder line must keep linking its railway station with the houses. */
+	if (c.type == TransitContractType::Feeder) {
+		if (!IsFeederStationThere(c)) {
+			EndContract(c, TransitContractEnd::StationGone, today);
+			return;
+		}
+		if (!LineFeedsStation(list, c.station, c.target)) {
+			EndContract(c, TransitContractEnd::NoService, today);
+			AddContractNews(c, STR_NEWS_TRANSIT_ENDED_NO_SERVICE);
+			return;
+		}
+	}
+
 	c.last_departures = static_cast<uint16_t>(std::min<uint32_t>(line.this_month.departures, UINT16_MAX));
 	c.last_riders = line.this_month.riders;
 	c.last_excess_wait = GetExcessWait(line);
@@ -479,6 +537,195 @@ static bool HasRecentContract(const OrderList *list, const Town *t, TimerGameEco
 		if (c.town == t->index && today - c.end < 2 * KEEP_ENDED_DAYS) return true;
 	}
 	return false;
+}
+
+/**
+ * The stations with railway platforms that passenger trains stopped at last month.
+ * @return Whether each station (by index) did.
+ */
+static std::vector<bool> GetStationsWithPassengerTrains()
+{
+	std::vector<bool> served(Station::GetPoolSize(), false);
+	for (const OrderList *list : OrderList::Iterate()) {
+		const Vehicle *v = list->GetFirstSharedVehicle();
+		if (v == nullptr || v->type != VehicleType::Train || list->line.last_month.load_count == 0 || !IsPassengerLine(list)) continue;
+		for (const Order &order : list->GetOrders()) {
+			if (!order.IsType(OT_GOTO_STATION)) continue;
+			const Station *st = Station::GetIfValid(order.GetDestination().ToStationID());
+			if (st != nullptr && !st->train_station.IsEmpty()) served[st->index.base()] = true;
+		}
+	}
+	return served;
+}
+
+/**
+ * Do the bus stops or railway stations of any company reach a tile?
+ * @param tile The tile.
+ * @return True if one does.
+ */
+static bool IsReachedByPassengerStation(TileIndex tile)
+{
+	bool reached = false;
+	ForAllStationsAroundTiles(TileArea(tile, 1, 1), [&reached](Station *st, TileIndex) {
+		if (st->facilities.Any({StationFacility::BusStop, StationFacility::Train})) reached = true;
+		return true;
+	});
+	return reached;
+}
+
+/**
+ * Find houses of a town that no stop reaches, a bus ride from a railway station.
+ * @param t The town.
+ * @param rail The railway station.
+ * @return The middle of the houses, or INVALID_TILE if there are none.
+ */
+static TileIndex FindFeederHouses(const Town *t, const Station *rail)
+{
+	const int radius = std::max<int>(FEEDER_MIN_DISTANCE, IntSqrt(t->cache.squared_town_zone_radius[to_underlying(HouseZone::TownEdge)]));
+	TileIndex best = INVALID_TILE;
+	uint best_houses = 0;
+	for (uint i = 0; i < 64; i++) {
+		const int dx = static_cast<int>(RandomRange(2 * radius + 1)) - radius;
+		const int dy = static_cast<int>(RandomRange(2 * radius + 1)) - radius;
+		const TileIndex tile = TileAddWrap(t->xy, dx, dy);
+		if (tile == INVALID_TILE || !IsTileType(tile, TileType::House) || GetTownIndex(tile) != t->index) continue;
+		const uint distance = DistanceManhattan(tile, rail->xy);
+		if (distance < FEEDER_MIN_DISTANCE || distance > FEEDER_MAX_DISTANCE || IsReachedByPassengerStation(tile)) continue;
+		uint houses = 0;
+		for (TileIndex near : TileArea(tile, 1, 1).Expand(2)) {
+			if (IsTileType(near, TileType::House) && GetTownIndex(near) == t->index) houses++;
+		}
+		if (houses > best_houses) {
+			best = tile;
+			best_houses = houses;
+		}
+	}
+	return best_houses >= 6 ? best : INVALID_TILE;
+}
+
+/**
+ * Is the railway station of a feeder line still there: a station with
+ * railway platforms in the town (its number may have gone to another
+ * station since)?
+ * @param c The feeder request or contract.
+ * @return True if it is.
+ */
+static bool IsFeederStationThere(const TransitContract &c)
+{
+	const Station *rail = Station::GetIfValid(c.station);
+	return rail != nullptr && !rail->train_station.IsEmpty() && rail->town != nullptr && rail->town->index == c.town;
+}
+
+/**
+ * Does a bus line feed a railway station: a stop at it or next to it and,
+ * if given, a stop near the houses?
+ * @param list The line.
+ * @param station The railway station.
+ * @param target The houses, or INVALID_TILE.
+ * @return True if it does.
+ */
+static bool LineFeedsStation(const OrderList *list, StationID station, TileIndex target)
+{
+	const Station *rail = Station::GetIfValid(station);
+	if (rail == nullptr || !IsBusLine(list)) return false;
+	bool at_station = false, at_houses = target == INVALID_TILE;
+	for (const Order &order : list->GetOrders()) {
+		if (!order.IsType(OT_GOTO_STATION) || order.GetNonStopType().Test(OrderNonStopFlag::GoVia)) continue;
+		const Station *st = Station::GetIfValid(order.GetDestination().ToStationID());
+		if (st == nullptr) continue;
+		if (st == rail || DistanceManhattan(st->xy, rail->xy) <= FEEDER_STATION_REACH) at_station = true;
+		if (target != INVALID_TILE && (st->TileIsInCatchment(target) || DistanceManhattan(st->xy, target) <= 3)) at_houses = true;
+	}
+	return at_station && at_houses;
+}
+
+/**
+ * Now and then a town with a railway station asks for a feeder bus line
+ * between the station and houses no stop reaches, as Rapid KL runs feeder
+ * buses to the MRT, if its budget allows. The first company to run one gets
+ * a contract.
+ * @param t The town.
+ * @param today The date.
+ * @param rail_served The stations passenger trains stopped at last month.
+ */
+static void MaybeOfferFeeder(Town *t, TimerGameEconomy::Date today, const std::vector<bool> &rail_served)
+{
+	if (t->cache.population < MIN_TRANSIT_POPULATION) return;
+	for (const TransitContract &c : _transit_contracts) {
+		if (c.town == t->index && c.type == TransitContractType::Feeder && (IsFeederOffer(c) || today - c.start < FEEDER_PAUSE_DAYS)) return;
+	}
+
+	/* Only towns with passenger trains roll the dice, so games without them run as before. */
+	std::vector<const Station *> stations;
+	for (const Station *st : Station::Iterate()) {
+		if (st->town == t && rail_served[st->index.base()]) stations.push_back(st);
+	}
+	if (stations.empty() || !Chance16(1, FEEDER_CHANCE)) return;
+	const Station *rail = stations[RandomRange(static_cast<uint32_t>(stations.size()))];
+	const TileIndex target = FindFeederHouses(t, rail);
+	if (target == INVALID_TILE) return;
+
+	/* Two to four buses, by how far it is; the town must afford a year of it. */
+	const uint buses = Clamp<uint>(DistanceManhattan(target, rail->xy) / 8 + 1, 2, 4);
+	const Money estimate = GetBusYearCost() * buses / 24 * (100 + FEEDER_MARGIN) / 100;
+	if (estimate * 12 > GetTownTransitAvailable(t)) return;
+
+	TransitContract &c = _transit_contracts.emplace_back();
+	c.id = _next_transit_contract++;
+	c.town = t->index;
+	c.type = TransitContractType::Feeder;
+	c.state = TransitContractState::Tender;
+	c.station = rail->index;
+	c.target = target;
+	c.start = today;
+	c.end = today + FEEDER_OFFER_DAYS;
+	c.cost_basis = estimate;
+	AddNewsItem(GetEncodedString(STR_NEWS_TRANSIT_FEEDER_WANTED, t->index, rail->index, DistanceManhattan(target, rail->xy), estimate, c.end),
+			NewsType::Subsidies, NewsStyle::Normal, {}, target, rail->index);
+}
+
+/**
+ * A town's request for a feeder line: sign with the busiest line that runs it, or give up when no one does in time.
+ * @param c The request.
+ * @param today The date.
+ */
+static void CheckFeederOffer(TransitContract &c, TimerGameEconomy::Date today)
+{
+	if (!IsFeederStationThere(c)) {
+		EndContract(c, TransitContractEnd::StationGone, today);
+		return;
+	}
+
+	OrderList *best = nullptr;
+	for (OrderList *list : OrderList::Iterate()) {
+		const Vehicle *v = list->GetFirstSharedVehicle();
+		if (v == nullptr || !Company::IsValidID(v->owner) || list->line.this_month.departures < FEEDER_MIN_DEPARTURES) continue;
+		if (best != nullptr && list->line.this_month.departures <= best->line.this_month.departures) continue;
+		if (!IsPassengerLine(list) || !LineFeedsStation(list, c.station, c.target)) continue;
+		if (std::ranges::any_of(_transit_contracts, [list](const TransitContract &o) { return o.line == list->index && o.state != TransitContractState::Ended; })) continue;
+		best = list;
+	}
+	if (best == nullptr) {
+		if (today >= c.end) EndContract(c, TransitContractEnd::NoTaker, today);
+		return;
+	}
+
+	c.company = best->GetFirstSharedVehicle()->owner;
+	c.line = best->index;
+	c.state = TransitContractState::Active;
+	c.start = today;
+	c.end = today + CONTRACT_YEARS * EconomyTime::DAYS_IN_YEAR;
+	c.cost_basis = GetTransitLineCostBasis(best);
+	c.bid = FEEDER_MARGIN;
+	c.fee = c.cost_basis * (100 + FEEDER_MARGIN) / 100;
+	c.required_departures = static_cast<uint16_t>(std::max<uint>(2, best->line.this_month.departures * 9 / 10));
+	c.baseline_wait = GetExcessWait(best->line);
+	c.months = 0;
+	c.months_met = 0;
+	c.idle_months = 0;
+	c.paid = 0;
+	c.fares = 0;
+	AddContractNews(c, STR_NEWS_TRANSIT_FEEDER_SIGNED, c.company, c.station, c.fee, CONTRACT_YEARS);
 }
 
 /**
@@ -612,7 +859,9 @@ void TransitMonthlyLoop()
 	TimerGameEconomy::Date today = TimerGameEconomy::date;
 
 	for (TransitContract &c : _transit_contracts) {
-		if (c.state == TransitContractState::Active) {
+		if (IsFeederOffer(c)) {
+			CheckFeederOffer(c, today);
+		} else if (c.state == TransitContractState::Active) {
 			RunContractMonth(c, today);
 		} else if (c.state == TransitContractState::Tender && today >= c.end) {
 			ResolveTender(c, today);
@@ -622,8 +871,10 @@ void TransitMonthlyLoop()
 		return !Town::IsValidID(c.town) || (c.state == TransitContractState::Ended && today - c.end > KEEP_ENDED_DAYS);
 	});
 
+	const std::vector<bool> rail_served = GetStationsWithPassengerTrains();
 	for (Town *t : Town::Iterate()) {
 		MaybeOpenTender(t, today);
+		MaybeOfferFeeder(t, today, rail_served);
 		DecideTownSchemes(t);
 		PayTownSchemes(t);
 	}
