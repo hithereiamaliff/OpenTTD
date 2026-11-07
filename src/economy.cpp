@@ -11,6 +11,8 @@
 #include "line.h"
 #include "fare.h"
 #include "transit_authority.h"
+#include "brt.h"
+#include "roadveh.h"
 #include <ranges>
 #include "company_func.h"
 #include "command_func.h"
@@ -1341,6 +1343,9 @@ static uint GetLoadAmount(Vehicle *v)
 
 	/* Scale load amount the same as capacity */
 	if (e->info.misc_flags.Test(EngineMiscFlag::NoDefaultCargoMultiplier) && !air_mail) load_amount = CeilDiv(load_amount * CargoSpec::Get(v->cargo_type)->multiplier, 0x100);
+
+	/* Fare gates and level platforms at BRT stations. */
+	if (v->type == VehicleType::Road) load_amount = CeilDiv(load_amount * GetBrtBoardingPercent(RoadVehicle::From(v->First())), 100);
 
 	/* Zero load amount breaks a lot of things. */
 	return std::max(1u, load_amount);

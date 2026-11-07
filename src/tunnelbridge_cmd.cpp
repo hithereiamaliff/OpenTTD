@@ -37,6 +37,7 @@
 #include "water.h"
 #include "company_gui.h"
 #include "tunnelbridge_cmd.h"
+#include "brt.h"
 #include "landscape_cmd.h"
 #include "terraform_cmd.h"
 
@@ -50,6 +51,10 @@ TileIndex _build_tunnel_endtile; ///< The end of a tunnel; as hidden return from
 
 /** Z position of the bridge sprites relative to bridge height (downwards) */
 static const int BRIDGE_Z_START = 3;
+
+static_assert(std::size(_orig_bridge) == MAX_BRIDGES);
+
+static void DrawBridgeSpan(const TileInfo *ti, TileIndex rampnorth, TileIndex rampsouth, Axis axis, BridgePillarFlags blocked_pillars);
 
 
 /**
@@ -1438,6 +1443,18 @@ static void DrawTile_TunnelBridge(TileInfo *ti)
 		AddSortableSpriteToDraw(SPR_EMPTY_BOUNDING_BOX, PAL_NONE, *ti, front_sep[tunnelbridge_direction]);
 
 		DrawBridgeMiddle(ti, BridgePillarFlag::EdgeNE + tunnelbridge_direction);
+	} else if (IsElevatedViaductEnd(ti->tile)) {
+		/* The end of a viaduct with stops on it behind: flat, like the rest of the viaduct. */
+		DrawGroundSprite(SPR_CONCRETE_GROUND, PAL_NONE);
+		TileIndex other = GetOtherBridgeEnd(ti->tile);
+		const bool north = tunnelbridge_direction == DiagDirection::SE || tunnelbridge_direction == DiagDirection::SW;
+		DrawBridgeSpan(ti, north ? ti->tile : other, north ? other : ti->tile, DiagDirToAxis(tunnelbridge_direction), {});
+		/* A bridge across, above the viaduct. */
+		if (DiagDirToAxis(tunnelbridge_direction) == Axis::X) {
+			DrawBridgeMiddle(ti, {BridgePillarFlag::EdgeSW, BridgePillarFlag::EdgeNE});
+		} else {
+			DrawBridgeMiddle(ti, {BridgePillarFlag::EdgeNW, BridgePillarFlag::EdgeSE});
+		}
 	} else { // IsBridge(ti->tile)
 		DrawFoundation(ti, GetBridgeFoundation(ti->tileh, DiagDirToAxis(tunnelbridge_direction)));
 		bool is_custom_layout = false; // Set if rail/road bridge uses a custom layout.
@@ -1603,6 +1620,21 @@ static BridgePillarFlags GetBridgeTilePillarFlags(TileIndex tile, TileIndex ramp
  */
 void DrawBridgeMiddle(const TileInfo *ti, BridgePillarFlags blocked_pillars)
 {
+	if (!IsBridgeAbove(ti->tile)) return;
+
+	DrawBridgeSpan(ti, GetNorthernBridgeEnd(ti->tile), GetSouthernBridgeEnd(ti->tile), GetBridgeAxis(ti->tile), blocked_pillars);
+}
+
+/**
+ * Draw a piece of a bridge's span on a tile: under the bridge, or on the flat end of a viaduct with stops on it behind.
+ * @param ti Tile information of the tile to draw it on.
+ * @param rampnorth The northern end of the bridge.
+ * @param rampsouth The southern end of the bridge.
+ * @param axis The axis of the bridge.
+ * @param blocked_pillars Mask of pillar corners and edges blocked by tile below the bridge.
+ */
+static void DrawBridgeSpan(const TileInfo *ti, TileIndex rampnorth, TileIndex rampsouth, Axis axis, BridgePillarFlags blocked_pillars)
+{
 	/* Sectional view of bridge bounding boxes:
 	 *
 	 *  1           2                                1,2 = SpriteCombine of Bridge front/(back&floor) and RoadCatenary
@@ -1619,12 +1651,7 @@ void DrawBridgeMiddle(const TileInfo *ti, BridgePillarFlags blocked_pillars)
 	 *
 	 */
 
-	if (!IsBridgeAbove(ti->tile)) return;
-
-	TileIndex rampnorth = GetNorthernBridgeEnd(ti->tile);
-	TileIndex rampsouth = GetSouthernBridgeEnd(ti->tile);
 	TransportType transport_type = GetTunnelBridgeTransportType(rampsouth);
-	Axis axis = GetBridgeAxis(ti->tile);
 	BridgePillarFlags pillars;
 	bool is_custom_layout; // Set if rail/road bridge uses a custom layout.
 
@@ -1633,11 +1660,13 @@ void DrawBridgeMiddle(const TileInfo *ti, BridgePillarFlags blocked_pillars)
 	bool drawfarpillar;
 	if (transport_type != TransportType::Water) {
 		BridgeType bridge_type = GetBridgeType(rampsouth);
-		BridgePieces bridge_piece = CalcBridgePiece(GetTunnelBridgeLength(ti->tile, rampnorth) + 1, GetTunnelBridgeLength(ti->tile, rampsouth) + 1);
+		/* An end drawn as part of the span looks like the middle of the bridge. */
+		const bool at_end = ti->tile == rampnorth || ti->tile == rampsouth;
+		BridgePieces bridge_piece = at_end ? BRIDGE_PIECE_MIDDLE_ODD : CalcBridgePiece(GetTunnelBridgeLength(ti->tile, rampnorth) + 1, GetTunnelBridgeLength(ti->tile, rampsouth) + 1);
 		drawfarpillar = !HasBit(GetBridgeSpec(bridge_type)->flags, 0);
 		base_offset += GetBridgeSpriteTableBaseOffset(transport_type, rampsouth);
 		psid = GetBridgeSpriteTable(bridge_type, bridge_piece);
-		pillars = GetBridgeTilePillarFlags(ti->tile, rampnorth, rampsouth, bridge_type, transport_type);
+		pillars = at_end ? BRIDGEPILLARFLAGS_ALL_CORNERS : GetBridgeTilePillarFlags(ti->tile, rampnorth, rampsouth, bridge_type, transport_type);
 		is_custom_layout = BridgeHasCustomSpriteTable(bridge_type, bridge_piece);
 	} else {
 		drawfarpillar = true;
@@ -1734,6 +1763,8 @@ static int GetSlopePixelZ_TunnelBridge(TileIndex tile, uint x, uint y, bool grou
 		/* On the bridge ramp? */
 		if (ground_vehicle) {
 			if (tileh != SLOPE_FLAT) return z + TILE_HEIGHT;
+			/* The end of a viaduct with stops on it behind is flat at the viaduct's height. */
+			if (IsElevatedViaductEnd(tile)) return z + TILE_HEIGHT;
 
 			switch (dir) {
 				default: NOT_REACHED();

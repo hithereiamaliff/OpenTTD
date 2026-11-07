@@ -23,6 +23,7 @@
 
 #include "../../line.h"
 #include "../../line_cmd.h"
+#include "../../brt.h"
 #include "../../transit_authority.h"
 #include "../../transit_authority_cmd.h"
 #include "../../string_func.h"
@@ -876,6 +877,29 @@ static const TransitContract *GetScriptLineTender(VehicleID vehicle_id)
 {
 	const OrderList *list = GetScriptLine(vehicle_id);
 	return list == nullptr ? -1 : list->line.last_month.departures;
+}
+
+/* static */ SQInteger ScriptOrder::GetLineBRTScore(VehicleID vehicle_id)
+{
+	const OrderList *list = GetScriptLine(vehicle_id);
+	if (list == nullptr) return -1;
+	const BrtScore score = ::GetLineBrtScore(list);
+	return score.known ? static_cast<SQInteger>(score.score) : -1;
+}
+
+/* static */ SQInteger ScriptOrder::GetLineBRTGrade(VehicleID vehicle_id)
+{
+	const OrderList *list = GetScriptLine(vehicle_id);
+	if (list == nullptr) return -1;
+	return ::to_underlying(::GetLineBrtScore(list).grade);
+}
+
+/* static */ SQInteger ScriptOrder::GetLineBuswayShare(VehicleID vehicle_id)
+{
+	const OrderList *list = GetScriptLine(vehicle_id);
+	if (list == nullptr) return -1;
+	const BrtScore score = ::GetLineBrtScore(list);
+	return score.known ? static_cast<SQInteger>(score.busway) : -1;
 }
 
 /* static */ SQInteger ScriptOrder::GetLineAverageGap(VehicleID vehicle_id)

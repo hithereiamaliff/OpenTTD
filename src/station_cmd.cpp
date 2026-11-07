@@ -9,6 +9,7 @@
 
 #include "stdafx.h"
 #include "fare.h"
+#include "brt.h"
 #include "core/flatset_type.hpp"
 #include "aircraft.h"
 #include "bridge.h"
@@ -3447,6 +3448,9 @@ static void DrawTile_Station(TileInfo *ti)
 
 	if (HasStationRail(ti->tile) && HasRailCatenaryDrawn(GetRailType(ti->tile))) DrawRailCatenary(ti);
 
+	/* A stop between the ends of two viaducts stands on a deck at their height. */
+	if (IsAnyRoadStop(ti->tile) && IsElevatedRoadStop(ti->tile)) DrawElevatedStopDeck(ti);
+
 	if (IsAnyRoadStop(ti->tile)) {
 		RoadType road_rt = GetRoadTypeRoad(ti->tile);
 		RoadType tram_rt = GetRoadTypeTram(ti->tile);
@@ -3516,7 +3520,8 @@ static void DrawTile_Station(TileInfo *ti)
 
 	/* Bus lanes, bus-only roads and give-way markings on the road through the stop. */
 	if (IsDriveThroughStopTile(ti->tile)) DrawBusPriorityStop(ti);
-	DrawRailTileSeq(ti, t, TransparencyOption::Buildings, total_offset, relocation, palette);
+	/* A BRT station's platforms take the place of the stop's shelters. */
+	if (!IsDriveThroughStopTile(ti->tile) || !DrawBrtStation(ti)) DrawRailTileSeq(ti, t, TransparencyOption::Buildings, total_offset, relocation, palette);
 	if (IsAnyRoadStop(ti->tile) && HasStopCharger(ti->tile)) DrawStopCharger(ti);
 	DrawBridgeMiddle(ti, GetStationBlockedPillars(bridgeable_info, GetStationGfx(ti->tile)));
 }
@@ -4070,7 +4075,7 @@ static void UpdateStationRating(Station *st)
 		if (Company::IsValidID(st->owner) && st->town->statues.Test(st->owner)) rating += 26;
 
 		/* Riders weigh the fares of the vehicles leaving here. */
-		if (IsCargoInClass(cs->Index(), CargoClass::Passengers)) rating += GetStationFareRatingBonus(st);
+		if (IsCargoInClass(cs->Index(), CargoClass::Passengers)) rating += GetStationFareRatingBonus(st) + GetStationBrtRatingBonus(st);
 
 		uint8_t age = ge->last_age;
 		if (age < 3) rating += 10;
@@ -5371,6 +5376,9 @@ uint FlowStatMap::GetFlowFromVia(StationID from, StationID via) const
 /** @copydoc CheckBuildAboveProc */
 static CommandCost CheckBuildAbove_Station(TileIndex tile, [[maybe_unused]] DoCommandFlags flags, [[maybe_unused]] Axis axis, int height)
 {
+	/* A stop on a viaduct is already at bridge height. */
+	if (IsElevatedRoadStop(tile)) return CommandCost(STR_ERROR_MUST_DEMOLISH_BRIDGE_FIRST);
+
 	StationType type = GetStationType(tile);
 	auto bridgeable_info = GetStationBridgeableTileInfo(type);
 
@@ -5395,7 +5403,8 @@ static CommandCost CheckBuildAbove_Station(TileIndex tile, [[maybe_unused]] DoCo
 /** TileTypeProcs definitions for TileType::Station tiles. */
 extern const TileTypeProcs _tile_type_station_procs = {
 	.draw_tile_proc = DrawTile_Station,
-	.get_slope_pixel_z_proc = [](TileIndex tile, uint, uint, bool) { return GetTileMaxPixelZ(tile); },
+	/* Vehicles on a stop raised onto a viaduct drive at the viaduct's height. */
+	.get_slope_pixel_z_proc = [](TileIndex tile, uint, uint, bool ground_vehicle) { return GetTileMaxPixelZ(tile) + (ground_vehicle && IsElevatedRoadStop(tile) ? static_cast<int>(TILE_HEIGHT) : 0); },
 	.clear_tile_proc = ClearTile_Station,
 	.get_tile_desc_proc = GetTileDesc_Station,
 	.get_tile_track_status_proc = GetTileTrackStatus_Station,

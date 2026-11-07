@@ -394,6 +394,7 @@ enum class Commands : uint8_t {
 	BuildBusLane, ///< paint or remove bus lanes along a road
 	SetGiveWayStop, ///< paint or remove give-way markings at a bus stop
 	SetTrafficLightBusPriority, ///< switch bus signals of traffic lights on or off
+	SetBrtStation, ///< make a bus stop a BRT station, or an ordinary stop again
 
 	End, ///< @important Must ALWAYS be on the end of this list!! (period)
 };

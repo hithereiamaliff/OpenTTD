@@ -3015,6 +3015,7 @@ STR_BRIDGE_NAME_WOODEN                                          :Wooden
 STR_BRIDGE_NAME_CONCRETE                                        :Concrete
 STR_BRIDGE_NAME_TUBULAR_STEEL                                   :Tubular, Steel
 STR_BRIDGE_TUBULAR_SILICON                                      :Tubular, Silicon
+STR_BRIDGE_NAME_CONCRETE_VIADUCT                                :Viaduct, Concrete
 
 
 # Road construction toolbar
@@ -3042,6 +3043,8 @@ STR_BUS_PRIORITY_LANE_TOOLTIP                                   :{BLACK}Paint bu
 STR_BUS_PRIORITY_LANE_PEAK_TOOLTIP                              :{BLACK}Paint bus lanes for the peak hours: drag along a road. Buses get through town traffic faster (two congestion levels less), and the other traffic keeps its lanes. Ctrl+Drag removes bus lanes
 STR_BUS_PRIORITY_GIVE_WAY_TOOLTIP                               :{BLACK}Paint give-way markings at a bus stop: buses pull out of the stop ahead of the queue, as town traffic gives way to them on the roads next to it. Ctrl+Click removes them
 STR_BUS_PRIORITY_BUS_SIGNAL_TOOLTIP                             :{BLACK}Give traffic lights bus signals: buses get green a moment before the rest of the traffic; smart lights also turn green early for a waiting bus and stay green for a bus about to cross. Click a junction with traffic lights; Ctrl+Click switches the bus signals off
+STR_BUS_PRIORITY_BUSWAY_TOOLTIP                                 :{BLACK}Build a kerbed busway in the middle of the road: drag along a road, town roads too. Buses drive past town traffic at full speed and kerbs keep the traffic out, so it counts as a busway for the BRT score; the other traffic, a lane short, is slower. Ctrl+Drag removes it
+STR_BUS_PRIORITY_BRT_STATION_TOOLTIP                            :{BLACK}Make a drive-through bus stop a BRT station with fare gates and level platforms: riders pay before boarding and use every door, so buses load twice as fast, low-floor city buses three times. A stop between the ends of two concrete viaducts stands on the viaduct. Ctrl+Click makes it an ordinary stop again
 STR_ROAD_TOOLBAR_TOOLTIP_BUILD_TRAFFIC_LIGHTS                   :{BLACK}Build traffic lights at a road junction, or click lights to change their timings. Ctrl+Click to remove them. Also press Shift to show cost estimate only
 
 # Zoning toolbar
@@ -3323,6 +3326,9 @@ STR_LAND_AREA_INFORMATION_STOP_CHARGER                          :{BLACK}Charger 
 STR_LAND_AREA_INFORMATION_BUS_LANE                              :{BLACK}Bus lane: {LTBLUE}all day{BLACK}: buses pass town traffic, other traffic is slower
 STR_LAND_AREA_INFORMATION_BUS_LANE_PEAK                         :{BLACK}Bus lane: {LTBLUE}peak hours{BLACK}: buses get through town traffic faster
 STR_LAND_AREA_INFORMATION_GIVE_WAY                              :{BLACK}Give-way markings: {LTBLUE}buses pull out ahead of the queue
+STR_LAND_AREA_INFORMATION_BUSWAY                                :{BLACK}Kerbed busway: {LTBLUE}buses pass town traffic, other traffic is slower
+STR_LAND_AREA_INFORMATION_BRT_STATION                           :{BLACK}BRT station: {LTBLUE}fare gates and level platforms{BLACK} (upkeep {CURRENCY_LONG} a year)
+STR_LAND_AREA_INFORMATION_ELEVATED_STOP                         :{BLACK}Stop on the viaduct: {LTBLUE}buses stay at the viaduct's height
 STR_LAND_AREA_INFORMATION_CITY_SERVICES_HERE                    :{BLACK}City services here: {LTBLUE}{RAW_STRING}
 STR_LAND_AREA_INFORMATION_LANDINFO_COORDS                       :{BLACK}Coordinates: {LTBLUE}{NUM} x {NUM} x {NUM}
 STR_LAND_AREA_INFORMATION_LANDINFO_INDEX                        :{BLACK}Tile index: {LTBLUE}{NUM} ({HEX})
@@ -3423,6 +3429,7 @@ STR_LAI_BRIDGE_DESCRIPTION_RAIL_CANTILEVER_STEEL                :Steel cantileve
 STR_LAI_BRIDGE_DESCRIPTION_RAIL_SUSPENSION_CONCRETE             :Reinforced concrete suspension rail bridge
 STR_LAI_BRIDGE_DESCRIPTION_RAIL_WOODEN                          :Wooden rail bridge
 STR_LAI_BRIDGE_DESCRIPTION_RAIL_CONCRETE                        :Concrete rail bridge
+STR_LAI_BRIDGE_DESCRIPTION_RAIL_CONCRETE_VIADUCT                :Concrete rail viaduct
 STR_LAI_BRIDGE_DESCRIPTION_RAIL_TUBULAR_STEEL                   :Tubular rail bridge
 
 STR_LAI_BRIDGE_DESCRIPTION_ROAD_SUSPENSION_STEEL                :Steel suspension road bridge
@@ -3431,6 +3438,7 @@ STR_LAI_BRIDGE_DESCRIPTION_ROAD_CANTILEVER_STEEL                :Steel cantileve
 STR_LAI_BRIDGE_DESCRIPTION_ROAD_SUSPENSION_CONCRETE             :Reinforced concrete suspension road bridge
 STR_LAI_BRIDGE_DESCRIPTION_ROAD_WOODEN                          :Wooden road bridge
 STR_LAI_BRIDGE_DESCRIPTION_ROAD_CONCRETE                        :Concrete road bridge
+STR_LAI_BRIDGE_DESCRIPTION_ROAD_CONCRETE_VIADUCT                :Concrete road viaduct
 STR_LAI_BRIDGE_DESCRIPTION_ROAD_TUBULAR_STEEL                   :Tubular road bridge
 
 STR_LAI_BRIDGE_DESCRIPTION_AQUEDUCT                             :Aqueduct
@@ -5107,6 +5115,16 @@ STR_LINE_LOAD_UNKNOWN                                           :{BLACK}How full
 STR_LINE_ON_TIME                                                :{BLACK}On time: {LTBLUE}{COMMA}%{BLACK} of {COMMA} timetabled departure{P "" s} last month
 STR_LINE_ON_TIME_UNKNOWN                                        :{BLACK}On time: no running timetable to compare with
 STR_LINE_PROFIT                                                 :{BLACK}Profit this year: {CURRENCY_LONG} (last year: {CURRENCY_LONG})
+STR_LINE_BRT_SCORE                                              :{BLACK}BRT score last month: {WHITE}{NUM}{BLACK} of 100, {WHITE}{STRING}
+STR_LINE_BRT_SCORE_PENALTY                                      :{BLACK}BRT score last month: {WHITE}{NUM}{BLACK} of 100, {WHITE}{STRING}{BLACK} ({NUM} off for shared sections)
+STR_LINE_BRT_UNKNOWN                                            :{BLACK}BRT score: worked out each month for bus lines
+STR_LINE_BRT_PARTS                                              :{BLACK}Busway {NUM}%, bus lanes {NUM}%, shared {NUM}%; BRT stops {NUM}%; bus signals {NUM}%
+STR_LINE_BRT_PARTS_NO_JUNCTIONS                                 :{BLACK}Busway {NUM}%, bus lanes {NUM}%, shared {NUM}%; BRT stops {NUM}%; no junctions
+STR_LINE_BRT_GRADE_NONE                                         :not BRT
+STR_LINE_BRT_GRADE_BASIC                                        :basic BRT
+STR_LINE_BRT_GRADE_BRONZE                                       :BRT bronze
+STR_LINE_BRT_GRADE_SILVER                                       :BRT silver
+STR_LINE_BRT_GRADE_GOLD                                         :BRT gold
 STR_LINE_NUMBER_BUTTON                                          :{BLACK}Number
 STR_LINE_NUMBER_TOOLTIP                                         :{BLACK}Give the line a number, like 101, T420 or CAT, shown on its badge in vehicle lists
 STR_LINE_NAME_BUTTON                                            :{BLACK}Name
@@ -5725,6 +5743,12 @@ STR_ERROR_CAN_T_BUILD_GIVE_WAY                                  :{WHITE}Can't pa
 STR_ERROR_CAN_T_REMOVE_GIVE_WAY                                 :{WHITE}Can't remove the give-way markings here...
 STR_ERROR_GIVE_WAY_BUS_STOP_ONLY                                :{WHITE}... they go at bus stops
 STR_ERROR_GIVE_WAY_NONE                                         :{WHITE}... there are no give-way markings here
+STR_ERROR_CAN_T_BUILD_BUSWAY                                    :{WHITE}Can't build a kerbed busway here...
+STR_ERROR_CAN_T_REMOVE_BUSWAY                                   :{WHITE}Can't remove the busway here...
+STR_ERROR_CAN_T_BUILD_BRT_STATION                               :{WHITE}Can't build a BRT station here...
+STR_ERROR_CAN_T_REMOVE_BRT_STATION                              :{WHITE}Can't make this an ordinary stop again...
+STR_ERROR_BRT_STATION_BUS_STOP_ONLY                             :{WHITE}... BRT stations are built on drive-through bus stops
+STR_ERROR_BRT_STATION_NONE                                      :{WHITE}... this stop is no BRT station
 STR_ERROR_CAN_T_CHANGE_BUS_SIGNAL                               :{WHITE}Can't change the bus signals here...
 STR_ERROR_BUS_SIGNAL_NONE                                       :{WHITE}... these traffic lights have no bus signals
 STR_ERROR_TRAFFIC_LIGHTS_NEED_JUNCTION                          :traffic lights need a road junction

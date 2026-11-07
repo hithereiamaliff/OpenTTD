@@ -48,6 +48,7 @@ static const SaveLoad _station_fare_desc[] = {
 	SaveLoad::Variable<VarFileType::I64>("fare_paid", SLE_OBJECT_ADDRESS(Station, fare_paid)),
 	SaveLoad::Variable<VarFileType::I64>("fare_standard", SLE_OBJECT_ADDRESS(Station, fare_standard)),
 	SaveLoad::Variable<VarFileType::U16>("fare_level", SLE_OBJECT_ADDRESS(Station, fare_level)),
+	SaveLoad::Variable<VarFileType::U8>("brt_grade", SLE_OBJECT_ADDRESS(Station, brt_grade)),
 };
 
 /**

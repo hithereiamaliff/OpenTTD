@@ -42,6 +42,7 @@
 #include "depot_yard.h"
 #include "stop_charger.h"
 #include "bus_priority.h"
+#include "brt.h"
 #include "station_map.h"
 #include "object_map.h"
 
@@ -231,9 +232,14 @@ public:
 		switch (GetBusLane(this->tile)) {
 			case BusLane::AllDay: this->landinfo_data.push_back(GetString(STR_LAND_AREA_INFORMATION_BUS_LANE)); break;
 			case BusLane::Peak: this->landinfo_data.push_back(GetString(STR_LAND_AREA_INFORMATION_BUS_LANE_PEAK)); break;
+			case BusLane::Busway: this->landinfo_data.push_back(GetString(STR_LAND_AREA_INFORMATION_BUSWAY)); break;
 			default: break;
 		}
 		if (HasGiveWayStop(this->tile)) this->landinfo_data.push_back(GetString(STR_LAND_AREA_INFORMATION_GIVE_WAY));
+
+		/* Bus rapid transit */
+		if (HasBrtStation(this->tile)) this->landinfo_data.push_back(GetString(STR_LAND_AREA_INFORMATION_BRT_STATION, GetBrtStationYearlyUpkeep()));
+		if (IsElevatedRoadStop(this->tile)) this->landinfo_data.push_back(GetString(STR_LAND_AREA_INFORMATION_ELEVATED_STOP));
 
 		/* Chargers at bus stops */
 		if (IsTileType(this->tile, TileType::Station) && IsAnyRoadStopTile(this->tile) && HasStopCharger(this->tile)) {

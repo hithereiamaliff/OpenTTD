@@ -10,6 +10,7 @@
 #include "stdafx.h"
 #include "bridge.h"
 #include "roadveh.h"
+#include "brt.h"
 #include "city_bus.h"
 #include "depot_yard.h"
 #include "stop_charger.h"
@@ -748,6 +749,7 @@ static RoadVehicle *RoadVehFindCloseTo(RoadVehicle *v, int x, int y, Direction d
  */
 static void RoadVehArrivesAt(const RoadVehicle *v, Station *st)
 {
+	CountBrtStop(v);
 	if (v->IsBus()) {
 		/* Check if station was ever visited before */
 		if (!st->had_vehicle_of_type.Test(StationVehicleType::Bus)) {
@@ -1386,6 +1388,8 @@ again:
 			v->tile = tile;
 			v->state = (uint8_t)dir;
 			v->frame = start_frame;
+			/* Count the tile for the line's BRT score. */
+			if (v->IsFrontEngine()) CountBrtTile(v, tile);
 			RoadTramType rtt = GetRoadTramType(v->roadtype);
 			if (GetRoadType(old_tile, rtt) != GetRoadType(tile, rtt)) {
 				if (v->IsFrontEngine()) {
@@ -1609,6 +1613,9 @@ again:
 	if (v->current_order.IsType(OT_LEAVESTATION) && IsDriveThroughStopTile(v->tile)) {
 		v->current_order.Free();
 	}
+
+	/* A bus entering a bridge or tunnel: count its length for the line's BRT score. */
+	if (vets.Test(VehicleEnterTileState::EnteredWormhole) && v->state == RVSB_WORMHOLE && v->IsFrontEngine()) CountBrtSpan(v, v->tile);
 
 	/* Move to next frame unless vehicle arrived at a stop position
 	 * in a depot or entered a tunnel/bridge */

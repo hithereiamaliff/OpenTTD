@@ -559,6 +559,7 @@ public:
 	Money fare_paid = 0; ///< City fork: what riders who boarded here paid this month (saved in chunk FSTA).
 	Money fare_standard = 0; ///< City fork: what OpenTTD's classic fare would have been for those journeys.
 	uint16_t fare_level = 100; ///< City fork: what riders who boarded here paid last month, in percent of the classic fare (0 = free).
+	uint8_t brt_grade = 0; ///< City fork: the best #BrtGrade of the BRT lines that served the station last month (saved in chunk FSTA).
 	CargoTypes always_accepted{}; ///< Bitmask of always accepted cargo types (by houses, HQs, industry tiles when industry doesn't accept cargo)
 
 	IndustryList industries_near{}; ///< Cached list of industries near the station that can accept cargo, @see DeliverGoodsToIndustry()

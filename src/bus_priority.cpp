@@ -14,6 +14,8 @@
  *    traffic, squeezed into fewer lanes, is one congestion level worse;
  *  - a bus lane in the peak hours takes two levels off for buses and leaves
  *    the other traffic alone (it only takes the lane when the roads are busiest);
+ *  - a kerbed busway in the middle of the road works like a bus lane all day,
+ *    but kerbs keep the traffic out: it counts as a busway for BRT (brt.cpp);
  *  - give-way markings at a stop let buses pull out of it ahead of the queue;
  *  - bus-only roads (a road type) carry no town traffic, and only buses use them.
  * Bus signals at traffic lights live with the lights (traffic_light.cpp).
@@ -22,6 +24,7 @@
 #include "stdafx.h"
 #include "bus_priority.h"
 #include "bus_priority_cmd.h"
+#include "brt.h"
 #include "command_func.h"
 #include "company_func.h"
 #include "economy_func.h"
@@ -150,12 +153,12 @@ uint8_t GetCongestionLevelFor(TileIndex tile, bool bus)
 
 	BusLane lane = GetBusLane(tile);
 	if (bus) {
-		if (lane == BusLane::AllDay || IsNextToGiveWayStop(tile)) return 0;
+		if (lane == BusLane::AllDay || lane == BusLane::Busway || IsNextToGiveWayStop(tile)) return 0;
 		if (lane == BusLane::Peak) return level > 2 ? level - 2 : 0;
 		return level;
 	}
 	/* The others lost a lane. */
-	if (lane == BusLane::AllDay) return std::min<uint8_t>(ROAD_CONGESTION_MAX, level + 1);
+	if (lane == BusLane::AllDay || lane == BusLane::Busway) return std::min<uint8_t>(ROAD_CONGESTION_MAX, level + 1);
 	return level;
 }
 
@@ -166,7 +169,11 @@ uint8_t GetCongestionLevelFor(TileIndex tile, bool bus)
  */
 Money GetBusLaneCost(BusLane lane)
 {
-	return GetPrice(Price::BuildObject, lane == BusLane::AllDay ? 4 : 3, nullptr);
+	switch (lane) {
+		case BusLane::Busway: return GetPrice(Price::BuildObject, 10, nullptr);
+		case BusLane::AllDay: return GetPrice(Price::BuildObject, 4, nullptr);
+		default: return GetPrice(Price::BuildObject, 3, nullptr);
+	}
 }
 
 /**
@@ -267,13 +274,14 @@ CommandCost CmdSetGiveWayStop(DoCommandFlags flags, TileIndex tile, bool remove)
 }
 
 /**
- * A tile was cleared, or a stop removed: its lane and markings go too.
+ * A tile was cleared, or a stop removed: its lane, markings and BRT station go too.
  * @param tile The tile.
  */
 void OnBusPriorityTileCleared(TileIndex tile)
 {
 	if (!_bus_lanes.empty()) _bus_lanes.erase(tile);
 	if (!_give_way_stops.empty()) _give_way_stops.erase(tile);
+	if (!GetBrtStations().empty()) GetBrtStations().erase(tile);
 }
 
 /**
@@ -316,6 +324,7 @@ void DrawBusPriorityRoad(const TileInfo *ti)
 	switch (GetBusLane(ti->tile)) {
 		case BusLane::AllDay: DrawGroundSprite(SPR_BUS_PRIORITY_BASE + BPS_LANE_X + axis, PAL_NONE); break;
 		case BusLane::Peak: DrawGroundSprite(SPR_BUS_PRIORITY_BASE + BPS_PEAK_X + axis, PAL_NONE); break;
+		case BusLane::Busway: DrawGroundSprite(SPR_BUSWAY_X + axis, PAL_NONE); break;
 		default: break;
 	}
 }
@@ -335,6 +344,7 @@ void DrawBusPriorityStop(const TileInfo *ti)
 		switch (GetBusLane(ti->tile)) {
 			case BusLane::AllDay: DrawGroundSprite(SPR_BUS_PRIORITY_BASE + BPS_LANE_X + axis, PAL_NONE); break;
 			case BusLane::Peak: DrawGroundSprite(SPR_BUS_PRIORITY_BASE + BPS_PEAK_X + axis, PAL_NONE); break;
+			case BusLane::Busway: DrawGroundSprite(SPR_BUSWAY_X + axis, PAL_NONE); break;
 			default: break;
 		}
 	}

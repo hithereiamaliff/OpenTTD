@@ -17,6 +17,8 @@ enum BusPriorityWidgets : WidgetID {
 	WID_BP_LANE_PEAK, ///< Paint a peak-hours bus lane.
 	WID_BP_GIVE_WAY, ///< Paint give-way markings at a bus stop.
 	WID_BP_BUS_SIGNAL, ///< Switch on bus signals at traffic lights.
+	WID_BP_BUSWAY, ///< Build a kerbed busway.
+	WID_BP_BRT_STATION, ///< Make a bus stop a BRT station.
 };
 
 #endif /* WIDGETS_BUS_PRIORITY_WIDGET_H */

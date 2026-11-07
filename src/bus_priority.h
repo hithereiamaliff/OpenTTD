@@ -21,6 +21,7 @@ enum class BusLane : uint8_t {
 	None, ///< No bus lane.
 	Peak, ///< A bus lane in the peak hours.
 	AllDay, ///< A bus lane all day.
+	Busway, ///< A kerbed busway in the middle of the road: like a bus lane all day, but apart from the traffic.
 	End, ///< End marker.
 };
 

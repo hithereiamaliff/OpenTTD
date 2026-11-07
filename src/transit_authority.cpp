@@ -9,6 +9,7 @@
 
 #include "stdafx.h"
 #include "transit_authority.h"
+#include "brt.h"
 #include "city_bus.h"
 #include "roadveh.h"
 #include "transit_authority_cmd.h"
@@ -225,7 +226,7 @@ uint GetTransitLineQuality(const OrderList *list)
 	}
 	if (count == 0) return 0;
 	const uint quality = (40 * regularity + 30 * reliability / count + 30 * youth / count) / 100;
-	return std::min<uint>(100, quality + ELECTRIC_QUALITY_BONUS * GetLineElectricShare(list) / 100);
+	return std::min<uint>(100, quality + ELECTRIC_QUALITY_BONUS * GetLineElectricShare(list) / 100 + GetBrtTenderQualityBonus(list));
 }
 
 /**

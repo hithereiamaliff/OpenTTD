@@ -22,6 +22,7 @@
 #include "../../stop_charger.h"
 #include "../../stop_charger_cmd.h"
 #include "../../bus_priority_cmd.h"
+#include "../../brt.h"
 #include "../../depot_map.h"
 #include "../../object_cmd.h"
 #include "../../object_map.h"
@@ -737,7 +738,7 @@ static bool NeighbourHasReachableRoad(::RoadType rt, TileIndex start_tile, DiagD
 {
 	EnforceCompanyModeValid(false);
 	EnforcePrecondition(false, ::IsValidTile(start) && ::IsValidTile(end));
-	EnforcePrecondition(false, lane == BL_ALL_DAY || lane == BL_PEAK);
+	EnforcePrecondition(false, lane == BL_ALL_DAY || lane == BL_PEAK || lane == BL_BUSWAY);
 
 	return ScriptObject::Command<Commands::BuildBusLane>::Do(end, start, static_cast<::BusLane>(lane), false);
 }
@@ -767,6 +768,32 @@ static bool NeighbourHasReachableRoad(::RoadType rt, TileIndex start_tile, DiagD
 /* static */ bool ScriptRoad::HasGiveWayStop(TileIndex tile)
 {
 	return ::IsValidTile(tile) && ::HasGiveWayStop(tile);
+}
+
+/* static */ bool ScriptRoad::BuildBRTStation(TileIndex tile)
+{
+	EnforceCompanyModeValid(false);
+	EnforcePrecondition(false, ::IsValidTile(tile));
+
+	return ScriptObject::Command<Commands::SetBrtStation>::Do(tile, false);
+}
+
+/* static */ bool ScriptRoad::RemoveBRTStation(TileIndex tile)
+{
+	EnforceCompanyModeValid(false);
+	EnforcePrecondition(false, ::IsValidTile(tile));
+
+	return ScriptObject::Command<Commands::SetBrtStation>::Do(tile, true);
+}
+
+/* static */ bool ScriptRoad::HasBRTStation(TileIndex tile)
+{
+	return ::IsValidTile(tile) && ::HasBrtStation(tile);
+}
+
+/* static */ bool ScriptRoad::IsElevatedStation(TileIndex tile)
+{
+	return ::IsValidTile(tile) && ::IsElevatedRoadStop(tile);
 }
 
 /* static */ bool ScriptRoad::SetTrafficLightBusPriority(TileIndex tile, bool on)

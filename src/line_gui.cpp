@@ -9,6 +9,7 @@
 
 #include "stdafx.h"
 #include "line.h"
+#include "brt.h"
 #include "line_cmd.h"
 #include "command_func.h"
 #include "company_func.h"
@@ -212,6 +213,31 @@ struct LineWindow : Window {
 			lines.push_back(GetString(STR_LINE_ON_TIME_UNKNOWN));
 		}
 
+		/* The BRT score of bus lines. */
+		if (IsBusLine(list)) {
+			const BrtScore brt = GetLineBrtScore(list);
+			if (brt.known) {
+				static constexpr StringID GRADES[] = {STR_LINE_BRT_GRADE_NONE, STR_LINE_BRT_GRADE_BASIC, STR_LINE_BRT_GRADE_BRONZE, STR_LINE_BRT_GRADE_SILVER, STR_LINE_BRT_GRADE_GOLD};
+				const StringID grade = GRADES[to_underlying(brt.grade)];
+				if (brt.penalty > 0) {
+					lines.push_back(GetString(STR_LINE_BRT_SCORE_PENALTY, brt.score, grade, brt.penalty));
+				} else {
+					lines.push_back(GetString(STR_LINE_BRT_SCORE, brt.score, grade));
+				}
+				if (brt.crossings == 0) {
+					lines.push_back(GetString(STR_LINE_BRT_PARTS_NO_JUNCTIONS, brt.busway, brt.lanes, brt.shared, brt.gated));
+				} else {
+					lines.push_back(GetString(STR_LINE_BRT_PARTS, brt.busway, brt.lanes, brt.shared, brt.gated, brt.signals * 100 / brt.crossings));
+				}
+			} else {
+				lines.push_back(GetString(STR_LINE_BRT_UNKNOWN));
+				lines.emplace_back();
+			}
+		} else {
+			lines.emplace_back();
+			lines.emplace_back();
+		}
+
 		Money profit_this_year = 0, profit_last_year = 0;
 		for (const Vehicle *v = list->GetFirstSharedVehicle(); v != nullptr; v = v->NextShared()) {
 			profit_this_year += v->GetDisplayProfitThisYear();
@@ -222,13 +248,13 @@ struct LineWindow : Window {
 	}
 
 	/** Number of lines in the info panel, below the badge row. */
-	static constexpr uint INFO_LINES = 9;
+	static constexpr uint INFO_LINES = 11;
 
 	void UpdateWidgetSize(WidgetID widget, Dimension &size, [[maybe_unused]] const Dimension &padding, [[maybe_unused]] Dimension &fill, [[maybe_unused]] Dimension &resize) override
 	{
 		if (widget != WID_LN_INFO) return;
 		size.height = WidgetDimensions::scaled.framerect.Vertical() + GetCharacterHeight(FontSize::Normal) + WidgetDimensions::scaled.vsep_wide + INFO_LINES * GetCharacterHeight(FontSize::Normal);
-		size.width = std::max(size.width, static_cast<uint>(ScaleGUITrad(380)));
+		size.width = std::max(size.width, static_cast<uint>(ScaleGUITrad(440)));
 	}
 
 	std::string GetWidgetString(WidgetID widget, StringID stringid) const override

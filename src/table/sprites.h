@@ -409,7 +409,12 @@ static constexpr SpriteID SPR_IMG_GIVE_WAY = SPR_TRAFFIC_LIGHTS_BASE + 215; ///<
 static constexpr SpriteID SPR_IMG_BUS_SIGNAL = SPR_TRAFFIC_LIGHTS_BASE + 216; ///< Icon of the bus signal tool.
 static constexpr SpriteID SPR_BUS_SIGNAL_LIT = SPR_TRAFFIC_LIGHTS_BASE + 217; ///< "B" lamp on a traffic light post, lit.
 static constexpr SpriteID SPR_BUS_SIGNAL_DARK = SPR_TRAFFIC_LIGHTS_BASE + 218; ///< "B" lamp on a traffic light post, dark.
-static constexpr uint16_t TRAFFIC_LIGHTS_SPRITE_COUNT = 219;
+static constexpr SpriteID SPR_BUSWAY_X = SPR_TRAFFIC_LIGHTS_BASE + 219; ///< Kerbed busway in the middle of a road along X; along Y follows.
+static constexpr SpriteID SPR_ELEVATED_STOP_DECK_X = SPR_TRAFFIC_LIGHTS_BASE + 221; ///< Deck and pillars under a stop raised onto a viaduct, road along X; along Y follows.
+static constexpr SpriteID SPR_BRT_STATION_BASE = SPR_TRAFFIC_LIGHTS_BASE + 223; ///< BRT station sides: road along X far and near side, along Y far and near side (4 sprites).
+static constexpr SpriteID SPR_IMG_BUSWAY = SPR_TRAFFIC_LIGHTS_BASE + 227; ///< Icon of the kerbed busway tool.
+static constexpr SpriteID SPR_IMG_BRT_STATION = SPR_TRAFFIC_LIGHTS_BASE + 228; ///< Icon of the BRT station tool.
+static constexpr uint16_t TRAFFIC_LIGHTS_SPRITE_COUNT = 229;
 
 static const SpriteID SPR_NEWGRFS_BASE = SPR_TRAFFIC_LIGHTS_BASE + TRAFFIC_LIGHTS_SPRITE_COUNT;
 

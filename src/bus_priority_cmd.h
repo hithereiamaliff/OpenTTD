@@ -15,8 +15,10 @@
 
 CommandCost CmdBuildBusLane(DoCommandFlags flags, TileIndex end_tile, TileIndex start_tile, BusLane lane, bool remove);
 CommandCost CmdSetGiveWayStop(DoCommandFlags flags, TileIndex tile, bool remove);
+CommandCost CmdSetBrtStation(DoCommandFlags flags, TileIndex tile, bool remove);
 
 DEF_CMD_TRAIT(Commands::BuildBusLane, CmdBuildBusLane, {}, CommandType::LandscapeConstruction)
 DEF_CMD_TRAIT(Commands::SetGiveWayStop, CmdSetGiveWayStop, {}, CommandType::LandscapeConstruction)
+DEF_CMD_TRAIT(Commands::SetBrtStation, CmdSetBrtStation, {}, CommandType::LandscapeConstruction)
 
 #endif /* BUS_PRIORITY_CMD_H */

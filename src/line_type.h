@@ -30,6 +30,17 @@ struct LineMonthStats {
 	uint8_t max_load = 0; ///< Fullest departure, in percent.
 	uint32_t timed = 0; ///< Departures from the first stop that had a running timetable to judge.
 	uint32_t on_time = 0; ///< Of those, the ones that left on time.
+	/* For the BRT score of bus lines (brt.cpp). */
+	uint32_t brt_tiles = 0; ///< Tiles driven by the line's buses.
+	uint32_t brt_busway = 0; ///< Of those, on busways: bus-only roads, kerbed busways, bus-only viaducts and tunnels.
+	uint32_t brt_lanes = 0; ///< On all-day bus lanes.
+	uint32_t brt_peak = 0; ///< On peak bus lanes.
+	uint32_t brt_crossings = 0; ///< Junctions and level crossings crossed.
+	uint32_t brt_lights = 0; ///< Of those, with traffic lights but no bus signals.
+	uint32_t brt_signals = 0; ///< Of those, with bus signals.
+	uint32_t brt_stops = 0; ///< Stops made to load.
+	uint32_t brt_gated = 0; ///< Of those, at BRT stations.
+	uint32_t brt_level = 0; ///< Of those, by low-floor buses at BRT stations.
 };
 
 /** The line of a shared order list. */

@@ -30,7 +30,17 @@
 	SaveLoad::Variable<VarFileType::U32>(prefix ".load_count", SLE_OBJECT_ADDRESS(LineInfo, member.load_count)), \
 	SaveLoad::Variable<VarFileType::U8>(prefix ".max_load", SLE_OBJECT_ADDRESS(LineInfo, member.max_load)), \
 	SaveLoad::Variable<VarFileType::U32>(prefix ".timed", SLE_OBJECT_ADDRESS(LineInfo, member.timed)), \
-	SaveLoad::Variable<VarFileType::U32>(prefix ".on_time", SLE_OBJECT_ADDRESS(LineInfo, member.on_time))
+	SaveLoad::Variable<VarFileType::U32>(prefix ".on_time", SLE_OBJECT_ADDRESS(LineInfo, member.on_time)), \
+	SaveLoad::Variable<VarFileType::U32>(prefix ".brt_tiles", SLE_OBJECT_ADDRESS(LineInfo, member.brt_tiles)), \
+	SaveLoad::Variable<VarFileType::U32>(prefix ".brt_busway", SLE_OBJECT_ADDRESS(LineInfo, member.brt_busway)), \
+	SaveLoad::Variable<VarFileType::U32>(prefix ".brt_lanes", SLE_OBJECT_ADDRESS(LineInfo, member.brt_lanes)), \
+	SaveLoad::Variable<VarFileType::U32>(prefix ".brt_peak", SLE_OBJECT_ADDRESS(LineInfo, member.brt_peak)), \
+	SaveLoad::Variable<VarFileType::U32>(prefix ".brt_crossings", SLE_OBJECT_ADDRESS(LineInfo, member.brt_crossings)), \
+	SaveLoad::Variable<VarFileType::U32>(prefix ".brt_lights", SLE_OBJECT_ADDRESS(LineInfo, member.brt_lights)), \
+	SaveLoad::Variable<VarFileType::U32>(prefix ".brt_signals", SLE_OBJECT_ADDRESS(LineInfo, member.brt_signals)), \
+	SaveLoad::Variable<VarFileType::U32>(prefix ".brt_stops", SLE_OBJECT_ADDRESS(LineInfo, member.brt_stops)), \
+	SaveLoad::Variable<VarFileType::U32>(prefix ".brt_gated", SLE_OBJECT_ADDRESS(LineInfo, member.brt_gated)), \
+	SaveLoad::Variable<VarFileType::U32>(prefix ".brt_level", SLE_OBJECT_ADDRESS(LineInfo, member.brt_level))
 
 static const SaveLoad _line_desc[] = {
 	SaveLoad::String("number", SLE_OBJECT_ADDRESS(LineInfo, number), StringValidationSetting::AllowControlCode),

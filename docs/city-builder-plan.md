@@ -878,6 +878,108 @@ monthly samples; saves `city-prio1/2/3/6-demo.csav`,
 - Lanes, peak lanes, give-way zigzags, the bus road and the "B" lamps
   show in screenshots after saving and loading.
 
+## Done: transit part 8, busways and BRT
+
+Part 7 let buses past town traffic. Part 8 takes them out of it: busways
+apart from the traffic, an elevated busway with stations on the viaduct
+(Sunway style), BRT stations, and a BRT score for every bus line. Two more
+buttons on the Bus Priority toolbar (Ctrl removes with both).
+
+- **Kerbed busway** (button 5, drag along a road, 400 a tile): a red
+  busway in the middle of the road between kerbs, on any road the company may
+  paint, town roads too (town roads can't become bus-only roads). Buses ignore
+  congestion, as on all-day bus lanes; the other traffic, a lane short, is
+  one congestion level worse. Unlike painted lanes it counts as a busway for
+  the BRT score. Stored with the bus lanes (a third kind of lane).
+- **Concrete viaduct**: a new bridge type ("Viaduct, Concrete", from 1965,
+  320 km/h, any length up to the "maximum bridge length" setting), for roads
+  and railways; it is the concrete bridge in grey. Built with the bus-only road
+  it is an elevated busway. Towns and NewGRF bridge sets keep to the 13
+  original bridge types.
+- **Stations on the viaduct**: OpenTTD can't put a station on a bridge, so a
+  drive-through stop between the ends of two concrete road viaducts (flat
+  ground, same height, viaducts leading away from it) is raised to the
+  viaducts' height, and so is a run of up to four such stops. The viaduct
+  ends next to it are drawn flat, as part of the viaduct, and buses stay at
+  the viaduct's height: up the first viaduct, through the station and on
+  without touching the ground. Build: viaduct, one empty tile, viaduct; then a
+  drive-through stop on the tile. Removing a viaduct puts the stop back on the
+  ground. Nothing is saved for this: it follows from the map.
+- **BRT stations** (button 6, click a drive-through bus stop, 4,000, upkeep
+  400 a year): fare gates and level platforms, drawn as platforms with a glass
+  wall, a roof with a company colour edge and gates, in place of the stop's
+  shelters. Riders pay before they board and use every door: buses load and
+  unload twice as fast, the low-floor city buses (part 5) three times as fast.
+  They go with the stop.
+- **BRT score** of every bus line, worked out each month from what its buses
+  did, after the ITDP BRT Standard's basics; shown in the line window with
+  the parts:
+
+| Part | Points | From |
+|---|---|---|
+| Dedicated lanes | 25 | share of the distance on busways (in full), all-day bus lanes (60%), peak bus lanes (30%) |
+| Apart from the traffic | 25 | share on busways: bus-only roads, kerbed busways, bus-only viaducts and tunnels |
+| Pay before boarding | 15 | share of stops made at BRT stations |
+| Level boarding | 15 | share of stops made at BRT stations by low-floor buses |
+| Priority at junctions | 20 | share of junctions and level crossings crossed that have bus signals (plain traffic lights count a quarter); full without any |
+| Shared sections | up to -30 | a point off for each percent of the distance in mixed traffic over 10% (Johor's Iskandar BRT, 25% shared, was shelved) |
+
+  A line is BRT when at least half its distance is on busways or all-day bus
+  lanes and it scores 40 or more: basic BRT, bronze from 55, silver from 70,
+  gold from 85.
+- **What the grade does**: passengers rate the stations a BRT line stops at
+  better (basic +4%, bronze +7%, silver +10%, gold +14%; the best line
+  counts), and towns add quality points in tenders for BRT lines (2, 4, 7,
+  10).
+- Saved: BRT stations in chunk BRTS; kerbed busways in BLAN; the line
+  counters in LINE; each station's grade in FSTA.
+- Script API: `ScriptRoad.BL_BUSWAY`, `BuildBRTStation`, `RemoveBRTStation`,
+  `HasBRTStation`, `IsElevatedStation`; `ScriptOrder.GetLineBRTScore`,
+  `GetLineBRTGrade`, `GetLineBuswayShare`; the viaduct is bridge type 13.
+- Code: `src/brt.{h,cpp}`; hooks in `bus_priority*.cpp`,
+  `tunnelbridge_cmd.cpp` (flat viaduct ends, the span drawing),
+  `station_cmd.cpp` (raised stops, BRT stations, ratings), `roadveh_cmd.cpp`
+  (counting), `economy.cpp` (boarding), `line*.cpp`, `transit_authority.cpp`,
+  `table/bridge_land.h`, `saveload/bus_priority_sl.cpp`, `line_sl.cpp`,
+  `fare_sl.cpp`.
+
+Tests (test AI BusTest settings `prio` 8-12; the town line is part 7's: one
+16-tile line through a town centre with 13 buses, the same map and seed,
+55,000 ticks, 17 monthly samples; saves `city-busway-demo.csav`,
+`city-brt-demo.csav`, `city-elevated-demo.csav`):
+
+- 99/99 unit tests; all 27 test saves (vanilla 14.1 and 15.3, bundled, the
+  fork's demos and the new ones) load, save and reload; the new chunk BRTS,
+  the line counters and the stations' grade are in the saves.
+
+| Setup | Departures a month | Range | Riders a month | BRT score |
+|---|---|---|---|---|
+| Nothing | 13.2 (as in part 7) | 12-16 | 258 | 0 |
+| Kerbed busway | 17.9 (like all-day lanes, 17.8) | 10-22 | 241 | 37: not BRT (busway 85%, no BRT stations, plain junctions) |
+| BRT stations at both stops | 14.6 (+11%) | 9-21 | 277 | 0: all in mixed traffic (30 off) |
+| Busway, BRT stations and 4 traffic lights with bus signals | 17.5 | 12-21 | 303 (+17%) | 89 on average: gold in 15 of 16 months, silver once |
+
+- Passenger ratings at the two stops: 94-95% on average without BRT, 99%
+  with the gold line (the cap is 100%).
+- Bus signals add the lights' delay back (part 7: lights alone 10.1), so the
+  full BRT line runs about as often as the busway alone, but with faster
+  boarding and better ratings it carries the most riders.
+- Viaduct line (prio 11): depot, bus-only road, stop A on the ground, 5
+  tiles of viaduct, stop B raised between two viaducts, 5 tiles of viaduct,
+  stop C on the ground; two Laju BRT 18e, two Kenari City 12 and a Seri M9
+  run A, B, C, B. B is raised and A isn't; the buses pass through B at the
+  viaduct's height, articulated ones too; the line scores 90-92 (gold, 95%
+  busway; the points it loses are for stop C, which is no BRT station, and
+  the road to the depot).
+- Edge cases (prio 12): a bridge across a raised stop is refused; removing a
+  viaduct puts the stop back on the ground and building it again raises it;
+  a wooden bridge in its place doesn't.
+- Screenshots: the viaduct with the raised BRT station and flat viaduct ends,
+  the ground BRT station with the ramp up, the busway between kerbs with
+  street-life cars kept off it (they still cross at junctions), the toolbar,
+  and the line window ("BRT score last month: 90 of 100, BRT gold (2 off for
+  shared sections)").
+
 ## Roadmap
 
 Sizes are rough: S = one session, M = a few, L = many, XL = a project in itself.

@@ -752,6 +752,30 @@ public:
 	static SQInteger GetLineDepartures(VehicleID vehicle_id);
 
 	/**
+	 * Get a bus line's BRT score of last month.
+	 * @param vehicle_id Any vehicle of the line.
+	 * @pre ScriptVehicle::IsPrimaryVehicle(vehicle_id).
+	 * @return The score from 0 to 100, or -1 if the vehicle is invalid, no bus, or the score isn't known yet.
+	 */
+	static SQInteger GetLineBRTScore(VehicleID vehicle_id);
+
+	/**
+	 * Get a bus line's BRT grade of last month.
+	 * @param vehicle_id Any vehicle of the line.
+	 * @pre ScriptVehicle::IsPrimaryVehicle(vehicle_id).
+	 * @return 0 not BRT, 1 basic, 2 bronze, 3 silver, 4 gold; -1 if the vehicle is invalid.
+	 */
+	static SQInteger GetLineBRTGrade(VehicleID vehicle_id);
+
+	/**
+	 * Get the share of a bus line's distance last month on busways (bus-only roads, kerbed busways, bus-only viaducts and tunnels).
+	 * @param vehicle_id Any vehicle of the line.
+	 * @pre ScriptVehicle::IsPrimaryVehicle(vehicle_id).
+	 * @return The share in percent, or -1 if the vehicle is invalid, no bus, or the share isn't known yet.
+	 */
+	static SQInteger GetLineBuswayShare(VehicleID vehicle_id);
+
+	/**
 	 * Get the average time between a line's recent departures from its first stop.
 	 * @param vehicle_id Any vehicle of the line.
 	 * @pre ScriptVehicle::IsPrimaryVehicle(vehicle_id).

@@ -28,8 +28,9 @@ static ChangeInfoResult BridgeChangeInfo(uint first, uint last, int prop, ByteRe
 {
 	ChangeInfoResult ret = ChangeInfoResult::Success;
 
-	if (last > MAX_BRIDGES) {
-		GrfMsg(Severity::Error, "BridgeChangeInfo: Bridge {} is invalid, max {}, ignoring", last, MAX_BRIDGES);
+	/* The city fork's own bridge types come after the original ones; NewGRFs can't change them. */
+	if (last > NUM_ORIGINAL_BRIDGES) {
+		GrfMsg(Severity::Error, "BridgeChangeInfo: Bridge {} is invalid, max {}, ignoring", last, NUM_ORIGINAL_BRIDGES);
 		return ChangeInfoResult::InvalidId;
 	}
 

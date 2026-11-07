@@ -15,7 +15,9 @@
 #include "timer/timer_game_calendar.h"
 #include "bridge_type.h"
 
-static const uint MAX_BRIDGES = 13; ///< Maximal number of available bridge specs.
+static const uint NUM_ORIGINAL_BRIDGES = 13; ///< Number of bridge specs of the original game; NewGRFs and towns only use these.
+static const uint MAX_BRIDGES = 14; ///< Maximal number of available bridge specs.
+static const BridgeType BRIDGE_CONCRETE_VIADUCT = 13; ///< City fork: concrete viaduct; road stops between two of its ends are raised onto it.
 constexpr uint SPRITES_PER_BRIDGE_PIECE = 32; ///< Number of sprites there are per bridge piece.
 
 /** Container for Bridge pillar flags for each axis of each bridge middle piece. */

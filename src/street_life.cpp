@@ -9,6 +9,7 @@
 
 #include "stdafx.h"
 #include "street_life.h"
+#include "bus_priority.h"
 #include "core/random_func.hpp"
 #include "genworld.h"
 #include "landscape.h"
@@ -183,10 +184,13 @@ static bool IsStreetTile(TileIndex tile)
 			if (IsRoadDepot(tile) || !HasTileRoadType(tile, RoadTramType::Road)) return false;
 			/* Town traffic stays off bus-only roads. */
 			if (GetRoadTypeRoad(tile) == ROADTYPE_BUS) return false;
-			return !IsNormalRoad(tile) || !HasRoadWorks(tile);
+			if (!IsNormalRoad(tile)) return true;
+			/* Kerbs keep it off busways; it still crosses them at junctions. */
+			if (GetBusLane(tile) == BusLane::Busway && (GetRoadBits(tile, RoadTramType::Road) == ROAD_X || GetRoadBits(tile, RoadTramType::Road) == ROAD_Y)) return false;
+			return !HasRoadWorks(tile);
 
 		case TileType::Station:
-			return (IsDriveThroughStopTile(tile) || IsRoadWaypoint(tile)) && HasTileRoadType(tile, RoadTramType::Road) && GetRoadTypeRoad(tile) != ROADTYPE_BUS;
+			return (IsDriveThroughStopTile(tile) || IsRoadWaypoint(tile)) && HasTileRoadType(tile, RoadTramType::Road) && GetRoadTypeRoad(tile) != ROADTYPE_BUS && GetBusLane(tile) != BusLane::Busway;
 
 		default:
 			return false;

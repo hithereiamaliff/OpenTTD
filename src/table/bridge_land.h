@@ -472,6 +472,18 @@ static const PalSpriteID _bridge_sprite_table_generic_concrete_heads[] = {
 	{ SPR_BTGEN_MGLV_RAMP_X_DOWN, PALETTE_TO_STRUCT_CONCRETE }, { SPR_BTGEN_MGLV_RAMP_Y_DOWN, PALETTE_TO_STRUCT_CONCRETE }, { SPR_BTGEN_MGLV_RAMP_X_UP,    PALETTE_TO_STRUCT_CONCRETE }, { SPR_BTGEN_MGLV_RAMP_Y_UP,    PALETTE_TO_STRUCT_CONCRETE },
 };
 
+/** City fork: concrete viaduct, the concrete bridge in grey concrete. */
+static const PalSpriteID _bridge_sprite_table_concrete_viaduct_middle[] = {
+	{ SPR_BTCON_RAIL_X, PALETTE_TO_STRUCT_CONCRETE },        { SPR_BTCON_X_FRONT, PALETTE_TO_STRUCT_CONCRETE },     { SPR_BTCON_X_PILLAR, PALETTE_TO_STRUCT_CONCRETE }, { 0x0, PAL_NONE },
+	{ SPR_BTCON_RAIL_Y, PALETTE_TO_STRUCT_CONCRETE },        { SPR_BTCON_Y_FRONT, PALETTE_TO_STRUCT_CONCRETE },     { SPR_BTCON_Y_PILLAR, PALETTE_TO_STRUCT_CONCRETE }, { 0x0, PAL_NONE },
+	{ SPR_BTCON_ROAD_X, PALETTE_TO_STRUCT_CONCRETE },        { SPR_BTCON_X_FRONT, PALETTE_TO_STRUCT_CONCRETE },     { SPR_BTCON_X_PILLAR, PALETTE_TO_STRUCT_CONCRETE }, { 0x0, PAL_NONE },
+	{ SPR_BTCON_ROAD_Y, PALETTE_TO_STRUCT_CONCRETE },        { SPR_BTCON_Y_FRONT, PALETTE_TO_STRUCT_CONCRETE },     { SPR_BTCON_Y_PILLAR, PALETTE_TO_STRUCT_CONCRETE }, { 0x0, PAL_NONE },
+	{ SPR_BTCON_MONO_X, PALETTE_TO_STRUCT_CONCRETE },        { SPR_BTCON_X_FRONT, PALETTE_TO_STRUCT_CONCRETE },     { SPR_BTCON_X_PILLAR, PALETTE_TO_STRUCT_CONCRETE }, { 0x0, PAL_NONE },
+	{ SPR_BTCON_MONO_Y, PALETTE_TO_STRUCT_CONCRETE },        { SPR_BTCON_Y_FRONT, PALETTE_TO_STRUCT_CONCRETE },     { SPR_BTCON_Y_PILLAR, PALETTE_TO_STRUCT_CONCRETE }, { 0x0, PAL_NONE },
+	{ SPR_BTCON_MGLV_X, PALETTE_TO_STRUCT_CONCRETE },        { SPR_BTCON_X_FRONT, PALETTE_TO_STRUCT_CONCRETE },     { SPR_BTCON_X_PILLAR, PALETTE_TO_STRUCT_CONCRETE }, { 0x0, PAL_NONE },
+	{ SPR_BTCON_MGLV_Y, PALETTE_TO_STRUCT_CONCRETE },        { SPR_BTCON_Y_FRONT, PALETTE_TO_STRUCT_CONCRETE },     { SPR_BTCON_Y_PILLAR, PALETTE_TO_STRUCT_CONCRETE }, { 0x0, PAL_NONE },
+};
+
 static const PalSpriteID _bridge_sprite_table_girder_middle[] = {
 	{  0x9F9, PAL_NONE }, {  0x9FD, PAL_NONE }, {  0x9C9, PAL_NONE }, {    0x0, PAL_NONE },
 	{  0x9FA, PAL_NONE }, {  0x9FE, PAL_NONE }, {  0x9CA, PAL_NONE }, {    0x0, PAL_NONE },
@@ -712,6 +724,16 @@ static const std::span<const PalSpriteID> _bridge_sprite_table_tubular_silicon[]
 	_bridge_sprite_table_generic_concrete_heads,
 };
 
+static const std::span<const PalSpriteID> _bridge_sprite_table_concrete_viaduct[] = {
+	_bridge_sprite_table_concrete_viaduct_middle,
+	_bridge_sprite_table_concrete_viaduct_middle,
+	_bridge_sprite_table_concrete_viaduct_middle,
+	_bridge_sprite_table_concrete_viaduct_middle,
+	_bridge_sprite_table_concrete_viaduct_middle,
+	_bridge_sprite_table_concrete_viaduct_middle,
+	_bridge_sprite_table_generic_concrete_heads,
+};
+
 static const std::span<const std::span<const PalSpriteID>> _bridge_sprite_table[MAX_BRIDGES] = {
 	_bridge_sprite_table_wood,
 	_bridge_sprite_table_concrete,
@@ -726,6 +748,7 @@ static const std::span<const std::span<const PalSpriteID>> _bridge_sprite_table[
 	_bridge_sprite_table_tubular_oxide,
 	_bridge_sprite_table_tubular_yellow,
 	_bridge_sprite_table_tubular_silicon,
+	_bridge_sprite_table_concrete_viaduct,
 };
 
 static constexpr BridgePillarFlags BRIDGEPILLARFLAGS_ALL_CORNERS = {
@@ -820,4 +843,8 @@ const BridgeSpec _orig_bridge[] = {
 
 	{TimerGameCalendar::Year{2010}, 2, UINT16_MAX, 510, 608, 0xA28, PALETTE_TO_STRUCT_CONCRETE,
 	   STR_BRIDGE_TUBULAR_SILICON,          {STR_LAI_BRIDGE_DESCRIPTION_RAIL_TUBULAR_STEEL,       STR_LAI_BRIDGE_DESCRIPTION_ROAD_TUBULAR_STEEL},       CANTILEVER_PILLARS},
+
+	/* City fork: a plain concrete viaduct for long elevated roads and railways (BRIDGE_CONCRETE_VIADUCT). */
+	{TimerGameCalendar::Year{1965}, 0, UINT16_MAX, 120, 320, 0xA26, PALETTE_TO_STRUCT_CONCRETE,
+	   STR_BRIDGE_NAME_CONCRETE_VIADUCT,    {STR_LAI_BRIDGE_DESCRIPTION_RAIL_CONCRETE_VIADUCT,    STR_LAI_BRIDGE_DESCRIPTION_ROAD_CONCRETE_VIADUCT},    ALL_PILLARS},
 };

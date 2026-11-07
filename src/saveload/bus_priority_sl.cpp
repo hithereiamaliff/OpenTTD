@@ -13,6 +13,7 @@
 
 #include "../bus_priority.h"
 #include "../map_func.h"
+#include "../brt.h"
 
 #include "../safeguards.h"
 
@@ -95,11 +96,51 @@ struct GWAYChunkHandler : ChunkHandler {
 	}
 };
 
+/** A BRT station, for saving. */
+struct BrtStationSave {
+	TileIndex tile = INVALID_TILE; ///< The stop.
+};
+
+static const SaveLoad _brt_station_desc[] = {
+	SaveLoad::Variable<VarFileType::U32>("tile", SLE_OBJECT_ADDRESS(BrtStationSave, tile)),
+};
+
+/** Bus stops that are BRT stations (see brt.h). */
+struct BRTSChunkHandler : ChunkHandler {
+	BRTSChunkHandler() : ChunkHandler("BRTS", ChunkType::Table) {}
+
+	void Save() const override
+	{
+		SlTableHeader(_brt_station_desc);
+
+		int index = 0;
+		for (TileIndex tile : GetBrtStations()) {
+			BrtStationSave save{tile};
+			SlSetArrayIndex(index++);
+			SlObject(&save, _brt_station_desc);
+		}
+	}
+
+	void Load() const override
+	{
+		const std::vector<SaveLoad> slt = SlTableHeader(_brt_station_desc);
+
+		GetBrtStations().clear();
+		while (SlIterateArray() != -1) {
+			BrtStationSave save;
+			SlObject(&save, slt);
+			if (IsValidTile(save.tile)) GetBrtStations().insert(save.tile);
+		}
+	}
+};
+
 static const BLANChunkHandler BLAN;
 static const GWAYChunkHandler GWAY;
+static const BRTSChunkHandler BRTS;
 static const ChunkHandlerRef bus_priority_chunk_handlers[] = {
 	BLAN,
 	GWAY,
+	BRTS,
 };
 
 extern const ChunkHandlerTable _bus_priority_chunk_handlers(bus_priority_chunk_handlers);

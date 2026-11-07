@@ -47,7 +47,7 @@ BROWN, BROWN_DARK = nearest((150, 90, 40)), nearest((90, 50, 20))
 YELLOW = nearest((252, 220, 0))
 TREE, TREE_DARK = nearest((60, 150, 40)), nearest((30, 90, 20))
 
-W, H = 512, 680
+W, H = 512, 800
 sheet = Image.new("P", (W, H), T)
 sheet.putpalette(pal)
 px = sheet.load()
@@ -1082,6 +1082,130 @@ for name, letter in (("bus lamp lit", W_), ("bus lamp dark", G_)):
     sprites.append((x0, 640, 5, 7, -2, -23, name))
 
 assert len(sprites) == 219, len(sprites)
+
+# Busways and BRT: the kerbed busway in the middle of a road (along X and along Y),
+# the deck under a stop raised onto a viaduct (X, Y), the two sides of a BRT station
+# (road along X: far and near side; along Y: far and near side), then toolbar icons.
+KERB_LIGHT, KERB_SHADE = rgb_index((200, 200, 196)), rgb_index((120, 120, 118))
+
+
+def busway_fn(axis):
+    def fn(x, y):
+        w, u = across_along(axis, x, y)
+        if 4.5 <= w < 4.85 or 11.15 < w <= 11.5:
+            return KERB_LIGHT
+        if 4.85 <= w < 5.05 or 10.95 < w <= 11.15:
+            return KERB_SHADE
+        if 5.05 <= w <= 10.95:
+            if abs(w - 8) < 0.25 and u % 3.2 < 1.6:
+                return LINE_WHITE
+            return BUS_RED_DARK
+        return None
+    return fn
+
+
+for i, axis in enumerate(('x', 'y')):
+    b = Building()
+    b.ground(busway_fn(axis))
+    b.emit(4 + i * 72, 684, f"kerbed busway {axis}")
+
+DECK_TOP = (196, 196, 190)
+for i, axis in enumerate(('x', 'y')):
+    b = Building()
+
+    def at(u, w):
+        """u along the road, w across it."""
+        return (u, w) if axis == 'x' else (w, u)
+    # Columns under the edges of the deck; the ones under the near edge show.
+    for pu, pw in ((4.0, 1.4), (12.0, 1.4), (4.0, 14.6), (12.0, 14.6)):
+        x0_, y0_ = at(pu - 0.9, pw - 0.9)
+        x1_, y1_ = at(pu + 0.9, pw + 0.9)
+        b.box(min(x0_, x1_), min(y0_, y1_), max(x0_, x1_), max(y0_, y1_), 0, 5, CONCRETE, CONCRETE)
+    b.box(0, 0, 16, 16, 5, 8, CONCRETE, DECK_TOP)
+    b.emit(148 + i * 72, 684, f"stop deck {axis}")
+
+PLATFORM, PLATFORM_TOP = (170, 170, 165), (205, 205, 200)
+ROOF_WHITE = (232, 232, 230)
+GATE_GREY = (70, 72, 78)
+POST_GREY = (110, 112, 118)
+
+
+def brt_side(axis, near):
+    """One side of a BRT station: a platform with a yellow edge, a glass wall at
+    the back (far side only, so buses stay in view), a roof with a company colour
+    edge and a row of fare gates at one end."""
+    b = Building()
+
+    def box(u0, u1, w0, w1, z0, z1, wall, top, **kw):
+        if axis == 'x':
+            b.box(u0, w0, u1, w1, z0, z1, wall, top, **kw)
+        else:
+            b.box(w0, u0, w1, u1, z0, z1, wall, top, **kw)
+
+    yellow = rgb_index((240, 205, 30))
+    if not near:
+        # Platform on the far pavement; its face towards the road is the visible one.
+        box(0, 16, 0.3, 3.4, 0, 2, PLATFORM, PLATFORM_TOP,
+            se=(lambda u, v: yellow if v >= 1.3 else None) if axis == 'x' else None,
+            sw=(lambda u, v: yellow if v >= 1.3 else None) if axis == 'y' else None)
+        # Glass wall at the back with frames.
+        glass = lambda u, v: rgb_index((60, 70, 85)) if (u % 3.2) < 0.35 or v < 0.4 else GLASS_LIGHT
+        box(0.4, 15.6, 0.3, 0.7, 2, 10, (150, 175, 200), (150, 175, 200),
+            se=glass if axis == 'x' else None, sw=glass if axis == 'y' else None)
+        # Fare gates at the end of the platform.
+        for g in (12.4, 13.5, 14.6):
+            box(g, g + 0.5, 1.0, 2.7, 2, 4.5, GATE_GREY, (230, 200, 40))
+        # Roof.
+        box(0, 16, 0.0, 3.9, 10, 11.5, ROOF_WHITE, ROOF_WHITE,
+            se=(lambda u, v: CC_BAND) if axis == 'x' else None, sw=(lambda u, v: CC_BAND) if axis == 'y' else None)
+    else:
+        # Platform on the near pavement, its yellow edge on top along the road.
+        def edge(x, y):
+            w = y if axis == 'x' else x
+            return yellow if w < 13.0 else None
+        box(0, 16, 12.6, 15.7, 0, 2, PLATFORM, PLATFORM_TOP, roof=edge)
+        # Fare gates at the other end.
+        for g in (1.0, 2.1, 3.2):
+            box(g, g + 0.5, 13.4, 15.0, 2, 4.5, GATE_GREY, (230, 200, 40))
+        # Posts and roof.
+        for pu in (0.6, 8.0, 15.4):
+            box(pu - 0.25, pu + 0.25, 15.0, 15.5, 2, 10, POST_GREY, POST_GREY)
+        box(0, 16, 12.1, 16.0, 10, 11.5, ROOF_WHITE, ROOF_WHITE,
+            se=(lambda u, v: CC_BAND) if axis == 'x' else None, sw=(lambda u, v: CC_BAND) if axis == 'y' else None)
+    return b
+
+
+for i, (axis, near) in enumerate((('x', False), ('x', True), ('y', False), ('y', True))):
+    b = brt_side(axis, near)
+    b.emit(4 + i * 72, 740, f"brt station {axis} {'near' if near else 'far'}")
+
+K2 = rgb_index((200, 200, 196))
+icon(292, 740, [
+    "G..KRRRRRRRRK..G",
+    "G..KRRRWRRRRK..G",
+    "G..KRRRRRRRRK..G",
+    "G..KRRRWRRRRK..G",
+    "G..KRRRRRRRRK..G",
+    "G..KRRRWRRRRK..G",
+    "G..KRRRRRRRRK..G",
+    "G..KRRRWRRRRK..G",
+    "G..KRRRRRRRRK..G",
+    "G..KRRRWRRRRK..G",
+], {'K': K2, 'R': BUS_RED_DARK, 'W': W_, 'G': G_}, "icon busway")
+icon(312, 740, [
+    "WWWWWWWWWWWWWWWW",
+    "CCCCCCCCCCCCCCCC",
+    ".K....K.....K...",
+    ".K.LL.K.LL..K...",
+    ".K.LL.K.LL..K...",
+    ".K....K.....K...",
+    ".K.KY.KY.KY.K...",
+    ".K.K..K..K..K...",
+    "YYYYYYYYYYYYYYYY",
+    "GGGGGGGGGGGGGGGG",
+], {'W': W_, 'C': rgb_index((40, 90, 200)), 'K': K_, 'L': GLASS_LIGHT, 'Y': Y_, 'G': G_}, "icon brt station")
+
+assert len(sprites) == 229, len(sprites)
 sheet.save(f"{SRC}/city.png", optimize=True)
 
 header = """// This file is part of OpenTTD.
@@ -1106,6 +1230,9 @@ header = """// This file is part of OpenTTD.
 //   201-203: charger over a bus stop (road along X, along Y), icon of the stop charger tool
 //   204-211: bus lanes (all day, peak), bus-only road, give-way markings; each for roads along X and along Y
 //   212-218: icons: bus priority, bus lane, peak bus lane, give way, bus signal; "B" lamp lit and dark
+//   219-222: kerbed busway (road along X, along Y), deck under a stop raised onto a viaduct (X, Y)
+//   223-226: BRT station sides: road along X far and near side, along Y far and near side
+//   227-228: icons: kerbed busway, BRT station
 //
    -1 * 0\t 0C "City fork graphics"
    -1 * 3\t 05 1C %02X

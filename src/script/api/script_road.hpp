@@ -94,6 +94,7 @@ public:
 		BL_NONE    = ::to_underlying(::BusLane::None),   ///< No bus lane.
 		BL_PEAK    = ::to_underlying(::BusLane::Peak),   ///< Bus lane in the peak hours: two congestion levels less for buses.
 		BL_ALL_DAY = ::to_underlying(::BusLane::AllDay), ///< Bus lane all day: buses ignore congestion, other traffic gets one level more.
+		BL_BUSWAY  = ::to_underlying(::BusLane::Busway), ///< Kerbed busway in the middle of the road: like BL_ALL_DAY, and it counts as a busway for BRT.
 	};
 
 	/**
@@ -660,7 +661,7 @@ public:
 	 * Paint bus lanes along a straight stretch of road.
 	 * @param start One end of the stretch.
 	 * @param end The other end, in a straight line from start.
-	 * @param lane BL_ALL_DAY or BL_PEAK.
+	 * @param lane BL_ALL_DAY, BL_PEAK or BL_BUSWAY.
 	 * @pre ScriptMap::IsValidTile(start) && ScriptMap::IsValidTile(end).
 	 * @game @pre ScriptCompanyMode::IsValid().
 	 * @exception ScriptError::ERR_NOT_ENOUGH_CASH
@@ -705,6 +706,38 @@ public:
 	 * @api ai game
 	 */
 	static bool HasGiveWayStop(TileIndex tile);
+
+	/**
+	 * Make a drive-through bus stop a BRT station with fare gates and level platforms.
+	 * @param tile The stop.
+	 * @pre ScriptMap::IsValidTile(tile).
+	 * @game @pre ScriptCompanyMode::IsValid().
+	 * @return Whether it was built.
+	 */
+	static bool BuildBRTStation(TileIndex tile);
+
+	/**
+	 * Make a BRT station an ordinary stop again.
+	 * @param tile The stop.
+	 * @pre ScriptMap::IsValidTile(tile).
+	 * @game @pre ScriptCompanyMode::IsValid().
+	 * @return Whether it was removed.
+	 */
+	static bool RemoveBRTStation(TileIndex tile);
+
+	/**
+	 * Is a stop a BRT station?
+	 * @param tile The stop.
+	 * @return True if it is.
+	 */
+	static bool HasBRTStation(TileIndex tile);
+
+	/**
+	 * Is a drive-through stop raised onto a viaduct (it lies between the ends of two concrete viaducts)?
+	 * @param tile The stop.
+	 * @return True if it is.
+	 */
+	static bool IsElevatedStation(TileIndex tile);
 
 	/**
 	 * Switch the bus signals of traffic lights on or off: buses get green a moment
