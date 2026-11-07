@@ -297,14 +297,19 @@ static int64_t GetTicksUntilNextPeak()
 /**
  * Is it worth parking vehicles of a line for a while? Only when they can wait at least about a round trip:
  * the stretch has to last at least two of the line's round trips, as getting to the depot and back takes about one.
+ * On-demand vehicles only ever drive from one stop to another, so for them a trip is two such legs.
  * @param list The line's order list.
  * @param ticks How long the vehicles would wait.
  * @return True if it is worth it, or the round trip isn't known yet.
  */
 static bool IsParkingWorthwhile(const OrderList *list, int64_t ticks)
 {
-	const TimerGameTick::Ticks round_trip = list->GetTotalDuration();
-	return round_trip <= 0 || ticks >= 2 * static_cast<int64_t>(round_trip);
+	int64_t round_trip = list->GetTotalDuration();
+	if (list->line.on_demand) {
+		const auto stops = std::ranges::count_if(list->GetOrders(), [](const Order &o) { return o.IsType(OT_GOTO_STATION); });
+		if (stops > 0) round_trip = round_trip * 2 / stops;
+	}
+	return round_trip <= 0 || ticks >= 2 * round_trip;
 }
 
 /**
@@ -424,9 +429,9 @@ static const IntervalTimer<TimerGameEconomy> _city_clock_daily({TimerGameEconomy
 /* On-demand lines. */
 
 /**
- * An on-demand vehicle that just left a stop picks the next one of its line: where the most passengers
- * it can take wait (less what the line's other vehicles on their way there will take), where the
- * passengers on board want to get off, or that waited longest for a pickup; nearer ones first.
+ * An on-demand vehicle that just left a stop picks the next one of its line: where the passengers on
+ * board want to get off, where the most passengers it has room for wait (less what the line's other
+ * vehicles on their way there will take), or that waited longest for a pickup; nearer ones first.
  * @param v The vehicle (front), just leaving a stop.
  * @return True if it picked a stop; its order index points at it then.
  */
@@ -434,12 +439,13 @@ bool ChooseOnDemandStop(Vehicle *v)
 {
 	if (v->orders == nullptr || !v->orders->line.on_demand || !v->current_order.IsType(OT_LEAVESTATION)) return false;
 
-	/* What it carries; at the next stop the passengers on board make room, so it has its whole capacity. */
-	uint capacity = 0;
+	/* What it carries. */
+	uint capacity = 0, on_board = 0;
 	CargoTypes cargoes{};
 	for (const Vehicle *u = v; u != nullptr; u = u->Next()) {
 		if (u->cargo_cap == 0) continue;
 		capacity += u->cargo_cap;
+		on_board += u->cargo.TotalCount();
 		cargoes.Set(u->cargo_type);
 	}
 
@@ -462,11 +468,22 @@ bool ChooseOnDemandStop(Vehicle *v)
 			since = std::max<uint>(since, ge.time_since_pickup);
 		}
 
-		/* Passengers on board who want to get off there (with cargo distribution). */
-		uint alighting = 0;
+		/* Passengers on board who get off there. With cargo distribution, the stop's planned flows say
+		 * which share of those from each first station end their trip there; passengers without a
+		 * planned flow (no cargo distribution) get off at any stop. */
+		uint planned_off = 0, free_off = 0;
 		for (const Vehicle *u = v; u != nullptr; u = u->Next()) {
+			if (u->cargo_cap == 0 || u->cargo.TotalCount() == 0) continue;
+			const GoodsEntry &ge = st->goods[u->cargo_type];
+			const FlowStatMap *flows = ge.HasData() ? &ge.GetData().flows : nullptr;
 			for (const CargoPacket *cp : *u->cargo.Packets()) {
-				if (cp->GetNextHop() == id) alighting += cp->Count();
+				const auto it = (flows == nullptr) ? FlowStatMap::const_iterator{} : flows->find(cp->GetFirstStation());
+				if (flows == nullptr || it == flows->end() || it->second.GetShares()->empty()) {
+					free_off += cp->Count();
+					continue;
+				}
+				const uint total = it->second.GetShares()->rbegin()->first;
+				if (total > 0) planned_off += static_cast<uint>(static_cast<uint64_t>(cp->Count()) * it->second.GetShare(id) / total);
 			}
 		}
 
@@ -482,8 +499,10 @@ bool ChooseOnDemandStop(Vehicle *v)
 			for (const Vehicle *w = u; w != nullptr; w = w->Next()) incoming += w->cargo_cap;
 		}
 
-		const uint pickup = std::min(waiting > incoming ? waiting - incoming : 0, capacity);
-		const uint64_t score = (static_cast<uint64_t>(pickup) + alighting + (served ? 0 : since * 4) + 1) * 1024 / (DistanceManhattan(v->tile, st->xy) + 4);
+		/* It can take as many as there is room for once those getting off there have. */
+		const uint room = capacity - std::min(capacity, on_board - std::min(on_board, planned_off + free_off));
+		const uint pickup = std::min(waiting > incoming ? waiting - incoming : 0, room);
+		const uint64_t score = (static_cast<uint64_t>(pickup) + 2 * planned_off + (served ? 0 : since * 4) + 1) * 1024 / (DistanceManhattan(v->tile, st->xy) + 4);
 		if (best == INVALID_VEH_ORDER_ID || score > best_score) {
 			best = i;
 			best_score = score;

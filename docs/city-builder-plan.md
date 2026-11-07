@@ -1214,12 +1214,16 @@ the date in the status bar, orange in the rush hours.
   again just run, and the time spent waiting doesn't count as travel time
   (or the line's round trip would seem far longer).
 - **On-demand lines** (line window, new "On demand" button): after each stop
-  a vehicle heads for the stop of its line where the most passengers it can
-  take wait, less the room on the line's other vehicles already heading
-  there, where its passengers want to get off (with cargo distribution), or
-  that waited longest for a pickup; nearer ones first. Stops on the way
-  don't become implicit orders, and "Even spacing" doesn't hold its
-  vehicles.
+  a vehicle heads for the stop of its line where its passengers get off
+  (counted double), where the most passengers it has room for wait (less the
+  room on the line's other vehicles already heading there), or that waited
+  longest for a pickup; nearer ones first. With cargo distribution, who gets
+  off where comes from each stop's planned flows for the station they first
+  boarded at (passengers on board don't store their next stop); without it
+  everyone gets off at the next stop. Stops on the way don't become
+  implicit orders, and "Even spacing" doesn't hold its vehicles. For
+  off-peak parking an on-demand line's trip counts as two legs between
+  stops.
 - Saved: the setting by name; a line's off-peak number and on-demand switch
   in LINE; the vehicles waiting for the next rush hour in a new chunk PEAK.
 - Script API: `ScriptDate.GetCityTime`, `IsRushHour`;
@@ -1253,11 +1257,20 @@ Merbok Twin Decker buses on part 7's 16-tile line, a day per year):
 - A day per month: the line (round trip 28 days) kept all 6 running, as the
   stretches between rush hours are too short for it.
 
-| On-demand (6 stops around the centre) | Fixed loop | On demand |
+| On-demand (6 stops around the centre), riders 2021 | Fixed loop | On demand |
 |---|---|---|
-| Kinningbury, 3 buses | 7,968 riders, 52% | 9,177 riders, 72% |
-| Grubourne (4,500 people), 2 buses | 3,503 riders, 63% | 5,531 riders, 69% |
+| Kinningbury, 3 buses | 7,968, satisfaction 52% | 9,177, 72% |
+| Grubourne (4,500 people), 2 buses | 3,503, 63% | 5,531, 69% |
+| Kinningbury, 3 buses, cargo distribution (symmetric) | 4,821, 66% | 7,960, 64% |
+| Grubourne, 2 buses, cargo distribution | 3,553, 58% | 5,616, 67% |
 | Different stops the buses head for at a time | 1.7 and 1.0 (they bunch) | 3.0 and 1.9 |
+
+- An on-demand line keeping 1 of 3 buses between the rush hours parked the
+  other 2 at night, in the day and in the evening.
+- With cargo distribution the first version did worse than the fixed loop
+  (3,286 riders in Grubourne): it counted on passengers storing their next
+  stop on board, which they don't, so full buses headed for crowds they had
+  no room for. Reading the stops' planned flows fixed it.
 
 - A save with 4 buses parked (`city-rushhour-demo.csav`) reloads with them
   still waiting; all 6 set out at 06:04.
