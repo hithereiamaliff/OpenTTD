@@ -11,6 +11,7 @@
 #include "city_clock.h"
 #include "environment.h"
 #include "town_budget.h"
+#include "commuting.h"
 #include "landscape.h"
 #include "news_func.h"
 #include "ai/ai.hpp"
@@ -176,6 +177,7 @@ void InitializeGame(uint size_x, uint size_y, bool reset_date, bool reset_settin
 	InitializeCityClock();
 	InitializeEnvironment();
 	InitializeTownBudgets();
+	InitializeCommuting();
 
 	InitializeCompanies();
 	AI::Initialize();

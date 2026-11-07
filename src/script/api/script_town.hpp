@@ -547,6 +547,32 @@ public:
 	static SQInteger GetLowEmissionZoneVehicles(TownID town_id);
 
 	/**
+	 * Get how many of a town's people go to work on a day (setting economy.commuting).
+	 * Towns work their commutes out once a month.
+	 * @param town_id The town.
+	 * @pre IsValidTown(town_id).
+	 * @return The number, 0 if not worked out yet or commuting is off, or -1 for an invalid town.
+	 */
+	static SQInteger GetCommuters(TownID town_id);
+
+	/**
+	 * Get how many of a town's commuters take transit: the more transit beats the car, the more.
+	 * @param town_id The town.
+	 * @pre IsValidTown(town_id).
+	 * @return The number, 0 if not worked out yet or commuting is off, or -1 for an invalid town.
+	 */
+	static SQInteger GetTransitCommuters(TownID town_id);
+
+	/**
+	 * Get how long a town's commute takes door to door on average, by car or by transit.
+	 * @param town_id The town.
+	 * @param by_transit True for those who take transit, false for drivers.
+	 * @pre IsValidTown(town_id).
+	 * @return The time in ticks, 0 if nobody commutes that way or it isn't worked out, or -1 for an invalid town.
+	 */
+	static SQInteger GetCommuteTime(TownID town_id, bool by_transit);
+
+	/**
 	 * Get the land value where a town's people live, from 0 to 100, weighted by population, as of last month.
 	 * @param town_id The town.
 	 * @pre IsValidTown(town_id).

@@ -1661,6 +1661,128 @@ town monthly; BusTest's line through Kinningbury, 10,500 people):
 - Screenshots: the Budget window for Kinningbury (transit fund, parking
   limits and tree planting in force) and a refused low-emission zone.
 
+## Done: M5, commuting
+
+Towns work out where their people work and how they get there, and town
+traffic follows the routes the drivers take. A new setting, **Commuting**
+(Settings, Environment, Towns, after Town budgets and ordinances), on by
+default; it needs town traffic. Off works as M6 did.
+
+**Who goes where.** Once a month (each town on its own day) a town cuts its
+area into cells of 4 by 4 tiles (8 by 8 when more than 200 cells have
+homes). 45% of its people go to work on a day: from each cell by the people
+living there (homes; offices, shops and public buildings count a quarter
+and a tenth of their people as flats above), to cells by their jobs
+(offices, shops and public buildings; homes a tenth; city services 30 a
+tile; the town's industries 10), fewer the further away (half as many at
+10 tiles; a gravity model).
+
+**Drive or ride?** Times count a town tile as about 75 m and a tick as a
+third of a second:
+
+| Commuter by car | Time |
+|---|---|
+| The quickest way over the town's roads | 52 ticks a tile at 60 km/h (corners, crossings, lights), slower with town traffic (part 2's speed caps), 100 km/h on expressways |
+| Junction / with traffic lights / level crossing / drive-through stop | +15 / +25 / +20 / +10 ticks |
+| Parking and walking to work | 5 minutes in the centre, 3 inner suburbs, 2 outer, 1 outskirts, half at the edge; half as long again with parking limits; 5 more from the edge of a car-free centre |
+| A congestion charge into the zone | feels like 3 more minutes |
+
+| Commuter by transit | Time |
+|---|---|
+| Walking to a stop within reach (a station's catchment covers the home) and from the last stop | 130 ticks a tile, feels twice as long |
+| Waiting | the line's measured wait (longer when its vehicles bunch), up to 4 times longer when they leave more than 70% full on average; feels half as long again |
+| Boarding / changing | feels like a minute / two minutes |
+| The fare | feels like 2 minutes at the standard price, nothing when free; changing pays no new fare |
+| Riding | the line's measured driving time between its stops, plus up to 120 ticks standing at each stop on the way (OpenTTD's loading takes far longer than a commuter would notice) |
+
+Of those who could do either, the share taking transit is 1 / (1 + r^2),
+r being how long transit feels against the car: half when it feels as long,
+a fifth at twice as long, at most 85%. Only homes and jobs within reach of
+a stop can choose transit. Every passenger line counts (any company, any
+transport but aircraft), with its stops in the town and around it.
+
+At least as many commuters take transit as the share of the town's
+passengers your services carry says (part 2's measure: 60% at most when
+they carry all of them). So nothing does worse than before: a bus line
+that carries passengers takes cars off the road as it did. Those extra
+riders are found among the drivers within reach of stops (up to the 85%);
+only if there aren't enough of them do the rest leave their cars at home
+all over town.
+
+**What it does:**
+
+- **Traffic follows the routes.** Every drivers' route adds its cars to the
+  roads it takes; town traffic counts half the old traffic of the homes and
+  jobs around a road (errands, deliveries) and 25 per commuter's car a day.
+  The roads between homes and jobs get busy; side streets stay quieter.
+  Routes avoid congestion, and each month's routes are averaged with the
+  last, so traffic spreads over parallel roads as jams build.
+- **Transit takes cars off those routes**: what transit takes off the road
+  for the whole town (the town window, the M6 ordinances, the congestion
+  charge's residents) is now the share of commuters who take it.
+- **Riders**: homes and workplaces whose commuters take transit because it
+  is quick (journey times alone) send more passengers: 2% more for each
+  percent above 15%, up to twice as many at 65%. Never fewer than before.
+
+**Seeing it:**
+
+- **Town window**: "Commuters: 5,516 a day, 28% by transit" and "Door to
+  door: 13 min by car, 32 min by transit" (or "transit doesn't go where they
+  work"), in place of "Your services take ...% of cars off the road".
+- **Towns menu**: **Commuter traffic map** tints roads by commuters' cars a
+  day, both ways: green from 100, yellow 400, orange 1,000, red 2,000 (again
+  to hide).
+- **Land info**: a road's "Commuters: 872 cars a day"; a house's
+  "Commuting from here: 48% by transit" (homes) or "Commuting to work here:
+  31% by transit" (other buildings).
+
+- Saved: each town's figures, its grid of shares and the cars on each road
+  in chunk TCOM. Old saves start without them; until a town's first month
+  its traffic is worked out as before.
+- Script API: `ScriptTown.GetCommuters`, `GetTransitCommuters`,
+  `GetCommuteTime` (ticks, by car or by transit); `ScriptRoad.GetCommuterTraffic`.
+- Code: `src/commuting.{h,cpp}`, `commuting_type.h`,
+  `src/saveload/commuting_sl.cpp`; hooks in `town_traffic.cpp` (traffic,
+  the town's car reduction), `town_cmd.cpp` (passengers, a removed town's
+  cars), `town_gui.cpp`, `misc_gui.cpp`, `environment.cpp` and
+  `toolbar_gui.cpp` (the map), the settings tables.
+- Cost: 0.2-0.8 ms for a town of 10,000 people, 4 ms for 28,000 and 7 ms
+  for 41,000, once a month each, on its own day.
+
+Tests (test AI CommuteDump logs the biggest towns monthly: commuters, the
+shares, times, congestion levels and commuters' cars on their roads;
+Kinningbury, about 11,000 people, 17 months from mid-2021):
+
+| Kinningbury | By transit (journey times alone) | Door to door, car / transit | Busiest road, cars a day | Roads at level 4+ (5+) | Before M5 |
+|---|---|---|---|---|---|
+| No transit | 0% | 9 min / - | 2,800 | 22% (9%) | 17% (5%) |
+| BusTest's line: 2 stops, 13 buses | 11% (0%) | 9 / 20 min | 2,400 | 11% (6%) | 12% (4%), 10% of cars off |
+| PeakTest's 8-stop loop, 8 buses | 27% (4%) | 9 / 21 min | 1,900 | 5% (3%) | 1% (0%), 24% off |
+| The same loop, 20 buses | 40% (11%) | 11 / 15 min | 1,700 | 1% (0%) | 0%, 42% off |
+
+- Over the four biggest towns congestion stays about as before (roads at
+  level 4 and up: 22% against 20% without transit), but more of it is on
+  the main roads (level 5 and up: 8% against 4.5%) and less on side streets.
+- With the 20-bus loop the loop's stops cover most of the centre: homes
+  there send 47-53% of their commuters by transit, the uncovered edges 0%.
+- A car-free centre (M6) makes the centre a five-minute walk from the car:
+  journey times alone send 16% to transit instead of 11%.
+- The first versions taught a lot: OpenTTD's towns are small and its buses
+  slow (about 100 ticks a tile between stops, against 26 for a free car at
+  the same speed), so true-to-life costs sent almost nobody to transit, and
+  a 2-stop line that carried a fifth of the town's passengers took no cars
+  off the road. Hence town-scale driving (52 ticks a tile), standing time
+  capped at stops, and the floor of riders from the passengers carried.
+  Counting people only in homes gave Kinningbury 540 commuters (its people
+  live mostly in offices, by OpenTTD's count); a stop counted for getting
+  on and off at once made rides out of nothing.
+- With the setting off, part 13's and part 14's baseline runs give
+  identical monthly results; 99/99 unit tests; all 39 test saves (with the
+  new `city-commute-demo.csav`) load, save and reload.
+- Screenshots: the town window's commuting lines; the commuter traffic map
+  over Kinningbury with the 20-bus loop, and land info on a road (872 cars
+  a day).
+
 ## Roadmap
 
 Sizes are rough: S = one session, M = a few, L = many, XL = a project in itself.
@@ -1670,14 +1792,15 @@ Sizes are rough: S = one session, M = a few, L = many, XL = a project in itself.
 | M2 | Traffic realism | Done: give way, light settings, traffic map and overlay, amber, routing around jams. | — | |
 | M3 | Zoning | Done: zones, town growth follows them, homes/jobs line in the town window, zones in land info. | — | |
 | M4 | City services and happiness | Part 1 done: police, fire, clinic, school and park with coverage, happiness, growth, ratings and upkeep. Later: bigger buildings (hospital, university), services that also make passengers. | L | |
-| M5 | Town car traffic | Towns send private cars between homes and workplaces. Good public transport takes cars off the road. Partly done: congestion from the homes and jobs nearby, street life and the share of cars transit takes off (transit part 2), traffic between towns (part 9). Left: commuting trips from homes to jobs along real roads, so traffic follows the routes people take, and people choosing car or transit by journey time and fare. | L | The most SimCity-like part; performance-sensitive on big maps. |
+| M5 | Town car traffic | Done within towns: commuters drive between homes and jobs along real roads, or take transit when it is quick enough; traffic follows their routes; transit takes cars off them (see M5, commuting). Left: commuting between towns (suburbs to the city by rail or expressway). | M | The most SimCity-like part. |
 | M6 | City budget and ordinances | Done: towns collect taxes and spend them on transit, running the town and ordinances; they set their own tax rates and bring in ordinances (transit fund, parking limits, low-emission zone, car-free centre, tree planting, transit-oriented development); companies propose them. | — | The owner's call: towns decide, companies lobby. |
 | M7 | Land value and pollution | Done as transit part 14: traffic, diesel vehicles and industry pollute; parks, services and good stations raise land value; map views, tints and lines show both; towns build to fit. | — | |
 | M8 | Utilities | Power and water networks. | XL | Probably skip, or keep it light (arctic/tropic towns already need food/water). |
 
-Recommended order: the rest of M5 next (commuting and choosing car or
-transit), the last big SimCity part; M4's bigger buildings and M8 after it,
-if wanted.
+Recommended order: commuting between towns next (M5's second part: people
+living in one town and working in another, by road, expressway or rail),
+which makes intercity and suburban rail matter to traffic; then M4's bigger
+buildings; M8 only if wanted.
 
 ## Getting it onto the owner's computer (Windows)
 
@@ -1703,7 +1826,6 @@ Savegame locations (files end in `.sav`; autosaves are in `save/autosave`):
 ## Open questions for the owner
 
 1. Can you share one of your saves, so it can be tested before you play it?
-2. Which milestone next? Recommendation: the rest of M5: people commute
-   from homes to jobs along real roads, and choose car or transit by
-   journey time and fare.
+2. Which milestone next? Recommendation: commuting between towns, so trains
+   and expressways between a town and its suburbs take cars off the roads.
 3. A name for the fork.

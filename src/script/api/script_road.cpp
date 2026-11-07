@@ -31,6 +31,7 @@
 #include "../../script/squirrel_helper_type.hpp"
 
 #include "../../city_clock.h"
+#include "../../commuting.h"
 
 #include "../../safeguards.h"
 
@@ -686,6 +687,12 @@ static bool NeighbourHasReachableRoad(::RoadType rt, TileIndex start_tile, DiagD
 	if (!::IsValidTile(tile) || !::IsTileType(tile, TileType::Road) || ::IsRoadDepot(tile)) return -1;
 
 	return ::AdjustCongestionForCityTime(::GetRoadCongestion(tile));
+}
+
+/* static */ SQInteger ScriptRoad::GetCommuterTraffic(TileIndex tile)
+{
+	if (!::IsValidTile(tile) || !::IsCommutingOn()) return 0;
+	return ::GetCommuteCars(tile) * 2;
 }
 
 /* static */ bool ScriptRoad::BuildDepotFacility(TileIndex tile, DepotFacility facility)

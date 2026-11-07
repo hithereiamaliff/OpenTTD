@@ -123,6 +123,9 @@ add_files(
     city_clock.h
     city_services.cpp
     city_services.h
+    commuting.cpp
+    commuting.h
+    commuting_type.h
     city_services_gui.cpp
     city_services_type.h
     clear_cmd.cpp

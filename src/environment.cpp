@@ -30,6 +30,7 @@
 
 #include "stdafx.h"
 #include "environment.h"
+#include "commuting.h"
 #include "city_bus.h"
 #include "city_services.h"
 #include "company_base.h"
@@ -236,6 +237,7 @@ PixelColour GetLandValueColour(uint value)
  */
 PaletteID GetEnvironmentOverlayPalette(TileIndex tile)
 {
+	if (_environment_overlay == EnvironmentOverlay::Commuters) return GetCommuteOverlayPalette(tile);
 	if (_environment_overlay == EnvironmentOverlay::None || !IsEnvironmentKnown()) return PAL_NONE;
 	if (_environment_overlay == EnvironmentOverlay::Pollution) {
 		const uint api = GetTilePollution(tile);

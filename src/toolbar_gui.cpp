@@ -51,6 +51,7 @@
 #include "town_zoning.h"
 #include "city_services.h"
 #include "environment.h"
+#include "commuting.h"
 #include "highscore.h"
 #include "goal_base.h"
 #include "goal_gui.h"
@@ -493,6 +494,7 @@ enum class TownMenuEntries {
 	ShowCityServices, ///< Open the city services toolbar.
 	ShowPollution, ///< Show air pollution over the land, or stop showing it.
 	ShowLandValue, ///< Show land value over the land, or stop showing it.
+	ShowCommuters, ///< Show commuters' cars on the roads, or stop showing them.
 };
 
 static CallBackFunction ToolbarTownClick(Window *w)
@@ -506,6 +508,9 @@ static CallBackFunction ToolbarTownClick(Window *w)
 	if (IsEnvironmentOn()) {
 		list.push_back(MakeDropDownListCheckedItem(GetEnvironmentOverlay() == EnvironmentOverlay::Pollution, STR_TOWN_MENU_POLLUTION_MAP, to_underlying(TownMenuEntries::ShowPollution)));
 		list.push_back(MakeDropDownListCheckedItem(GetEnvironmentOverlay() == EnvironmentOverlay::LandValue, STR_TOWN_MENU_LAND_VALUE_MAP, to_underlying(TownMenuEntries::ShowLandValue)));
+	}
+	if (IsCommutingOn()) {
+		list.push_back(MakeDropDownListCheckedItem(GetEnvironmentOverlay() == EnvironmentOverlay::Commuters, STR_TOWN_MENU_COMMUTER_MAP, to_underlying(TownMenuEntries::ShowCommuters)));
 	}
 
 	PopupMainToolbarMenu(w, WID_TN_TOWNS, std::move(list), 0);
@@ -533,6 +538,7 @@ static CallBackFunction MenuClickTown(int index)
 		case TownMenuEntries::ShowCityServices: ShowCityServicesToolbar(); break;
 		case TownMenuEntries::ShowPollution: ShowEnvironmentOverlay(EnvironmentOverlay::Pollution); break;
 		case TownMenuEntries::ShowLandValue: ShowEnvironmentOverlay(EnvironmentOverlay::LandValue); break;
+		case TownMenuEntries::ShowCommuters: ShowEnvironmentOverlay(EnvironmentOverlay::Commuters); break;
 	}
 	return CallBackFunction::None;
 }

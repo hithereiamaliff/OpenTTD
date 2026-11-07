@@ -51,6 +51,7 @@
 
 #include "widgets/town_widget.h"
 #include "town_traffic.h"
+#include "commuting.h"
 #include "environment.h"
 #include "town_budget.h"
 #include "transit_authority.h"
@@ -440,8 +441,25 @@ public:
 			}
 			DrawString(tr, GetString(STR_TOWN_VIEW_TRAFFIC, level, congested));
 			tr.top += GetCharacterHeight(FontSize::Normal);
-			DrawString(tr, GetString(STR_TOWN_VIEW_TRAFFIC_TRANSIT, GetTownCarReduction(this->town)));
-			tr.top += GetCharacterHeight(FontSize::Normal);
+			if (IsTownCommutingKnown(this->town)) {
+				/* Commuting: how many, how many take transit, and how long it takes them. */
+				const TownCommuting &c = this->town->commuting;
+				DrawString(tr, GetString(STR_TOWN_VIEW_COMMUTERS, c.commuters, GetTownCommuteTransitShare(this->town)));
+				tr.top += GetCharacterHeight(FontSize::Normal);
+				if (c.transit_time > 0) {
+					DrawString(tr, GetString(STR_TOWN_VIEW_COMMUTE_TIMES, GetCommuteMinutes(c.car_time), GetCommuteMinutes(c.transit_time)));
+				} else {
+					DrawString(tr, GetString(STR_TOWN_VIEW_COMMUTE_TIMES_CAR, GetCommuteMinutes(c.car_time)));
+				}
+				tr.top += GetCharacterHeight(FontSize::Normal);
+			} else {
+				if (IsCommutingOn()) {
+					DrawString(tr, STR_TOWN_VIEW_COMMUTERS_UNKNOWN);
+					tr.top += GetCharacterHeight(FontSize::Normal);
+				}
+				DrawString(tr, GetString(STR_TOWN_VIEW_TRAFFIC_TRANSIT, GetTownCarReduction(this->town)));
+				tr.top += GetCharacterHeight(FontSize::Normal);
+			}
 		}
 
 		/* The air where its people live, and what their land is worth. */
@@ -613,7 +631,7 @@ public:
 	 */
 	uint GetDesiredInfoHeight(int width) const
 	{
-		uint traffic_lines = (_settings_game.economy.town_traffic != to_underlying(TownTrafficSetting::Off) ? 2 : 0) + (IsEnvironmentOn() ? 1 : 0);
+		uint traffic_lines = (_settings_game.economy.town_traffic != to_underlying(TownTrafficSetting::Off) ? (IsCommutingOn() ? 3 : 2) : 0) + (IsEnvironmentOn() ? 1 : 0);
 		uint aimed_height = static_cast<uint>(3 + traffic_lines + CargoSpec::town_production_cargoes[TownProductionEffect::Passengers].size() + CargoSpec::town_production_cargoes[TownProductionEffect::Mail].size()) * GetCharacterHeight(FontSize::Normal);
 		aimed_height += GetServiceRowHeight();
 

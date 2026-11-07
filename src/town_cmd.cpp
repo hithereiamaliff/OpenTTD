@@ -10,6 +10,7 @@
 #include "stdafx.h"
 #include "bridge.h"
 #include "city_clock.h"
+#include "commuting.h"
 #include "misc/history_type.hpp"
 #include "misc/history_func.hpp"
 #include "road.h"
@@ -124,6 +125,9 @@ static bool TestTownOwnsBridge(TileIndex tile, const Town *t)
 Town::~Town()
 {
 	if (CleaningPool()) return;
+
+	/* Its commuters' cars leave the roads. */
+	OnTownCommutingRemoved(this);
 
 	/* Delete town authority window
 	 * and remove from list of sorted towns */
@@ -517,10 +521,18 @@ static void AdvanceHouseConstruction(TileIndex tile)
  * @param amount The number of cargo units.
  * @param stations Available stations for this house.
  * @param affected_by_recession Is this cargo halved during recessions?
+ * @param passenger_percent Passengers the house sends, in percent of the usual (commuters who take transit make more).
  */
-static void TownGenerateCargo(Town *t, CargoType cargo, uint amount, StationFinder &stations, bool affected_by_recession)
+static void TownGenerateCargo(Town *t, CargoType cargo, uint amount, StationFinder &stations, bool affected_by_recession, uint passenger_percent = 100)
 {
 	if (amount == 0) return;
+
+	/* Homes and workplaces whose commuters take transit a lot send more passengers. */
+	if (passenger_percent != 100 && IsCargoInClass(cargo, CargoClass::Passengers)) {
+		const uint scaled = amount * passenger_percent;
+		amount = scaled / 100 + (RandomRange(100) < scaled % 100 ? 1 : 0);
+		if (amount == 0) return;
+	}
 
 	/* All production is halved during a recession (except for NewGRF-supplied town cargo). */
 	if (affected_by_recession && EconomyIsInRecession()) {
@@ -547,8 +559,9 @@ static void TownGenerateCargo(Town *t, CargoType cargo, uint amount, StationFind
  * @param tpe The town production effect.
  * @param rate The town's product rate for this production.
  * @param stations Available stations for this house.
+ * @param passenger_percent Passengers the house sends, in percent of the usual.
  */
-static void TownGenerateCargoOriginal(Town *t, TownProductionEffect tpe, uint8_t rate, StationFinder &stations)
+static void TownGenerateCargoOriginal(Town *t, TownProductionEffect tpe, uint8_t rate, StationFinder &stations, uint passenger_percent = 100)
 {
 	for (const CargoSpec *cs : CargoSpec::town_production_cargoes[tpe]) {
 		uint32_t r = Random();
@@ -556,7 +569,7 @@ static void TownGenerateCargoOriginal(Town *t, TownProductionEffect tpe, uint8_t
 			CargoType cargo_type = cs->Index();
 			uint amt = (GB(r, 0, 8) * cs->town_production_multiplier / TOWN_PRODUCTION_DIVISOR) / 8 + 1;
 
-			TownGenerateCargo(t, cargo_type, amt, stations, true);
+			TownGenerateCargo(t, cargo_type, amt, stations, true, passenger_percent);
 		}
 	}
 }
@@ -567,8 +580,9 @@ static void TownGenerateCargoOriginal(Town *t, TownProductionEffect tpe, uint8_t
  * @param tpe The town production effect.
  * @param rate The town's product rate for this production.
  * @param stations Available stations for this house.
+ * @param passenger_percent Passengers the house sends, in percent of the usual.
  */
-static void TownGenerateCargoBinomial(Town *t, TownProductionEffect tpe, uint8_t rate, StationFinder &stations)
+static void TownGenerateCargoBinomial(Town *t, TownProductionEffect tpe, uint8_t rate, StationFinder &stations, uint passenger_percent = 100)
 {
 	for (const CargoSpec *cs : CargoSpec::town_production_cargoes[tpe]) {
 		CargoType cargo_type = cs->Index();
@@ -581,7 +595,7 @@ static void TownGenerateCargoBinomial(Town *t, TownProductionEffect tpe, uint8_t
 		/* Mask random value by potential pax and count number of actual pax. */
 		uint amt = CountBits(r & genmask) * cs->town_production_multiplier / TOWN_PRODUCTION_DIVISOR;
 
-		TownGenerateCargo(t, cargo_type, amt, stations, true);
+		TownGenerateCargo(t, cargo_type, amt, stations, true, passenger_percent);
 	}
 }
 
@@ -614,6 +628,7 @@ static void TileLoop_Town(TileIndex tile)
 	uint32_t r = Random();
 
 	StationFinder stations(TileArea(tile, 1, 1));
+	const uint passenger_percent = GetCommuterPassengerPercent(t, tile, *hs);
 
 	if (hs->callback_mask.Test(HouseCallbackMask::ProduceCargo)) {
 		for (uint i = 0; i < 256; i++) {
@@ -628,13 +643,13 @@ static void TileLoop_Town(TileIndex tile)
 			if (amt == 0) continue;
 
 			/* NewGRF-supplied town cargos are not affected by recessions. */
-			TownGenerateCargo(t, cargo, amt, stations, false);
+			TownGenerateCargo(t, cargo, amt, stations, false, passenger_percent);
 		}
 	} else {
 		switch (_settings_game.economy.town_cargogen_mode) {
 			case TownCargoGenMode::Original:
 				/* Original (quadratic) cargo generation algorithm */
-				TownGenerateCargoOriginal(t, TownProductionEffect::Passengers, hs->population, stations);
+				TownGenerateCargoOriginal(t, TownProductionEffect::Passengers, hs->population, stations, passenger_percent);
 				TownGenerateCargoOriginal(t, TownProductionEffect::Mail, hs->mail_generation, stations);
 				break;
 
@@ -643,7 +658,7 @@ static void TileLoop_Town(TileIndex tile)
 				/* Reduce generation rate to a 1/4, using tile bits to spread out distribution.
 				 * As tick counter is incremented by 256 between each call, we ignore the lower 8 bits. */
 				if (GB(TimerGameTick::counter, 8, 2) == GB(tile.base(), 0, 2)) {
-					TownGenerateCargoBinomial(t, TownProductionEffect::Passengers, hs->population, stations);
+					TownGenerateCargoBinomial(t, TownProductionEffect::Passengers, hs->population, stations, passenger_percent);
 					TownGenerateCargoBinomial(t, TownProductionEffect::Mail, hs->mail_generation, stations);
 				}
 				break;

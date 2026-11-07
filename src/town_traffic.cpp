@@ -9,6 +9,7 @@
 
 #include "stdafx.h"
 #include "town_traffic.h"
+#include "commuting.h"
 #include "town_budget.h"
 #include "city_clock.h"
 #include "bus_priority.h"
@@ -39,6 +40,10 @@ static constexpr uint TRAFFIC_CATCHMENT_RADIUS = 3;
  * 3,000 stay at 0-1; cities of 50,000 and more see 6 and 7.
  */
 static constexpr uint64_t TRAFFIC_LEVEL_THRESHOLDS[ROAD_CONGESTION_MAX] = {10000, 18000, 26000, 34000, 44000, 58000, 75000};
+/** With commuting, the traffic of the homes and jobs around a road counts for this share, in percent: the rest is commuters, who are routed. */
+static constexpr uint64_t LOCAL_TRAFFIC_PERCENT = 50;
+/** With commuting, the traffic of one commuter's car a day (one way) on a road. */
+static constexpr uint64_t COMMUTE_TRAFFIC_PER_CAR = 25;
 /** Traffic a city service tile draws, like a house with this many people. */
 static constexpr uint CITY_SERVICE_TRAFFIC = 30;
 /** More activity than this around one road is hardly possible: every tile an office block of 150 people. */
@@ -65,12 +70,28 @@ static uint GetTownTransitShare(const Town *t)
 }
 
 /**
- * How much of the town's car traffic the player's passenger services take
- * off the road: up to 60% when they carry all of the town's passengers.
+ * How much of the town's car traffic passenger services take off the road:
+ * with commuting, the share of commuters who take transit; else by the
+ * passengers they carry (#GetTownRidershipCarReduction).
  * @param t The town.
  * @return The reduction in percent.
  */
 uint GetTownCarReduction(const Town *t)
+{
+	/* With commuting, the share of commuters who take transit (see commuting.cpp). */
+	if (IsTownCommutingKnown(t)) return GetTownCommuteTransitShare(t);
+	return GetTownRidershipCarReduction(t);
+}
+
+/**
+ * How much of the town's car traffic the player's passenger services take
+ * off the road by the passengers they carry: up to 60% when they carry all
+ * of the town's passengers. With commuting, at least this share of
+ * commuters take transit.
+ * @param t The town.
+ * @return The reduction in percent.
+ */
+uint GetTownRidershipCarReduction(const Town *t)
 {
 	return GetTownTransitShare(t) * 60 / 256;
 }
@@ -143,13 +164,23 @@ uint8_t GetTownTrafficTarget(TileIndex tile, const Town *t)
 	if (DistanceSquare(tile, t->xy) > town_radius_sq * 4 + 64) return 0;
 
 	/* How much of the traffic around the road ends up on it, in millionths. */
+	const uint capacity = GetRoadCapacity(tile);
 	uint64_t share = static_cast<uint64_t>(GetTownSizeFactor(t)) * GetCentralityFactor(GetTownRadiusGroup(t, tile)) *
-			(100 - GetTownCarReduction(t)) * SETTING_FACTOR[setting] / GetRoadCapacity(tile);
+			(100 - GetTownCarReduction(t)) * SETTING_FACTOR[setting] / capacity;
 	/* A congestion charge keeps cars out of the town centre; so do parking limits and a car-free centre. */
+	const uint policy = GetCongestionChargeTrafficPercent(t, tile) * GetOrdinanceTrafficPercent(t, tile) / 100;
 	share = share * GetCongestionChargeTrafficPercent(t, tile) / 100;
 	share = share * GetOrdinanceTrafficPercent(t, tile) / 100;
+
+	/* With commuting, commuters' cars come along the routes they take, and the homes and jobs around add their errands. */
+	uint64_t commute_traffic = 0;
+	if (IsTownCommutingKnown(t)) {
+		commute_traffic = static_cast<uint64_t>(GetCommuteCars(tile)) * COMMUTE_TRAFFIC_PER_CAR * SETTING_FACTOR[setting] * policy / capacity / 100;
+		share = share * LOCAL_TRAFFIC_PERCENT / 100;
+	}
+
 	/* Even the densest blocks don't make enough traffic for small towns and their edges to congest. */
-	if (share * MAX_TRAFFIC_ACTIVITY / 1'000'000 < TRAFFIC_LEVEL_THRESHOLDS[0]) return 0;
+	if (share * MAX_TRAFFIC_ACTIVITY / 1'000'000 + commute_traffic < TRAFFIC_LEVEL_THRESHOLDS[0]) return 0;
 
 	/* Trips start and end at the homes, jobs and city services around the road. */
 	uint64_t activity = 0;
@@ -176,9 +207,9 @@ uint8_t GetTownTrafficTarget(TileIndex tile, const Town *t)
 				break;
 		}
 	}
-	if (activity == 0) return 0;
+	if (activity == 0 && commute_traffic == 0) return 0;
 
-	uint64_t traffic = activity * share / 1'000'000;
+	uint64_t traffic = activity * share / 1'000'000 + commute_traffic;
 	return static_cast<uint8_t>(std::ranges::count_if(TRAFFIC_LEVEL_THRESHOLDS, [traffic](uint64_t threshold) { return traffic >= threshold; }));
 }
 

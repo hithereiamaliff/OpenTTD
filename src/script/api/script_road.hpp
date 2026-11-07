@@ -592,6 +592,16 @@ public:
 	static SQInteger GetCongestion(TileIndex tile);
 
 	/**
+	 * How many commuters' cars use a road tile on a day, both ways (setting economy.commuting).
+	 * Commuters drive the quickest way between their homes and jobs, and
+	 * their cars add to the town traffic on the roads they take.
+	 * @param tile The tile to check.
+	 * @pre ScriptMap::IsValidTile(tile).
+	 * @return The cars a day; 0 if none, or if commuting is off.
+	 */
+	static SQInteger GetCommuterTraffic(TileIndex tile);
+
+	/**
 	 * Build a depot facility next to one of your road depots or its yard.
 	 * @param tile The tile to build it on.
 	 * @param facility The facility.

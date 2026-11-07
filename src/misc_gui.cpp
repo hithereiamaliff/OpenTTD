@@ -38,6 +38,7 @@
 #include "timer/timer_window.h"
 #include "pathfinder/water_regions.h"
 #include "town_traffic.h"
+#include "commuting.h"
 #include "town_zoning.h"
 #include "city_services.h"
 #include "environment.h"
@@ -221,6 +222,12 @@ public:
 			};
 			HouseKind kind = GetHouseKind(*HouseSpec::Get(GetHouseType(this->tile)));
 			this->landinfo_data.push_back(GetString(STR_LAND_AREA_INFORMATION_HOUSE_KIND, kind_names[to_underlying(kind)]));
+			/* How the people who live or work here get to work. */
+			const Town *house_town = Town::GetByTile(this->tile);
+			if (IsTownCommutingKnown(house_town)) {
+				const uint share = GetHouseCommuteShare(house_town, this->tile, *HouseSpec::Get(GetHouseType(this->tile)));
+				this->landinfo_data.push_back(GetString(kind == HouseKind::Home ? STR_LAND_AREA_INFORMATION_COMMUTE_HOME : STR_LAND_AREA_INFORMATION_COMMUTE_JOB, share));
+			}
 		}
 
 		/* Town traffic */
@@ -232,6 +239,10 @@ public:
 			} else {
 				this->landinfo_data.push_back(GetString(STR_LAND_AREA_INFORMATION_TOWN_TRAFFIC, level, PackVelocity(kmh, VehicleType::Road)));
 			}
+		}
+		/* Commuters' cars on the road, both ways. */
+		if (IsCommutingOn() && GetCommuteCars(this->tile) > 0) {
+			this->landinfo_data.push_back(GetString(STR_LAND_AREA_INFORMATION_COMMUTER_CARS, GetCommuteCars(this->tile) * 2));
 		}
 
 		/* Bus priority */

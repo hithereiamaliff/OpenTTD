@@ -35,6 +35,7 @@
 #include "town.h"
 #include "environment.h"
 #include "town_budget.h"
+#include "commuting.h"
 #include "video/video_driver.hpp"
 #include "sound/sound_driver.hpp"
 #include "music/music_driver.hpp"
@@ -401,7 +402,7 @@ static void TownFoundingChanged(int32_t)
 	}
 }
 
-/** The city clock was switched on or off, or its day got longer or shorter: the time shows in the status bar and the line window. */
+/** Air pollution and land value were switched on or off, or pollution made lighter or heavier. */
 static void EnvironmentChanged(int32_t)
 {
 	OnEnvironmentSettingChanged();
@@ -413,6 +414,12 @@ static void TownBudgetsChanged(int32_t)
 	InvalidateWindowClassesData(WindowClass::TownBudget);
 	InvalidateWindowClassesData(WindowClass::TransitAuthority);
 	SetWindowClassesDirty(WindowClass::TownView);
+}
+
+/** Commuting, or town traffic, was switched on or off: towns forget their commutes, or work them out at once. */
+static void CommutingChanged(int32_t)
+{
+	OnCommutingSettingChanged();
 }
 
 static void RushHoursChanged(int32_t)

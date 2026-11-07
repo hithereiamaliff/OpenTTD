@@ -33,6 +33,7 @@
 #include "../../environment.h"
 #include "../../town_budget.h"
 #include "../../town_traffic.h"
+#include "../../commuting.h"
 #include "../../town_budget_cmd.h"
 #include "../../transit_authority_cmd.h"
 #include "../../safeguards.h"
@@ -326,6 +327,28 @@
 {
 	if (!IsValidTown(town_id)) return -1;
 	return ::Town::Get(town_id)->budget.lez_charged_last_month;
+}
+
+/* static */ SQInteger ScriptTown::GetCommuters(TownID town_id)
+{
+	if (!IsValidTown(town_id)) return -1;
+	const ::Town *t = ::Town::Get(town_id);
+	return ::IsTownCommutingKnown(t) ? t->commuting.commuters : 0;
+}
+
+/* static */ SQInteger ScriptTown::GetTransitCommuters(TownID town_id)
+{
+	if (!IsValidTown(town_id)) return -1;
+	const ::Town *t = ::Town::Get(town_id);
+	return ::IsTownCommutingKnown(t) ? t->commuting.by_transit : 0;
+}
+
+/* static */ SQInteger ScriptTown::GetCommuteTime(TownID town_id, bool by_transit)
+{
+	if (!IsValidTown(town_id)) return -1;
+	const ::Town *t = ::Town::Get(town_id);
+	if (!::IsTownCommutingKnown(t)) return 0;
+	return by_transit ? t->commuting.transit_time : t->commuting.car_time;
 }
 
 /* static */ Money ScriptTown::GetReserves(TownID town_id)

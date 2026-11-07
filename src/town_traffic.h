@@ -12,7 +12,8 @@
  * a congestion level, worked out now and then from the homes, jobs and city
  * services around it, the size of the town, how central the road is, how
  * much of the town's travel the player's passenger services carry, and what
- * the road can take. Congested roads slow down road vehicles and the
+ * the road can take; with commuting (commuting.cpp), also from the
+ * commuters' cars on the routes they take. Congested roads slow down road vehicles and the
  * pathfinder avoids them. The level is kept in the map, so it is saved and
  * the same for every player in a network game. Cars and pedestrians drawn on
  * the roads only show it.
@@ -42,6 +43,7 @@ int GetRoadCongestionSpeedLimit(TileIndex tile, bool bus = false);
 int GetRoadCongestionSpeedLimitKmh(uint8_t level);
 uint GetRoadCongestionPenalty(TileIndex tile, bool bus = false);
 uint GetTownCarReduction(const Town *t);
+uint GetTownRidershipCarReduction(const Town *t);
 bool TownTrafficWaitsAt(TileIndex junction, Axis axis, bool longest_green_over);
 
 /** How busy the roads of a town are. */

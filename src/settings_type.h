@@ -641,6 +641,7 @@ struct EconomySettings {
 	uint8_t rush_hours; ///< how long a day of the city clock lasts, @see CityClockSetting
 	uint8_t environment; ///< how strong air pollution is; off switches pollution and land value off, @see EnvironmentSetting
 	bool town_budgets; ///< towns keep budgets and bring in ordinances
+	bool commuting; ///< towns work out where their people work and how they get there; traffic follows their routes
 	uint8_t larger_towns; ///< the number of cities to build. These start off larger and grow twice as fast
 	uint8_t initial_city_size; ///< multiplier for the initial size of the cities compared to towns
 	TownLayout town_layout; ///< select town layout, @see TownLayout

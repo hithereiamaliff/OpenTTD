@@ -30,6 +30,7 @@ enum class EnvironmentOverlay : uint8_t {
 	None, ///< Nothing.
 	Pollution, ///< Air pollution.
 	LandValue, ///< Land value.
+	Commuters, ///< Commuters' cars on the roads (see commuting.cpp).
 };
 
 /** The air pollutant index above which the air is unhealthy (Malaysia's API, Singapore's PSI). */

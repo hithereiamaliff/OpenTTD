@@ -487,6 +487,7 @@ STR_TOWN_MENU_ZONING                                            :Zoning
 STR_TOWN_MENU_CITY_SERVICES                                     :City services
 STR_TOWN_MENU_POLLUTION_MAP                                     :Air pollution map
 STR_TOWN_MENU_LAND_VALUE_MAP                                    :Land value map
+STR_TOWN_MENU_COMMUTER_MAP                                      :Commuter traffic map
 
 # Subsidies menu
 STR_SUBSIDIES_MENU_SUBSIDIES                                    :Subsidies
@@ -2186,6 +2187,8 @@ STR_CONFIG_SETTING_AIR_POLLUTION_NORMAL                         :Normal pollutio
 STR_CONFIG_SETTING_AIR_POLLUTION_HEAVY                          :Heavy pollution
 STR_CONFIG_SETTING_TOWN_BUDGETS                                 :Town budgets and ordinances: {STRING2}
 STR_CONFIG_SETTING_TOWN_BUDGETS_HELPTEXT                        :Towns collect taxes, more from bigger towns and dearer land. A quarter goes to transit (the transit budget for contracts, passes and concessions), 60% to running the town; the rest pays for ordinances or builds reserves. Towns cut taxes when they have money put by and raise them when they run short; high taxes make a town less happy and slow its growth.{}Towns bring in ordinances when their problems call for them and they can afford them: parking limits, a low-emission zone, a car-free centre, tree planting, transit-oriented development, a transit fund. Companies can propose them in the town's Budget window.{}Off: no budgets and no ordinances; transit budgets as before
+STR_CONFIG_SETTING_COMMUTING                                    :Commuting: {STRING2}
+STR_CONFIG_SETTING_COMMUTING_HELPTEXT                           :Towns work out once a month where their people work and how they get there. 45% of a town's people go to work on a day, more to places with many jobs, fewer the further away. Each can drive (the quickest way over the town's roads, slowed by town traffic, then parking: longer in the centre, longer with parking limits, from the edge of a car-free centre) or, within reach of a stop, take transit (walking, waiting, riding, changing, the fare, walking on). The quicker transit is against the car, the more take it: half when it takes as long. At least as many take it as the share of the town's passengers your services carry says. Drivers' cars follow their routes, so the roads between homes and jobs get busy; homes and workplaces whose commuters find transit quick send up to twice the passengers. Needs town traffic. Off: traffic comes from the homes and jobs around each road, as before
 
 STR_CONFIG_SETTING_LARGER_TOWNS                                 :Proportion of towns that will become cities: {STRING2}
 STR_CONFIG_SETTING_LARGER_TOWNS_HELPTEXT                        :Amount of towns which will become a city, thus a town which starts out larger and grows faster
@@ -3376,7 +3379,10 @@ STR_LAND_AREA_INFORMATION_ZONE_INDUSTRIAL                       :industry
 STR_LAND_AREA_INFORMATION_ZONE_PARK                             :parks
 STR_LAND_AREA_INFORMATION_TOWN_TRAFFIC_FREE                     :{BLACK}Town traffic: {LTBLUE}level {NUM} of 7, flows freely
 STR_LAND_AREA_INFORMATION_TOWN_TRAFFIC                          :{BLACK}Town traffic: {LTBLUE}level {NUM} of 7, moves at {VELOCITY}
+STR_LAND_AREA_INFORMATION_COMMUTER_CARS                         :{BLACK}Commuters: {LTBLUE}{COMMA} car{P "" s} a day
 STR_LAND_AREA_INFORMATION_HOUSE_KIND                            :{BLACK}Zoning counts it as: {LTBLUE}{STRING}
+STR_LAND_AREA_INFORMATION_COMMUTE_HOME                          :{BLACK}Commuting from here: {LTBLUE}{NUM}%{BLACK} by transit
+STR_LAND_AREA_INFORMATION_COMMUTE_JOB                           :{BLACK}Commuting to work here: {LTBLUE}{NUM}%{BLACK} by transit
 STR_LAND_AREA_INFORMATION_HOUSE_KIND_HOME                       :a home
 STR_LAND_AREA_INFORMATION_HOUSE_KIND_BUSINESS                   :a business
 STR_LAND_AREA_INFORMATION_HOUSE_KIND_PUBLIC                     :a public building
@@ -3980,6 +3986,10 @@ STR_TOWN_VIEW_TRAFFIC_MODERATE                                  :moderate
 STR_TOWN_VIEW_TRAFFIC_HEAVY                                     :heavy
 STR_TOWN_VIEW_TRAFFIC_VERY_HEAVY                                :very heavy
 STR_TOWN_VIEW_TRAFFIC_TRANSIT                                   :{BLACK}Your services take {ORANGE}{NUM}%{BLACK} of cars off the road
+STR_TOWN_VIEW_COMMUTERS                                         :{BLACK}Commuters: {ORANGE}{COMMA}{BLACK} a day, {ORANGE}{NUM}%{BLACK} by transit
+STR_TOWN_VIEW_COMMUTERS_UNKNOWN                                 :{BLACK}Commuters: not counted yet (towns count them once a month)
+STR_TOWN_VIEW_COMMUTE_TIMES                                     :{BLACK}Door to door: {ORANGE}{NUM} min{BLACK} by car, {ORANGE}{NUM} min{BLACK} by transit
+STR_TOWN_VIEW_COMMUTE_TIMES_CAR                                 :{BLACK}Door to door: {ORANGE}{NUM} min{BLACK} by car; transit doesn't go where they work
 STR_TOWN_VIEW_ENVIRONMENT                                       :{BLACK}Air: {ORANGE}API {NUM}{BLACK} ({STRING}); land value {ORANGE}{NUM}{BLACK} ({STRING})
 STR_TOWN_VIEW_ENVIRONMENT_UNHEALTHY                             :{BLACK}Air: {RED}API {NUM} ({STRING}){BLACK}; land value {ORANGE}{NUM}{BLACK} ({STRING})
 STR_TOWN_VIEW_ENVIRONMENT_UNKNOWN                               :{BLACK}Air and land value: measured at the end of the month
