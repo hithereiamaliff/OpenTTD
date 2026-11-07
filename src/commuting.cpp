@@ -57,6 +57,7 @@
 #include "stdafx.h"
 #include "commuting.h"
 #include "city_services_type.h"
+#include "city_services.h"
 #include "core/math_func.hpp"
 #include "debug.h"
 #include "fare.h"
@@ -691,7 +692,7 @@ void UpdateTownCommuting(Town *t)
 
 				case TileType::Object:
 					if (IsCityServiceObjectType(GetObjectType(tile)) && works_in(Object::GetByTile(tile)->town)) {
-						tile_jobs[local(x, y)] = 30 * 100;
+						tile_jobs[local(x, y)] = GetCityServiceJobs(GetCityServiceOfObjectType(GetObjectType(tile))) * 100;
 						tile_town[local(x, y)] = Object::GetByTile(tile)->town;
 					}
 					break;

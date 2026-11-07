@@ -643,6 +643,11 @@ static CommandCost ClearTile_Object(TileIndex tile, DoCommandFlags flags)
 /** @copydoc AddAcceptedCargoProc */
 static void AddAcceptedCargo_Object(TileIndex tile, CargoArray &acceptance, CargoTypes &always_accepted)
 {
+	/* City fork: the bigger city services take passengers. */
+	if (IsCityServiceObjectType(GetObjectType(tile))) {
+		AddCityServiceAcceptance(tile, acceptance, always_accepted);
+		return;
+	}
 	if (!IsObjectType(tile, OBJECT_HQ)) return;
 
 	/* HQ accepts passenger and mail; but we have to divide the values
@@ -706,6 +711,12 @@ static void TileLoop_Object(TileIndex tile)
 	}
 
 	if (IsTileOnWater(tile)) TileLoop_Water(tile);
+
+	/* City fork: the bigger city services send passengers. */
+	if (IsCityServiceObjectType(GetObjectType(tile))) {
+		TileLoopCityService(tile);
+		return;
+	}
 
 	if (!IsObjectType(tile, OBJECT_HQ)) return;
 

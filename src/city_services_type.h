@@ -5,7 +5,7 @@
  * See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with OpenTTD. If not, see <https://www.gnu.org/licenses/old-licenses/gpl-2.0>.
  */
 
-/** @file city_services_type.h Types for city services: police, fire, health, schools and parks. */
+/** @file city_services_type.h Types for city services: police, fire, health, schools and parks; hospitals, universities, stadiums and hawker centres. */
 
 #ifndef CITY_SERVICES_TYPE_H
 #define CITY_SERVICES_TYPE_H
@@ -19,11 +19,17 @@ enum class CityService : uint8_t {
 	Health, ///< Clinic.
 	Education, ///< School.
 	Park, ///< Park.
+	Hospital, ///< Hospital: health care for a whole town, and visitors (two by two tiles).
+	University, ///< University: education for a whole town, students and staff (two by two tiles).
+	Stadium, ///< Stadium: crowds on match days (two by two tiles).
+	Market, ///< Hawker centre or market: food and daily needs.
 	End, ///< End marker.
 };
 
 /** Number of kinds of city service. */
 static constexpr uint CITY_SERVICE_COUNT = to_underlying(CityService::End);
+/** The first kinds, from the first part of the city services; their object types come first. */
+static constexpr uint BASIC_CITY_SERVICE_COUNT = 5;
 
 /**
  * Object types of the city services. They sit at the top of the object type
@@ -31,6 +37,8 @@ static constexpr uint CITY_SERVICE_COUNT = to_underlying(CityService::End);
  * clash with the NewGRF objects of a savegame. 16 are reserved, a few used.
  */
 static constexpr ObjectType OBJECT_CITY_SERVICE_FIRST = NUM_OBJECTS - 16;
+/** Object types of the bigger city services, from the hospital on: the 16 below those. */
+static constexpr ObjectType OBJECT_CIVIC_SERVICE_FIRST = NUM_OBJECTS - 32;
 
 /**
  * Is an object type a city service?
@@ -39,7 +47,8 @@ static constexpr ObjectType OBJECT_CITY_SERVICE_FIRST = NUM_OBJECTS - 16;
  */
 inline bool IsCityServiceObjectType(ObjectType type)
 {
-	return type >= OBJECT_CITY_SERVICE_FIRST && type < OBJECT_CITY_SERVICE_FIRST + CITY_SERVICE_COUNT;
+	if (type >= OBJECT_CITY_SERVICE_FIRST) return type < OBJECT_CITY_SERVICE_FIRST + BASIC_CITY_SERVICE_COUNT;
+	return type >= OBJECT_CIVIC_SERVICE_FIRST && type < OBJECT_CIVIC_SERVICE_FIRST + (CITY_SERVICE_COUNT - BASIC_CITY_SERVICE_COUNT);
 }
 
 /**
@@ -50,7 +59,8 @@ inline bool IsCityServiceObjectType(ObjectType type)
  */
 inline CityService GetCityServiceOfObjectType(ObjectType type)
 {
-	return static_cast<CityService>(type - OBJECT_CITY_SERVICE_FIRST);
+	if (type >= OBJECT_CITY_SERVICE_FIRST) return static_cast<CityService>(type - OBJECT_CITY_SERVICE_FIRST);
+	return static_cast<CityService>(BASIC_CITY_SERVICE_COUNT + type - OBJECT_CIVIC_SERVICE_FIRST);
 }
 
 /**
@@ -60,7 +70,8 @@ inline CityService GetCityServiceOfObjectType(ObjectType type)
  */
 inline ObjectType GetObjectTypeOfCityService(CityService service)
 {
-	return OBJECT_CITY_SERVICE_FIRST + to_underlying(service);
+	if (to_underlying(service) < BASIC_CITY_SERVICE_COUNT) return OBJECT_CITY_SERVICE_FIRST + to_underlying(service);
+	return OBJECT_CIVIC_SERVICE_FIRST + (to_underlying(service) - BASIC_CITY_SERVICE_COUNT);
 }
 
 /** How much of a town's population lives within reach of each city service, updated monthly. */

@@ -3130,6 +3130,10 @@ STR_CITY_SERVICES_FIRE_TOOLTIP                                  :{BLACK}Build a 
 STR_CITY_SERVICES_HEALTH_TOOLTIP                                :{BLACK}Build a clinic: health care for people living within 10 tiles. City services make towns happier, and happy towns grow faster. Costs upkeep every month
 STR_CITY_SERVICES_EDUCATION_TOOLTIP                             :{BLACK}Build a school: education for people living within 10 tiles. City services make towns happier, and happy towns grow faster. Costs upkeep every month
 STR_CITY_SERVICES_PARK_TOOLTIP                                  :{BLACK}Build a park: green space for people living within 5 tiles. City services make towns happier, and happy towns grow faster. Costs upkeep every month
+STR_CITY_SERVICES_HOSPITAL_TOOLTIP                              :{BLACK}Build a hospital (two by two tiles): health care for houses within 22 tiles, like the clinics, and visitors: it sends and takes passengers, and its jobs draw commuters. Costly to build and run
+STR_CITY_SERVICES_UNIVERSITY_TOOLTIP                            :{BLACK}Build a university (two by two tiles): education for houses within 22 tiles, like the schools; land around it is worth more; students and staff: it sends and takes many passengers
+STR_CITY_SERVICES_STADIUM_TOOLTIP                               :{BLACK}Build a stadium (two by two tiles): the town within 16 tiles is a little happier; on match days, one day a week, crowds come by transit: it sends and takes passengers
+STR_CITY_SERVICES_MARKET_TOOLTIP                                :{BLACK}Build a hawker centre: food and daily needs within 8 tiles make people a little happier and land a little dearer; shoppers come and go by transit
 STR_CITY_SERVICE_POLICE                                         :Police station
 STR_CITY_SERVICE_FIRE                                           :Fire station
 STR_CITY_SERVICE_HEALTH                                         :Clinic
@@ -3140,6 +3144,14 @@ STR_CITY_SERVICE_FIRE_SHORT                                     :fire
 STR_CITY_SERVICE_HEALTH_SHORT                                   :health
 STR_CITY_SERVICE_EDUCATION_SHORT                                :school
 STR_CITY_SERVICE_PARK_SHORT                                     :park
+STR_CITY_SERVICE_HOSPITAL                                       :Hospital
+STR_CITY_SERVICE_HOSPITAL_SHORT                                 :hospital
+STR_CITY_SERVICE_UNIVERSITY                                     :University
+STR_CITY_SERVICE_UNIVERSITY_SHORT                               :university
+STR_CITY_SERVICE_STADIUM                                        :Stadium
+STR_CITY_SERVICE_STADIUM_SHORT                                  :stadium
+STR_CITY_SERVICE_MARKET                                         :Hawker centre
+STR_CITY_SERVICE_MARKET_SHORT                                   :hawker centre
 
 # Traffic light window
 STR_TRAFFIC_LIGHT_CAPTION                                       :{WHITE}Traffic lights in {TOWN}

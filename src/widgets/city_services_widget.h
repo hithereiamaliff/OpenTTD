@@ -18,6 +18,10 @@ enum CityServicesWidgets : WidgetID {
 	WID_CS_HEALTH,    ///< Build a clinic.
 	WID_CS_EDUCATION, ///< Build a school.
 	WID_CS_PARK,      ///< Build a park.
+	WID_CS_HOSPITAL,  ///< Build a hospital.
+	WID_CS_UNIVERSITY, ///< Build a university.
+	WID_CS_STADIUM,   ///< Build a stadium.
+	WID_CS_MARKET,    ///< Build a hawker centre.
 };
 
 #endif /* WIDGETS_CITY_SERVICES_WIDGET_H */

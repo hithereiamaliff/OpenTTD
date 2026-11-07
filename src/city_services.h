@@ -25,6 +25,7 @@
 #include "strings_type.h"
 #include "tile_type.h"
 #include "town_type.h"
+#include "cargo_type.h"
 
 struct ObjectSpec;
 struct TileInfo;
@@ -46,9 +47,13 @@ uint GetCityServiceObjectSpecIndex(const ObjectSpec *spec);
 
 uint GetTownHappiness(const Town *t);
 uint GetTownServiceGrowthBonus(const Town *t);
-uint8_t GetCityServicesCoveringTile(TileIndex tile);
+uint16_t GetCityServicesCoveringTile(TileIndex tile);
+uint GetCityServiceSize(CityService service);
+uint GetCityServiceJobs(CityService service);
 
 void DrawCityServiceTile(TileInfo *ti, ObjectType type);
+void TileLoopCityService(TileIndex tile);
+void AddCityServiceAcceptance(TileIndex tile, CargoArray &acceptance, CargoTypes &always_accepted);
 void OnCityServicesChanged();
 void UpdateCityServicesMonthly();
 void InitializeCityServices();

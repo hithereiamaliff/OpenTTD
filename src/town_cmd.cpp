@@ -605,6 +605,29 @@ static void TownGenerateCargoBinomial(Town *t, TownProductionEffect tpe, uint8_t
 	}
 }
 
+/**
+ * City fork: a city service's tile sends passengers to the stations within
+ * reach, like a house with so many people (see city_services.cpp).
+ * @param t The town it serves.
+ * @param tile The tile.
+ * @param people Like a house with this many people, at most 255.
+ */
+void GenerateServicePassengers(Town *t, TileIndex tile, uint people)
+{
+	StationFinder stations(TileArea(tile, 1, 1));
+	const uint8_t rate = static_cast<uint8_t>(std::min(people, 255U));
+	switch (_settings_game.economy.town_cargogen_mode) {
+		case TownCargoGenMode::Original:
+			TownGenerateCargoOriginal(t, TownProductionEffect::Passengers, rate, stations);
+			break;
+		case TownCargoGenMode::Bitcount:
+			if (GB(TimerGameTick::counter, 8, 2) == GB(tile.base(), 0, 2)) TownGenerateCargoBinomial(t, TownProductionEffect::Passengers, rate, stations);
+			break;
+		default:
+			NOT_REACHED();
+	}
+}
+
 /** @copydoc TileLoopProc */
 static void TileLoop_Town(TileIndex tile)
 {

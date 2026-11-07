@@ -1924,6 +1924,96 @@ Tests:
   Mendinghattan in 1972 (shophouse rows, office blocks, a mosque and a
   temple) and Funnford in 2042 (18,700 people, a city of towers).
 
+## Done: M4 part 3, step 1: hospital, university, stadium and hawker centre
+
+The owner asked for bigger city services and for town authorities with the
+powers of Malaysia's councils (majlis daerah, perbandaran, bandaraya) and
+Singapore's town councils, then states with elections, federal territories,
+and regions on other islands run like Sabah and Sarawak. Agreed order
+(owner's call): (1) the bigger services, (2) councils, (3) states. Councils
+will build services themselves; companies can still build them too.
+Elections: voters judge what a company's service does for them (traffic,
+transit, air, services), nothing else.
+
+Four new city services in the City Services toolbar (Towns menu, City
+services; hotkeys 6 to 9):
+
+| Service | Size | Reach | Counts as | Build / upkeep (in base object prices; a clinic is 900 / 180) | Draws |
+|---|---|---|---|---|---|
+| Hospital | 2 by 2 | 22 tiles | health care (like clinics) | 6,000 / 900 | visitors: passengers like a house of 70 a tile; 60 jobs a tile |
+| University | 2 by 2 | 22 tiles | education (like schools); land around +4 | 5,000 / 700 | students and staff: like a house of 110 a tile; 45 jobs a tile |
+| Stadium | 2 by 2 | 16 tiles | up to 3 points of happiness | 4,000 / 400 | crowds on match days (one day a week: four times like a house of 255), few otherwise; 12 jobs a tile |
+| Hawker centre | 1 tile | 8 tiles | up to 4 points of happiness; land +2 | 600 / 100 | shoppers: like a house of 60; 40 jobs |
+
+- They send passengers to stations within reach, like houses (the town's
+  passengers, counted in its figures), take passengers in (stations near
+  them accept passengers), and their jobs draw commuters (M5).
+- A hospital's reach is health care and a university's schooling, so one of
+  each brings a whole town's health and education coverage (and the
+  happiness, growth and land value that come with them) to 100%.
+- The town window shows all nine services' coverage.
+- Saved: as objects (the bigger ones have their own 16 object types below
+  the first services'); each town's coverage of the new ones in chunk CSVC.
+- Script API: `ScriptTown.CITY_SERVICE_HOSPITAL`, `_UNIVERSITY`, `_STADIUM`,
+  `_MARKET` for `BuildCityService`, `GetCityServiceCoverage` and the rest.
+- Code: `city_services*.{h,cpp}`, `city_services_type.h`; hooks in
+  `object_cmd.cpp` (passengers, acceptance), `town_cmd.cpp` (passenger
+  generation), `environment.cpp` (land value), `commuting.cpp` (jobs);
+  sprites 273-289.
+
+Tests (test AI CivicTest builds the four near the biggest town's centre in
+the third month; Funnford, 12,000 people at the start, against the same
+game without them, a year on):
+
+| Funnford | Without | With |
+|---|---|---|
+| Happiness | 43-48% | 73-75% |
+| Health / education coverage | 0 / 0% | 100 / 100% |
+| Land value | 51 | 55, rising to 64 |
+| Passengers a month from the town | 1,750-1,860 | 1,970-2,330 |
+| Time between new houses | 25 days | 21 days |
+| People in February 2021 | 12,400 | 13,298 |
+
+- With OpenTTD's buildings and no new services, the baseline runs give
+  identical monthly results; 99/99 unit tests; all 44 test saves (with the
+  new `city-civic-demo.csav`) load, save and reload.
+- Screenshots: the four in Funnford with the City Services toolbar; the
+  town window's coverage row.
+
+### Research for steps 2 and 3
+
+- **Malaysia's local authorities** (Local Government Act 1976, Act 171;
+  Town and Country Planning Act 1976, Act 172; Street, Drainage and
+  Building Act 1974, Act 133): three kinds, district councils (majlis
+  daerah) for rural areas, municipal councils (majlis perbandaran: at least
+  150,000 people and RM20 million a year since 2008) and city councils or
+  city halls (majlis or dewan bandaraya: 500,000 people and RM100 million;
+  city status is granted by the King). Led by a president (Yang DiPertua)
+  or a mayor (Datuk Bandar); councillors appointed by the state since local
+  elections ended in 1965 and 1976. They collect assessment tax, make
+  by-laws, license trade, plan and control development, run drains, local
+  roads, street lighting, markets, parks, public places, sanitation and
+  waste, burial grounds. 155 in all: 20 city, 40 municipal, 91 district
+  councils and 4 statutory bodies.
+- **Singapore's town councils** (Town Councils Act 1988): led by the
+  constituency's elected MPs; run the common property of HDB estates:
+  cleaning, lifts, repainting, landscaping, new communal facilities; funded
+  by service and conservancy charges (S&CC) and government grants (per flat,
+  per lift), with sinking funds for cyclical works; rated in a yearly
+  management report (green, amber, red) on cleanliness, maintenance, lifts
+  and arrears. HDB upgrades old estates (Neighbourhood Renewal, Home
+  Improvement, lift upgrading) and redevelops some en bloc (SERS).
+- **States**: 13 states with assemblies (Dewan Undangan Negeri) elected
+  first past the post in single-member seats at least every five years; the
+  majority forms the government under a Menteri Besar or Chief Minister.
+  States hold land, local government and natural resources; planning,
+  water, health are shared with the federation; little revenue of their
+  own (land), federal grants for the rest. Three federal territories (Kuala
+  Lumpur, Putrajaya, Labuan) have no state government: city halls or
+  corporations under the federal ministry. Sabah and Sarawak, across the
+  sea, keep their own land laws and control immigration (to be researched
+  further for step 3).
+
 ## Roadmap
 
 Sizes are rough: S = one session, M = a few, L = many, XL = a project in itself.
@@ -1932,14 +2022,14 @@ Sizes are rough: S = one session, M = a few, L = many, XL = a project in itself.
 |---|---|---|---|---|
 | M2 | Traffic realism | Done: give way, light settings, traffic map and overlay, amber, routing around jams. | — | |
 | M3 | Zoning | Done: zones, town growth follows them, homes/jobs line in the town window, zones in land info. | — | |
-| M4 | City services and happiness | Part 1 done: police, fire, clinic, school and park with coverage, happiness, growth, ratings and upkeep. Part 2 done: Malaysian and Singaporean town buildings, from kampungs and shophouses to HDB blocks, condominiums and towers, by year, zone, town size and land value. Left: bigger city services (hospital, university, stadium) that serve a whole town and draw commuters and passengers. | M | |
+| M4 | City services and happiness | Part 1 done: police, fire, clinic, school and park with coverage, happiness, growth, ratings and upkeep. Part 2 done: Malaysian and Singaporean town buildings, from kampungs and shophouses to HDB blocks, condominiums and towers, by year, zone, town size and land value. Part 3 step 1 done: hospital, university, stadium and hawker centre that serve a whole town and draw commuters and passengers. Next: step 2, councils (district, municipal and city councils building and running services, assessment tax, town councils for HDB estates); step 3, states with assemblies and elections, federal territories, regions across the sea run like Sabah and Sarawak. | L | The owner's calls: councils build, companies can too; states made automatically; elections judge service only. |
 | M5 | Town car traffic | Done: commuters drive between homes and jobs along real roads, in their town and up to four towns around, or take transit when it is quick enough; traffic follows their routes, also between towns; transit takes cars off them (see M5, commuting, and part 2). | — | |
 | M6 | City budget and ordinances | Done: towns collect taxes and spend them on transit, running the town and ordinances; they set their own tax rates and bring in ordinances (transit fund, parking limits, low-emission zone, car-free centre, tree planting, transit-oriented development); companies propose them. | — | The owner's call: towns decide, companies lobby. |
 | M7 | Land value and pollution | Done as transit part 14: traffic, diesel vehicles and industry pollute; parks, services and good stations raise land value; map views, tints and lines show both; towns build to fit. | — | |
 | M8 | Utilities | Power and water networks. | XL | Probably skip, or keep it light (arctic/tropic towns already need food/water). |
 
-Recommended order: M4 part 3 next, bigger city services (hospital,
-university, stadium); M8 only if wanted.
+Recommended order: M4 part 3 step 2 next (councils), then step 3
+(states, elections, federal territories); M8 only if wanted.
 
 ## Getting it onto the owner's computer (Windows)
 
@@ -1965,7 +2055,6 @@ Savegame locations (files end in `.sav`; autosaves are in `save/autosave`):
 ## Open questions for the owner
 
 1. Can you share one of your saves, so it can be tested before you play it?
-2. Which milestone next? Recommendation: M4 part 3, a hospital, a
-   university and a stadium that serve a whole town and draw commuters and
-   passengers.
+2. Which milestone next? Agreed: M4 part 3 step 2 (councils), then step 3
+   (states).
 3. A name for the fork.

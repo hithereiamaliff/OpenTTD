@@ -600,10 +600,13 @@ static void UpdateEnvironmentMonthly()
 
 	for (uint cell = 0; cell < n; cell++) {
 		int value = base[cell];
-		const uint8_t services = GetCityServicesCoveringTile(CellCentre(cell));
+		const uint16_t services = GetCityServicesCoveringTile(CellCentre(cell));
 		for (CityService service : {CityService::Police, CityService::Fire, CityService::Health, CityService::Education}) {
 			if (HasBit(services, to_underlying(service))) value += 4;
 		}
+		/* A university nearby makes land dearer still; so does a hawker centre, a little. */
+		if (HasBit(services, to_underlying(CityService::University))) value += 4;
+		if (HasBit(services, to_underlying(CityService::Market))) value += 2;
 		if (HasBit(services, to_underlying(CityService::Park))) value += 8;
 		value += transit[cell];
 		if (water[cell] != 0) value += 5;

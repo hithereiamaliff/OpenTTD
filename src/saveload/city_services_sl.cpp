@@ -29,6 +29,10 @@ struct TownServiceEntry {
 	uint8_t health = 0; ///< Percentage covered by clinics.
 	uint8_t education = 0; ///< Percentage covered by schools.
 	uint8_t park = 0; ///< Percentage covered by parks.
+	uint8_t hospital = 0; ///< Percentage covered by hospitals.
+	uint8_t university = 0; ///< Percentage covered by universities.
+	uint8_t stadium = 0; ///< Percentage covered by stadiums.
+	uint8_t market = 0; ///< Percentage covered by hawker centres.
 };
 
 static const SaveLoad _town_service_desc[] = {
@@ -37,9 +41,13 @@ static const SaveLoad _town_service_desc[] = {
 	SaveLoad::Variable<VarFileType::U8>("health", SLE_OBJECT_ADDRESS(TownServiceEntry, health)),
 	SaveLoad::Variable<VarFileType::U8>("education", SLE_OBJECT_ADDRESS(TownServiceEntry, education)),
 	SaveLoad::Variable<VarFileType::U8>("park", SLE_OBJECT_ADDRESS(TownServiceEntry, park)),
+	SaveLoad::Variable<VarFileType::U8>("hospital", SLE_OBJECT_ADDRESS(TownServiceEntry, hospital)),
+	SaveLoad::Variable<VarFileType::U8>("university", SLE_OBJECT_ADDRESS(TownServiceEntry, university)),
+	SaveLoad::Variable<VarFileType::U8>("stadium", SLE_OBJECT_ADDRESS(TownServiceEntry, stadium)),
+	SaveLoad::Variable<VarFileType::U8>("market", SLE_OBJECT_ADDRESS(TownServiceEntry, market)),
 };
 
-static_assert(CITY_SERVICE_COUNT == 5, "Add new city services to TownServiceEntry");
+static_assert(CITY_SERVICE_COUNT == 9, "Add new city services to TownServiceEntry");
 
 /** City service coverage per town, indexed by town. */
 struct CSVCChunkHandler : ChunkHandler {
@@ -51,7 +59,7 @@ struct CSVCChunkHandler : ChunkHandler {
 
 		for (const Town *t : Town::Iterate()) {
 			const auto &p = t->service_coverage.percent;
-			TownServiceEntry entry{p[0], p[1], p[2], p[3], p[4]};
+			TownServiceEntry entry{p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7], p[8]};
 			SlSetArrayIndex(t->index);
 			SlObject(&entry, _town_service_desc);
 		}
@@ -66,7 +74,8 @@ struct CSVCChunkHandler : ChunkHandler {
 			TownServiceEntry entry;
 			SlObject(&entry, slt);
 			if (!Town::IsValidID(index)) SlErrorCorrupt("City service coverage for a town that doesn't exist");
-			Town::Get(index)->service_coverage.percent = {entry.police, entry.fire, entry.health, entry.education, entry.park};
+			Town::Get(index)->service_coverage.percent = {entry.police, entry.fire, entry.health, entry.education, entry.park,
+					entry.hospital, entry.university, entry.stadium, entry.market};
 		}
 	}
 };

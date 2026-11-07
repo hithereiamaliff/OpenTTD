@@ -5,7 +5,19 @@
  * See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with OpenTTD. If not, see <https://www.gnu.org/licenses/old-licenses/gpl-2.0>.
  */
 
-/** @file city_services.cpp City services: police, fire, health, schools and parks. */
+/**
+ * @file city_services.cpp City services: police, fire, health, schools and parks;
+ * hospitals, universities, stadiums and hawker centres.
+ *
+ * The bigger services of the second part serve a whole town: a hospital's
+ * reach counts as health care, a university's as schooling, so they raise
+ * the same coverage (and happiness, growth and land value) as clinics and
+ * schools, over a much wider area. Stadiums and hawker centres reach their
+ * own, and add a little happiness. Unlike the first ones, the bigger
+ * services draw people: they send passengers (visitors, students, shoppers;
+ * crowds on a stadium's match days) to stations within reach, take
+ * passengers in, and their jobs draw commuters.
+ */
 
 #include "stdafx.h"
 #include "satisfaction.h"
@@ -24,6 +36,9 @@
 #include "object_base.h"
 #include "tilearea_type.h"
 #include "town.h"
+#include "object_map.h"
+#include "cargotype.h"
+#include "timer/timer_game_economy.h"
 #include "transparency.h"
 #include "viewport_func.h"
 #include "window_func.h"
@@ -42,28 +57,41 @@ struct CityServiceInfo {
 	uint yearly_upkeep; ///< Upkeep per year, as a multiple of the base object price.
 	uint8_t height; ///< Height of the sprite's bounding box, in pixels.
 	PaletteID overlay; ///< Colour of its coverage in the main view.
+	uint8_t size; ///< Tiles along each side: 1 or 2.
+	uint8_t passengers; ///< Passengers it sends, like a house with this many people on each tile; 0 for none.
+	uint8_t jobs; ///< Jobs on each tile, for commuters.
+	uint8_t sprite; ///< First sprite, from SPR_CIVIC_SERVICE_BASE (bigger services only).
 };
 
 /** The city services; costs are multiples of the base object price (about one pound at the start). */
 static const CityServiceInfo _city_service_info[CITY_SERVICE_COUNT] = {
-	{STR_CITY_SERVICE_POLICE, STR_CITY_SERVICE_POLICE_SHORT,       10, 750, 150, 30, PALETTE_TO_BLUE},
-	{STR_CITY_SERVICE_FIRE, STR_CITY_SERVICE_FIRE_SHORT,           10, 750, 150, 42, PALETTE_TO_RED},
-	{STR_CITY_SERVICE_HEALTH, STR_CITY_SERVICE_HEALTH_SHORT,       10, 900, 180, 30, PALETTE_TO_WHITE},
-	{STR_CITY_SERVICE_EDUCATION, STR_CITY_SERVICE_EDUCATION_SHORT, 10, 750, 150, 24, PALETTE_TO_ORANGE},
-	{STR_CITY_SERVICE_PARK, STR_CITY_SERVICE_PARK_SHORT,            5, 125,  25, 16, PALETTE_TO_GREEN},
+	{STR_CITY_SERVICE_POLICE, STR_CITY_SERVICE_POLICE_SHORT,          10,  750, 150, 30, PALETTE_TO_BLUE,   1,   0, 30,  0},
+	{STR_CITY_SERVICE_FIRE, STR_CITY_SERVICE_FIRE_SHORT,              10,  750, 150, 42, PALETTE_TO_RED,    1,   0, 30,  0},
+	{STR_CITY_SERVICE_HEALTH, STR_CITY_SERVICE_HEALTH_SHORT,          10,  900, 180, 30, PALETTE_TO_WHITE,  1,   0, 30,  0},
+	{STR_CITY_SERVICE_EDUCATION, STR_CITY_SERVICE_EDUCATION_SHORT,    10,  750, 150, 24, PALETTE_TO_ORANGE, 1,   0, 30,  0},
+	{STR_CITY_SERVICE_PARK, STR_CITY_SERVICE_PARK_SHORT,               5,  125,  25, 16, PALETTE_TO_GREEN,  1,   0, 30,  0},
+	{STR_CITY_SERVICE_HOSPITAL, STR_CITY_SERVICE_HOSPITAL_SHORT,      22, 6000, 900, 46, PALETTE_TO_PINK,   2,  70, 60,  0},
+	{STR_CITY_SERVICE_UNIVERSITY, STR_CITY_SERVICE_UNIVERSITY_SHORT,  22, 5000, 700, 40, PALETTE_TO_PURPLE, 2, 110, 45,  4},
+	{STR_CITY_SERVICE_STADIUM, STR_CITY_SERVICE_STADIUM_SHORT,        16, 4000, 400, 41, PALETTE_TO_YELLOW, 2,  30, 12,  8},
+	{STR_CITY_SERVICE_MARKET, STR_CITY_SERVICE_MARKET_SHORT,           8,  600, 100, 15, PALETTE_TO_CREAM,  1,  60, 40, 12},
 };
+static_assert(std::size(_city_service_info) == CITY_SERVICE_COUNT);
 
 /** Climate all. */
 #define ALL LandscapeTypes({LandscapeType::Temperate, LandscapeType::Arctic, LandscapeType::Tropic, LandscapeType::Toyland})
 /** Object spec of a city service; like _original_objects, see table/object_land.h. */
-#define M(name, height) {{ObjectClassID::Invalid(), 0}, StandardGRFFileProps{}, AnimationInfo<ObjectAnimationTriggers>{}, name, ALL, 0x11, 0, 50, TimerGameCalendar::Date{}, CalendarTime::MAX_DATE + 1, ObjectFlags{}, ObjectCallbackMasks{}, height, 1, 0, {}}
+#define M(name, height, size) {{ObjectClassID::Invalid(), 0}, StandardGRFFileProps{}, AnimationInfo<ObjectAnimationTriggers>{}, name, ALL, size, 0, 50, TimerGameCalendar::Date{}, CalendarTime::MAX_DATE + 1, ObjectFlags{}, ObjectCallbackMasks{}, height, 1, 0, {}}
 /** The object specs of the city services, in CityService order. */
 static const ObjectSpec _city_service_specs[CITY_SERVICE_COUNT] = {
-	M(STR_CITY_SERVICE_POLICE, 4),
-	M(STR_CITY_SERVICE_FIRE, 6),
-	M(STR_CITY_SERVICE_HEALTH, 4),
-	M(STR_CITY_SERVICE_EDUCATION, 3),
-	M(STR_CITY_SERVICE_PARK, 2),
+	M(STR_CITY_SERVICE_POLICE, 4, 0x11),
+	M(STR_CITY_SERVICE_FIRE, 6, 0x11),
+	M(STR_CITY_SERVICE_HEALTH, 4, 0x11),
+	M(STR_CITY_SERVICE_EDUCATION, 3, 0x11),
+	M(STR_CITY_SERVICE_PARK, 2, 0x11),
+	M(STR_CITY_SERVICE_HOSPITAL, 6, 0x22),
+	M(STR_CITY_SERVICE_UNIVERSITY, 5, 0x22),
+	M(STR_CITY_SERVICE_STADIUM, 5, 0x22),
+	M(STR_CITY_SERVICE_MARKET, 2, 0x11),
 };
 #undef M
 #undef ALL
@@ -73,7 +101,7 @@ static const ObjectSpec _city_service_specs[CITY_SERVICE_COUNT] = {
  * Empty while there are no city services. Derived from the objects on the
  * map only, so rebuilding it gives the same result on every client.
  */
-static std::vector<uint8_t> _service_cover;
+static std::vector<uint16_t> _service_cover;
 static bool _service_cover_dirty = true; ///< Does #_service_cover need rebuilding?
 
 /** The city service whose coverage the main view shows, or CityService::End for none. */
@@ -136,7 +164,28 @@ StringID GetCityServiceShortName(CityService service)
  */
 SpriteID GetCityServiceIcon(CityService service)
 {
+	if (to_underlying(service) >= BASIC_CITY_SERVICE_COUNT) return SPR_IMG_CIVIC_SERVICE_BASE + (to_underlying(service) - BASIC_CITY_SERVICE_COUNT);
 	return SPR_IMG_CITY_SERVICE_BASE + to_underlying(service);
+}
+
+/**
+ * Tiles along each side of a city service's building.
+ * @param service The service.
+ * @return 1 or 2.
+ */
+uint GetCityServiceSize(CityService service)
+{
+	return _city_service_info[to_underlying(service)].size;
+}
+
+/**
+ * Jobs on each tile of a city service, for commuters.
+ * @param service The service.
+ * @return The jobs.
+ */
+uint GetCityServiceJobs(CityService service)
+{
+	return _city_service_info[to_underlying(service)].jobs;
 }
 
 /**
@@ -191,11 +240,15 @@ uint GetCityServiceObjectSpecIndex(const ObjectSpec *spec)
  */
 uint GetTownHappiness(const Town *t)
 {
+	/* Hospitals and universities count for health and education: their reach is in those percentages. */
 	uint sum = 0;
-	for (uint8_t percent : t->service_coverage.percent) sum += percent;
+	for (uint s = 0; s < BASIC_CITY_SERVICE_COUNT; s++) sum += t->service_coverage.percent[s];
+	/* Hawker centres within reach add up to 4 points, a stadium up to 3. */
+	const auto &p = t->service_coverage.percent;
+	const int extras = p[to_underlying(CityService::Market)] * 4 / 100 + p[to_underlying(CityService::Stadium)] * 3 / 100;
 	/* How satisfied riders are with the town's stations adds or takes up to 10 points. */
-	const int happiness = static_cast<int>(TOWN_HAPPINESS_BASE + sum * (100 - TOWN_HAPPINESS_BASE) / (100 * CITY_SERVICE_COUNT)) + GetTownSatisfactionHappiness(t)
-			- static_cast<int>(GetTownPollutionUnhappiness(t)) + GetTownBudgetHappiness(t);
+	const int happiness = static_cast<int>(TOWN_HAPPINESS_BASE + sum * (100 - TOWN_HAPPINESS_BASE) / (100 * BASIC_CITY_SERVICE_COUNT)) + GetTownSatisfactionHappiness(t)
+			- static_cast<int>(GetTownPollutionUnhappiness(t)) + GetTownBudgetHappiness(t) + extras;
 	return static_cast<uint>(std::clamp(happiness, 0, 100));
 }
 
@@ -207,7 +260,7 @@ uint GetTownHappiness(const Town *t)
 uint GetTownServiceGrowthBonus(const Town *t)
 {
 	uint sum = 0;
-	for (uint8_t percent : t->service_coverage.percent) sum += percent;
+	for (uint s = 0; s < BASIC_CITY_SERVICE_COUNT; s++) sum += t->service_coverage.percent[s];
 	return sum / 15;
 }
 
@@ -224,7 +277,11 @@ static void RebuildServiceCoverage()
 		CityService service = GetCityServiceOfObjectType(o->type);
 		TileArea area = o->location;
 		area.Expand(GetCityServiceRadius(service));
-		for (TileIndex tile : area) SetBit(_service_cover[tile.base()], to_underlying(service));
+		/* A hospital's reach is health care too, a university's schooling. */
+		uint16_t bits = 1U << to_underlying(service);
+		if (service == CityService::Hospital) bits |= 1U << to_underlying(CityService::Health);
+		if (service == CityService::University) bits |= 1U << to_underlying(CityService::Education);
+		for (TileIndex tile : area) _service_cover[tile.base()] |= bits;
 	}
 
 	if (_service_cover.empty()) _service_cover.shrink_to_fit();
@@ -235,7 +292,7 @@ static void RebuildServiceCoverage()
  * @param tile The tile.
  * @return Bit mask with a bit per #CityService.
  */
-uint8_t GetCityServicesCoveringTile(TileIndex tile)
+uint16_t GetCityServicesCoveringTile(TileIndex tile)
 {
 	if (_service_cover_dirty) RebuildServiceCoverage();
 	return _service_cover.empty() ? 0 : _service_cover[tile.base()];
@@ -271,7 +328,7 @@ void UpdateCityServicesMonthly()
 
 			Count &count = counts[GetTownIndex(tile).base()];
 			count.total += population;
-			uint8_t cover = _service_cover[tile.base()];
+			uint16_t cover = _service_cover[tile.base()];
 			for (uint s = 0; s < CITY_SERVICE_COUNT; s++) {
 				if (HasBit(cover, s)) count.covered[s] += population;
 			}
@@ -286,7 +343,7 @@ void UpdateCityServicesMonthly()
 
 	/* Upkeep per owner, and which kinds of service each company runs for each town. */
 	std::array<Money, MAX_COMPANIES> upkeep{};
-	std::vector<std::array<uint8_t, MAX_COMPANIES>> kinds(Town::GetPoolSize());
+	std::vector<std::array<uint16_t, MAX_COMPANIES>> kinds(Town::GetPoolSize());
 	for (const Object *o : Object::Iterate()) {
 		if (!IsCityServiceObjectType(o->type)) continue;
 		Owner owner = GetTileOwner(o->location.tile);
@@ -302,7 +359,7 @@ void UpdateCityServicesMonthly()
 	Backup<CompanyID> cur_company(_current_company);
 	for (Town *t : Town::Iterate()) {
 		for (const Company *c : Company::Iterate()) {
-			uint8_t mask = kinds[t->index.base()][c->index.base()];
+			uint16_t mask = kinds[t->index.base()][c->index.base()];
 			if (mask == 0) continue;
 			cur_company.Change(c->index);
 			ChangeTownRating(t, CountBits(mask) * RATING_SERVICE_UP_STEP, RATING_SERVICE_MAXIMUM, DoCommandFlag::Execute);
@@ -327,13 +384,60 @@ void DrawCityServiceTile(TileInfo *ti, ObjectType type)
 	Owner owner = GetTileOwner(ti->tile);
 	PaletteID palette = owner == OWNER_NONE ? PAL_NONE : GetCompanyPalette(owner);
 
-	DrawGroundSprite(service == CityService::Park ? SPR_FLAT_GRASS_TILE : SPR_CONCRETE_GROUND, PAL_NONE);
+	const bool grass = service == CityService::Park || service == CityService::Stadium;
+	DrawGroundSprite(grass ? SPR_FLAT_GRASS_TILE : SPR_CONCRETE_GROUND, PAL_NONE);
 	if (IsInvisibilitySet(TransparencyOption::Structures)) return;
 
-	SpriteBounds bounds({0, 0, 0}, {TILE_SIZE, TILE_SIZE, _city_service_info[to_underlying(service)].height}, {0, 0, 0});
+	const CityServiceInfo &info = _city_service_info[to_underlying(service)];
+	SpriteBounds bounds({0, 0, 0}, {TILE_SIZE, TILE_SIZE, info.height}, {0, 0, 0});
 	SpriteID image = SPR_CITY_SERVICE_BASE + to_underlying(service);
+	if (to_underlying(service) >= BASIC_CITY_SERVICE_COUNT) {
+		/* Bigger buildings: a sprite per tile, (0,0), (1,0), (0,1), (1,1). */
+		const TileIndex north = Object::GetByTile(ti->tile)->location.tile;
+		const uint part = (TileX(ti->tile) - TileX(north)) + 2 * (TileY(ti->tile) - TileY(north));
+		image = SPR_CIVIC_SERVICE_BASE + info.sprite + (info.size == 2 ? part : 0);
+	}
 	SetBit(image, PALETTE_MODIFIER_COLOUR);
 	AddSortableSpriteToDraw(image, palette, *ti, bounds, IsTransparencySet(TransparencyOption::Structures));
+}
+
+/**
+ * Passengers a city service sends from one of its tiles, from the tile loop:
+ * visitors, students and shoppers, like a house with that many people; a
+ * stadium sends crowds on match days (one day a week) and few on the others.
+ * @param tile The tile.
+ */
+void TileLoopCityService(TileIndex tile)
+{
+	const Object *o = Object::GetByTile(tile);
+	const CityService service = GetCityServiceOfObjectType(o->type);
+	uint people = _city_service_info[to_underlying(service)].passengers;
+	if (people == 0 || o->town == nullptr) return;
+	uint rounds = 1;
+	if (service == CityService::Stadium) {
+		const bool match_day = (TimerGameEconomy::date.base() + o->town->index.base()) % 7 == 0;
+		if (match_day) {
+			people = 255;
+			rounds = 4;
+		}
+	}
+	for (uint i = 0; i < rounds; i++) GenerateServicePassengers(o->town, tile, people);
+}
+
+/**
+ * Cargo a city service's tile takes: passengers, for the bigger services.
+ * @param tile The tile.
+ * @param acceptance Cargo acceptance to add to.
+ * @param always_accepted Cargo types always accepted.
+ */
+void AddCityServiceAcceptance(TileIndex tile, CargoArray &acceptance, CargoTypes &always_accepted)
+{
+	const CityService service = GetCityServiceOfObjectType(GetObjectType(tile));
+	if (_city_service_info[to_underlying(service)].passengers == 0) return;
+	const CargoType pass = GetCargoTypeByLabel(CT_PASSENGERS);
+	if (!IsValidCargoType(pass)) return;
+	acceptance[pass] += 8;
+	always_accepted.Set(pass);
 }
 
 /**

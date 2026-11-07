@@ -1780,7 +1780,205 @@ for (x, y, z) in ((2, 3, 13), (14, 13, 13), (2, 13, 13), (3, 4, 18), (13, 12, 18
 te.box(7.4, 13.6, 8.6, 14.8, 0, 3, (120, 90, 50), (150, 110, 60))
 house(te, "Chinese temple")
 
-assert len(sprites) == 273, len(sprites)
+
+# ---------------------------------------------------------------------------
+# Bigger city services (city_services.cpp), from sprite 273 on: hospital, university
+# and stadium (two by two tiles, four parts each in the order (0,0), (1,0), (0,1), (1,1)),
+# a hawker centre, then their toolbar icons.
+
+def part_box(b, part, gx0, gy0, gx1, gy1, z0, z1, wall, top, sw=None, se=None, roof=None, shade=0.72):
+    """A box in the building's own coordinates (two tiles = 32 units), cut to one part's tile."""
+    ox, oy = 16 * part[0], 16 * part[1]
+    x0, x1 = max(gx0, ox), min(gx1, ox + 16)
+    y0, y1 = max(gy0, oy), min(gy1, oy + 16)
+    if x0 >= x1 or y0 >= y1:
+        return
+    b.box(x0 - ox, y0 - oy, x1 - ox, y1 - oy, z0, z1, wall, top,
+          sw=(lambda u, v: sw(u + y0 - gy0, v)) if sw else None,
+          se=(lambda u, v: se(u + x0 - gx0, v)) if se else None,
+          roof=(lambda x, y: roof(x + ox, y + oy)) if roof else None, shade=shade)
+
+
+def part_ground(b, part, fn):
+    ox, oy = 16 * part[0], 16 * part[1]
+    b.ground(lambda x, y: fn(x + ox, y + oy))
+
+
+def part_tree(b, part, gx, gy, size=4.0, height=8):
+    ox, oy = 16 * part[0], 16 * part[1]
+    if ox <= gx < ox + 16 and oy <= gy < oy + 16:
+        b.tree(gx - ox, gy - oy, size=size, height=height)
+
+
+def part_post(b, part, gx, gy, z0, z1, colour):
+    ox, oy = 16 * part[0], 16 * part[1]
+    if ox <= gx < ox + 16 and oy <= gy < oy + 16:
+        post(b, gx - ox, gy - oy, z0, z1, colour)
+
+
+PARTS = ((0, 0), (1, 0), (0, 1), (1, 1))
+HOSP_WALL, HOSP_TEAL = (240, 242, 244), rgb_index((40, 150, 150))
+def hosp_face(u, v):
+    if 0 <= v % 5 < 0.8:
+        return HOSP_TEAL if v > 6 else None
+    if (u % 1.6) < 1.0 and 1.5 <= v % 5 < 4.2:
+        return SKY_GLASS
+    return None
+def helipad(x, y):
+    d = math.hypot(x - 15, y - 11)
+    if d < 4.2:
+        if d > 3.6:
+            return rgb_index((240, 240, 240))
+        if abs(x - 15) < 0.4 and abs(y - 11) < 2.0 or (abs(y - 11) < 0.4 and abs(x - 15) < 1.4):
+            return rgb_index((240, 240, 240))
+        if (abs(x - 13.6) < 0.4 or abs(x - 16.4) < 0.4) and abs(y - 11) < 2.0:
+            return rgb_index((240, 240, 240))
+        return rgb_index((70, 75, 80))
+    return None
+for part in PARTS:
+    b = Building()
+    part_ground(b, part, lambda x, y: rgb_index((150, 150, 150)) if 24 < y < 30 and 6 < x < 26 else None)
+    part_box(b, part, 4, 4, 27, 20, 0, 46, HOSP_WALL, (150, 150, 155), sw=hosp_face, se=hosp_face, roof=helipad)
+    part_box(b, part, 3, 20, 29, 27, 0, 15, HOSP_WALL, (165, 165, 170), sw=hosp_face,
+             se=combine(lambda u, v: rgb_index((210, 30, 30)) if 11.5 <= u <= 14.5 and 9 <= v < 14 and (abs(u - 13) < 0.5 or abs(v - 11.5) < 0.8) else None, hosp_face))
+    part_box(b, part, 10, 27, 18, 30, 5, 6.5, (215, 215, 220), (230, 60, 50))
+    house(b, f"hospital {part[0]} {part[1]}")
+
+UNI_WALL = (215, 190, 150)
+def uni_face(u, v):
+    if 0 <= v % 6 < 0.7:
+        return rgb_index((185, 160, 120))
+    if (u % 2.0) < 1.0 and 2 <= v % 6 < 5:
+        return DARK_GLASS
+    return None
+def quad(x, y):
+    if 13.5 <= x <= 15 and 4 <= y <= 30:
+        return rgb_index((205, 185, 140))
+    if 4 <= x <= 30 and 23 <= y <= 24.5:
+        return rgb_index((205, 185, 140))
+    return rgb_index((80, 150, 60)) if (int(x * 3) + int(y * 3)) % 5 else rgb_index((95, 165, 70))
+for part in PARTS:
+    b = Building()
+    part_ground(b, part, quad)
+    part_box(b, part, 3, 3, 12, 29, 0, 24, UNI_WALL, (165, 75, 55), sw=uni_face, se=uni_face,
+             roof=lambda x, y: rgb_index((185, 90, 65)) if (int(x) + int(y)) % 3 == 0 else None)
+    part_box(b, part, 6, 13, 10, 17, 24, 40, UNI_WALL, (165, 75, 55),
+             sw=lambda u, v: rgb_index((250, 250, 250)) if 1.2 <= u <= 2.8 and 8 <= v < 12 else None,
+             se=lambda u, v: rgb_index((250, 250, 250)) if 1.2 <= u <= 2.8 and 8 <= v < 12 else None)
+    part_box(b, part, 17, 3, 29, 12, 0, 18, (225, 225, 220), (150, 150, 150), sw=uni_face, se=uni_face)
+    for (tx, ty) in ((20, 17), (25, 20), (21, 28), (27, 27)):
+        part_tree(b, part, tx, ty, size=3.6, height=8)
+    house(b, f"university {part[0]} {part[1]}")
+
+seat_cols = [cc(3), cc(5), cc(6), cc(4)]
+def stand_face(u, v):
+    if v < 2:
+        return rgb_index((120, 120, 125))
+    return seat_cols[int(v / 2) % 4] if (u % 1.0) < 0.8 else rgb_index((80, 80, 85))
+def pitch(x, y):
+    if 7 <= x <= 25 and 7 <= y <= 25:
+        line = abs(x - 7.3) < 0.3 or abs(x - 24.7) < 0.3 or abs(y - 7.3) < 0.3 or abs(y - 24.7) < 0.3 or abs(y - 16) < 0.25 or abs(math.hypot(x - 16, y - 16) - 3) < 0.3
+        if line:
+            return rgb_index((245, 245, 245))
+        return rgb_index((60, 150, 50)) if int((x - 7) / 2) % 2 else rgb_index((80, 170, 60))
+    return None
+for part in PARTS:
+    b = Building()
+    part_ground(b, part, pitch)
+    part_box(b, part, 2, 2, 30, 6.5, 0, 14, (170, 170, 175), (200, 200, 205), se=stand_face, sw=stand_face)
+    part_box(b, part, 2, 6.5, 6.5, 25.5, 0, 10, (170, 170, 175), (200, 200, 205), sw=stand_face, se=stand_face)
+    part_box(b, part, 25.5, 6.5, 30, 25.5, 0, 10, (170, 170, 175), (200, 200, 205), sw=stand_face, se=stand_face)
+    part_box(b, part, 2, 25.5, 30, 30, 0, 8, (170, 170, 175), (200, 200, 205), sw=stand_face, se=stand_face)
+    part_box(b, part, 2, 2, 30, 4.5, 14, 16, (225, 225, 230), (235, 235, 240))
+    for (mx, my) in ((3, 3), (29, 3), (3, 29), (29, 29)):
+        part_post(b, part, mx, my, 0, 38, rgb_index((150, 150, 155)))
+        part_box(b, part, mx - 1, my - 1, mx + 1, my + 1, 38, 41, (240, 240, 200), (255, 255, 220))
+    house(b, f"stadium {part[0]} {part[1]}")
+
+hc = Building()
+stall_cols = [rgb_index((200, 40, 30)), rgb_index((240, 190, 40)), rgb_index((40, 120, 190)), rgb_index((60, 160, 80))]
+for (i, x) in enumerate((3.0, 6.2, 9.4, 12.6)):
+    hc.box(x, 2.5, x + 2.6, 4.5, 0, 5, (200, 195, 185), (230, 225, 215), se=lambda u, v, c=stall_cols[i]: c if 3 <= v < 5 else None)
+for (x, y) in ((4.5, 8), (8.5, 8), (12.5, 8), (4.5, 12), (8.5, 12), (12.5, 12)):
+    hc.box(x - 0.9, y - 0.9, x + 0.9, y + 0.9, 0, 2.5, (150, 120, 80), (180, 150, 100))
+for (x, y) in ((2, 2), (14, 2), (2, 14), (14, 14), (8, 2), (8, 14), (2, 8), (14, 8)):
+    hc.box(x - 0.35, y - 0.35, x + 0.35, y + 0.35, 0, 9, (220, 220, 220), (220, 220, 220))
+for (i, (y0, y1)) in enumerate(((0.8, 15.2), (2.6, 13.4), (4.6, 11.4))):
+    hc.box(0.8, y0, 15.2, y1, 9 + 2 * i, 11 + 2 * i, (150, 50, 40), (175, 70, 50), shade=0.65)
+hc.box(6, 15.2, 10, 15.6, 6, 9, (240, 240, 240), (240, 240, 240), se=lambda u, v: rgb_index((200, 40, 30)) if 0.4 <= u <= 3.6 and 1 <= v < 2.4 else None)
+house(hc, "hawker centre")
+
+icon(4, 1930, [
+    ".KKKKKKKKKKKK.",
+    "KwwwwwwwwwwwwK",
+    "KwRRwwwwRRwwwK",
+    "KwRRwwwwRRwwwK",
+    "KwRRRRRRRRwwwK",
+    "KwRRRRRRRRwRwK",
+    "KwRRwwwwRRRRRK",
+    "KwRRwwwwRRwRwK",
+    "KwwwwwwwwwwwwK",
+    "KccccccccccccK",
+    "KcwwcwwcwwcwwK",
+    "KccccccccccccK",
+    "KcwwcwwcwwcwwK",
+    "KKKKKKKKKKKKKK",
+    "..............",
+], {'K': BLACK, 'w': WHITE, 'R': rgb_index((210, 30, 30)), 'c': rgb_index((40, 150, 150))}, "icon hospital")
+icon(22, 1930, [
+    "......KK......",
+    "....KKbbKK....",
+    "..KKbbbbbbKK..",
+    "KKbbbbbbbbbbKK",
+    "..KKbbbbbbKK.Y",
+    "....KKbbKK...Y",
+    "...KbKKKKbK..Y",
+    "...KbbbbbbK.YY",
+    "...KbbbbbbK.YY",
+    "....KKKKKK....",
+    "..............",
+    "..ssssssssss..",
+    "..sKsKsKsKss..",
+    "..ssssssssss..",
+    "..............",
+], {'K': BLACK, 'b': rgb_index((40, 50, 90)), 'Y': YELLOW, 's': rgb_index((215, 190, 150))}, "icon university")
+icon(40, 1930, [
+    "..............",
+    "...gggggggg...",
+    ".ggGGGGGGGGgg.",
+    "gGGGwGGGGwGGGg",
+    "gGGGwGGGGwGGGg",
+    "gGGGwwwwwwGGGg",
+    "gGGGwGwwGwGGGg",
+    "gGGGwwwwwwGGGg",
+    "gGGGwGGGGwGGGg",
+    "gGGGwGGGGwGGGg",
+    ".ggGGGGGGGGgg.",
+    "...gggggggg...",
+    "..............",
+    "..............",
+    "..............",
+], {'g': rgb_index((150, 150, 155)), 'G': rgb_index((70, 160, 60)), 'w': WHITE}, "icon stadium")
+icon(58, 1930, [
+    "..RRRRRRRRRR..",
+    ".RRRRRRRRRRRR.",
+    "RRRRRRRRRRRRRR",
+    ".W..........W.",
+    ".W..........W.",
+    ".W.yyy..ooo.W.",
+    ".WyyyyyoooooW.",
+    ".W.yyy..ooo.W.",
+    ".WbbbbbbbbbbW.",
+    ".WbwwbbwwbbbW.",
+    ".WbbbbbbbbbbW.",
+    ".W..........W.",
+    "..............",
+    "..............",
+    "..............",
+], {'R': rgb_index((175, 60, 45)), 'W': rgb_index((200, 200, 200)), 'y': YELLOW, 'o': rgb_index((240, 140, 40)), 'b': rgb_index((150, 120, 80)), 'w': WHITE}, "icon hawker centre")
+print("house rows end at", houses_y)
+
+assert len(sprites) == 290, len(sprites)
 sheet.save(f"{SRC}/city.png", optimize=True)
 
 header = """// This file is part of OpenTTD.
@@ -1819,6 +2017,8 @@ header = """// This file is part of OpenTTD.
 //            HDB slab block (along X: two parts, along Y: two parts), HDB point block, condominium,
 //            shophouses, office block, glass office tower, shopping mall (four parts), landmark tower,
 //            mixed development, mosque, Chinese temple
+//   273-285: hospital, university, stadium (four parts each: (0,0), (1,0), (0,1), (1,1)), hawker centre
+//   286-289: icons: hospital, university, stadium, hawker centre
 //
    -1 * 0\t 0C "City fork graphics"
    -1 * 5\t 05 1C FF %02X %02X

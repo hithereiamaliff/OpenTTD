@@ -158,6 +158,10 @@ public:
 		CITY_SERVICE_HEALTH    = to_underlying(::CityService::Health),    ///< Clinic.
 		CITY_SERVICE_EDUCATION = to_underlying(::CityService::Education), ///< School.
 		CITY_SERVICE_PARK      = to_underlying(::CityService::Park),      ///< Park.
+		CITY_SERVICE_HOSPITAL  = to_underlying(::CityService::Hospital),  ///< Hospital (two by two tiles).
+		CITY_SERVICE_UNIVERSITY = to_underlying(::CityService::University), ///< University (two by two tiles).
+		CITY_SERVICE_STADIUM   = to_underlying(::CityService::Stadium),   ///< Stadium (two by two tiles).
+		CITY_SERVICE_MARKET    = to_underlying(::CityService::Market),    ///< Hawker centre.
 		CITY_SERVICE_INVALID   = -1, ///< Not a city service.
 	};
 

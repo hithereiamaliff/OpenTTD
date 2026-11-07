@@ -33,7 +33,7 @@ enum class DepotFacility : uint8_t {
 static constexpr uint DEPOT_FACILITY_COUNT = to_underlying(DepotFacility::End);
 
 /** Object types of the depot facilities: in the reserved range, right after the city services. */
-static constexpr ObjectType OBJECT_DEPOT_FACILITY_FIRST = OBJECT_CITY_SERVICE_FIRST + CITY_SERVICE_COUNT;
+static constexpr ObjectType OBJECT_DEPOT_FACILITY_FIRST = OBJECT_CITY_SERVICE_FIRST + BASIC_CITY_SERVICE_COUNT;
 static_assert(OBJECT_DEPOT_FACILITY_FIRST + DEPOT_FACILITY_COUNT <= NUM_OBJECTS);
 
 /**

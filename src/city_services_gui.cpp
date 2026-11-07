@@ -5,7 +5,7 @@
  * See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with OpenTTD. If not, see <https://www.gnu.org/licenses/old-licenses/gpl-2.0>.
  */
 
-/** @file city_services_gui.cpp Toolbar to build city services: police, fire, health, schools and parks. */
+/** @file city_services_gui.cpp Toolbar to build city services: police, fire, health, schools and parks; hospitals, universities, stadiums and hawker centres. */
 
 #include "stdafx.h"
 #include "city_services.h"
@@ -60,12 +60,14 @@ struct CityServicesWindow : Window {
 	void ShowReach() const
 	{
 		int radius = GetCityServiceRadius(this->service);
+		const int size = GetCityServiceSize(this->service);
+		SetTileSelectSize(size, size);
 		SetTileSelectBigSize(-radius, -radius, 2 * radius, 2 * radius);
 	}
 
 	void OnClick([[maybe_unused]] Point pt, WidgetID widget, [[maybe_unused]] int click_count) override
 	{
-		if (widget < WID_CS_POLICE || widget > WID_CS_PARK) return;
+		if (widget < WID_CS_POLICE || widget > WID_CS_MARKET) return;
 
 		CityService service = GetServiceOfTool(widget);
 		if (HandlePlacePushButton(this, widget, GetCityServiceIcon(service), HT_RECT)) {
@@ -100,6 +102,10 @@ struct CityServicesWindow : Window {
 		Hotkey('3', "health", WID_CS_HEALTH),
 		Hotkey('4', "education", WID_CS_EDUCATION),
 		Hotkey('5', "park", WID_CS_PARK),
+		Hotkey('6', "hospital", WID_CS_HOSPITAL),
+		Hotkey('7', "university", WID_CS_UNIVERSITY),
+		Hotkey('8', "stadium", WID_CS_STADIUM),
+		Hotkey('9', "market", WID_CS_MARKET),
 	}};
 };
 
@@ -115,6 +121,11 @@ static constexpr std::initializer_list<NWidgetPart> _nested_city_services_widget
 		NWidget(WWT_IMGBTN, Colours::DarkGreen, WID_CS_HEALTH), SetFill(0, 1), SetToolbarMinimalSize(1), SetSpriteTip(SPR_IMG_CITY_SERVICE_BASE + 2, STR_CITY_SERVICES_HEALTH_TOOLTIP),
 		NWidget(WWT_IMGBTN, Colours::DarkGreen, WID_CS_EDUCATION), SetFill(0, 1), SetToolbarMinimalSize(1), SetSpriteTip(SPR_IMG_CITY_SERVICE_BASE + 3, STR_CITY_SERVICES_EDUCATION_TOOLTIP),
 		NWidget(WWT_IMGBTN, Colours::DarkGreen, WID_CS_PARK), SetFill(0, 1), SetToolbarMinimalSize(1), SetSpriteTip(SPR_IMG_CITY_SERVICE_BASE + 4, STR_CITY_SERVICES_PARK_TOOLTIP),
+		NWidget(WWT_PANEL, Colours::DarkGreen), SetMinimalSize(4, 22), EndContainer(),
+		NWidget(WWT_IMGBTN, Colours::DarkGreen, WID_CS_HOSPITAL), SetFill(0, 1), SetToolbarMinimalSize(1), SetSpriteTip(SPR_IMG_CIVIC_SERVICE_BASE + 0, STR_CITY_SERVICES_HOSPITAL_TOOLTIP),
+		NWidget(WWT_IMGBTN, Colours::DarkGreen, WID_CS_UNIVERSITY), SetFill(0, 1), SetToolbarMinimalSize(1), SetSpriteTip(SPR_IMG_CIVIC_SERVICE_BASE + 1, STR_CITY_SERVICES_UNIVERSITY_TOOLTIP),
+		NWidget(WWT_IMGBTN, Colours::DarkGreen, WID_CS_STADIUM), SetFill(0, 1), SetToolbarMinimalSize(1), SetSpriteTip(SPR_IMG_CIVIC_SERVICE_BASE + 2, STR_CITY_SERVICES_STADIUM_TOOLTIP),
+		NWidget(WWT_IMGBTN, Colours::DarkGreen, WID_CS_MARKET), SetFill(0, 1), SetToolbarMinimalSize(1), SetSpriteTip(SPR_IMG_CIVIC_SERVICE_BASE + 3, STR_CITY_SERVICES_MARKET_TOOLTIP),
 	EndContainer(),
 };
 

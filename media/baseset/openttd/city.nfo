@@ -34,9 +34,11 @@
 //            HDB slab block (along X: two parts, along Y: two parts), HDB point block, condominium,
 //            shophouses, office block, glass office tower, shopping mall (four parts), landmark tower,
 //            mixed development, mosque, Chinese temple
+//   273-285: hospital, university, stadium (four parts each: (0,0), (1,0), (0,1), (1,1)), hawker centre
+//   286-289: icons: hospital, university, stadium, hawker centre
 //
    -1 * 0	 0C "City fork graphics"
-   -1 * 5	 05 1C FF 11 01
+   -1 * 5	 05 1C FF 22 01
    -1 sprites/city.png 8bpp    4    4   4  17   -1  -16 normal
    -1 sprites/city.png 8bpp   12    4   4  17   -1  -16 normal
    -1 sprites/city.png 8bpp   20    4   4  17   -1  -16 normal
@@ -310,3 +312,20 @@
    -1 sprites/city.png 8bpp   48 1470  56 127  -27  -97 normal
    -1 sprites/city.png 8bpp  108 1470  44  51  -19  -25 normal
    -1 sprites/city.png 8bpp  156 1470  45  37  -21  -12 normal
+   -1 sprites/city.png 8bpp  205 1470  48  70  -23  -38 normal
+   -1 sprites/city.png 8bpp  257 1470  46  69  -13  -42 normal
+   -1 sprites/city.png 8bpp  307 1470  48  72  -31  -42 normal
+   -1 sprites/city.png 8bpp  359 1470  50  70  -21  -46 normal
+   -1 sprites/city.png 8bpp  413 1470  62  53  -30  -21 normal
+   -1 sprites/city.png 8bpp    4 1710  62  46  -30  -14 normal
+   -1 sprites/city.png 8bpp   70 1710  62  66  -30  -34 normal
+   -1 sprites/city.png 8bpp  136 1710  62  39  -30   -7 normal
+   -1 sprites/city.png 8bpp  202 1710  56  69  -27  -37 normal
+   -1 sprites/city.png 8bpp  262 1710  55  57  -23  -27 normal
+   -1 sprites/city.png 8bpp  321 1710  55  57  -30  -27 normal
+   -1 sprites/city.png 8bpp  380 1710  56  45  -27  -17 normal
+   -1 sprites/city.png 8bpp  440 1710  58  38  -28  -10 normal
+   -1 sprites/city.png 8bpp    4 1930  14  15    0    0 normal
+   -1 sprites/city.png 8bpp   22 1930  14  15    0    0 normal
+   -1 sprites/city.png 8bpp   40 1930  14  15    0    0 normal
+   -1 sprites/city.png 8bpp   58 1930  14  15    0    0 normal

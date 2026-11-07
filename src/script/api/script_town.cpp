@@ -607,7 +607,7 @@
  */
 static bool IsValidCityService(ScriptTown::CityService service)
 {
-	return service >= ScriptTown::CITY_SERVICE_POLICE && service <= ScriptTown::CITY_SERVICE_PARK;
+	return service >= ScriptTown::CITY_SERVICE_POLICE && service <= ScriptTown::CITY_SERVICE_MARKET;
 }
 
 /* static */ bool ScriptTown::BuildCityService(TileIndex tile, CityService service)

@@ -327,6 +327,7 @@ enum class TownAction : uint8_t {
 using TownActions = EnumBitSet<TownAction, uint8_t>;
 
 void ClearTownHouse(Town *t, TileIndex tile);
+void GenerateServicePassengers(Town *t, TileIndex tile, uint people);
 void UpdateTownMaxPass(Town *t);
 void UpdateTownRadius(Town *t);
 CommandCost CheckIfAuthorityAllowsNewStation(TileIndex tile, DoCommandFlags flags);

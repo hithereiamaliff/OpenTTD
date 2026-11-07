@@ -301,7 +301,7 @@ public:
 			CityService service = GetCityServiceOfObjectType(GetObjectType(this->tile));
 			this->landinfo_data.push_back(GetString(STR_LAND_AREA_INFORMATION_CITY_SERVICE, GetCityServiceRadius(service), GetCityServiceYearlyUpkeep(service)));
 		}
-		if (uint8_t services = GetCityServicesCoveringTile(this->tile); services != 0) {
+		if (uint16_t services = GetCityServicesCoveringTile(this->tile); services != 0) {
 			std::string list;
 			for (uint s = 0; s < CITY_SERVICE_COUNT; s++) {
 				if (!HasBit(services, s)) continue;
