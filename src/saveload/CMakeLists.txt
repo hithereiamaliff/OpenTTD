@@ -14,6 +14,7 @@ add_files(
     city_bus_sl.cpp
     city_clock_sl.cpp
     environment_sl.cpp
+    town_budget_sl.cpp
     city_services_sl.cpp
     company_sl.cpp
     depot_sl.cpp

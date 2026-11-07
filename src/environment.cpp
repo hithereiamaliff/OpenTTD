@@ -54,6 +54,7 @@
 #include "town.h"
 #include "town_map.h"
 #include "town_zoning.h"
+#include "town_budget.h"
 #include "train.h"
 #include "tree_map.h"
 #include "vehicle_base.h"
@@ -444,6 +445,25 @@ static void UpdateEnvironmentMonthly()
 	std::vector<uint8_t> water(n, 0), industry(n, 0);
 	std::vector<EnvironmentHouse> houses;
 
+	/* Cells in a town's zones: low-emission zones (centre and inner suburbs) and car-free centres. */
+	std::vector<uint8_t> low_emission(n, 0), car_free(n, 0);
+	auto mark_town_cells = [](const Town *t, HouseZone zone, std::vector<uint8_t> &cells) {
+		const uint radius_sq = t->cache.squared_town_zone_radius[to_underlying(zone)];
+		if (radius_sq == 0) return;
+		const int reach = static_cast<int>(IntSqrt(radius_sq) / ENV_CELL) + 1;
+		const int tx = TileX(t->xy) / ENV_CELL, ty = TileY(t->xy) / ENV_CELL;
+		for (int y = std::max(0, ty - reach); y <= std::min<int>(CellsY() - 1, ty + reach); y++) {
+			for (int x = std::max(0, tx - reach); x <= std::min<int>(CellsX() - 1, tx + reach); x++) {
+				const uint cell = y * CellsX() + x;
+				if (DistanceSquare(CellCentre(cell), t->xy) < radius_sq) cells[cell] = 1;
+			}
+		}
+	};
+	for (const Town *t : Town::Iterate()) {
+		if (HasOrdinance(t, Ordinance::LowEmissionZone)) mark_town_cells(t, HouseZone::TownInnerSuburb, low_emission);
+		if (HasOrdinance(t, Ordinance::CarFreeCentre)) mark_town_cells(t, HouseZone::TownCentre, car_free);
+	}
+
 	/* Roads, trees, water, industry and houses, row by row. */
 	const uint size_x = Map::SizeX(), size_y = Map::SizeY(), cells_x = CellsX(), cells_y = CellsY();
 	for (uint y = 0; y < size_y; y++) {
@@ -457,7 +477,8 @@ static void UpdateEnvironmentMonthly()
 				case TileType::Road:
 					if (!IsRoadDepot(tile)) {
 						const uint level = GetRoadCongestion(tile);
-						if (level != 0) emission[cell] += ROAD_EMISSION * level * level * factor / 100;
+						/* A low-emission zone keeps the oldest, dirtiest cars out. */
+						if (level != 0) emission[cell] += ROAD_EMISSION * level * level * factor / 100 * (low_emission[cell] != 0 ? 70 : 100) / 100;
 					}
 					break;
 
@@ -566,6 +587,8 @@ static void UpdateEnvironmentMonthly()
 		if (rating == 0) continue;
 		uint bonus = (st->facilities.Test(StationFacility::Train) ? 12 : 5) * rating / 255;
 		if (IsActiveTransportHub(st) || st->brt_grade > 0) bonus += 4;
+		/* Transit-oriented development: the town lets people build close to its railway stations. */
+		if (st->facilities.Test(StationFacility::Train) && st->town != nullptr && HasOrdinance(st->town, Ordinance::TransitOrientedDevelopment)) bonus += 10;
 		if (bonus == 0) continue;
 		for (TileIndex tile : st->catchment_tiles) {
 			uint8_t &best = transit[CellOf(tile)];
@@ -583,6 +606,8 @@ static void UpdateEnvironmentMonthly()
 		value += transit[cell];
 		if (water[cell] != 0) value += 5;
 		if (industry[cell] != 0) value -= 5;
+		/* Streets without through traffic. */
+		if (car_free[cell] != 0) value += 5;
 		value -= std::min<int>(50, _env_pollution[cell] / 5);
 		const uint target = static_cast<uint>(Clamp(value, 0, static_cast<int>(LAND_VALUE_MAX)));
 		_env_land_value[cell] = static_cast<uint8_t>(first ? target : (_env_land_value[cell] * 3 + target + 2) / 4);

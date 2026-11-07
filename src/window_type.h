@@ -792,6 +792,12 @@ enum class WindowClass : uint16_t {
 	TransitAuthority,
 
 	/**
+	 * Town budget window; %Window numbers:
+	 *   - #TownID = #TownBudgetWidgets
+	 */
+	TownBudget,
+
+	/**
 	 * Depot yard window; %Window numbers:
 	 *   - #DepotID = #DepotYardWidgets
 	 */

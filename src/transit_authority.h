@@ -30,6 +30,7 @@ struct OrderList;
 struct Town;
 struct Vehicle;
 
+Money GetTransitBusYearCost();
 Money GetTownTransitBudget(const Town *t);
 Money GetTownTransitCommitted(const Town *t);
 Money GetTownTransitAvailable(const Town *t);

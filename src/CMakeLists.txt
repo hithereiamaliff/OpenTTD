@@ -597,6 +597,11 @@ add_files(
     toolbar_gui.cpp
     toolbar_gui.h
     town.h
+    town_budget.cpp
+    town_budget.h
+    town_budget_cmd.h
+    town_budget_gui.cpp
+    town_budget_type.h
     town_cmd.cpp
     town_cmd.h
     town_gui.cpp

@@ -52,6 +52,7 @@
 #include "widgets/town_widget.h"
 #include "town_traffic.h"
 #include "environment.h"
+#include "town_budget.h"
 #include "transit_authority.h"
 #include "town_zoning.h"
 #include "city_services.h"
@@ -548,6 +549,10 @@ public:
 				ShowTransitAuthorityWindow(static_cast<TownID>(this->window_number));
 				break;
 
+			case WID_TV_BUDGET: // town budget and ordinances
+				ShowTownBudgetWindow(static_cast<TownID>(this->window_number));
+				break;
+
 			case WID_TV_CHANGE_NAME: // rename
 				ShowQueryString(GetString(STR_TOWN_NAME, this->window_number), STR_TOWN_VIEW_RENAME_TOWN_BUTTON, MAX_LENGTH_TOWN_NAME_CHARS, this, CS_ALPHANUMERAL, {QueryStringFlag::EnableDefault, QueryStringFlag::LengthIsInChars});
 				break;
@@ -707,6 +712,7 @@ static constexpr std::initializer_list<NWidgetPart> _nested_town_game_view_widge
 	NWidget(NWID_HORIZONTAL, NWidContainerFlag::EqualSize),
 		NWidget(WWT_PUSHTXTBTN, Colours::Brown, WID_TV_SHOW_AUTHORITY), SetMinimalSize(80, 12), SetFill(1, 1), SetResize(1, 0), SetStringTip(STR_TOWN_VIEW_LOCAL_AUTHORITY_BUTTON, STR_TOWN_VIEW_LOCAL_AUTHORITY_TOOLTIP),
 		NWidget(WWT_PUSHTXTBTN, Colours::Brown, WID_TV_TRANSIT), SetMinimalSize(40, 12), SetFill(1, 1), SetResize(1, 0), SetStringTip(STR_TOWN_VIEW_TRANSIT_BUTTON, STR_TOWN_VIEW_TRANSIT_TOOLTIP),
+		NWidget(WWT_PUSHTXTBTN, Colours::Brown, WID_TV_BUDGET), SetMinimalSize(40, 12), SetFill(1, 1), SetResize(1, 0), SetStringTip(STR_TOWN_VIEW_BUDGET_BUTTON, STR_TOWN_VIEW_BUDGET_TOOLTIP),
 		NWidget(WWT_TEXTBTN, Colours::Brown, WID_TV_CATCHMENT), SetMinimalSize(40, 12), SetFill(1, 1), SetResize(1, 0), SetStringTip(STR_BUTTON_CATCHMENT, STR_TOOLTIP_CATCHMENT),
 		NWidget(WWT_PUSHTXTBTN, Colours::Brown, WID_TV_GRAPH), SetFill(1, 0), SetResize(1, 0), SetStringTip(STR_TOWN_VIEW_CARGO_GRAPH, STR_TOWN_VIEW_CARGO_GRAPH_TOOLTIP),
 		NWidget(WWT_RESIZEBOX, Colours::Brown),

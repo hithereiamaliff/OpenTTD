@@ -1,0 +1,254 @@
+/*
+ * This file is part of OpenTTD.
+ * OpenTTD is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, version 2.
+ * OpenTTD is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with OpenTTD. If not, see <https://www.gnu.org/licenses/old-licenses/gpl-2.0>.
+ */
+
+/** @file town_budget_gui.cpp The window of a town's budget and ordinances. */
+
+#include "stdafx.h"
+#include "town_budget.h"
+#include "town_budget_cmd.h"
+#include "command_func.h"
+#include "company_base.h"
+#include "company_func.h"
+#include "environment.h"
+#include "road_pricing.h"
+#include "road_pricing_cmd.h"
+#include "strings_func.h"
+#include "town.h"
+#include "window_func.h"
+#include "window_gui.h"
+#include "zoom_func.h"
+
+#include "widgets/town_budget_widget.h"
+
+#include "table/strings.h"
+
+#include "safeguards.h"
+
+/** Rows of the list: the ordinances, then the congestion charge. */
+static constexpr uint TOWN_BUDGET_ROWS = ORDINANCE_COUNT + 1;
+
+/** What each ordinance does, in words; the congestion charge last. */
+static constexpr StringID ORDINANCE_EFFECTS[] = {
+	STR_ORDINANCE_EFFECT_TRANSIT_FUND, STR_ORDINANCE_EFFECT_PARKING_LIMITS, STR_ORDINANCE_EFFECT_LOW_EMISSION_ZONE,
+	STR_ORDINANCE_EFFECT_CAR_FREE_CENTRE, STR_ORDINANCE_EFFECT_TREE_PLANTING, STR_ORDINANCE_EFFECT_TRANSIT_ORIENTED_DEVELOPMENT,
+	STR_ORDINANCE_EFFECT_CONGESTION_CHARGE,
+};
+static_assert(std::size(ORDINANCE_EFFECTS) == TOWN_BUDGET_ROWS);
+
+/** What a town needs for each ordinance, in words; the congestion charge last. */
+static constexpr StringID ORDINANCE_NEEDS[] = {
+	STR_ORDINANCE_NEEDS_TRANSIT_FUND, STR_ORDINANCE_NEEDS_PARKING_LIMITS, STR_ORDINANCE_NEEDS_LOW_EMISSION_ZONE,
+	STR_ORDINANCE_NEEDS_CAR_FREE_CENTRE, STR_ORDINANCE_NEEDS_TREE_PLANTING, STR_ORDINANCE_NEEDS_TRANSIT_ORIENTED_DEVELOPMENT,
+	STR_ORDINANCE_NEEDS_CONGESTION_CHARGE,
+};
+static_assert(std::size(ORDINANCE_NEEDS) == TOWN_BUDGET_ROWS);
+
+/** The window of a town's budget: taxes, spending, reserves, and the ordinances it has or could bring in. */
+struct TownBudgetWindow : Window {
+	Scrollbar *vscroll = nullptr; ///< Scrollbar of the list.
+	int selected = -1; ///< Selected row, -1 for none.
+
+	TownBudgetWindow(WindowDesc &desc, WindowNumber window_number) : Window(desc)
+	{
+		this->CreateNestedTree();
+		this->vscroll = this->GetScrollbar(WID_TB_SCROLLBAR);
+		this->FinishInitNested(window_number);
+		this->vscroll->SetCount(TOWN_BUDGET_ROWS);
+		this->OnInvalidateData();
+	}
+
+	int RowHeight() const
+	{
+		return GetCharacterHeight(FontSize::Normal) + 2 * GetCharacterHeight(FontSize::Small) + WidgetDimensions::scaled.vsep_wide;
+	}
+
+	void UpdateWidgetSize(WidgetID widget, Dimension &size, [[maybe_unused]] const Dimension &padding, [[maybe_unused]] Dimension &fill, [[maybe_unused]] Dimension &resize) override
+	{
+		switch (widget) {
+			case WID_TB_SUMMARY:
+				size.height = WidgetDimensions::scaled.framerect.Vertical() + 5 * GetCharacterHeight(FontSize::Normal);
+				size.width = std::max<uint>(size.width, ScaleGUITrad(600));
+				break;
+
+			case WID_TB_LIST:
+				resize.height = this->RowHeight();
+				size.height = WidgetDimensions::scaled.framerect.Vertical() + TOWN_BUDGET_ROWS * this->RowHeight();
+				fill.height = resize.height;
+				break;
+		}
+	}
+
+	std::string GetWidgetString(WidgetID widget, StringID stringid) const override
+	{
+		if (widget == WID_TB_CAPTION) return GetString(STR_TOWN_BUDGET_CAPTION, this->window_number);
+		return this->Window::GetWidgetString(widget, stringid);
+	}
+
+	/**
+	 * Is the ordinance (or the congestion charge) of a row in force in the town?
+	 * @param t The town.
+	 * @param row The row.
+	 * @return True if it is.
+	 */
+	static bool IsInForce(const Town *t, uint row)
+	{
+		if (row == ORDINANCE_COUNT) return t->transit.congestion_charge;
+		return HasOrdinance(t, static_cast<Ordinance>(row));
+	}
+
+	/**
+	 * Why the town would turn down the local company's proposal of a row.
+	 * @param t The town.
+	 * @param row The row.
+	 * @return The reason, or INVALID_STRING_ID if it would agree.
+	 */
+	static StringID GetRefusal(const Town *t, uint row)
+	{
+		if (row == ORDINANCE_COUNT) return GetCongestionChargeRefusal(t, _local_company);
+		return GetOrdinanceRefusal(t, static_cast<Ordinance>(row), _local_company);
+	}
+
+	void DrawSummary(const Rect &r, const Town *t) const
+	{
+		Rect ir = r.Shrink(WidgetDimensions::scaled.framerect);
+		if (!AreTownBudgetsOn()) {
+			DrawStringMultiLine(ir, STR_TOWN_BUDGET_OFF);
+			return;
+		}
+		const TownBudget &b = t->budget;
+		const Money base = GetTownTaxBase(t);
+		const uint value = (IsEnvironmentKnown() && t->environment.land_value != 0) ? t->environment.land_value : 50;
+		DrawString(ir, GetString(STR_TOWN_BUDGET_TAXES, b.tax_rate, value, GetTownYearlyTaxes(t)));
+		ir.top += GetCharacterHeight(FontSize::Normal);
+		DrawString(ir, GetString(STR_TOWN_BUDGET_SPENDING, base * GetTownTransitSharePercent(t) / 100, GetTownTransitSharePercent(t),
+				base * TOWN_RUNNING_SHARE / 100, base * (GetTownOrdinanceCostPercent(t) - (HasOrdinance(t, Ordinance::TransitFund) ? GetOrdinanceCostPercent(Ordinance::TransitFund) : 0)) / 100));
+		ir.top += GetCharacterHeight(FontSize::Normal);
+		DrawString(ir, GetString(STR_TOWN_BUDGET_FEES, b.fees_last_year, b.fees_this_year, b.lez_charged_last_month));
+		ir.top += GetCharacterHeight(FontSize::Normal);
+		DrawString(ir, GetString(b.reserves < 0 ? STR_TOWN_BUDGET_RESERVES_NEGATIVE : STR_TOWN_BUDGET_RESERVES, b.reserves, b.taxes_last_year, b.spent_last_year));
+		ir.top += GetCharacterHeight(FontSize::Normal);
+		const int happiness = GetTownBudgetHappiness(t);
+		DrawString(ir, GetString(STR_TOWN_BUDGET_EFFECTS, fmt::format("{:+}", happiness), GetTownTaxGrowthPercent(t), b.trees_planted));
+	}
+
+	void DrawList(const Rect &r, const Town *t) const
+	{
+		Rect ir = r.Shrink(WidgetDimensions::scaled.framerect);
+		const int row_height = this->RowHeight();
+		const int small = GetCharacterHeight(FontSize::Small);
+		for (uint row = this->vscroll->GetPosition(); row < TOWN_BUDGET_ROWS && ir.top < ir.bottom; row++) {
+			Rect line = ir.WithHeight(row_height);
+			if (static_cast<int>(row) == this->selected) GfxFillRect(line.Shrink(-WidgetDimensions::scaled.framerect.left, 0), PC_DARK_GREY);
+
+			const StringID name = row == ORDINANCE_COUNT ? STR_ORDINANCE_CONGESTION_CHARGE : GetOrdinanceName(static_cast<Ordinance>(row));
+			const uint cost = row == ORDINANCE_COUNT ? 0 : GetOrdinanceCostPercent(static_cast<Ordinance>(row));
+			std::string title;
+			if (IsInForce(t, row)) {
+				const TimerGameEconomy::Date since = row == ORDINANCE_COUNT ? t->transit.charge_since : t->budget.since[row];
+				title = GetString(STR_TOWN_BUDGET_ROW_IN_FORCE, name, since);
+			} else {
+				title = GetString(STR_TOWN_BUDGET_ROW_NOT_IN_FORCE, name);
+			}
+			DrawString(line, title);
+			int y = line.top + GetCharacterHeight(FontSize::Normal);
+			std::string effect = GetString(cost == 0 ? STR_TOWN_BUDGET_EFFECT_FREE : STR_TOWN_BUDGET_EFFECT_COST, ORDINANCE_EFFECTS[row], cost);
+			DrawString(line.left, line.right, y, effect, TextColour::FromString, AlignmentH::Start, false, FontSize::Small);
+			y += small;
+			if (!IsInForce(t, row)) {
+				const bool can = Company::IsValidID(_local_company) && GetRefusal(t, row) == INVALID_STRING_ID;
+				DrawString(line.left, line.right, y, GetString(can ? STR_TOWN_BUDGET_NEEDS_CAN : STR_TOWN_BUDGET_NEEDS, ORDINANCE_NEEDS[row]), TextColour::FromString, AlignmentH::Start, false, FontSize::Small);
+			}
+			ir.top += row_height;
+		}
+	}
+
+	void DrawWidget(const Rect &r, WidgetID widget) const override
+	{
+		const Town *t = Town::GetIfValid(this->window_number);
+		if (t == nullptr) return;
+		switch (widget) {
+			case WID_TB_SUMMARY: this->DrawSummary(r, t); break;
+			case WID_TB_LIST: this->DrawList(r, t); break;
+		}
+	}
+
+	void OnClick([[maybe_unused]] Point pt, WidgetID widget, [[maybe_unused]] int click_count) override
+	{
+		switch (widget) {
+			case WID_TB_LIST: {
+				const int row = this->vscroll->GetScrolledRowFromWidget(pt.y, this, WID_TB_LIST, WidgetDimensions::scaled.framerect.top);
+				this->selected = (row == INT32_MAX || row < 0 || row >= static_cast<int>(TOWN_BUDGET_ROWS)) ? -1 : row;
+				this->OnInvalidateData();
+				break;
+			}
+
+			case WID_TB_PROPOSE:
+				if (this->selected < 0) break;
+				if (this->selected == static_cast<int>(ORDINANCE_COUNT)) {
+					Command<Commands::ProposeCongestionCharge>::Post(STR_ERROR_CAN_T_PROPOSE_CONGESTION_CHARGE, static_cast<TownID>(this->window_number));
+				} else {
+					Command<Commands::ProposeOrdinance>::Post(STR_ERROR_CAN_T_PROPOSE_ORDINANCE, static_cast<TownID>(this->window_number), static_cast<Ordinance>(this->selected));
+				}
+				break;
+		}
+	}
+
+	void OnResize() override
+	{
+		this->vscroll->SetCapacityFromWidget(this, WID_TB_LIST, WidgetDimensions::scaled.framerect.Vertical());
+	}
+
+	void OnInvalidateData([[maybe_unused]] int data = 0, [[maybe_unused]] bool gui_scope = true) override
+	{
+		if (!gui_scope) return;
+		const Town *t = Town::GetIfValid(this->window_number);
+		if (t == nullptr) {
+			this->Close();
+			return;
+		}
+		bool disabled = this->selected < 0 || !Company::IsValidID(_local_company) || IsInForce(t, this->selected);
+		if (this->selected >= 0 && this->selected < static_cast<int>(ORDINANCE_COUNT) && !AreTownBudgetsOn()) disabled = true;
+		this->SetWidgetDisabledState(WID_TB_PROPOSE, disabled);
+		this->SetDirty();
+	}
+};
+
+static constexpr std::initializer_list<NWidgetPart> _nested_town_budget_widgets = {
+	NWidget(NWID_HORIZONTAL),
+		NWidget(WWT_CLOSEBOX, Colours::Brown),
+		NWidget(WWT_CAPTION, Colours::Brown, WID_TB_CAPTION), SetToolTip(STR_TOOLTIP_WINDOW_TITLE_DRAG_THIS),
+		NWidget(WWT_SHADEBOX, Colours::Brown),
+		NWidget(WWT_DEFSIZEBOX, Colours::Brown),
+		NWidget(WWT_STICKYBOX, Colours::Brown),
+	EndContainer(),
+	NWidget(WWT_PANEL, Colours::Brown, WID_TB_SUMMARY), SetFill(1, 0), SetResize(1, 0), EndContainer(),
+	NWidget(NWID_HORIZONTAL),
+		NWidget(WWT_PANEL, Colours::Brown, WID_TB_LIST), SetFill(1, 1), SetResize(1, 1), SetScrollbar(WID_TB_SCROLLBAR), SetToolTip(STR_TOWN_BUDGET_LIST_TOOLTIP), EndContainer(),
+		NWidget(NWID_VSCROLLBAR, Colours::Brown, WID_TB_SCROLLBAR),
+	EndContainer(),
+	NWidget(NWID_HORIZONTAL),
+		NWidget(WWT_PUSHTXTBTN, Colours::Brown, WID_TB_PROPOSE), SetFill(1, 0), SetResize(1, 0), SetStringTip(STR_TOWN_BUDGET_PROPOSE_BUTTON, STR_TOWN_BUDGET_PROPOSE_TOOLTIP),
+		NWidget(WWT_RESIZEBOX, Colours::Brown),
+	EndContainer(),
+};
+
+static WindowDesc _town_budget_desc(
+	WindowPosition::Automatic, "view_town_budget", 0, 0,
+	WindowClass::TownBudget, WindowClass::None,
+	{},
+	_nested_town_budget_widgets
+);
+
+/**
+ * Open the budget window of a town.
+ * @param town The town.
+ */
+void ShowTownBudgetWindow(TownID town)
+{
+	if (!Town::IsValidID(town)) return;
+	AllocateWindowDescFront<TownBudgetWindow>(_town_budget_desc, town.base());
+}

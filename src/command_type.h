@@ -400,6 +400,8 @@ enum class Commands : uint8_t {
 	ProposeCongestionCharge, ///< ask a town to bring in a congestion charge
 	UpgradeStation, ///< make a station a bus interchange or a transport hub
 	BuildScreenDoors, ///< fit platform screen doors along a station's railway platforms
+	ProposeOrdinance, ///< propose an ordinance to a town
+	SetTownOrdinance, ///< bring in or repeal a town's ordinance (game scripts)
 
 	End, ///< @important Must ALWAYS be on the end of this list!! (period)
 };

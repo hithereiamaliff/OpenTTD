@@ -47,6 +47,7 @@ enum TownViewWidgets : WidgetID {
 	WID_TV_DELETE,         ///< Delete this town (scenario editor only).
 	WID_TV_GRAPH,
 	WID_TV_TRANSIT, ///< Show the town's transit authority.
+	WID_TV_BUDGET, ///< Show the town's budget and ordinances.
 };
 
 /** Widgets of the #FoundTownWindow class. */

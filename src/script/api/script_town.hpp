@@ -16,6 +16,7 @@
 #include "../../town_type.h"
 #include "../../town_zoning.h"
 #include "../../city_services_type.h"
+#include "../../town_budget_type.h"
 
 /**
  * Class that handles all town related functions.
@@ -158,6 +159,20 @@ public:
 		CITY_SERVICE_EDUCATION = to_underlying(::CityService::Education), ///< School.
 		CITY_SERVICE_PARK      = to_underlying(::CityService::Park),      ///< Park.
 		CITY_SERVICE_INVALID   = -1, ///< Not a city service.
+	};
+
+	/**
+	 * Ordinances a town can bring in (with town budgets switched on). Towns
+	 * bring them in on their own when their problems call for them and they
+	 * can afford them; companies can propose them (ProposeOrdinance).
+	 */
+	enum Ordinance {
+		ORDINANCE_TRANSIT_FUND = to_underlying(::Ordinance::TransitFund), ///< 40% of the town's taxes for transit instead of 25%.
+		ORDINANCE_PARKING_LIMITS = to_underlying(::Ordinance::ParkingLimits), ///< Traffic in the centre and inner suburbs -15%, a parking levy.
+		ORDINANCE_LOW_EMISSION_ZONE = to_underlying(::Ordinance::LowEmissionZone), ///< Traffic pollution in the centre and inner suburbs -30%; road vehicles that aren't electric pay to drive in.
+		ORDINANCE_CAR_FREE_CENTRE = to_underlying(::Ordinance::CarFreeCentre), ///< Traffic in the centre -60%, happier people, dearer land.
+		ORDINANCE_TREE_PLANTING = to_underlying(::Ordinance::TreePlanting), ///< The town plants trees every month.
+		ORDINANCE_TRANSIT_ORIENTED_DEVELOPMENT = to_underlying(::Ordinance::TransitOrientedDevelopment), ///< Land value +10 around railway stations with passenger trains.
 	};
 
 	/**
@@ -453,6 +468,83 @@ public:
 	 * @return The index; 0 while not known or with pollution switched off, -1 for an invalid town.
 	 */
 	static SQInteger GetPollution(TownID town_id);
+
+	/**
+	 * Has a town an ordinance in force?
+	 * @param town_id The town.
+	 * @param ordinance The ordinance.
+	 * @pre IsValidTown(town_id).
+	 * @return True if it has; false if not, with town budgets switched off, or for an invalid town.
+	 */
+	static bool HasOrdinance(TownID town_id, Ordinance ordinance);
+
+	/**
+	 * Propose an ordinance to a town. It agrees if it has the problem the
+	 * ordinance is for, can afford it, and rates the company well enough
+	 * (Good for a transit fund, a low-emission zone or a car-free centre,
+	 * Mediocre for the others). The campaign costs about as much as a small
+	 * station.
+	 * @param town_id The town.
+	 * @param ordinance The ordinance.
+	 * @pre IsValidTown(town_id).
+	 * @pre ScriptCompanyMode::IsValid().
+	 * @return Whether the town brought it in.
+	 */
+	static bool ProposeOrdinance(TownID town_id, Ordinance ordinance);
+
+	/**
+	 * Bring in or repeal an ordinance in a town, whatever its problems and money.
+	 * @param town_id The town.
+	 * @param ordinance The ordinance.
+	 * @param in_force Whether it is in force.
+	 * @pre IsValidTown(town_id).
+	 * @pre ScriptCompanyMode::IsDeity().
+	 * @return Whether it has been/can be set.
+	 * @api -ai
+	 */
+	static bool SetOrdinance(TownID town_id, Ordinance ordinance, bool in_force);
+
+	/**
+	 * Get a town's tax rate: in percent of the normal rate, from 70 to 150.
+	 * Towns cut taxes when they have money put by and raise them when they run short.
+	 * @param town_id The town.
+	 * @pre IsValidTown(town_id).
+	 * @return The rate, or -1 for an invalid town or with town budgets switched off.
+	 */
+	static SQInteger GetTaxRate(TownID town_id);
+
+	/**
+	 * Get the taxes a town collects a year at its current rate.
+	 * @param town_id The town.
+	 * @pre IsValidTown(town_id).
+	 * @return The taxes, or -1 for an invalid town or with town budgets switched off.
+	 */
+	static Money GetTaxIncome(TownID town_id);
+
+	/**
+	 * Get the money a town has put by; less than zero when it is in debt.
+	 * @param town_id The town.
+	 * @pre IsValidTown(town_id).
+	 * @return The reserves; 0 for an invalid town or with town budgets switched off.
+	 */
+	static Money GetReserves(TownID town_id);
+
+	/**
+	 * Get how much of a town's car traffic passenger services take off its
+	 * roads: up to 60% when they carry all of its passengers.
+	 * @param town_id The town.
+	 * @pre IsValidTown(town_id).
+	 * @return The reduction in percent, or -1 for an invalid town.
+	 */
+	static SQInteger GetCarReduction(TownID town_id);
+
+	/**
+	 * Get how many company road vehicles paid to drive into a town's low-emission zone last month.
+	 * @param town_id The town.
+	 * @pre IsValidTown(town_id).
+	 * @return The number, or -1 for an invalid town.
+	 */
+	static SQInteger GetLowEmissionZoneVehicles(TownID town_id);
 
 	/**
 	 * Get the land value where a town's people live, from 0 to 100, weighted by population, as of last month.

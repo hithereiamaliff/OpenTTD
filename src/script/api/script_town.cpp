@@ -31,6 +31,9 @@
 
 #include "../../transit_authority.h"
 #include "../../environment.h"
+#include "../../town_budget.h"
+#include "../../town_traffic.h"
+#include "../../town_budget_cmd.h"
 #include "../../transit_authority_cmd.h"
 #include "../../safeguards.h"
 
@@ -277,6 +280,58 @@
 	if (!IsValidTown(town_id)) return INVALID_TILE;
 	const TransitContract *offer = GetTownFeederOffer(town_id);
 	return offer == nullptr ? INVALID_TILE : offer->target;
+}
+
+/* static */ bool ScriptTown::HasOrdinance(TownID town_id, Ordinance ordinance)
+{
+	if (!IsValidTown(town_id) || ordinance < 0 || ordinance >= static_cast<int>(ORDINANCE_COUNT)) return false;
+	return ::HasOrdinance(::Town::Get(town_id), static_cast<::Ordinance>(ordinance));
+}
+
+/* static */ bool ScriptTown::ProposeOrdinance(TownID town_id, Ordinance ordinance)
+{
+	EnforceCompanyModeValid(false);
+	EnforcePrecondition(false, IsValidTown(town_id));
+	EnforcePrecondition(false, ordinance >= 0 && ordinance < static_cast<int>(ORDINANCE_COUNT));
+	return ScriptObject::Command<Commands::ProposeOrdinance>::Do(town_id, static_cast<::Ordinance>(ordinance));
+}
+
+/* static */ bool ScriptTown::SetOrdinance(TownID town_id, Ordinance ordinance, bool in_force)
+{
+	EnforceDeityMode(false);
+	EnforcePrecondition(false, IsValidTown(town_id));
+	EnforcePrecondition(false, ordinance >= 0 && ordinance < static_cast<int>(ORDINANCE_COUNT));
+	return ScriptObject::Command<Commands::SetTownOrdinance>::Do(town_id, static_cast<::Ordinance>(ordinance), in_force);
+}
+
+/* static */ SQInteger ScriptTown::GetTaxRate(TownID town_id)
+{
+	if (!IsValidTown(town_id) || !::AreTownBudgetsOn()) return -1;
+	return ::Town::Get(town_id)->budget.tax_rate;
+}
+
+/* static */ Money ScriptTown::GetTaxIncome(TownID town_id)
+{
+	if (!IsValidTown(town_id) || !::AreTownBudgetsOn()) return -1;
+	return ::GetTownYearlyTaxes(::Town::Get(town_id));
+}
+
+/* static */ SQInteger ScriptTown::GetCarReduction(TownID town_id)
+{
+	if (!IsValidTown(town_id)) return -1;
+	return ::GetTownCarReduction(::Town::Get(town_id));
+}
+
+/* static */ SQInteger ScriptTown::GetLowEmissionZoneVehicles(TownID town_id)
+{
+	if (!IsValidTown(town_id)) return -1;
+	return ::Town::Get(town_id)->budget.lez_charged_last_month;
+}
+
+/* static */ Money ScriptTown::GetReserves(TownID town_id)
+{
+	if (!IsValidTown(town_id) || !::AreTownBudgetsOn()) return 0;
+	return ::Town::Get(town_id)->budget.reserves;
 }
 
 /* static */ SQInteger ScriptTown::GetPollution(TownID town_id)

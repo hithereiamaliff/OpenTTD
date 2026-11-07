@@ -2184,6 +2184,8 @@ STR_CONFIG_SETTING_AIR_POLLUTION_OFF                            :Off
 STR_CONFIG_SETTING_AIR_POLLUTION_LIGHT                          :Light pollution
 STR_CONFIG_SETTING_AIR_POLLUTION_NORMAL                         :Normal pollution
 STR_CONFIG_SETTING_AIR_POLLUTION_HEAVY                          :Heavy pollution
+STR_CONFIG_SETTING_TOWN_BUDGETS                                 :Town budgets and ordinances: {STRING2}
+STR_CONFIG_SETTING_TOWN_BUDGETS_HELPTEXT                        :Towns collect taxes, more from bigger towns and dearer land. A quarter goes to transit (the transit budget for contracts, passes and concessions), 60% to running the town; the rest pays for ordinances or builds reserves. Towns cut taxes when they have money put by and raise them when they run short; high taxes make a town less happy and slow its growth.{}Towns bring in ordinances when their problems call for them and they can afford them: parking limits, a low-emission zone, a car-free centre, tree planting, transit-oriented development, a transit fund. Companies can propose them in the town's Budget window.{}Off: no budgets and no ordinances; transit budgets as before
 
 STR_CONFIG_SETTING_LARGER_TOWNS                                 :Proportion of towns that will become cities: {STRING2}
 STR_CONFIG_SETTING_LARGER_TOWNS_HELPTEXT                        :Amount of towns which will become a city, thus a town which starts out larger and grows faster
@@ -4008,6 +4010,8 @@ STR_TOWN_VIEW_LOCAL_AUTHORITY_BUTTON                            :{BLACK}Local Au
 STR_TOWN_VIEW_LOCAL_AUTHORITY_TOOLTIP                           :{BLACK}Show information on local authority
 STR_TOWN_VIEW_TRANSIT_BUTTON                                    :{BLACK}Transit
 STR_TOWN_VIEW_TRANSIT_TOOLTIP                                   :{BLACK}Show the town's transit authority: its budget, and its tenders and contracts for lines
+STR_TOWN_VIEW_BUDGET_BUTTON                                     :{BLACK}Budget
+STR_TOWN_VIEW_BUDGET_TOOLTIP                                    :{BLACK}Show the town's budget and ordinances: its taxes, spending and reserves, the rules it has brought in, and the ones you can propose
 STR_TOWN_VIEW_RENAME_TOOLTIP                                    :{BLACK}Change town name
 STR_TOWN_VIEW_CARGO_GRAPH                                       :Cargo Graph
 STR_TOWN_VIEW_CARGO_GRAPH_TOOLTIP                               :Show graph of town's cargo history
@@ -5383,6 +5387,44 @@ STR_TRANSIT_LINE_BUTTON                                         :{BLACK}Line
 STR_TRANSIT_LINE_TOOLTIP                                        :{BLACK}Show the line of the selected tender or contract, or the houses a wanted feeder line should reach
 STR_TRANSIT_CHARGE_BUTTON                                       :Propose congestion charge
 STR_TRANSIT_CHARGE_TOOLTIP                                      :{BLACK}Campaign for a congestion charge: road vehicles except buses pay to drive into the centre and inner suburbs, town traffic there falls by about 30%, and the money goes to the town's transit budget. The town agrees from 5,000 people, when its centre is at congestion level 2 on average and it rates your company Good or better
+STR_TOWN_BUDGET_CAPTION                                         :{WHITE}{TOWN} - Budget and ordinances
+STR_TOWN_BUDGET_OFF                                             :{BLACK}Towns keep no budgets and bring in no ordinances: the setting "Town budgets and ordinances" is off
+STR_TOWN_BUDGET_TAXES                                           :{BLACK}Taxes: {ORANGE}{NUM}%{BLACK} of normal, land value {NUM}: {CURRENCY_LONG} a year
+STR_TOWN_BUDGET_SPENDING                                        :{BLACK}Spending a year: transit {CURRENCY_LONG} ({NUM}%), running the town {CURRENCY_LONG}, ordinances {CURRENCY_LONG}
+STR_TOWN_BUDGET_FEES                                            :{BLACK}Parking levies and low-emission zone fees: {CURRENCY_LONG} last year, {CURRENCY_LONG} this year; {NUM} vehicle{P "" s} paid to drive in last month
+STR_TOWN_BUDGET_RESERVES                                        :{BLACK}Reserves: {GREEN}{CURRENCY_LONG}{BLACK}. Last year: taxes {CURRENCY_LONG}, spent {CURRENCY_LONG}
+STR_TOWN_BUDGET_RESERVES_NEGATIVE                               :{BLACK}Reserves: {RED}{CURRENCY_LONG}{BLACK}, in debt: taxes go up. Last year: taxes {CURRENCY_LONG}, spent {CURRENCY_LONG}
+STR_TOWN_BUDGET_EFFECTS                                         :{BLACK}Taxes and ordinances: happiness {ORANGE}{RAW_STRING}{BLACK}, time between new houses {ORANGE}{NUM}%{BLACK}; trees planted: {NUM}
+STR_TOWN_BUDGET_ROW_IN_FORCE                                    :{BLACK}{STRING}: {GREEN}in force{BLACK} since {DATE_SHORT}
+STR_TOWN_BUDGET_ROW_NOT_IN_FORCE                                :{BLACK}{STRING}: {SILVER}not in force
+STR_TOWN_BUDGET_EFFECT_COST                                     :{SILVER}{STRING}; costs {NUM}% of taxes a year
+STR_TOWN_BUDGET_EFFECT_FREE                                     :{SILVER}{STRING}; costs nothing
+STR_TOWN_BUDGET_NEEDS                                           :{SILVER}{STRING}
+STR_TOWN_BUDGET_NEEDS_CAN                                       :{SILVER}{STRING}. {GREEN}You can propose it
+STR_TOWN_BUDGET_LIST_TOOLTIP                                    :{BLACK}Rules the town can bring in. Towns bring them in on their own when their problems call for them and they can afford them, and repeal the dearest when their money runs low; you can propose them too. Click one to select it
+STR_TOWN_BUDGET_PROPOSE_BUTTON                                  :{BLACK}Propose
+STR_TOWN_BUDGET_PROPOSE_TOOLTIP                                 :{BLACK}Propose the selected ordinance to the town. It agrees if it has the problem, can afford it (from what is left of its taxes, or two years' worth of reserves) and rates your company well enough; the campaign costs about as much as a small station
+STR_ORDINANCE_TRANSIT_FUND                                      :Transit fund
+STR_ORDINANCE_PARKING_LIMITS                                    :Parking limits
+STR_ORDINANCE_LOW_EMISSION_ZONE                                 :Low-emission zone
+STR_ORDINANCE_CAR_FREE_CENTRE                                   :Car-free centre
+STR_ORDINANCE_TREE_PLANTING                                     :Tree planting
+STR_ORDINANCE_TRANSIT_ORIENTED_DEVELOPMENT                      :Transit-oriented development
+STR_ORDINANCE_CONGESTION_CHARGE                                 :Congestion charge
+STR_ORDINANCE_EFFECT_TRANSIT_FUND                               :40% of taxes for transit instead of 25%: more money for contracts, passes and concessions
+STR_ORDINANCE_EFFECT_PARKING_LIMITS                             :traffic in the centre and inner suburbs -15%, a parking levy brings in 3% of taxes, happiness -1
+STR_ORDINANCE_EFFECT_LOW_EMISSION_ZONE                          :traffic pollution in the centre and inner suburbs -30%; road vehicles that aren't electric pay to drive in
+STR_ORDINANCE_EFFECT_CAR_FREE_CENTRE                            :traffic in the centre -60%, happiness +3, land value +5 there
+STR_ORDINANCE_EFFECT_TREE_PLANTING                              :the town plants trees on free land every month: cleaner air
+STR_ORDINANCE_EFFECT_TRANSIT_ORIENTED_DEVELOPMENT               :land value +10 around railway stations with passenger trains: bigger buildings there
+STR_ORDINANCE_EFFECT_CONGESTION_CHARGE                          :traffic in the centre and inner suburbs -30%; road vehicles except buses pay to drive in; the money goes to transit
+STR_ORDINANCE_NEEDS_TRANSIT_FUND                                :Needs 1,500 people, your buses or trains in the town, and a Good rating
+STR_ORDINANCE_NEEDS_PARKING_LIMITS                              :Needs 3,000 people and a congested centre (level 1.5 on average)
+STR_ORDINANCE_NEEDS_LOW_EMISSION_ZONE                           :Needs 3,000 people, air that is moderate or worse, and a Good rating
+STR_ORDINANCE_NEEDS_CAR_FREE_CENTRE                             :Needs 5,000 people, transit taking 15% of cars off the road, and a Good rating
+STR_ORDINANCE_NEEDS_TREE_PLANTING                               :Needs 1,000 people
+STR_ORDINANCE_NEEDS_TRANSIT_ORIENTED_DEVELOPMENT                :Needs a railway station with passenger trains
+STR_ORDINANCE_NEEDS_CONGESTION_CHARGE                           :Needs 5,000 people, a congested centre (level 2 on average) and a Good rating
 STR_TRANSIT_BID_MARGIN                                          :{NUM}% margin: {CURRENCY_LONG} a month
 STR_TRANSIT_BID_WITHDRAW                                        :Take the bid back
 STR_TRANSIT_LINE_NUMBER_NAME                                    :Line {RAW_STRING} ({RAW_STRING})
@@ -5460,6 +5502,9 @@ STR_NEWS_TOLL_CONCESSION_EXTENDED                               :{BIG_FONT}{BLAC
 STR_NEWS_TOLL_FREEZE                                            :{BIG_FONT}{BLACK}Government freezes {COMPANY}'s tolls until {DATE_LONG}!{}It pays half of what the freeze costs
 STR_NEWS_TRANSIT_BUDGET_GONE                                    :{BIG_FONT}{BLACK}{TOWN}'s transit budget is used up for this year: passes and concessions are paid only in part until the new year
 STR_NEWS_TOWN_AIR_UNHEALTHY                                     :{BIG_FONT}{BLACK}Haze over {TOWN}!{}The air where its people live is unhealthy (API {NUM}). Traffic, diesel vehicles and industry pollute; electric buses and trains, parks and trees help
+STR_NEWS_ORDINANCE_ADOPTED                                      :{BIG_FONT}{BLACK}{TOWN} brings in a new ordinance: {STRING}!
+STR_NEWS_ORDINANCE_PROPOSED                                     :{BIG_FONT}{BLACK}{TOWN} brings in a new ordinance: {STRING}, as {COMPANY} proposed!
+STR_NEWS_ORDINANCE_REPEALED                                     :{BIG_FONT}{BLACK}{TOWN} repeals its ordinance {STRING} to balance its budget
 STR_DEPARTURES_CAPTION                                          :{WHITE}{STATION} - Departures
 STR_DEPARTURES_LIST_TOOLTIP                                     :{BLACK}The next vehicles to leave, with their line and next stops. Click a departure to show the vehicle, Ctrl+Click to show its line
 STR_DEPARTURES_NONE                                             :{BLACK}No departures expected
@@ -5927,6 +5972,18 @@ STR_ERROR_DRIVERLESS_ONLY_TRAINS                                :{WHITE}... only
 STR_ERROR_DRIVERLESS_NOT_ELECTRIC                               :{WHITE}... all its trains need electric engines
 STR_ERROR_DRIVERLESS_NO_SCREEN_DOORS                            :{WHITE}... every station it stops at needs platform screen doors
 STR_ERROR_DRIVERLESS_LEVEL_CROSSINGS                            :{WHITE}... its trains crossed roads at level crossings this month or last month
+STR_ERROR_CAN_T_PROPOSE_ORDINANCE                               :{WHITE}Can't propose this ordinance...
+STR_ERROR_ORDINANCES_OFF                                        :{WHITE}... towns keep no budgets: the setting is off
+STR_ERROR_ORDINANCE_ALREADY                                     :{WHITE}... it is in force already
+STR_ERROR_ORDINANCE_TOWN_TOO_SMALL                              :{WHITE}... the town is too small for it
+STR_ERROR_ORDINANCE_NOT_CONGESTED                               :{WHITE}... its centre isn't congested enough (level 1.5 on average)
+STR_ERROR_ORDINANCE_AIR_CLEAN                                   :{WHITE}... its air is good
+STR_ERROR_ORDINANCE_TRANSIT_SHARE                               :{WHITE}... too few of its people ride transit: services must take 15% of its cars off the road
+STR_ERROR_ORDINANCE_NO_RAILWAY                                  :{WHITE}... it has no railway station with passenger trains
+STR_ERROR_ORDINANCE_NO_SERVICE                                  :{WHITE}... your company runs no buses or trains from the town
+STR_ERROR_ORDINANCE_CANT_AFFORD                                 :{WHITE}... it can't afford it
+STR_ERROR_ORDINANCE_RATING_GOOD                                 :{WHITE}... it doesn't rate your company Good or better
+STR_ERROR_ORDINANCE_RATING_MEDIOCRE                             :{WHITE}... it doesn't rate your company Mediocre or better
 STR_ERROR_CAN_T_CHANGE_BUS_SIGNAL                               :{WHITE}Can't change the bus signals here...
 STR_ERROR_BUS_SIGNAL_NONE                                       :{WHITE}... these traffic lights have no bus signals
 STR_ERROR_TRAFFIC_LIGHTS_NEED_JUNCTION                          :traffic lights need a road junction

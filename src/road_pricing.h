@@ -59,6 +59,7 @@ Money GetVehicleToll(const RoadVehicle *front, TileIndex tile);
 void OnRoadPricingTileCleared(TileIndex tile);
 void OnRoadVehicleEntersTile(RoadVehicle *front, TileIndex from, TileIndex to);
 
+uint GetTollClassPercent(const RoadVehicle *front);
 bool IsInCongestionChargeZone(const Town *t, TileIndex tile);
 uint GetCongestionChargeTrafficPercent(const Town *t, TileIndex tile);
 uint GetCongestionChargeZoneLevel(const Town *t);

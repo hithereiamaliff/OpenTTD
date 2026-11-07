@@ -70,6 +70,7 @@
 #include "town_zoning.h"
 #include "city_services.h"
 #include "environment.h"
+#include "town_budget.h"
 
 #include "table/strings.h"
 #include "table/town_land.h"
@@ -3951,8 +3952,9 @@ static uint GetNormalGrowthRate(Town *t)
 
 	/* City services make towns happier, and happy towns grow faster. */
 	m = m * (100 - GetTownServiceGrowthBonus(t)) / 100;
-	/* Polluted air makes them grow slower. */
+	/* Polluted air makes them grow slower, and so do high taxes. */
 	m = m * (100 + GetTownPollutionGrowthPenalty(t)) / 100;
+	m = m * GetTownTaxGrowthPercent(t) / 100;
 
 	return TownTicksToGameTicks(m / (t->cache.num_houses / 50 + 1));
 }

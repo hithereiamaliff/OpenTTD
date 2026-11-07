@@ -11,6 +11,7 @@
 #include "satisfaction.h"
 #include "city_services.h"
 #include "environment.h"
+#include "town_budget.h"
 #include "company_base.h"
 #include "company_func.h"
 #include "core/backup_type.hpp"
@@ -183,7 +184,8 @@ uint GetCityServiceObjectSpecIndex(const ObjectSpec *spec)
 /**
  * How happy is a town? Without city services it is #TOWN_HAPPINESS_BASE;
  * full coverage by all of them makes it 100. Riders' satisfaction with its
- * stations adds or takes up to 10 points; polluted air takes up to 15.
+ * stations adds or takes up to 10 points; polluted air takes up to 15; taxes
+ * and ordinances add or take a few.
  * @param t The town.
  * @return Happiness in percent.
  */
@@ -193,7 +195,7 @@ uint GetTownHappiness(const Town *t)
 	for (uint8_t percent : t->service_coverage.percent) sum += percent;
 	/* How satisfied riders are with the town's stations adds or takes up to 10 points. */
 	const int happiness = static_cast<int>(TOWN_HAPPINESS_BASE + sum * (100 - TOWN_HAPPINESS_BASE) / (100 * CITY_SERVICE_COUNT)) + GetTownSatisfactionHappiness(t)
-			- static_cast<int>(GetTownPollutionUnhappiness(t));
+			- static_cast<int>(GetTownPollutionUnhappiness(t)) + GetTownBudgetHappiness(t);
 	return static_cast<uint>(std::clamp(happiness, 0, 100));
 }
 

@@ -1545,6 +1545,122 @@ BusTest's 13-bus line through Kinningbury, 10,500 people, mid-2021):
   centre; the map's Air pollution and Land value views; the town window;
   land info on a statue (API 113, land value 45).
 
+## Done: M6, town budgets and ordinances
+
+The owner's design call: **towns decide, companies lobby**. The player stays
+a transport company; towns run their own budgets and bring in their own
+rules, and a company can propose a rule to a town. A new setting, **Town
+budgets and ordinances** (Settings, Environment, Towns, after Air pollution
+and land value), on by default. Off works as part 14 did.
+
+**Budgets.** Each town collects taxes: about £10.80 a resident a year at
+normal costs, in proportion to 50 plus its land value (+30% on land worth
+80, -30% on land worth 20). What it spends is reckoned from its taxes at the
+normal rate, whatever its tax rate:
+
+| Spending | Share of the town's taxes |
+|---|---|
+| Transit: the transit authority's budget for contracts, passes and concessions (part 4) | 25% (as much as before on land worth 50); 40% with a transit fund |
+| Running the town: roads, staff, upkeep | 60% |
+| Ordinances | 0 to 6% each (below) |
+| Left over, into reserves | 15% without ordinances |
+
+A town starts with half a year's taxes put by. Each January it looks at its
+money:
+
+- in debt: taxes up 10 points; deep in debt (more than half a year's taxes):
+  it also repeals its dearest ordinance that has been in force two years
+  ("Kinningbury repeals its ordinance Transit fund to balance its budget");
+- after a year in surplus with more than a year's taxes put by: taxes down
+  10 points;
+- after a year in deficit with less than a quarter of a year's put by: up 10.
+
+Rates go from 70% to 150% of normal. Each 5% above normal costs a point of
+happiness (and each 5% below adds one), and the time between new houses
+follows the rate (at 80% they come a fifth sooner).
+
+**Ordinances.** A town brings in at most one a year on its own, when it has
+the problem and the money (what is left of the 15%, or two years of the cost
+put by). A company proposes one from the town's Budget window; the town
+agrees under the same conditions, plus a rating (only checked once the town
+has rated the company). A proposal costs the same as a congestion charge
+proposal (£3,750 at normal costs).
+
+| Ordinance | Effect | Cost a year | A company can propose it with | A town brings it in on its own when (chance a year) |
+|---|---|---|---|---|
+| Transit fund | 40% of taxes for transit instead of 25% | 15% of taxes (into transit) | 1,500 people, the company's buses or trains in the town, Good rating | transit takes 20% of cars off the road and it has a year's taxes put by (1 in 3) |
+| Parking limits | town traffic -15% in the centre and inner suburbs; a parking levy brings in 3% of taxes; happiness -1 | 1% | 3,000 people, a congested centre (level 1.5 on average), Mediocre rating | 6,000 people and level 2.5 (1 in 2) |
+| Low-emission zone | traffic pollution in the centre and inner suburbs -30%; company road vehicles that aren't electric pay to drive in (£22.50 a bus, £30 a mail van, £60 a lorry at normal costs) | 2% | 3,000 people, air moderate or worse (API over 50), Good rating | API 100 or more (1 in 2) |
+| Car-free centre | town traffic -60% in the centre; happiness +3; land value +5 there | 6% | 5,000 people, transit taking 15% of cars off the road, Good rating | 8,000 people, 25% of cars off (1 in 3) |
+| Tree planting | the town plants 2 to 8 young trees a month (more for bigger towns) on grass and rough land that isn't zoned for buildings, or is zoned park | 3% | 1,000 people, Mediocre rating | API 60 or more (1 in 2) |
+| Transit-oriented development | land value +10 around railway stations with passenger trains, so towns build bigger there | nothing | a railway station with passenger trains, Mediocre rating | it has one (1 in 4) |
+
+The congestion charge (part 9) is listed with them and proposed the same
+way. News: "Kinningbury brings in a new ordinance: Parking limits!" (or "...,
+as [your company] proposed!").
+
+**Seeing it:** the town window has a new **Budget** button (between Transit
+and Coverage). The window shows the taxes, spending, fees, reserves and what
+taxes and ordinances do to happiness and growth; then each ordinance with
+"in force since ..." or "not in force", its effect and cost, and what it
+needs ("You can propose it" in green when the town would agree). Click a
+row, then **Propose**; a refusal says why ("... its air is good").
+
+- Saved: each town's budget in chunk TBUD. Old saves start without one; the
+  first month sets it up.
+- Script API: `ScriptTown.HasOrdinance`, `ProposeOrdinance`, `SetOrdinance`
+  (game scripts), `GetTaxRate`, `GetTaxIncome`, `GetReserves`,
+  `GetCarReduction`, `GetLowEmissionZoneVehicles`; `ORDINANCE_*`.
+- Code: `src/town_budget.{h,cpp}`, `town_budget_type.h`, `town_budget_cmd.h`,
+  `town_budget_gui.cpp`, `src/saveload/town_budget_sl.cpp`; hooks in
+  `transit_authority.cpp` (the transit budget), `town_traffic.cpp`
+  (traffic), `road_pricing.cpp` (the zone fee), `environment.cpp`
+  (pollution and land value), `city_services.cpp` (happiness),
+  `town_cmd.cpp` (growth), `town_gui.cpp`.
+
+Tests (test AI BudgetTest proposes ordinances at set months and logs the
+town monthly; BusTest's line through Kinningbury, 10,500 people):
+
+- Money: Kinningbury collects £118,000 to £124,000 a year; its transit budget
+  is £29,600 to £31,000, the same as before; reserves grow by about 15% of
+  taxes a year.
+- Proposals: parking limits accepted (centre congestion 2.3-2.4 down to
+  1.6-1.7); tree planting accepted (the town's API 48 down to 38 within a
+  year); transit fund accepted (transit budget £29,500 to £47,000; reserves
+  stay near £68,000); low-emission zone refused (air good), car-free centre
+  refused (transit took 7-11% of cars off with a two-stop line),
+  transit-oriented development refused (no railway).
+- Car-free centre with a better line (20 buses, 8 stops, 30-50% of cars
+  off), against the same game without the proposal:
+
+| Kinningbury, 2021 | Car-free centre | Without |
+|---|---|---|
+| Centre and inner suburbs' congestion | 0.0-0.2 | 0.8-1.2 |
+| Town's API | 28-32 | 37-42 |
+| Land value | 61-62 | 57-58 |
+| Happiness, the first half year | 48-51 | 45-48 |
+
+  The town without the proposal brought in a car-free centre itself at the
+  2022 review.
+- Low-emission zone under Heavy pollution, proposed at API 66: API 76 six
+  months later against 90 without; 16 to 25 company diesel vehicles paid to
+  drive in a month. The town without the proposal brought one in itself at
+  its 2021 review (API about 100); after that both stay near 90 as the town grows.
+- Ten years, nobody proposing: the four biggest towns bring in parking
+  limits on their own (Kinningbury 2021, Nennville and Gredinghall 2022,
+  Slundston 2023); their taxes settle at 80% from 2025 with reserves of
+  about £135,000. With five times the polluting traffic, Kinningbury
+  brought in tree planting at API 67-74.
+- First versions taught: spending that followed the tax rate let reserves
+  grow forever (now reckoned at the normal rate); taxes fell three years
+  running (a cut now needs a year in surplus); a car-free centre that needed
+  parking limits first was out of reach for towns with strong transit.
+- With the setting off, part 13's and part 14's baseline runs give identical
+  monthly results; 99/99 unit tests; all 38 test saves (with the new
+  `city-budget-demo.csav`) load, save and reload.
+- Screenshots: the Budget window for Kinningbury (transit fund, parking
+  limits and tree planting in force) and a refused low-emission zone.
+
 ## Roadmap
 
 Sizes are rough: S = one session, M = a few, L = many, XL = a project in itself.
@@ -1554,12 +1670,14 @@ Sizes are rough: S = one session, M = a few, L = many, XL = a project in itself.
 | M2 | Traffic realism | Done: give way, light settings, traffic map and overlay, amber, routing around jams. | — | |
 | M3 | Zoning | Done: zones, town growth follows them, homes/jobs line in the town window, zones in land info. | — | |
 | M4 | City services and happiness | Part 1 done: police, fire, clinic, school and park with coverage, happiness, growth, ratings and upkeep. Later: bigger buildings (hospital, university), services that also make passengers. | L | |
-| M5 | Town car traffic | Towns send private cars between homes and workplaces. Good public transport takes cars off the road. | XL | The most SimCity-like part; performance-sensitive on big maps. |
-| M6 | City budget and ordinances | Per-town budget (taxes from population, spending on services and roads) and ordinances (transit subsidy, parking limits and so on). | L | Needs a design call: the player stays a transport company, or also acts as mayor. |
+| M5 | Town car traffic | Towns send private cars between homes and workplaces. Good public transport takes cars off the road. Partly done: congestion from the homes and jobs nearby, street life and the share of cars transit takes off (transit part 2), traffic between towns (part 9). Left: commuting trips from homes to jobs along real roads, so traffic follows the routes people take, and people choosing car or transit by journey time and fare. | L | The most SimCity-like part; performance-sensitive on big maps. |
+| M6 | City budget and ordinances | Done: towns collect taxes and spend them on transit, running the town and ordinances; they set their own tax rates and bring in ordinances (transit fund, parking limits, low-emission zone, car-free centre, tree planting, transit-oriented development); companies propose them. | — | The owner's call: towns decide, companies lobby. |
 | M7 | Land value and pollution | Done as transit part 14: traffic, diesel vehicles and industry pollute; parks, services and good stations raise land value; map views, tints and lines show both; towns build to fit. | — | |
 | M8 | Utilities | Power and water networks. | XL | Probably skip, or keep it light (arctic/tropic towns already need food/water). |
 
-Recommended order: M6 next (town budgets and ordinances), then M5.
+Recommended order: the rest of M5 next (commuting and choosing car or
+transit), the last big SimCity part; M4's bigger buildings and M8 after it,
+if wanted.
 
 ## Getting it onto the owner's computer (Windows)
 
@@ -1585,6 +1703,7 @@ Savegame locations (files end in `.sav`; autosaves are in `save/autosave`):
 ## Open questions for the owner
 
 1. Can you share one of your saves, so it can be tested before you play it?
-2. Which milestone next? Recommendation: M6 (city budget and ordinances),
-   now that towns have transit budgets, happiness, pollution and land value.
+2. Which milestone next? Recommendation: the rest of M5: people commute
+   from homes to jobs along real roads, and choose car or transit by
+   journey time and fare.
 3. A name for the fork.

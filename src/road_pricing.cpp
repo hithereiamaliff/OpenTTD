@@ -39,6 +39,7 @@
 #include "tile_cmd.h"
 #include "tilearea_type.h"
 #include "town.h"
+#include "town_budget.h"
 #include "town_traffic.h"
 #include "transparency.h"
 #include "tunnelbridge_map.h"
@@ -204,7 +205,7 @@ uint8_t GetEffectiveTollLevel(CompanyID company)
  * @param front The vehicle (front).
  * @return The class in percent of a car's toll: buses 75%, vans with mail 100%, lorries 200%.
  */
-static uint GetTollClassPercent(const RoadVehicle *front)
+uint GetTollClassPercent(const RoadVehicle *front)
 {
 	if (front->IsBus()) return 75;
 	if (IsCargoInClass(front->cargo_type, CargoClass::Mail)) return 100;
@@ -508,9 +509,12 @@ void OnRoadVehicleEntersTile(RoadVehicle *front, TileIndex from, TileIndex to)
 		}
 	}
 
-	if (_charging_towns == 0 || front->IsBus() || !IsTileType(to, TileType::Road)) return;
+	if ((_charging_towns == 0 && !AnyLowEmissionZones()) || !IsTileType(to, TileType::Road)) return;
 	Town *t = ClosestTownFromTile(to, UINT_MAX);
-	if (t == nullptr || !IsInCongestionChargeZone(t, to) || (IsValidTile(from) && IsInCongestionChargeZone(t, from))) return;
+	if (t == nullptr) return;
+	/* Low-emission zones: vehicles that aren't electric pay to drive in. */
+	if (AnyLowEmissionZones()) OnRoadVehicleEntersLowEmissionZone(front, t, from, to);
+	if (_charging_towns == 0 || front->IsBus() || !IsInCongestionChargeZone(t, to) || (IsValidTile(from) && IsInCongestionChargeZone(t, from))) return;
 	Money charge = GetCongestionCharge(front);
 	if (charge <= 0) return;
 	SubtractMoneyFromCompany(front->owner, CommandCost(ExpensesType::RoadVehRun, charge));

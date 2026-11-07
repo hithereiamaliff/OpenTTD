@@ -19,6 +19,7 @@
 #include "newgrf_storage.h"
 #include "cargo_type.h"
 #include "city_services_type.h"
+#include "town_budget_type.h"
 
 /** The air where a town's people live and what their land is worth, updated monthly (see environment.cpp). */
 struct TownEnvironment {
@@ -205,6 +206,7 @@ struct Town : TownPool::PoolItem<&_town_pool> {
 	CityServiceCoverage service_coverage{}; ///< City fork: share of the population near each city service, updated monthly.
 	TownTransit transit{}; ///< City fork: the town's transit authority (saved in chunk TTRA).
 	TownEnvironment environment{}; ///< City fork: the air where its people live and what their land is worth (saved in chunk TENV).
+	TownBudget budget{}; ///< City fork: its taxes, spending, reserves and ordinances (saved in chunk TBUD).
 
 	uint8_t fund_buildings_months = 0; ///< fund buildings program in action?
 	uint8_t road_build_months = 0; ///< fund road reconstruction in action?

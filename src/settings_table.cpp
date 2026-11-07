@@ -34,6 +34,7 @@
 #include "error.h"
 #include "town.h"
 #include "environment.h"
+#include "town_budget.h"
 #include "video/video_driver.hpp"
 #include "sound/sound_driver.hpp"
 #include "music/music_driver.hpp"
@@ -404,6 +405,14 @@ static void TownFoundingChanged(int32_t)
 static void EnvironmentChanged(int32_t)
 {
 	OnEnvironmentSettingChanged();
+}
+
+static void TownBudgetsChanged(int32_t)
+{
+	UpdateLowEmissionZoneTowns();
+	InvalidateWindowClassesData(WindowClass::TownBudget);
+	InvalidateWindowClassesData(WindowClass::TransitAuthority);
+	SetWindowClassesDirty(WindowClass::TownView);
 }
 
 static void RushHoursChanged(int32_t)

@@ -55,6 +55,7 @@
 #include "../town_zoning_cmd.h"
 #include "../line_cmd.h"
 #include "../metro_cmd.h"
+#include "../town_budget_cmd.h"
 #include "../fare_cmd.h"
 #include "../transit_authority_cmd.h"
 #include "../vehicle_cmd.h"

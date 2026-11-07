@@ -29,6 +29,7 @@
 #include "station_base.h"
 #include "strings_func.h"
 #include "town.h"
+#include "town_budget.h"
 #include "vehicle_base.h"
 #include "window_func.h"
 
@@ -114,7 +115,7 @@ TransitContract *GetTransitContract(uint32_t id)
  * The cost of a bus for a year that a town counts with: the running costs of a town bus, as much again for wear and the operator.
  * @return The cost.
  */
-static Money GetBusYearCost()
+Money GetTransitBusYearCost()
 {
 	/* Running cost prices are kept in 1/256 of a pound a year. */
 	return (GetPrice(Price::RunningRoadveh, 160, nullptr) >> 8) * 3;
@@ -128,7 +129,9 @@ static Money GetBusYearCost()
 Money GetTownTransitBudget(const Town *t)
 {
 	if (t->cache.population < MIN_TRANSIT_POPULATION) return 0;
-	return GetBusYearCost() * t->cache.population * BUDGET_BUSES_PER_10K / 10000;
+	/* With town budgets, a share of the town's taxes: as much as before on land of medium value and at normal taxes. */
+	if (AreTownBudgetsOn()) return GetTownTaxBase(t) * GetTownTransitSharePercent(t) / 100;
+	return GetTransitBusYearCost() * t->cache.population * BUDGET_BUSES_PER_10K / 10000;
 }
 
 /**
@@ -667,7 +670,7 @@ static void MaybeOfferFeeder(Town *t, TimerGameEconomy::Date today, const std::v
 
 	/* Two to four buses, by how far it is; the town must afford a year of it. */
 	const uint buses = Clamp<uint>(DistanceManhattan(target, rail->xy) / 8 + 1, 2, 4);
-	const Money estimate = GetBusYearCost() * buses / 24 * (100 + FEEDER_MARGIN) / 100;
+	const Money estimate = GetTransitBusYearCost() * buses / 24 * (100 + FEEDER_MARGIN) / 100;
 	if (estimate * 12 > GetTownTransitAvailable(t)) return;
 
 	TransitContract &c = _transit_contracts.emplace_back();
