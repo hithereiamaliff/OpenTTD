@@ -307,8 +307,8 @@ void ObjectOverrideManager::SetEntitySpec(ObjectSpec &&spec)
 		type = this->AddEntityID(spec.grf_prop.local_id, spec.grf_prop.grfid, OBJECT_TRANSMITTER);
 	}
 
-	/* The top of the range is for the city services; NewGRF objects never get those. */
-	if (type == this->invalid_id || type >= OBJECT_CITY_SERVICE_FIRST) {
+	/* The top of the range is for the city services and depot facilities; NewGRF objects never get those. */
+	if (type == this->invalid_id || type >= OBJECT_CITY_RESERVED_FIRST) {
 		GrfMsg(Severity::Error, "Object.SetEntitySpec: Too many objects allocated. Ignoring.");
 		return;
 	}

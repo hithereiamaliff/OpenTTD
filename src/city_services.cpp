@@ -227,7 +227,7 @@ bool IsCityServiceObjectSpec(const ObjectSpec *spec)
  */
 uint GetCityServiceObjectSpecIndex(const ObjectSpec *spec)
 {
-	return OBJECT_CITY_SERVICE_FIRST + static_cast<uint>(spec - std::begin(_city_service_specs));
+	return GetObjectTypeOfCityService(static_cast<CityService>(spec - std::begin(_city_service_specs)));
 }
 
 /**

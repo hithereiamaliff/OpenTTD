@@ -33,12 +33,17 @@ static constexpr uint BASIC_CITY_SERVICE_COUNT = 5;
 
 /**
  * Object types of the city services. They sit at the top of the object type
- * range, which NewGRF objects never get (see _object_mngr), so they never
- * clash with the NewGRF objects of a savegame. 16 are reserved, a few used.
+ * range, which NewGRF objects never get (see ObjectOverrideManager::SetEntitySpec),
+ * so they never clash with the NewGRF objects of a savegame. The top 32 are
+ * reserved: the first services and the depot facilities in the top 16, the
+ * bigger services in the 16 below.
  */
 static constexpr ObjectType OBJECT_CITY_SERVICE_FIRST = NUM_OBJECTS - 16;
 /** Object types of the bigger city services, from the hospital on: the 16 below those. */
 static constexpr ObjectType OBJECT_CIVIC_SERVICE_FIRST = NUM_OBJECTS - 32;
+/** The lowest reserved object type; NewGRF objects only get types below it. */
+static constexpr ObjectType OBJECT_CITY_RESERVED_FIRST = OBJECT_CIVIC_SERVICE_FIRST;
+static_assert(CITY_SERVICE_COUNT - BASIC_CITY_SERVICE_COUNT <= OBJECT_CITY_SERVICE_FIRST - OBJECT_CIVIC_SERVICE_FIRST, "The bigger city services must fit in their 16 object types");
 
 /**
  * Is an object type a city service?
