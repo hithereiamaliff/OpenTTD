@@ -17,6 +17,7 @@ enum TownBudgetWidgets : WidgetID {
 	WID_TB_LIST, ///< The ordinances.
 	WID_TB_SCROLLBAR, ///< Scrollbar of the list.
 	WID_TB_PROPOSE, ///< Propose the selected ordinance.
+	WID_TB_COFUND, ///< Co-fund the council's next city service.
 };
 
 #endif /* WIDGETS_TOWN_BUDGET_WIDGET_H */

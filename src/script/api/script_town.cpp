@@ -35,6 +35,8 @@
 #include "../../town_traffic.h"
 #include "../../commuting.h"
 #include "../../town_budget_cmd.h"
+#include "../../council.h"
+#include "../../council_cmd.h"
 #include "../../transit_authority_cmd.h"
 #include "../../safeguards.h"
 
@@ -367,6 +369,44 @@
 {
 	if (!IsValidTown(town_id) || !::AreTownBudgetsOn()) return 0;
 	return ::Town::Get(town_id)->budget.reserves;
+}
+
+/* static */ SQInteger ScriptTown::GetCouncilLevel(TownID town_id)
+{
+	if (!IsValidTown(town_id) || !::AreTownCouncilsOn()) return -1;
+	return to_underlying(::GetCouncilLevel(::Town::Get(town_id)));
+}
+
+/* static */ Money ScriptTown::GetLicenceIncome(TownID town_id)
+{
+	if (!IsValidTown(town_id) || !::AreTownCouncilsOn()) return -1;
+	return ::Town::Get(town_id)->council.licences_last_year;
+}
+
+/* static */ SQInteger ScriptTown::GetEstateCondition(TownID town_id)
+{
+	if (!IsValidTown(town_id) || !::AreTownCouncilsOn()) return -1;
+	return ::Town::Get(town_id)->council.estate_condition;
+}
+
+/* static */ SQInteger ScriptTown::GetCouncilServicesBuilt(TownID town_id)
+{
+	if (!IsValidTown(town_id) || !::AreTownCouncilsOn()) return -1;
+	return ::Town::Get(town_id)->council.services_built;
+}
+
+/* static */ ScriptTown::CityService ScriptTown::GetCouncilPlannedService(TownID town_id)
+{
+	if (!IsValidTown(town_id)) return CITY_SERVICE_INVALID;
+	const ::CityService service = ::GetCouncilPlannedService(::Town::Get(town_id));
+	return service == ::CityService::End ? CITY_SERVICE_INVALID : static_cast<CityService>(to_underlying(service));
+}
+
+/* static */ bool ScriptTown::CofundCouncilService(TownID town_id)
+{
+	EnforceCompanyModeValid(false);
+	EnforcePrecondition(false, IsValidTown(town_id));
+	return ScriptObject::Command<Commands::CofundCouncilService>::Do(town_id);
 }
 
 /* static */ SQInteger ScriptTown::GetPollution(TownID town_id)

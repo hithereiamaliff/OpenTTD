@@ -101,8 +101,11 @@ void BuildObject(ObjectType type, TileIndex tile, CompanyID owner, Town *town, u
 	 * get the colour from the company's livery settings. */
 	if (owner == OWNER_NONE) {
 		o->recolour_offset = Random();
-	} else {
+	} else if (Company::IsValidID(owner)) {
 		o->recolour_offset = Company::Get(owner)->GetCompanyRecolourOffset(LiveryScheme::Default);
+	} else {
+		/* City fork: a town council's own city services; they are drawn in the council's colours. */
+		o->recolour_offset = 0;
 	}
 
 	/* If the object wants only one colour, then give it that colour. */
@@ -123,7 +126,7 @@ void BuildObject(ObjectType type, TileIndex tile, CompanyID owner, Town *town, u
 		if (HasTileWaterGround(t)) InvalidateWaterRegion(t);
 		WaterClass wc = (IsWaterTile(t) ? GetWaterClass(t) : WaterClass::Invalid);
 		/* Update company infrastructure counts for objects build on canals owned by nobody. */
-		if (wc == WaterClass::Canal && owner != OWNER_NONE && (IsTileOwner(t, OWNER_NONE) || IsTileOwner(t, OWNER_WATER))) {
+		if (wc == WaterClass::Canal && Company::IsValidID(owner) && (IsTileOwner(t, OWNER_NONE) || IsTileOwner(t, OWNER_WATER))) {
 			Company::Get(owner)->infrastructure.water++;
 			DirtyCompanyInfrastructureWindows(owner);
 		}

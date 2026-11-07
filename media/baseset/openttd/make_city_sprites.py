@@ -47,7 +47,7 @@ BROWN, BROWN_DARK = nearest((150, 90, 40)), nearest((90, 50, 20))
 YELLOW = nearest((252, 220, 0))
 TREE, TREE_DARK = nearest((60, 150, 40)), nearest((30, 90, 20))
 
-W, H = 512, 1960
+W, H = 512, 2440
 sheet = Image.new("P", (W, H), T)
 sheet.putpalette(pal)
 px = sheet.load()
@@ -1700,33 +1700,88 @@ gt.box(5, 5, 11, 11, 146, 160, (85, 140, 155), (150, 160, 165), sw=gt_face, se=g
 post(gt, 8, 8, 160, 178, rgb_index((200, 200, 205)))
 house(gt, "glass office tower")
 
-# Shopping mall: two by two tiles, four storeys with a glass atrium and signs in its colours.
-def mall_part(px_, py_):
-    b = Building()
-    ox, oy = 16 * px_, 16 * py_
-    x0, x1 = max(1, ox) - ox, min(31, ox + 16) - ox
-    y0, y1 = max(1, oy) - oy, min(31, oy + 16) - oy
-    def face(u, v, along):
-        g = u + along
-        if v < 7:
-            if 12 <= g <= 18:
-                return SKY_GLASS if v < 6 else FRAME
-            return rgb_index((200, 195, 185)) if (g % 3.0) < 0.5 else DARK_GLASS
-        if 17 <= v < 23 and 4 <= g % 14 < 10:
-            return cc(6) if v < 22 else cc(4)
-        return None
-    def roof(x, y):
-        gx, gy = x + ox, y + oy
-        if 13 <= gx <= 19 and 4 <= gy <= 28:
-            return SKY_GLASS if (int(gy) % 2) else rgb_index((200, 220, 230))
-        if gx < 2 or gy < 2 or gx > 30 or gy > 30:
-            return cc(5)
-        return None
-    b.box(x0, y0, x1, y1, 0, 26, (225, 220, 210), (175, 175, 175),
-          sw=lambda u, v: face(u, v, oy + y0), se=lambda u, v: face(u, v, ox + x0), roof=roof)
-    return b
+# Helpers for buildings of two or four tiles: boxes, ground, trees and posts in the building's own
+# coordinates (two tiles = 32 units), cut to one part's tile.
+def part_box(b, part, gx0, gy0, gx1, gy1, z0, z1, wall, top, sw=None, se=None, roof=None, shade=0.72):
+    """A box in the building's own coordinates (two tiles = 32 units), cut to one part's tile."""
+    ox, oy = 16 * part[0], 16 * part[1]
+    x0, x1 = max(gx0, ox), min(gx1, ox + 16)
+    y0, y1 = max(gy0, oy), min(gy1, oy + 16)
+    if x0 >= x1 or y0 >= y1:
+        return
+    b.box(x0 - ox, y0 - oy, x1 - ox, y1 - oy, z0, z1, wall, top,
+          sw=(lambda u, v: sw(u + y0 - gy0, v)) if sw else None,
+          se=(lambda u, v: se(u + x0 - gx0, v)) if se else None,
+          roof=(lambda x, y: roof(x + ox, y + oy)) if roof else None, shade=shade)
+
+
+def part_ground(b, part, fn):
+    ox, oy = 16 * part[0], 16 * part[1]
+    b.ground(lambda x, y: fn(x + ox, y + oy))
+
+
+def part_tree(b, part, gx, gy, size=4.0, height=8):
+    ox, oy = 16 * part[0], 16 * part[1]
+    if ox <= gx < ox + 16 and oy <= gy < oy + 16:
+        b.tree(gx - ox, gy - oy, size=size, height=height)
+
+
+def part_post(b, part, gx, gy, z0, z1, colour):
+    ox, oy = 16 * part[0], 16 * part[1]
+    if ox <= gx < ox + 16 and oy <= gy < oy + 16:
+        post(b, gx - ox, gy - oy, z0, z1, colour)
+
+
+PARTS = ((0, 0), (1, 0), (0, 1), (1, 1))
+
+
+# Shopping mall: two by two tiles, five storeys of shops with a big sign band and banners in its
+# colours, a glass atrium at the front corner, a skylight and a rooftop car park with cars.
+MALL_WALL = (234, 228, 214)
+CAR_RGB = [(200, 40, 35), (240, 240, 240), (60, 90, 170), (60, 60, 65), (180, 180, 185),
+           (240, 200, 60), (40, 120, 70), (150, 40, 40), (230, 230, 230), (90, 90, 100)]
+CAR_COLOURS = [rgb_index(c) for c in CAR_RGB]
+def mall_face(u, v):
+    if v < 6:
+        if (u % 4.0) < 0.4:
+            return FRAME
+        return SKY_GLASS if v < 5 else rgb_index((90, 90, 95))
+    if v < 7:
+        return rgb_index((245, 245, 245))
+    if 24 <= v < 30:
+        if 25.5 <= v < 28.5 and 3 <= u % 13 < 10 and int(u * 1.5) % 4 != 3:
+            return rgb_index((250, 250, 250))
+        return cc(4)
+    if u % 9 < 1.6 and 9 <= v < 22:
+        return cc(6)
+    if 10 <= v < 20 and 3.5 <= u % 9 < 7:
+        return rgb_index((200, 195, 185)) if int(v) % 4 else rgb_index((180, 175, 168))
+    return None
+def mall_roof(x, y):
+    if 12 <= x <= 20 and 3 <= y <= 18:
+        return SKY_GLASS if int(y) % 2 else rgb_index((200, 220, 230))
+    if x < 11 and y < 22 and x > 2 and y > 2:
+        # Rooftop car park: rows of cars on asphalt.
+        if 4 <= x % 5 < 5:
+            return rgb_index((230, 230, 230)) if int(y * 2) % 4 == 0 else rgb_index((80, 80, 85))
+        if (x % 5) < 3.2 and (y % 2.0) < 1.4:
+            k = int(x // 5) * 13 + int(y // 2)
+            return CAR_COLOURS[(k * 7) % len(CAR_COLOURS)] if k % 5 != 2 else rgb_index((80, 80, 85))
+        return rgb_index((80, 80, 85))
+    return None
+def atrium_face(u, v):
+    if (u % 1.5) < 0.25 or v % 5 < 0.6:
+        return FRAME
+    return SKY_GLASS
 for (px_, py_) in ((0, 0), (0, 1), (1, 0), (1, 1)):
-    house(mall_part(px_, py_), f"mall {px_} {py_}")
+    b = Building()
+    part = (px_, py_)
+    part_box(b, part, 1, 1, 31, 31, 0, 30, MALL_WALL, (170, 170, 172), sw=mall_face, se=mall_face, roof=mall_roof)
+    part_box(b, part, 23, 23, 31, 31, 0, 38, (220, 235, 240), (200, 200, 205), sw=atrium_face, se=atrium_face,
+             roof=lambda x, y: SKY_GLASS if (int(x) + int(y)) % 2 else rgb_index((200, 220, 230)))
+    part_box(b, part, 31, 25, 32, 31, 5, 6, (245, 245, 245), (245, 245, 245))
+    part_box(b, part, 25, 31, 31, 32, 5, 6, (245, 245, 245), (245, 245, 245))
+    house(b, f"mall {px_} {py_}")
 
 # Landmark tower: a tapering steel and glass tower with a spire.
 lt = Building()
@@ -1786,37 +1841,6 @@ house(te, "Chinese temple")
 # and stadium (two by two tiles, four parts each in the order (0,0), (1,0), (0,1), (1,1)),
 # a hawker centre, then their toolbar icons.
 
-def part_box(b, part, gx0, gy0, gx1, gy1, z0, z1, wall, top, sw=None, se=None, roof=None, shade=0.72):
-    """A box in the building's own coordinates (two tiles = 32 units), cut to one part's tile."""
-    ox, oy = 16 * part[0], 16 * part[1]
-    x0, x1 = max(gx0, ox), min(gx1, ox + 16)
-    y0, y1 = max(gy0, oy), min(gy1, oy + 16)
-    if x0 >= x1 or y0 >= y1:
-        return
-    b.box(x0 - ox, y0 - oy, x1 - ox, y1 - oy, z0, z1, wall, top,
-          sw=(lambda u, v: sw(u + y0 - gy0, v)) if sw else None,
-          se=(lambda u, v: se(u + x0 - gx0, v)) if se else None,
-          roof=(lambda x, y: roof(x + ox, y + oy)) if roof else None, shade=shade)
-
-
-def part_ground(b, part, fn):
-    ox, oy = 16 * part[0], 16 * part[1]
-    b.ground(lambda x, y: fn(x + ox, y + oy))
-
-
-def part_tree(b, part, gx, gy, size=4.0, height=8):
-    ox, oy = 16 * part[0], 16 * part[1]
-    if ox <= gx < ox + 16 and oy <= gy < oy + 16:
-        b.tree(gx - ox, gy - oy, size=size, height=height)
-
-
-def part_post(b, part, gx, gy, z0, z1, colour):
-    ox, oy = 16 * part[0], 16 * part[1]
-    if ox <= gx < ox + 16 and oy <= gy < oy + 16:
-        post(b, gx - ox, gy - oy, z0, z1, colour)
-
-
-PARTS = ((0, 0), (1, 0), (0, 1), (1, 1))
 HOSP_WALL, HOSP_TEAL = (240, 242, 244), rgb_index((40, 150, 150))
 def hosp_face(u, v):
     if 0 <= v % 5 < 0.8:
@@ -1976,9 +2000,171 @@ icon(58, 1930, [
     "..............",
     "..............",
 ], {'R': rgb_index((175, 60, 45)), 'W': rgb_index((200, 200, 200)), 'y': YELLOW, 'o': rgb_index((240, 140, 40)), 'b': rgb_index((150, 120, 80)), 'w': WHITE}, "icon hawker centre")
+
+# ---------------------------------------------------------------------------
+# Shops (city_houses.cpp), from sprite 290 on: a supermarket, a shopping complex (two tiles,
+# along X: north and south part, then along Y), a hypermarket with its car park (two by two
+# tiles: (0,0), (0,1), (1,0), (1,1), the order of the house parts). Their signs are in the
+# building's colours, so each one looks like another chain.
+
+ASPHALT = rgb_index((82, 82, 88))
+BAY_LINE = rgb_index((232, 232, 232))
+def car(b, part, x, y, k, along_x=True):
+    """A parked car, 2.2 by 1.2 units, in one of the car colours."""
+    c = CAR_RGB[k % len(CAR_RGB)]
+    dx, dy = (1.1, 0.6) if along_x else (0.6, 1.1)
+    if part is None:
+        b.box(x - dx, y - dy, x + dx, y + dy, 0, 2, c, c)
+        b.box(x - dx * 0.5, y - dy * 0.8, x + dx * 0.5, y + dy * 0.8, 2, 3, c, (150, 190, 210))
+    else:
+        part_box(b, part, x - dx, y - dy, x + dx, y + dy, 0, 2, c, c)
+        part_box(b, part, x - dx * 0.5, y - dy * 0.8, x + dx * 0.5, y + dy * 0.8, 2, 3, c, (150, 190, 210))
+
+# Supermarket: a two-storey store with a glass front, a canopy, a big sign band and a car park.
+sm = Building()
+def sm_ground(x, y):
+    if x >= 10:
+        if any(abs(y - l) < 0.18 for l in (1.4, 4.6, 7.8, 11.0, 14.2)) and x > 11.5:
+            return BAY_LINE
+        return ASPHALT
+    return None
+sm.ground(sm_ground)
+def sm_front(u, v):
+    if v < 6:
+        if 5.2 <= u < 7.8:
+            return SKY_GLASS if v < 5.4 else FRAME
+        return DARK_GLASS if (u % 2.2) > 0.3 else FRAME
+    if 8.5 <= v < 14:
+        if 2.5 <= u < 10.5 and 10 <= v < 12.6 and int(u * 2) % 3 != 2:
+            return rgb_index((250, 250, 250))
+        return cc(5)
+    return None
+def sm_side(u, v):
+    if 8.5 <= v < 14 and 0.8 <= u < 5.5:
+        return cc(5) if not (1.6 <= u < 4.6 and 10 <= v < 12.6) else rgb_index((250, 250, 250))
+    return None
+sm.box(1.5, 1.5, 10, 14.5, 0, 15, (228, 224, 216), (150, 150, 153), sw=sm_front, se=sm_side,
+       roof=lambda x, y: rgb_index((120, 120, 126)) if (3 < x < 5 and 3 < y < 6) or (5.5 < x < 7.5 and 9 < y < 12) else None)
+sm.box(10, 4.4, 11.6, 11.8, 5.5, 6.5, (240, 240, 240), (245, 245, 245))
+sm.box(10.3, 12.4, 11.3, 14.2, 0, 2, (170, 170, 175), (200, 200, 205))
+for (i, y) in enumerate((3.0, 6.2, 9.4, 12.6)):
+    if i != 2:
+        car(sm, None, 13.4, y, i * 3 + 1, along_x=True)
+house(sm, "supermarket")
+
+# Shopping complex of the 1970s and 1980s: a podium of shops with rows of signboards, a rooftop
+# car park and an office tower over one end with a tall sign; two tiles long, along X and along Y.
+COMPLEX_SIGNS = [rgb_index(c) for c in ((200, 40, 30), (240, 200, 40), (40, 110, 190), (60, 160, 80), (240, 140, 40), (250, 250, 250))]
+def complex_long(u, v):
+    if v < 5:
+        if (u % 3.0) < 0.35:
+            return FRAME
+        return SKY_GLASS if v < 4.2 else rgb_index((90, 90, 95))
+    lv = (v - 5) % 4.75
+    if v < 24 and lv < 1.8 and (u % 3.0) >= 0.4:
+        return COMPLEX_SIGNS[(int(u // 3.0) + int((v - 5) // 4.75) * 2) % len(COMPLEX_SIGNS)]
+    if v < 24 and 2.4 <= lv < 4.2 and (u % 1.5) < 1.0:
+        return DARK_GLASS
+    if v < 24 and (u % 9.0) < 0.8:
+        return cc(5)
+    return None
+def complex_end(u, v):
+    if v < 5:
+        return SKY_GLASS if 3 <= u < 9 and v < 4.2 else None
+    if 6 <= v < 23 and 4 <= u < 8:
+        return cc(6) if not (5 <= u < 7 and int(v) % 3 == 0) else rgb_index((250, 250, 250))
+    return None
+def complex_roof(axis):
+    def fn(x, y):
+        a, c = (x, y) if axis == 'x' else (y, x)
+        if a < 11:
+            return None
+        if (c % 6) < 0.25 or (c % 6) > 5.75:
+            return BAY_LINE
+        if 1 <= (c % 6) < 2.4 or 3.6 <= (c % 6) < 5:
+            k = int(a // 2.6) * 5 + int(c // 6) * 2 + (1 if (c % 6) > 3 else 0)
+            if (a % 2.6) < 2.0 and k % 4 != 1:
+                return CAR_COLOURS[(k * 7) % len(CAR_COLOURS)]
+        return ASPHALT
+    return fn
+tower_face = combine(bands(4.5, rgb_index((45, 55, 65)), lo=1.2, hi=3.2), lambda u, v: rgb_index((180, 175, 165)) if (u % 2.5) < 0.3 else None)
+def complex_part(axis, part):
+    b = Building()
+    if axis == 'x':
+        pp = (part, 0)
+        part_box(b, pp, 1, 2, 31, 14, 0, 24, (226, 220, 206), (95, 95, 100), sw=complex_end, se=complex_long, roof=complex_roof('x'))
+        part_box(b, pp, 2.5, 3.5, 9.5, 12.5, 24, 46, (205, 200, 188), (150, 150, 150), sw=tower_face,
+                 se=combine(lambda u, v: cc(6) if 1 <= u < 2.6 and 3 <= v < 20 else None, tower_face))
+    else:
+        pp = (0, part)
+        part_box(b, pp, 2, 1, 14, 31, 0, 24, (226, 220, 206), (95, 95, 100), sw=complex_long, se=complex_end, roof=complex_roof('y'))
+        part_box(b, pp, 3.5, 2.5, 12.5, 9.5, 24, 46, (205, 200, 188), (150, 150, 150), se=tower_face,
+                 sw=combine(lambda u, v: cc(6) if 1 <= u < 2.6 and 3 <= v < 20 else None, tower_face))
+    return b
+for axis in ('x', 'y'):
+    for part in (0, 1):
+        house(complex_part(axis, part), f"shopping complex {axis} {part}")
+
+# Hypermarket: a big two-storey box with an entrance canopy and a sign band in its colours on the
+# side facing its car park; rows of parked cars, lamp posts, a trolley shelter and a sign pylon.
+def hyper_front(u, v):
+    if v < 6:
+        if 11 <= u < 17:
+            return SKY_GLASS if v < 5.2 else FRAME
+        return rgb_index((215, 212, 205)) if v > 0.8 else rgb_index((150, 150, 150))
+    if 6 <= v < 8:
+        return cc(3)
+    if 12 <= v < 19:
+        if 6 <= u < 22 and 13.5 <= v < 17.5 and int(u * 1.3) % 5 != 4:
+            return rgb_index((250, 250, 250))
+        return cc(5)
+    return None
+def hyper_side(u, v):
+    if 6 <= v < 8:
+        return cc(3)
+    if 11 <= v < 18 and 3 <= u < 10:
+        return cc(5) if not (4.5 <= u < 8.5 and 12.5 <= v < 16.5) else rgb_index((250, 250, 250))
+    return None
+def hyper_roof(x, y):
+    if (int(x) % 4 == 1 and int(y) % 5 == 2):
+        return rgb_index((110, 110, 115))
+    if 6 <= x <= 9 and 5 <= y <= 27:
+        return rgb_index((205, 220, 228)) if int(y) % 3 else rgb_index((180, 200, 210))
+    return None
+def hyper_ground(x, y):
+    if x < 16.5:
+        return None
+    if 16.5 <= x < 18.5:
+        return rgb_index((185, 182, 175))
+    if any(abs(x - l) < 0.15 for l in (19.0, 22.5, 26.0, 29.5)) or ((x - 19.0) % 7.0 < 3.5 and (y % 2.4) < 0.15):
+        return BAY_LINE
+    return ASPHALT
+for part in ((0, 0), (0, 1), (1, 0), (1, 1)):
+    b = Building()
+    part_ground(b, part, hyper_ground)
+    part_box(b, part, 2, 2, 16, 30, 0, 20, (232, 230, 224), (190, 190, 194), sw=hyper_front, se=hyper_side, roof=hyper_roof)
+    part_box(b, part, 16, 10, 18.2, 20, 6, 7, (240, 240, 240), (240, 240, 240))
+    part_box(b, part, 17, 21.5, 18.4, 25, 0, 4, (170, 170, 175), (200, 200, 205))
+    k = 0
+    for xr in (20.75, 27.75):
+        for (i, yc) in enumerate((2.4, 4.8, 7.2, 9.6, 12.0, 14.4, 16.8, 19.2, 21.6, 24.0, 26.4)):
+            for side in (-1.05, 1.05):
+                k += 1
+                if (k * 5 + i) % 7 in (0, 3):
+                    continue
+                car(b, part, xr + side, yc, (k * 37 + i * 11 + (3 if side > 0 else 0)) % 97, along_x=True)
+    for (lx, ly) in ((24.25, 6), (24.25, 16), (24.25, 26)):
+        part_post(b, part, lx, ly, 0, 12, rgb_index((150, 150, 155)))
+        part_box(b, part, lx - 0.4, ly - 0.4, lx + 0.4, ly + 0.4, 12, 13, (240, 240, 200), (255, 255, 220))
+    part_post(b, part, 30.2, 30.2, 0, 18, rgb_index((140, 140, 145)))
+    part_box(b, part, 29.4, 28.6, 31, 31, 18, 30, (230, 230, 230), (210, 210, 210),
+             sw=lambda u, v: rgb_index((250, 250, 250)) if 0.6 <= u < 1.8 and 4 <= v < 9 else cc(5),
+             se=lambda u, v: rgb_index((250, 250, 250)) if 0.3 <= u < 1.3 and 4 <= v < 9 else cc(5))
+    house(b, f"hypermarket {part[0]} {part[1]}")
+
 print("house rows end at", houses_y)
 
-assert len(sprites) == 290, len(sprites)
+assert len(sprites) == 299, len(sprites)
 sheet.save(f"{SRC}/city.png", optimize=True)
 
 header = """// This file is part of OpenTTD.
@@ -2019,6 +2205,8 @@ header = """// This file is part of OpenTTD.
 //            mixed development, mosque, Chinese temple
 //   273-285: hospital, university, stadium (four parts each: (0,0), (1,0), (0,1), (1,1)), hawker centre
 //   286-289: icons: hospital, university, stadium, hawker centre
+//   290-298: shops: supermarket, shopping complex (along X: two parts, along Y: two parts),
+//            hypermarket (four parts: (0,0), (0,1), (1,0), (1,1))
 //
    -1 * 0\t 0C "City fork graphics"
    -1 * 5\t 05 1C FF %02X %02X

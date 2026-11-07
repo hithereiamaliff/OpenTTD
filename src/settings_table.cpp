@@ -35,6 +35,7 @@
 #include "town.h"
 #include "environment.h"
 #include "town_budget.h"
+#include "council.h"
 #include "commuting.h"
 #include "video/video_driver.hpp"
 #include "sound/sound_driver.hpp"
@@ -414,6 +415,13 @@ static void TownBudgetsChanged(int32_t)
 	InvalidateWindowClassesData(WindowClass::TownBudget);
 	InvalidateWindowClassesData(WindowClass::TransitAuthority);
 	SetWindowClassesDirty(WindowClass::TownView);
+	MarkWholeScreenDirty();
+}
+
+/** Town councils were switched on or off: the budget windows change, and the estates' colours. */
+static void TownCouncilsChanged(int32_t new_value)
+{
+	TownBudgetsChanged(new_value);
 }
 
 /** Commuting, or town traffic, was switched on or off: towns forget their commutes, or work them out at once. */

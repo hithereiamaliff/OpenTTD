@@ -534,6 +534,59 @@ public:
 	static Money GetReserves(TownID town_id);
 
 	/**
+	 * Get what kind of council runs a town: 0 a district council (majlis
+	 * daerah), 1 a municipal council (majlis perbandaran), 2 a city council
+	 * (majlis bandaraya).
+	 * @param town_id The town.
+	 * @pre IsValidTown(town_id).
+	 * @return The kind; -1 for an invalid town or with town councils switched off.
+	 */
+	static SQInteger GetCouncilLevel(TownID town_id);
+
+	/**
+	 * Get the business licences a town's council collected last year.
+	 * @param town_id The town.
+	 * @pre IsValidTown(town_id).
+	 * @return The licences; -1 for an invalid town or with town councils switched off.
+	 */
+	static Money GetLicenceIncome(TownID town_id);
+
+	/**
+	 * Get the condition of a town's estates of flats, which its council keeps up.
+	 * @param town_id The town.
+	 * @pre IsValidTown(town_id).
+	 * @return The condition in percent; -1 for an invalid town or with town councils switched off.
+	 */
+	static SQInteger GetEstateCondition(TownID town_id);
+
+	/**
+	 * Get how many city services a town's council has built.
+	 * @param town_id The town.
+	 * @pre IsValidTown(town_id).
+	 * @return The number; -1 for an invalid town or with town councils switched off.
+	 */
+	static SQInteger GetCouncilServicesBuilt(TownID town_id);
+
+	/**
+	 * Get the city service a town's council would build next.
+	 * @param town_id The town.
+	 * @pre IsValidTown(town_id).
+	 * @return The service, or CITY_SERVICE_INVALID when it needs none (or for an invalid town, or with councils off).
+	 */
+	static CityService GetCouncilPlannedService(TownID town_id);
+
+	/**
+	 * Co-fund a town council's next city service: the company pays what the
+	 * council lacks for it (at least a quarter of its cost), and the council
+	 * builds it at once.
+	 * @param town_id The town.
+	 * @pre IsValidTown(town_id).
+	 * @game @pre ScriptCompanyMode::IsValid().
+	 * @return True if the money was given.
+	 */
+	static bool CofundCouncilService(TownID town_id);
+
+	/**
 	 * Get how much of a town's car traffic passenger services take off its
 	 * roads: up to 60% when they carry all of its passengers.
 	 * @param town_id The town.

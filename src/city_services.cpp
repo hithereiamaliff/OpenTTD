@@ -22,6 +22,7 @@
 #include "stdafx.h"
 #include "satisfaction.h"
 #include "city_services.h"
+#include "council.h"
 #include "environment.h"
 #include "town_budget.h"
 #include "company_base.h"
@@ -248,7 +249,7 @@ uint GetTownHappiness(const Town *t)
 	const int extras = p[to_underlying(CityService::Market)] * 4 / 100 + p[to_underlying(CityService::Stadium)] * 3 / 100;
 	/* How satisfied riders are with the town's stations adds or takes up to 10 points. */
 	const int happiness = static_cast<int>(TOWN_HAPPINESS_BASE + sum * (100 - TOWN_HAPPINESS_BASE) / (100 * BASIC_CITY_SERVICE_COUNT)) + GetTownSatisfactionHappiness(t)
-			- static_cast<int>(GetTownPollutionUnhappiness(t)) + GetTownBudgetHappiness(t) + extras;
+			- static_cast<int>(GetTownPollutionUnhappiness(t)) + GetTownBudgetHappiness(t) + extras + GetCouncilHappiness(t);
 	return static_cast<uint>(std::clamp(happiness, 0, 100));
 }
 
@@ -382,7 +383,8 @@ void DrawCityServiceTile(TileInfo *ti, ObjectType type)
 {
 	CityService service = GetCityServiceOfObjectType(type);
 	Owner owner = GetTileOwner(ti->tile);
-	PaletteID palette = owner == OWNER_NONE ? PAL_NONE : GetCompanyPalette(owner);
+	/* The council's own services fly its colours: dark blue. */
+	PaletteID palette = owner == OWNER_TOWN ? GetColourPalette(Colours::DarkBlue) : (Company::IsValidID(owner) ? GetCompanyPalette(owner) : PAL_NONE);
 
 	const bool grass = service == CityService::Park || service == CityService::Stadium;
 	DrawGroundSprite(grass ? SPR_FLAT_GRASS_TILE : SPR_CONCRETE_GROUND, PAL_NONE);

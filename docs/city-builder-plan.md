@@ -2014,6 +2014,208 @@ game without them, a year on):
   sea, keep their own land laws and control immigration (to be researched
   further for step 3).
 
+## Done: M4 part 3, step 2: shops and town councils
+
+The owner said go for step 2 (councils) and asked for malls and
+supermarkets, "super common features in Malaysia and Singapore", which the
+towns lacked: a 22-year test game had ended with 4 malls on the whole map and
+there were no supermarkets at all.
+
+### Shops
+
+New town buildings in the Malaysian and Singaporean style (setting **Town
+buildings**), and the mall redrawn so it reads as one: five storeys of shops
+with a big sign band and banners in its colours, a glass atrium at the front
+corner, a skylight and cars on its roof.
+
+| Building | Size | From | Where in town | Town of at least | A town wants | People | Takes |
+|---|---|---|---|---|---|---|---|
+| Supermarket: a two-storey store, glass front, sign band, a car park | 1 tile | 1965 | outskirts to centre | 800 | 1, and 1 more for each 2,500 people | 40 | goods, food (full) |
+| Shopping complex (1970s and 1980s): a podium of shops with rows of signboards, cars on the roof, an office tower over one end | 2 tiles, along X or Y | 1973 | outer suburbs to centre | 3,000 | 1, and 1 more for each 10,000 | 150 | goods, food (half a tile) |
+| Shopping mall (redrawn) | 2 by 2 | 1985 | inner suburbs, centre | 6,000 | 1, and 1 more for each 8,000 | 240 | goods, food (half a tile) |
+| Hypermarket: a big box with an entrance canopy, a sign band and a pylon, a car park with rows of cars, lamp posts and a trolley shelter | 2 by 2 | 1993 | edge, outskirts, outer suburbs | 5,000 | 1, and 1 more for each 15,000 | 160 | goods, food (half a tile) |
+
+- A town builds only as many of each as it wants for its people, and the
+  ones it lacks three times as readily as other buildings.
+- Bigger shops need free land of their own. Once a year a town of 3,000 that
+  lacks a mall, a complex or a hypermarket and has a site of old small
+  houses of its own (kampung houses, terraces, shophouses, walk-up flats past
+  their minimum age, nobody's protected ones) or bare land where the shop may
+  stand, clears it and builds the shop, as developers buy up old houses.
+- Their signs come in many chains' colours (red, green, orange, blue,
+  yellow, dark green, purple, pink); no real brands.
+- Shops are businesses for zoning and commuting (their people are jobs),
+  and take food in the sub-tropics as well as goods, so deliveries reach
+  them.
+- Code: `city_houses.{h,cpp}` (house types 20-28, quotas, food,
+  `GetCityShopToRedevelop`), `town_cmd.cpp` (probability, acceptance,
+  `RedevelopForShop` once a year), sprites 290-298 and the redrawn mall
+  (265-268) in `make_city_sprites.py`.
+
+Tests (map 256 by 256, seed 42, counts at the yearly census):
+
+| World | Supermarkets | Shopping complexes | Malls | Hypermarkets | Sites cleared |
+|---|---|---|---|---|---|
+| 2020 to 2030, normal growth (towns of 6,500 to 9,800) | 27 | 5 | 2 | 4 | 2 |
+| 1960 to 2000, fastest growth (towns of 13,900 to 15,800) | 56 | 13 | 3 | 9 | 3 |
+
+Screenshots: Rudinghall in 2000 (a hypermarket and its car park, a
+shopping complex), supermarkets with their car parks close up.
+
+### Town councils
+
+Every town is run by a council, as in Malaysia; a new setting **Town
+councils** (Settings, Environment, Towns, after Town budgets and
+ordinances), on by default; it needs town budgets. Off works as before.
+
+| Council | Becomes one | Builds |
+|---|---|---|
+| Majlis Daerah (district council) | every town at first | police and fire stations, clinics, schools, parks, hawker centres |
+| Majlis Perbandaran (municipal council) | 4,000 people and £37,800 a year in taxes and licences (at normal costs) | also a hospital and a stadium |
+| Majlis Bandaraya (city council) | 12,000 people and £108,000 a year, three years after becoming a municipality | also a university |
+
+Real thresholds are 150,000 and 500,000 people (and RM20 and 100 million a
+year); towns here are smaller. A new game's towns, and an old game's when it
+is loaded, start with the standing they qualify for; after that they go up
+each January, with news ("Gredinghall becomes a municipality: Majlis
+Perbandaran Gredinghall", "City status for Gredinghall! Majlis Bandaraya
+Gredinghall"). They never go down.
+
+**Money.** The town's taxes (part M6) are the council's assessment tax.
+Beside them:
+
+- **Business licences**: 30% of the taxes at the normal rate, in the share
+  of the town's people who work in shops and offices: 15% of the taxes in a
+  town of 8,500, 24% in a city of 23,000 with more jobs than homes.
+- **Services fund**: a tenth of the taxes goes into a fund for new
+  services, out of the town's running costs (60% before: now 50% running,
+  10% fund), so a town spends no more than before.
+- A council builds from the fund, from what companies gave it, and from the
+  town's reserves above half a year's taxes. When it needs nothing new, it
+  keeps two years' worth in the fund and gives the rest back to the reserves,
+  so the town can cut its taxes.
+
+**Services.** Each month a council builds the service its town lacks most,
+when it has the money: health and schooling up to 80% of the town reached,
+police and fire 70%, parks 60%, hawker centres 50% (15 points more when it
+has more than two years' taxes put by). A municipality of 6,000 people builds
+a hospital instead of a clinic, a city of 12,000 a university instead of a
+school; a municipality of 8,000 wants a hospital and a stadium of its own and
+a city a university, however well its clinics and schools serve it. The
+bigger ones only when it can pay for them within three years. It builds on
+free land (grass, rough land, trees; not zoned for buildings or industry)
+nearer to it than to any other town, where the new service reaches the most
+of its people not yet reached by that kind of service (at least 100; for the
+two by two ones the most people, at least 600). Its services fly dark blue
+flags; it runs them out of its running costs (no upkeep for companies, no
+rating for anyone); companies can't remove them. News: "Majlis Perbandaran
+Gredinghall opens a new clinic".
+
+**Co-funding.** A company can co-fund a council's next service from the
+Budget window: it pays what the council lacks for it (at least a quarter of
+its cost), the council builds it at once, the news names the company
+("..., co-funded by ..."), and the town's rating of the company goes up 200
+points, up to Very good. Companies still build services of their own too.
+
+**Estates.** Councils run the estates of flats (walk-up flats, HDB slab and
+point blocks, OpenTTD's blocks of flats; condominiums run themselves) as
+Singapore's town councils run HDB estates:
+
+- Flats pay service and conservancy charges (S&CC) into a sinking fund:
+  20% of a resident's taxes at the normal rate a year.
+- Routine upkeep (cleaning, lifts, repairs) comes out of it: 16% a
+  resident, half a point more for each year of the estates' age above 20.
+  The council tops it up from the town's reserves when the fund runs dry.
+  The estates' condition heads for 85% when the upkeep is paid in full, down
+  to 40% when nothing is.
+- Every six years the council repaints its estates (25% a resident): the
+  condition goes to 100% and **the blocks change colour**, all at once, with
+  news.
+- Estates 20 years old on average are renewed every fifteen years
+  (neighbourhood renewal; 60% a resident, the government paying three
+  quarters): condition 100%, happiness +2 and land value +5 in the suburbs
+  for ten years.
+- Municipalities and cities rebuild one of their oldest blocks (35 years, on
+  land worth 50 or more) each year as a new HDB point block, as Singapore's
+  selective en bloc redevelopment does.
+- Condition counts for happiness, up to 3 points either way (70% neutral), in
+  the share of the town's people who live in flats; land value -5 in the
+  suburbs while estates are run down (below 50%).
+
+**Yearly report.** Each January, as Singapore's town council management
+reports: services (the share of the town reached by those the council may
+build: 75% green, 45% amber, below red), estates (condition 75% green, 55%
+amber) and finances (in credit with taxes at most 10% over normal green, in
+credit amber, in debt red).
+
+**Seeing it:** the town window has a line "Council: Majlis Bandaraya
+Gredinghall (city council)". The Budget window is titled with the council's
+name and has six more lines: the council and since when, its next standing,
+licences and charges, new services (the next one and what it can spend, or
+none needed), estates (people in flats, age, condition, last repainted and
+renewed, fund) and the last report; then a **Co-fund the next service**
+button beside Propose. The spending line shows the services fund.
+
+- Saved: each town's council in chunk TCNL, with what the town had at the
+  start of the month (so every player of a network game reckons alike). Old
+  saves set up their councils in the first month.
+- Script API: `ScriptTown.GetCouncilLevel`, `GetLicenceIncome`,
+  `GetEstateCondition`, `GetCouncilServicesBuilt`,
+  `GetCouncilPlannedService`, `CofundCouncilService`.
+- Code: `src/council.{h,cpp}`, `council_type.h`, `council_cmd.h`,
+  `src/saveload/council_sl.cpp`; hooks in `town_budget.cpp` (licences,
+  monthly and yearly), `town_budget_gui.cpp`, `town_gui.cpp`,
+  `city_services.cpp` (happiness, the council's flag colour),
+  `environment.cpp` (land value), `city_houses.cpp` (repainting),
+  `town_cmd.cpp` (rebuilding old blocks), `object_cmd.cpp` (objects owned
+  by a town).
+
+Tests (test AI CouncilTest logs the four biggest towns monthly and can
+co-fund the biggest town's next service at a set month; land value on):
+
+- Co-funding in the sixth month: Traningstone (8,564 people) lacked £12,549
+  for a clinic; the company paid it, the council built the clinic at once
+  (health 74% of the town), and the town rated the company Very good. In
+  the next months the council built a school and a police station from its
+  own money; happiness 40% to 64% within the year.
+- 2020 to 2030 (towns of 5,800 to 8,600 at first), against the same game
+  without councils:
+
+| 2029 | Traningstone | Gredinghall | Sindworth | Tunnford |
+|---|---|---|---|---|
+| Services built by the council | 9 | 10 | 8 | 8 |
+| Happiness with / without | 96 / 43 | 99 / 44 | 99 / 44 | 100 / 44 |
+| Land value with / without | 74 / 56 | 72 / 55 | 78 / 54 | 77 / 52 |
+| People with / without | 8,960 / 9,998 | 8,456 / 9,187 | 7,113 / 6,579 | 6,391 / 6,057 |
+
+  The councils keep taxes at 100% for their first five years while they
+  build (70% after), and their services take free land the dense towns would
+  have grown onto, so the two biggest towns end 8-10% smaller and the two
+  smaller ones 5-8% bigger.
+- 1960 to 2010 with the fastest growth (about 20 towns): the councils built
+  165 services (39 parks, 26 schools, 21 clinics, 19 hawker centres, 18
+  police and 18 fire stations, 9 hospitals, 8 universities, 7 stadiums); 9
+  towns became cities at 12,000 people; 13 estate renewals and 14 old blocks
+  rebuilt. Against the same game without councils:
+
+| 2009 | Gredinghall | Keningbury | Rudinghall |
+|---|---|---|---|
+| People with / without | 23,003 / 16,209 | 20,542 / 18,383 | 25,922 / 19,138 |
+| Happiness with / without | 99 / 39 | 100 / 38 | 97 / 42 |
+| Land value with / without | 80 / 52 | 81 / 49 | 75 / 53 |
+| Taxes with / without | 70% / 90% | 70% / 90% | 70% / 80% |
+
+- Big cities run out of free land for more services; then their reserves
+  pile up (£300,000 to £750,000 by 2009) with taxes at the 70% floor. Step 3's
+  states could take a share.
+- With budgets (and so councils), commuting and the new buildings off, the
+  baseline runs give identical results; 99/99 unit tests; all 46 test saves
+  (with the new `city-shops-demo.csav`, from before councils, and
+  `city-council-demo.csav`) load, save and reload.
+- Screenshots: Gredinghall in 2010 (23,003 people; the council's hospital,
+  university and stadium, a mall, a hypermarket, supermarkets); its town
+  window with the council line; its council's Budget window.
+
 ## Roadmap
 
 Sizes are rough: S = one session, M = a few, L = many, XL = a project in itself.
@@ -2022,14 +2224,14 @@ Sizes are rough: S = one session, M = a few, L = many, XL = a project in itself.
 |---|---|---|---|---|
 | M2 | Traffic realism | Done: give way, light settings, traffic map and overlay, amber, routing around jams. | — | |
 | M3 | Zoning | Done: zones, town growth follows them, homes/jobs line in the town window, zones in land info. | — | |
-| M4 | City services and happiness | Part 1 done: police, fire, clinic, school and park with coverage, happiness, growth, ratings and upkeep. Part 2 done: Malaysian and Singaporean town buildings, from kampungs and shophouses to HDB blocks, condominiums and towers, by year, zone, town size and land value. Part 3 step 1 done: hospital, university, stadium and hawker centre that serve a whole town and draw commuters and passengers. Next: step 2, councils (district, municipal and city councils building and running services, assessment tax, town councils for HDB estates); step 3, states with assemblies and elections, federal territories, regions across the sea run like Sabah and Sarawak. | L | The owner's calls: councils build, companies can too; states made automatically; elections judge service only. |
+| M4 | City services and happiness | Part 1 done: police, fire, clinic, school and park with coverage, happiness, growth, ratings and upkeep. Part 2 done: Malaysian and Singaporean town buildings, from kampungs and shophouses to HDB blocks, condominiums and towers, by year, zone, town size and land value. Part 3 step 1 done: hospital, university, stadium and hawker centre that serve a whole town and draw commuters and passengers. Step 2 done: supermarkets, shopping complexes, malls and hypermarkets; town councils (district, municipal, city) that collect licences, build services (companies can co-fund) and run estates as Singapore's town councils do, with a yearly report. Next: step 3, states with assemblies and elections, federal territories, regions across the sea run like Sabah and Sarawak. | L | The owner's calls: councils build, companies can too; states made automatically; elections judge service only. |
 | M5 | Town car traffic | Done: commuters drive between homes and jobs along real roads, in their town and up to four towns around, or take transit when it is quick enough; traffic follows their routes, also between towns; transit takes cars off them (see M5, commuting, and part 2). | — | |
 | M6 | City budget and ordinances | Done: towns collect taxes and spend them on transit, running the town and ordinances; they set their own tax rates and bring in ordinances (transit fund, parking limits, low-emission zone, car-free centre, tree planting, transit-oriented development); companies propose them. | — | The owner's call: towns decide, companies lobby. |
 | M7 | Land value and pollution | Done as transit part 14: traffic, diesel vehicles and industry pollute; parks, services and good stations raise land value; map views, tints and lines show both; towns build to fit. | — | |
 | M8 | Utilities | Power and water networks. | XL | Probably skip, or keep it light (arctic/tropic towns already need food/water). |
 
-Recommended order: M4 part 3 step 2 next (councils), then step 3
-(states, elections, federal territories); M8 only if wanted.
+Recommended order: M4 part 3 step 3 next (states, elections, federal
+territories, regions run like Sabah and Sarawak); M8 only if wanted.
 
 ## Getting it onto the owner's computer (Windows)
 
@@ -2055,6 +2257,6 @@ Savegame locations (files end in `.sav`; autosaves are in `save/autosave`):
 ## Open questions for the owner
 
 1. Can you share one of your saves, so it can be tested before you play it?
-2. Which milestone next? Agreed: M4 part 3 step 2 (councils), then step 3
-   (states).
+2. Which milestone next? Agreed: M4 part 3 step 3 (states, elections,
+   federal territories, regions across the sea).
 3. A name for the fork.

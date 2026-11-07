@@ -128,6 +128,10 @@ add_files(
     commuting.cpp
     commuting.h
     commuting_type.h
+    council.cpp
+    council.h
+    council_cmd.h
+    council_type.h
     city_services_gui.cpp
     city_services_type.h
     clear_cmd.cpp

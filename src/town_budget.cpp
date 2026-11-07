@@ -30,6 +30,7 @@
 #include "stdafx.h"
 #include "town_budget.h"
 #include "town_budget_cmd.h"
+#include "council.h"
 #include "cargotype.h"
 #include "city_bus.h"
 #include "bridge_map.h"
@@ -464,8 +465,9 @@ static void ReviewTownBudget(Town *t)
 		}
 		return;
 	}
-	/* Cut taxes only after a year in surplus, raise them only after a year in deficit. */
-	const Money surplus = b.taxes_last_year + b.fees_last_year - b.spent_last_year;
+	/* Cut taxes only after a year in surplus, raise them only after a year in deficit. The council's licences
+	 * count as income, its new services as spending. */
+	const Money surplus = b.taxes_last_year + b.fees_last_year - b.spent_last_year + GetCouncilSurplusLastYear(t);
 	if (b.reserves > taxes && surplus >= 0) {
 		b.tax_rate = static_cast<uint8_t>(std::max<uint>(TAX_MIN, b.tax_rate - TAX_STEP));
 	} else if (b.reserves < taxes / 4 && surplus < 0) {
@@ -521,6 +523,9 @@ static const IntervalTimer<TimerGameEconomy> _town_budgets_monthly({TimerGameEco
 		if (HasOrdinance(t, Ordinance::TreePlanting)) PlantTownTrees(t);
 	}
 
+	/* The councils: licences, charges, estates and new services. */
+	UpdateTownCouncilsMonthly();
+
 	if (TimerGameEconomy::month == 0) {
 		for (Town *t : Town::Iterate()) {
 			TownBudget &b = t->budget;
@@ -530,7 +535,9 @@ static const IntervalTimer<TimerGameEconomy> _town_budgets_monthly({TimerGameEco
 			b.taxes_this_year = 0;
 			b.fees_this_year = 0;
 			b.spent_this_year = 0;
+			if (AreTownCouncilsOn()) RotateTownCouncilYear(t);
 			ReviewTownBudget(t);
+			ReviewTownCouncil(t);
 		}
 	}
 	InvalidateWindowClassesData(WindowClass::TownBudget);

@@ -2186,11 +2186,13 @@ STR_CONFIG_SETTING_AIR_POLLUTION_LIGHT                          :Light pollution
 STR_CONFIG_SETTING_AIR_POLLUTION_NORMAL                         :Normal pollution
 STR_CONFIG_SETTING_AIR_POLLUTION_HEAVY                          :Heavy pollution
 STR_CONFIG_SETTING_TOWN_BUILDING_STYLE                          :Town buildings: {STRING2}
-STR_CONFIG_SETTING_TOWN_BUILDING_STYLE_HELPTEXT                 :What towns build in the temperate and sub-tropical climates. Malaysian and Singaporean: kampung houses on stilts and rows of shophouses first; terrace houses from 1950, walk-up flats from 1955, HDB slab blocks from 1965 and point blocks from 1975 in the suburbs and around the centre; office blocks from 1965, glass towers and shopping malls from 1985, mixed developments from 1995 and condominiums from 1990 near the centre, and a landmark tower in a city of 40,000 people; mosques and Chinese temples among them. Towns put the tall ones where land is dear (near the centre, good stations, parks and city services) and rebuild old houses into newer kinds as they grow. OpenTTD's public buildings, and those that take food or water, stay. Changing it changes only what towns build from now on
+STR_CONFIG_SETTING_TOWN_BUILDING_STYLE_HELPTEXT                 :What towns build in the temperate and sub-tropical climates. Malaysian and Singaporean: kampung houses on stilts and rows of shophouses first; terrace houses from 1950, walk-up flats from 1955, HDB slab blocks from 1965 and point blocks from 1975 in the suburbs and around the centre; office blocks from 1965, glass towers and shopping malls from 1985, mixed developments from 1995 and condominiums from 1990 near the centre, and a landmark tower in a city of 40,000 people; mosques and Chinese temples among them. Shops for their people: supermarkets from 1965 (one for each 2,500 people), shopping complexes from 1973 (from 3,000 people), malls (from 6,000) and hypermarkets with big car parks on the edge of town from 1993 (from 5,000); towns clear old small houses for the bigger ones. Shops take goods, and food in the sub-tropics. Towns put the tall ones where land is dear (near the centre, good stations, parks and city services) and rebuild old houses into newer kinds as they grow. OpenTTD's public buildings, and those that take food or water, stay. Changing it changes only what towns build from now on
 STR_CONFIG_SETTING_TOWN_BUILDING_STYLE_ORIGINAL                 :OpenTTD's
 STR_CONFIG_SETTING_TOWN_BUILDING_STYLE_MALAYSIAN                :Malaysian and Singaporean
 STR_CONFIG_SETTING_TOWN_BUILDING_STYLE_BOTH                     :Both
 STR_CONFIG_SETTING_TOWN_BUDGETS                                 :Town budgets and ordinances: {STRING2}
+STR_CONFIG_SETTING_TOWN_COUNCILS                                :Town councils: {STRING2}
+STR_CONFIG_SETTING_TOWN_COUNCILS_HELPTEXT                       :Towns are run by councils, as in Malaysia: a district council (majlis daerah) at first, a municipal council (majlis perbandaran) from 4,000 people with the income to match, a city council (majlis bandaraya) from 12,000 after three years as a municipality. Beside the town's taxes, councils collect business licences from shops and offices, and they build city services from what they save: clinics, schools, police and fire stations, parks and hawker centres where the town lacks them; a hospital and a stadium once a municipality, a university once a city. Companies can co-fund the next one in the town's Budget window. Councils also run the estates of flats as Singapore's town councils do: service and conservancy charges pay for upkeep and for repainting every six years; old estates are renewed and the oldest blocks rebuilt. Needs town budgets{}Off: towns as before
 STR_CONFIG_SETTING_TOWN_BUDGETS_HELPTEXT                        :Towns collect taxes, more from bigger towns and dearer land. A quarter goes to transit (the transit budget for contracts, passes and concessions), 60% to running the town; the rest pays for ordinances or builds reserves. Towns cut taxes when they have money put by and raise them when they run short; high taxes make a town less happy and slow its growth.{}Towns bring in ordinances when their problems call for them and they can afford them: parking limits, a low-emission zone, a car-free centre, tree planting, transit-oriented development, a transit fund. Companies can propose them in the town's Budget window.{}Off: no budgets and no ordinances; transit budgets as before
 STR_CONFIG_SETTING_COMMUTING                                    :Commuting: {STRING2}
 STR_CONFIG_SETTING_COMMUTING_HELPTEXT                           :Towns work out once a month where their people work and how they get there. 45% of a town's people go to work on a day, more to places with many jobs, fewer the further away, also in up to four towns within 64 tiles they can get to by road or transit. Each can drive (the quickest way over the town's roads, slowed by town traffic, then parking: longer in the centre, longer with parking limits, from the edge of a car-free centre) or, within reach of a stop, take transit (walking, waiting, riding, changing, the fare, walking on). The quicker transit is against the car, the more take it: half when it takes as long. At least as many take it as the share of the town's passengers your services carry says. Drivers' cars follow their routes, so the roads between homes and jobs get busy; homes and workplaces whose commuters find transit quick send up to twice the passengers. Needs town traffic. Off: traffic comes from the homes and jobs around each road, as before
@@ -3994,6 +3996,7 @@ STR_TOWN_VIEW_POPULATION_HOUSES                                 :{BLACK}Populati
 STR_TOWN_VIEW_ZONING_BALANCED                                   :{BLACK}Homes for {ORANGE}{COMMA}{BLACK}, jobs for {ORANGE}{COMMA}{BLACK}: balanced
 STR_TOWN_VIEW_ZONING_WANTS_COMMERCIAL                           :{BLACK}Homes for {ORANGE}{COMMA}{BLACK}, jobs for {ORANGE}{COMMA}{BLACK}: wants more shops and offices
 STR_TOWN_VIEW_ZONING_WANTS_RESIDENTIAL                          :{BLACK}Homes for {ORANGE}{COMMA}{BLACK}, jobs for {ORANGE}{COMMA}{BLACK}: wants more homes
+STR_TOWN_VIEW_COUNCIL                                           :{BLACK}Council: {ORANGE}{STRING} {TOWN}{BLACK} ({STRING})
 STR_TOWN_VIEW_HAPPINESS                                         :{BLACK}Happiness: {ORANGE}{NUM}%{BLACK}. City services reach:
 STR_TOWN_VIEW_HAPPINESS_SATISFACTION                            :{BLACK}Happiness: {ORANGE}{NUM}%{BLACK} (riders' satisfaction {ORANGE}{NUM}%{BLACK}). City services reach:
 STR_TOWN_VIEW_SERVICE_PERCENT                                   :{BLACK}{NUM}%
@@ -5419,6 +5422,7 @@ STR_TOWN_BUDGET_CAPTION                                         :{WHITE}{TOWN} -
 STR_TOWN_BUDGET_OFF                                             :{BLACK}Towns keep no budgets and bring in no ordinances: the setting "Town budgets and ordinances" is off
 STR_TOWN_BUDGET_TAXES                                           :{BLACK}Taxes: {ORANGE}{NUM}%{BLACK} of normal, land value {NUM}: {CURRENCY_LONG} a year
 STR_TOWN_BUDGET_SPENDING                                        :{BLACK}Spending a year: transit {CURRENCY_LONG} ({NUM}%), running the town {CURRENCY_LONG}, ordinances {CURRENCY_LONG}
+STR_TOWN_BUDGET_SPENDING_COUNCIL                                :{BLACK}Spending a year: transit {CURRENCY_LONG} ({NUM}%), running the town {CURRENCY_LONG}, services fund {CURRENCY_LONG}, ordinances {CURRENCY_LONG}
 STR_TOWN_BUDGET_FEES                                            :{BLACK}Parking levies and low-emission zone fees: {CURRENCY_LONG} last year, {CURRENCY_LONG} this year; {NUM} vehicle{P "" s} paid to drive in last month
 STR_TOWN_BUDGET_RESERVES                                        :{BLACK}Reserves: {GREEN}{CURRENCY_LONG}{BLACK}. Last year: taxes {CURRENCY_LONG}, spent {CURRENCY_LONG}
 STR_TOWN_BUDGET_RESERVES_NEGATIVE                               :{BLACK}Reserves: {RED}{CURRENCY_LONG}{BLACK}, in debt: taxes go up. Last year: taxes {CURRENCY_LONG}, spent {CURRENCY_LONG}
@@ -5431,6 +5435,32 @@ STR_TOWN_BUDGET_NEEDS                                           :{SILVER}{STRING
 STR_TOWN_BUDGET_NEEDS_CAN                                       :{SILVER}{STRING}. {GREEN}You can propose it
 STR_TOWN_BUDGET_LIST_TOOLTIP                                    :{BLACK}Rules the town can bring in. Towns bring them in on their own when their problems call for them and they can afford them, and repeal the dearest when their money runs low; you can propose them too. Click one to select it
 STR_TOWN_BUDGET_PROPOSE_BUTTON                                  :{BLACK}Propose
+STR_TOWN_BUDGET_COFUND_BUTTON                                   :{BLACK}Co-fund the next service
+STR_TOWN_BUDGET_COFUND_TOOLTIP                                  :{BLACK}Pay what the council lacks for its next new service (at least a quarter of its cost): it builds it at once, and thinks better of your company
+STR_TOWN_BUDGET_CAPTION_COUNCIL                                 :{WHITE}{STRING} {TOWN} - Council budget and ordinances
+STR_TOWN_BUDGET_COUNCIL                                         :{BLACK}Council: {ORANGE}{STRING} {TOWN}{BLACK}, a {STRING}{RAW_STRING}
+STR_TOWN_BUDGET_COUNCIL_SINCE                                   :{BLACK} since {NUM}
+STR_TOWN_BUDGET_COUNCIL_NEXT_MUNICIPAL                          :{BLACK}Municipality at {COMMA} people and {CURRENCY_LONG} a year in taxes and licences
+STR_TOWN_BUDGET_COUNCIL_NEXT_CITY                               :{BLACK}City status at {COMMA} people and {CURRENCY_LONG} a year, after 3 years as a municipality
+STR_TOWN_BUDGET_COUNCIL_NEXT_NONE                               :{BLACK}City council: the highest standing a town can have
+STR_TOWN_BUDGET_COUNCIL_INCOME                                  :{BLACK}Business licences: {CURRENCY_LONG} last year ({CURRENCY_LONG} so far); charges from flats: {CURRENCY_LONG}
+STR_TOWN_BUDGET_COUNCIL_SERVICE                                 :{BLACK}New services: a {ORANGE}{STRING}{BLACK} next, {CURRENCY_LONG}; it can spend {CURRENCY_LONG}. {COMMA} built
+STR_TOWN_BUDGET_COUNCIL_SERVICE_NONE                            :{BLACK}New services: none needed now. {COMMA} built, {CURRENCY_LONG} spent on them last year
+STR_TOWN_BUDGET_COUNCIL_ESTATES                                 :{BLACK}Estates: {COMMA} people in flats, {NUM} years old; condition {ORANGE}{NUM}%{BLACK}, repainted {NUM}{RAW_STRING}; fund {CURRENCY_LONG}
+STR_TOWN_BUDGET_COUNCIL_RENEWED                                 :{BLACK}, renewed {NUM}
+STR_TOWN_BUDGET_COUNCIL_ESTATES_NONE                            :{BLACK}Estates: no flats yet
+STR_TOWN_BUDGET_COUNCIL_REPORT                                  :{BLACK}Yearly report: services {STRING}, estates {STRING}, finances {STRING}
+STR_TOWN_BUDGET_COUNCIL_REPORT_NONE                             :{BLACK}Yearly report: the first one comes in January
+STR_COUNCIL_BAND_NONE                                           :{BLACK}-
+STR_COUNCIL_BAND_GREEN                                          :{GREEN}green{BLACK}
+STR_COUNCIL_BAND_AMBER                                          :{YELLOW}amber{BLACK}
+STR_COUNCIL_BAND_RED                                            :{RED}red{BLACK}
+STR_COUNCIL_PREFIX_DISTRICT                                     :Majlis Daerah
+STR_COUNCIL_PREFIX_MUNICIPAL                                    :Majlis Perbandaran
+STR_COUNCIL_PREFIX_CITY                                         :Majlis Bandaraya
+STR_COUNCIL_KIND_DISTRICT                                       :district council
+STR_COUNCIL_KIND_MUNICIPAL                                      :municipal council
+STR_COUNCIL_KIND_CITY                                           :city council
 STR_TOWN_BUDGET_PROPOSE_TOOLTIP                                 :{BLACK}Propose the selected ordinance to the town. It agrees if it has the problem, can afford it (from what is left of its taxes, or two years' worth of reserves) and rates your company well enough; the campaign costs about as much as a small station
 STR_ORDINANCE_TRANSIT_FUND                                      :Transit fund
 STR_ORDINANCE_PARKING_LIMITS                                    :Parking limits
@@ -5531,6 +5561,12 @@ STR_NEWS_TOLL_FREEZE                                            :{BIG_FONT}{BLAC
 STR_NEWS_TRANSIT_BUDGET_GONE                                    :{BIG_FONT}{BLACK}{TOWN}'s transit budget is used up for this year: passes and concessions are paid only in part until the new year
 STR_NEWS_TOWN_AIR_UNHEALTHY                                     :{BIG_FONT}{BLACK}Haze over {TOWN}!{}The air where its people live is unhealthy (API {NUM}). Traffic, diesel vehicles and industry pollute; electric buses and trains, parks and trees help
 STR_NEWS_ORDINANCE_ADOPTED                                      :{BIG_FONT}{BLACK}{TOWN} brings in a new ordinance: {STRING}!
+STR_NEWS_COUNCIL_MUNICIPAL                                      :{BIG_FONT}{BLACK}{0:TOWN} becomes a municipality: {1:STRING} {0:TOWN}
+STR_NEWS_COUNCIL_CITY                                           :{BIG_FONT}{BLACK}City status for {0:TOWN}! {1:STRING} {0:TOWN}
+STR_NEWS_COUNCIL_SERVICE                                        :{BIG_FONT}{BLACK}{STRING} {TOWN} opens a new {STRING}
+STR_NEWS_COUNCIL_SERVICE_COFUNDED                               :{BIG_FONT}{BLACK}{STRING} {TOWN} opens a new {STRING}, co-funded by {COMPANY}
+STR_NEWS_COUNCIL_REPAINT                                        :{BIG_FONT}{BLACK}{STRING} {TOWN} repaints its estates in new colours
+STR_NEWS_COUNCIL_RENEWAL                                        :{BIG_FONT}{BLACK}Neighbourhood renewal for {TOWN}'s estates, {NUM} years old on average
 STR_NEWS_ORDINANCE_PROPOSED                                     :{BIG_FONT}{BLACK}{TOWN} brings in a new ordinance: {STRING}, as {COMPANY} proposed!
 STR_NEWS_ORDINANCE_REPEALED                                     :{BIG_FONT}{BLACK}{TOWN} repeals its ordinance {STRING} to balance its budget
 STR_DEPARTURES_CAPTION                                          :{WHITE}{STATION} - Departures
@@ -6001,6 +6037,10 @@ STR_ERROR_DRIVERLESS_NOT_ELECTRIC                               :{WHITE}... all 
 STR_ERROR_DRIVERLESS_NO_SCREEN_DOORS                            :{WHITE}... every station it stops at needs platform screen doors
 STR_ERROR_DRIVERLESS_LEVEL_CROSSINGS                            :{WHITE}... its trains crossed roads at level crossings this month or last month
 STR_ERROR_CAN_T_PROPOSE_ORDINANCE                               :{WHITE}Can't propose this ordinance...
+STR_ERROR_CAN_T_COFUND_SERVICE                                  :{WHITE}Can't co-fund the council's next service...
+STR_ERROR_COUNCILS_OFF                                          :{WHITE}... towns have no councils (setting "Town councils")
+STR_ERROR_COUNCIL_NO_SERVICE_NEEDED                             :{WHITE}... the council needs no new service now
+STR_ERROR_COUNCIL_NO_SITE                                       :{WHITE}... the council has found no free land for it
 STR_ERROR_ORDINANCES_OFF                                        :{WHITE}... towns keep no budgets: the setting is off
 STR_ERROR_ORDINANCE_ALREADY                                     :{WHITE}... it is in force already
 STR_ERROR_ORDINANCE_TOWN_TOO_SMALL                              :{WHITE}... the town is too small for it
@@ -6300,6 +6340,9 @@ STR_TOWN_BUILDING_NAME_LANDMARK_TOWER                           :Landmark tower
 STR_TOWN_BUILDING_NAME_MIXED_DEVELOPMENT                        :Mixed development
 STR_TOWN_BUILDING_NAME_MOSQUE                                   :Mosque
 STR_TOWN_BUILDING_NAME_CHINESE_TEMPLE                           :Chinese temple
+STR_TOWN_BUILDING_NAME_SUPERMARKET                              :Supermarket
+STR_TOWN_BUILDING_NAME_SHOPPING_COMPLEX                         :Shopping complex
+STR_TOWN_BUILDING_NAME_HYPERMARKET                              :Hypermarket
 
 ##id 0x4800
 # industry names

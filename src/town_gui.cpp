@@ -9,6 +9,7 @@
 
 #include "stdafx.h"
 #include "town.h"
+#include "council.h"
 #include "viewport_func.h"
 #include "error.h"
 #include "gui.h"
@@ -404,6 +405,13 @@ public:
 		DrawString(tr, GetString(STR_TOWN_VIEW_POPULATION_HOUSES, this->town->cache.population, this->town->cache.num_houses));
 		tr.top += GetCharacterHeight(FontSize::Normal);
 
+		/* Its council. */
+		if (AreTownCouncilsOn() && this->town->council.started) {
+			const CouncilLevel level = this->town->council.level;
+			DrawString(tr, GetString(STR_TOWN_VIEW_COUNCIL, GetCouncilPrefix(level), this->town->index, GetCouncilKind(level)));
+			tr.top += GetCharacterHeight(FontSize::Normal);
+		}
+
 		TownZoneDemand demand = GetTownZoneDemand(this->town);
 		StringID demand_str = demand.commercial > 20 ? STR_TOWN_VIEW_ZONING_WANTS_COMMERCIAL : (demand.commercial < -20 ? STR_TOWN_VIEW_ZONING_WANTS_RESIDENTIAL : STR_TOWN_VIEW_ZONING_BALANCED);
 		DrawString(tr, GetString(demand_str, demand.residents, demand.jobs));
@@ -641,6 +649,7 @@ public:
 	{
 		uint traffic_lines = (_settings_game.economy.town_traffic != to_underlying(TownTrafficSetting::Off) ? (IsCommutingOn() ? 3 : 2) : 0) + (IsEnvironmentOn() ? 1 : 0);
 		if (IsTownCommutingKnown(this->town) && (GetCommutersLeaving(this->town).first > 0 || GetCommutersComingTo(this->town).first > 0)) traffic_lines++;
+		if (AreTownCouncilsOn() && this->town->council.started) traffic_lines++; // The council's line.
 		uint aimed_height = static_cast<uint>(3 + traffic_lines + CargoSpec::town_production_cargoes[TownProductionEffect::Passengers].size() + CargoSpec::town_production_cargoes[TownProductionEffect::Mail].size()) * GetCharacterHeight(FontSize::Normal);
 		aimed_height += GetServiceRowHeight();
 

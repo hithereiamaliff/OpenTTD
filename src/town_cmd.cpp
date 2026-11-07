@@ -72,6 +72,7 @@
 #include "town_zoning.h"
 #include "city_services.h"
 #include "environment.h"
+#include "council.h"
 #include "town_budget.h"
 
 #include "table/strings.h"
@@ -867,6 +868,9 @@ void AddAcceptedCargoOfHouse(TileIndex tile, HouseID house, const HouseSpec *hs,
 	for (uint8_t i = 0; i < lengthof(accepts); i++) {
 		AddAcceptedCargoSetMask(accepts[i], hs->cargo_acceptance[i], acceptance, always_accepted);
 	}
+
+	/* City fork: shops take food too, where the climate has it. */
+	if (const uint food = GetCityHouseFoodAcceptance(house); food != 0) AddAcceptedCargoSetMask(GetCargoTypeByLabel(CT_FOOD), food, acceptance, always_accepted);
 }
 
 /** @copydoc AddAcceptedCargoProc */
@@ -2977,7 +2981,7 @@ static bool TryBuildTownHouse(Town *t, TileIndex tile, TownExpandModes modes)
 		}
 
 		/* Towns build what fits the value of the land. */
-		uint cur_prob = ScaleHouseProbabilityByLandValue(hs.probability, hs, tile);
+		uint cur_prob = ScaleCityHouseProbability(hs, ScaleHouseProbabilityByLandValue(hs.probability, hs, tile));
 		probability_max += cur_prob;
 		probs.emplace_back(hs.Index(), cur_prob);
 	}
@@ -4346,6 +4350,101 @@ static const IntervalTimer<TimerGameEconomy> _economy_towns_monthly({TimerGameEc
 	}
 });
 
+/**
+ * City fork: a town that lacks a mall, a shopping complex or a hypermarket
+ * (see city_houses.cpp) clears a site of old small houses for one, as
+ * developers buy up old houses, once a year: on a random spot where the shop
+ * may stand by zone, its tiles all old one-tile houses of the town (or bare
+ * land) on one level.
+ * @param t The town.
+ */
+static void RedevelopForShop(Town *t)
+{
+	if (!t->flags.Test(TownFlag::IsGrowing) || t->cache.population < 3000) return;
+	const HouseID house = GetCityShopToRedevelop(t);
+	if (house == INVALID_HOUSE_ID) return;
+	const HouseSpec *hs = HouseSpec::Get(house);
+	const uint radius = IntSqrt(t->cache.squared_town_zone_radius[to_underlying(HouseZone::TownEdge)]);
+	if (radius == 0) return;
+	AutoRestoreBackup cur_company(_current_company, OWNER_TOWN);
+	const uint w = hs->building_flags.Any(BUILDING_2_TILES_X) ? 2 : 1;
+	const uint h = hs->building_flags.Any(BUILDING_2_TILES_Y) ? 2 : 1;
+	HouseZones climate{};
+	climate.Set(_settings_game.game_creation.landscape == LandscapeType::Tropic ? HouseZone::ClimateSubtropic : HouseZone::ClimateTemperate);
+	for (uint attempt = 0; attempt < 64; attempt++) {
+		const int dx = static_cast<int>(RandomRange(2 * radius + 1)) - static_cast<int>(radius);
+		const int dy = static_cast<int>(RandomRange(2 * radius + 1)) - static_cast<int>(radius);
+		const TileIndex tile = TileAddWrap(t->xy, dx, dy);
+		if (tile == INVALID_TILE || TileX(tile) + w >= Map::MaxX() || TileY(tile) + h >= Map::MaxY()) continue;
+		HouseZones zones = climate;
+		zones.Set(GetTownRadiusGroup(t, tile));
+		if (!hs->building_availability.All(zones) || !TownZonesAllowHouse(tile, *hs)) continue;
+		const TileArea area(tile, w, h);
+		const int z = GetTileMaxZ(tile);
+		bool ok = true;
+		uint houses = 0;
+		for (TileIndex ti : area) {
+			if (GetTileMaxZ(ti) != z || IsBridgeAbove(ti)) {
+				ok = false;
+			} else if (IsTileType(ti, TileType::House)) {
+				ok = GetTownIndex(ti) == t->index && IsSmallOldCityHouse(ti);
+				houses++;
+			} else {
+				ok = IsTileType(ti, TileType::Clear) && !IsClearGround(ti, ClearGround::Fields) && GetTownZone(ti) != TownZone::Park;
+			}
+			if (!ok) break;
+		}
+		if (!ok || houses == 0) continue;
+		for (TileIndex ti : area) {
+			if (IsTileType(ti, TileType::House)) ClearTownHouse(t, ti);
+		}
+		BuildTownHouse(t, tile, hs, house, Random(), false, false);
+		Debug(Facility::Misc, Severity::Trace1, "[houses] town {} clears a site at {} {} for house {}", t->index, TileX(tile), TileY(tile), house - CITY_HOUSE_OFFSET);
+		return;
+	}
+}
+
+/**
+ * City fork: a town council rebuilds one of the town's oldest blocks of flats
+ * (35 years and older, on land worth 50 or more where land values are known)
+ * as a new one, as Singapore's en bloc redevelopment does: an HDB point block
+ * on each of its tiles where towns build those, else whatever the town builds
+ * there now.
+ * @param t The town.
+ */
+void RebuildOldEstateBlock(Town *t)
+{
+	const uint radius = IntSqrt(t->cache.squared_town_zone_radius[to_underlying(HouseZone::TownEdge)]);
+	if (radius == 0) return;
+	AutoRestoreBackup cur_company(_current_company, OWNER_TOWN);
+	for (uint attempt = 0; attempt < 64; attempt++) {
+		const int dx = static_cast<int>(RandomRange(2 * radius + 1)) - static_cast<int>(radius);
+		const int dy = static_cast<int>(RandomRange(2 * radius + 1)) - static_cast<int>(radius);
+		TileIndex tile = TileAddWrap(t->xy, dx, dy);
+		if (tile == INVALID_TILE || !IsTileType(tile, TileType::House) || GetTownIndex(tile) != t->index || !IsHouseCompleted(tile)) continue;
+		HouseID house = GetHouseType(tile);
+		tile += GetHouseNorthPart(house);
+		const HouseSpec *hs = HouseSpec::Get(house);
+		if (!IsEstateFlat(*hs) || GetHouseAge(tile) < 35 || IsHousePlayerProtected(tile) || !CanDeleteHouse(tile)) continue;
+		if (IsEnvironmentKnown() && GetTileLandValue(tile) < 50) continue;
+		std::vector<TileIndex> tiles{tile};
+		if (hs->building_flags.Any(BUILDING_2_TILES_Y)) tiles.push_back(tile + TileDiffXY(0, 1));
+		if (hs->building_flags.Any(BUILDING_2_TILES_X)) tiles.push_back(tile + TileDiffXY(1, 0));
+		if (hs->building_flags.Any(BUILDING_HAS_4_TILES)) tiles.push_back(tile + TileDiffXY(1, 1));
+		ClearTownHouse(t, tile);
+		for (TileIndex ti : tiles) {
+			const HouseID rebuild = GetEstateRebuildHouse(t);
+			if (rebuild != INVALID_HOUSE_ID) {
+				BuildTownHouse(t, ti, HouseSpec::Get(rebuild), rebuild, Random(), false, false);
+			} else {
+				TryBuildTownHouse(t, ti, {TownExpandMode::Buildings});
+			}
+		}
+		Debug(Facility::Misc, Severity::Trace1, "[council] town {} rebuilds an old block at {} {}", t->index, TileX(tile), TileY(tile));
+		return;
+	}
+}
+
 static const IntervalTimer<TimerGameEconomy> _economy_towns_yearly({TimerGameEconomy::Trigger::Year, TimerGameEconomy::Priority::Town}, [](auto)
 {
 	/* Increment house ages */
@@ -4353,6 +4452,8 @@ static const IntervalTimer<TimerGameEconomy> _economy_towns_yearly({TimerGameEco
 		if (!IsTileType(t, TileType::House)) continue;
 		IncrementHouseAge(t);
 	}
+
+	for (Town *t : Town::Iterate()) RedevelopForShop(t);
 });
 
 /** @copydoc TerraformTileProc */

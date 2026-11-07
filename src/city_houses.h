@@ -23,7 +23,7 @@ enum class TownBuildingStyle : uint8_t {
 };
 
 /** Number of Malaysian and Singaporean house types (with the extra parts of the bigger ones). */
-static constexpr uint NUM_CITY_HOUSES = 20;
+static constexpr uint NUM_CITY_HOUSES = 29;
 static_assert(CITY_HOUSE_OFFSET + NUM_CITY_HOUSES <= NUM_HOUSES);
 
 void AddCityHouseSpecs();
@@ -31,5 +31,10 @@ void DrawCityHouseTile(TileInfo *ti, HouseID house_id);
 void DrawCityHouseInGUI(int x, int y, HouseID house_id, int view);
 bool IsHouseAllowedByTownStyle(const HouseSpec &hs);
 bool CanTownBuildCityHouse(const Town *t, const HouseSpec &hs);
+uint ScaleCityHouseProbability(const HouseSpec &hs, uint probability);
+uint GetCityHouseFoodAcceptance(HouseID house);
+HouseID GetCityShopToRedevelop(const Town *t);
+bool IsSmallOldCityHouse(TileIndex tile);
+HouseID GetEstateRebuildHouse(const Town *t);
 
 #endif /* CITY_HOUSES_H */

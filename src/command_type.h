@@ -402,6 +402,7 @@ enum class Commands : uint8_t {
 	BuildScreenDoors, ///< fit platform screen doors along a station's railway platforms
 	ProposeOrdinance, ///< propose an ordinance to a town
 	SetTownOrdinance, ///< bring in or repeal a town's ordinance (game scripts)
+	CofundCouncilService, ///< co-fund a town council's next city service
 
 	End, ///< @important Must ALWAYS be on the end of this list!! (period)
 };

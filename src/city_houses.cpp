@@ -16,6 +16,13 @@
  * the 1980s and 1990s, condominiums, and in the biggest cities a landmark
  * tower. Mosques and Chinese temples stand among them.
  *
+ * Shops are everywhere: supermarkets from the 1960s, shopping complexes from
+ * the 1970s, malls from the 1980s and hypermarkets with big car parks on the
+ * edge of town from the 1990s. A town wants so many of each for its people
+ * and builds the ones it lacks readily; for a mall, a shopping complex or a
+ * hypermarket it clears a site of old small houses when it has no free land,
+ * as developers buy up old houses.
+ *
  * They are built-in house types with the last house IDs (NewGRF houses get
  * the ones below), drawn with the city fork's sprites. Towns pick them like
  * any house: by zone, year and the value of the land (part 14), so dear
@@ -26,6 +33,7 @@
 
 #include "stdafx.h"
 #include "city_houses.h"
+#include "council.h"
 #include "cargo_type.h"
 #include "house.h"
 #include "settings_type.h"
@@ -64,6 +72,7 @@ static constexpr Colours COLOUR_SETS[][8] = {
 	{Colours::Cream, Colours::White, Colours::PaleGreen, Colours::LightBlue, Colours::Cream, Colours::Yellow, Colours::White, Colours::Pink}, ///< Houses: light colours.
 	{Colours::PaleGreen, Colours::Yellow, Colours::LightBlue, Colours::Orange, Colours::Pink, Colours::Cream, Colours::Green, Colours::Red}, ///< HDB blocks and shophouses: bright ones.
 	{Colours::Blue, Colours::Grey, Colours::DarkGreen, Colours::Brown, Colours::White, Colours::LightBlue, Colours::DarkBlue, Colours::Mauve}, ///< Towers: quieter ones.
+	{Colours::Red, Colours::Green, Colours::Orange, Colours::Blue, Colours::Yellow, Colours::DarkGreen, Colours::Purple, Colours::Pink}, ///< Shops: their signs in many chains' colours.
 };
 
 /**
@@ -71,11 +80,12 @@ static constexpr Colours COLOUR_SETS[][8] = {
  * @param look The building's look.
  * @param x X of its northern tile, in world units.
  * @param y Y of its northern tile, in world units.
+ * @param shift Repaintings of its estate (blocks of flats only): each picks the next colour.
  * @return The recolour palette, or PAL_NONE.
  */
-static PaletteID GetCityHousePalette(const CityHouseLook &look, uint x, uint y)
+static PaletteID GetCityHousePalette(const CityHouseLook &look, uint x, uint y, uint shift = 0)
 {
-	const Colours colour = COLOUR_SETS[look.colours][GB(TileHash(x, y), 0, 3)];
+	const Colours colour = COLOUR_SETS[look.colours][GB(TileHash(x, y) + shift, 0, 3)];
 	return colour == Colours::Invalid ? PAL_NONE : GetColourPalette(colour);
 }
 
@@ -93,14 +103,23 @@ static constexpr CityHouseLook CITY_HOUSE_LOOKS[NUM_CITY_HOUSES] = {
 	{ 9, 1, 2, 15, 13, 24, false, 2},  // shophouses
 	{10, 3, 3, 13, 13, 79, false, 0},  // office block
 	{11, 3, 3, 13, 13, 178, false, 0}, // glass office tower
-	{12, 1, 1, 16, 16, 26, false, 3},  // shopping mall, north part
-	{13, 1, 0, 16, 15, 26, false, 3},  // shopping mall, part at (0, 1)
-	{14, 0, 1, 15, 16, 26, false, 3},  // shopping mall, part at (1, 0)
-	{15, 0, 0, 15, 15, 26, false, 3},  // shopping mall, south part
+	{12, 1, 1, 16, 16, 30, false, 4},  // shopping mall, north part
+	{13, 1, 0, 16, 15, 30, false, 4},  // shopping mall, part at (0, 1)
+	{14, 0, 1, 15, 16, 30, false, 4},  // shopping mall, part at (1, 0)
+	{15, 0, 0, 15, 15, 38, false, 4},  // shopping mall, south part with the atrium
 	{16, 3, 3, 13, 13, 196, false, 0}, // landmark tower
 	{17, 1, 1, 15, 15, 106, false, 3}, // mixed development
 	{18, 1, 3, 13, 14, 38, false, 0},  // mosque
 	{19, 2, 3, 14, 15, 20, false, 0},  // Chinese temple
+	{37, 1, 1, 15, 15, 16, false, 4},  // supermarket
+	{38, 1, 2, 16, 14, 46, false, 3},  // shopping complex along X, north part with the tower
+	{39, 0, 2, 15, 14, 24, false, 3},  // shopping complex along X, south part
+	{40, 2, 1, 14, 16, 46, false, 3},  // shopping complex along Y, north part with the tower
+	{41, 2, 0, 14, 15, 24, false, 3},  // shopping complex along Y, south part
+	{42, 2, 2, 16, 16, 20, false, 4},  // hypermarket, north part
+	{43, 2, 0, 16, 14, 20, false, 4},  // hypermarket, part at (0, 1)
+	{44, 0, 1, 15, 16, 13, false, 4},  // hypermarket, part at (1, 0): car park
+	{45, 0, 0, 15, 15, 30, false, 4},  // hypermarket, south part: car park and sign
 };
 
 /** Heights of the three stages of construction, in pixels. */
@@ -116,6 +135,8 @@ static constexpr uint8_t CONSTRUCTION_HEIGHTS[] = {3, 22, 64};
 
 /** The extra part of a bigger building: no size, no people, not built on its own. */
 #define CH_PART(bn, rc, rr) CH(0, CalendarTime::MAX_YEAR, 0, rc, bn, rr, 0, 8, 2, 1, {}, {}, 0, 0)
+/** The same for a shop: it takes goods on every tile. */
+#define CH_SHOP_PART(bn, rc, rr) CH(0, CalendarTime::MAX_YEAR, 0, rc, bn, rr, 0, 8, 2, 4, {}, {}, 0, 0)
 
 using enum HouseZone;
 static constexpr HouseZone TEMP = ClimateTemperate, TROPIC = ClimateSubtropic;
@@ -157,10 +178,24 @@ static const HouseSpec _city_house_specs[NUM_CITY_HOUSES] = {
 	   HouseZones({TEMP, TROPIC, TownEdge, TownOutskirt, TownOuterSuburb, TownInnerSuburb}), 3, 60),
 	CH(1900, CalendarTime::MAX_YEAR, 5, 120, STR_TOWN_BUILDING_NAME_CHINESE_TEMPLE, 230, 2, 2, 0, 0, BuildingFlag::Size1x1,
 	   HouseZones({TEMP, TROPIC, TownOuterSuburb, TownInnerSuburb, TownCentre}), 3, 60),
+	CH(1965, CalendarTime::MAX_YEAR, 40, 110, STR_TOWN_BUILDING_NAME_SUPERMARKET, 100, 15, 6, 2, 8, BuildingFlag::Size1x1,
+	   HouseZones({TEMP, TROPIC, TownOutskirt, TownOuterSuburb, TownInnerSuburb, TownCentre}), 10, 20),
+	CH(1973, CalendarTime::MAX_YEAR, 150, 160, STR_TOWN_BUILDING_NAME_SHOPPING_COMPLEX, 150, 50, 8, 3, 8, BuildingFlag::Size2x1,
+	   HouseZones({TEMP, TROPIC, TownOuterSuburb, TownInnerSuburb, TownCentre}), 6, 30),
+	CH_SHOP_PART(STR_TOWN_BUILDING_NAME_SHOPPING_COMPLEX, 160, 150),
+	CH(1973, CalendarTime::MAX_YEAR, 150, 160, STR_TOWN_BUILDING_NAME_SHOPPING_COMPLEX, 150, 50, 8, 3, 8, BuildingFlag::Size1x2,
+	   HouseZones({TEMP, TROPIC, TownOuterSuburb, TownInnerSuburb, TownCentre}), 6, 30),
+	CH_SHOP_PART(STR_TOWN_BUILDING_NAME_SHOPPING_COMPLEX, 160, 150),
+	CH(1993, CalendarTime::MAX_YEAR, 160, 180, STR_TOWN_BUILDING_NAME_HYPERMARKET, 150, 40, 8, 3, 8, BuildingFlag::Size2x2,
+	   HouseZones({TEMP, TROPIC, TownEdge, TownOutskirt, TownOuterSuburb}), 6, 25),
+	CH_SHOP_PART(STR_TOWN_BUILDING_NAME_HYPERMARKET, 180, 150),
+	CH_SHOP_PART(STR_TOWN_BUILDING_NAME_HYPERMARKET, 180, 150),
+	CH_SHOP_PART(STR_TOWN_BUILDING_NAME_HYPERMARKET, 180, 150),
 };
 
 #undef CH
 #undef CH_PART
+#undef CH_SHOP_PART
 
 /**
  * Town population from which (and up to which) towns build each house type, in
@@ -183,6 +218,10 @@ static constexpr std::pair<uint32_t, uint32_t> CITY_HOUSE_POPULATION[NUM_CITY_HO
 	{12000, UINT32_MAX}, // mixed development
 	{0, UINT32_MAX}, // mosque
 	{0, UINT32_MAX}, // Chinese temple
+	{800, UINT32_MAX}, // supermarket
+	{3000, UINT32_MAX}, {0, UINT32_MAX}, // shopping complex along X
+	{3000, UINT32_MAX}, {0, UINT32_MAX}, // shopping complex along Y
+	{5000, UINT32_MAX}, {0, UINT32_MAX}, {0, UINT32_MAX}, {0, UINT32_MAX}, // hypermarket
 };
 
 /** The landmark tower: one in a town, and only in a big one. */
@@ -192,6 +231,78 @@ static constexpr uint LANDMARK_POPULATION = 40000;
 static constexpr HouseID MOSQUE = CITY_HOUSE_OFFSET + 18;
 static constexpr HouseID CHINESE_TEMPLE = CITY_HOUSE_OFFSET + 19;
 static constexpr uint PEOPLE_PER_PLACE_OF_WORSHIP = 6000;
+
+/** The shops. */
+static constexpr HouseID SHOPPING_MALL = CITY_HOUSE_OFFSET + 12;
+static constexpr HouseID SUPERMARKET = CITY_HOUSE_OFFSET + 20;
+static constexpr HouseID SHOPPING_COMPLEX_X = CITY_HOUSE_OFFSET + 21;
+static constexpr HouseID SHOPPING_COMPLEX_Y = CITY_HOUSE_OFFSET + 23;
+static constexpr HouseID HYPERMARKET = CITY_HOUSE_OFFSET + 25;
+
+/** Kinds of shop a town wants so many of. */
+enum class CityShop : uint8_t {
+	Supermarket, ///< Supermarkets.
+	Complex, ///< Shopping complexes.
+	Mall, ///< Malls.
+	Hypermarket, ///< Hypermarkets.
+	None, ///< Not a shop.
+};
+
+/**
+ * What kind of shop is a house type?
+ * @param id The house type (its north part).
+ * @return The kind, or CityShop::None.
+ */
+static CityShop GetCityShop(HouseID id)
+{
+	switch (id) {
+		case SUPERMARKET: return CityShop::Supermarket;
+		case SHOPPING_COMPLEX_X: case SHOPPING_COMPLEX_Y: return CityShop::Complex;
+		case SHOPPING_MALL: return CityShop::Mall;
+		case HYPERMARKET: return CityShop::Hypermarket;
+		default: return CityShop::None;
+	}
+}
+
+/**
+ * How many shops of a kind has a town?
+ * @param t The town.
+ * @param shop The kind.
+ * @return The number of buildings.
+ */
+static uint CountCityShops(const Town *t, CityShop shop)
+{
+	const auto &counts = t->cache.building_counts.id_count;
+	auto count = [&counts](HouseID id) -> uint { return id < counts.size() ? counts[id] : 0; };
+	switch (shop) {
+		case CityShop::Supermarket: return count(SUPERMARKET);
+		case CityShop::Complex: return count(SHOPPING_COMPLEX_X) + count(SHOPPING_COMPLEX_Y);
+		case CityShop::Mall: return count(SHOPPING_MALL);
+		case CityShop::Hypermarket: return count(HYPERMARKET);
+		default: return 0;
+	}
+}
+
+/**
+ * How many shops of a kind does a town want for its people? A supermarket
+ * from 800 people and one more for each 2,500; a shopping complex from 3,000
+ * and one more for each 10,000; a mall from 6,000 and one more for each
+ * 8,000; a hypermarket from 5,000 and one more for each 15,000.
+ * @param t The town.
+ * @param shop The kind.
+ * @return The number of buildings.
+ */
+static uint GetCityShopsWanted(const Town *t, CityShop shop)
+{
+	const uint population = t->cache.population;
+	switch (shop) {
+		case CityShop::Supermarket: return population < 800 ? 0 : 1 + population / 2500;
+		case CityShop::Complex: return population < 3000 ? 0 : 1 + (population - 3000) / 10000;
+		case CityShop::Mall: return population < 6000 ? 0 : 1 + (population - 6000) / 8000;
+		case CityShop::Hypermarket: return population < 5000 ? 0 : 1 + (population - 5000) / 15000;
+		default: return 0;
+	}
+}
 
 /** Put the Malaysian and Singaporean house types in the house list, after the room kept for NewGRF houses. */
 void AddCityHouseSpecs()
@@ -224,7 +335,9 @@ void DrawCityHouseTile(TileInfo *ti, HouseID house_id)
 		/* All parts of a bigger building in the colour of its northern tile. */
 		HouseID north = house_id;
 		const TileIndex base = ti->tile + GetHouseNorthPart(north);
-		palette = GetCityHousePalette(look, TileX(base) * TILE_SIZE, TileY(base) * TILE_SIZE);
+		/* Blocks of flats change colour each time their council repaints its estates. */
+		const uint shift = IsEstateFlat(*HouseSpec::Get(north)) ? GetEstatePaint(Town::GetByTile(ti->tile)) : 0;
+		palette = GetCityHousePalette(look, TileX(base) * TILE_SIZE, TileY(base) * TILE_SIZE, shift);
 		if (palette != PAL_NONE) SetBit(image, PALETTE_MODIFIER_COLOUR);
 	} else {
 		image = SPR_CITY_HOUSE_CONSTRUCTION + std::min<uint8_t>(stage, 2);
@@ -302,7 +415,91 @@ bool CanTownBuildCityHouse(const Town *t, const HouseSpec &hs)
 	if (t->cache.population < lowest || t->cache.population > highest) return false;
 	if (id == LANDMARK_TOWER) return have == 0 && t->cache.population >= LANDMARK_POPULATION;
 	if (id == MOSQUE || id == CHINESE_TEMPLE) return have < 1 + t->cache.population / PEOPLE_PER_PLACE_OF_WORSHIP;
+	if (const CityShop shop = GetCityShop(id); shop != CityShop::None) return CountCityShops(t, shop) < GetCityShopsWanted(t, shop);
 	return true;
+}
+
+/**
+ * How likely is a town to build a house type, beyond what the land value
+ * says? The shops a town lacks (it may only build those, see
+ * CanTownBuildCityHouse) three times as likely as otherwise.
+ * @param hs The house type.
+ * @param probability The likelihood so far.
+ * @return The likelihood.
+ */
+uint ScaleCityHouseProbability(const HouseSpec &hs, uint probability)
+{
+	return GetCityShop(hs.Index()) != CityShop::None ? probability * 3 : probability;
+}
+
+/**
+ * Food a tile of a Malaysian or Singaporean house takes beyond its listed
+ * cargo, where the climate has food: shops sell it. A supermarket takes a
+ * full share, each tile of a shopping complex, mall or hypermarket half.
+ * @param house The house type of the tile.
+ * @return The acceptance in 1/8.
+ */
+uint GetCityHouseFoodAcceptance(HouseID house)
+{
+	if (!IsCityHouse(house)) return 0;
+	if (house == SUPERMARKET) return 8;
+	if ((house >= SHOPPING_MALL && house < SHOPPING_MALL + 4) || (house >= SHOPPING_COMPLEX_X && house < HYPERMARKET + 4)) return 4;
+	return 0;
+}
+
+/**
+ * Which bigger shop would a town clear old houses for, having no free land for it?
+ * One it lacks and may build now: a mall (from 6,000 people and 1985), else a
+ * shopping complex, else a hypermarket.
+ * @param t The town.
+ * @return The house type, or INVALID_HOUSE_ID for none.
+ */
+HouseID GetCityShopToRedevelop(const Town *t)
+{
+	if (static_cast<TownBuildingStyle>(_settings_game.economy.town_building_style) == TownBuildingStyle::Original) return INVALID_HOUSE_ID;
+	const LandscapeType climate = _settings_game.game_creation.landscape;
+	if (climate != LandscapeType::Temperate && climate != LandscapeType::Tropic) return INVALID_HOUSE_ID;
+	const bool x_first = t->index.base() % 2 == 0;
+	for (HouseID id : {SHOPPING_MALL, x_first ? SHOPPING_COMPLEX_X : SHOPPING_COMPLEX_Y, x_first ? SHOPPING_COMPLEX_Y : SHOPPING_COMPLEX_X, HYPERMARKET}) {
+		const HouseSpec *hs = HouseSpec::Get(id);
+		if (!hs->enabled || hs->grf_prop.override_id != INVALID_HOUSE_ID) continue;
+		if (TimerGameCalendar::year < hs->min_year || TimerGameCalendar::year > hs->max_year) continue;
+		if (CanTownBuildCityHouse(t, *hs)) return id;
+	}
+	return INVALID_HOUSE_ID;
+}
+
+/**
+ * What a council puts up where it rebuilds an old block of flats: an HDB
+ * point block, where towns build those now.
+ * @param t The town.
+ * @return The house type, or INVALID_HOUSE_ID to let the town build what it likes.
+ */
+HouseID GetEstateRebuildHouse(const Town *t)
+{
+	const HouseID point_block = CITY_HOUSE_OFFSET + 7;
+	const HouseSpec *hs = HouseSpec::Get(point_block);
+	if (!hs->enabled || !IsHouseAllowedByTownStyle(*hs)) return INVALID_HOUSE_ID;
+	const LandscapeType climate = _settings_game.game_creation.landscape;
+	if (climate != LandscapeType::Temperate && climate != LandscapeType::Tropic) return INVALID_HOUSE_ID;
+	if (TimerGameCalendar::year < hs->min_year || !CanTownBuildCityHouse(t, *hs)) return INVALID_HOUSE_ID;
+	return point_block;
+}
+
+/**
+ * May a town clear a house tile for a new shop: an old, small, finished
+ * building of one tile (a kampung house, terraces, shophouses, walk-up flats
+ * and the like) that nobody protects?
+ * @param tile The tile.
+ * @return True if it may.
+ */
+bool IsSmallOldCityHouse(TileIndex tile)
+{
+	if (!IsTileType(tile, TileType::House) || !IsHouseCompleted(tile) || IsHousePlayerProtected(tile)) return false;
+	const HouseSpec *hs = HouseSpec::Get(GetHouseType(tile));
+	if (!hs->building_flags.Test(BuildingFlag::Size1x1) || hs->population > 70) return false;
+	if (GetHouseKind(*hs) == HouseKind::Public) return false;
+	return GetHouseAge(tile) >= hs->minimum_life && CanDeleteHouse(tile);
 }
 
 /** For testing: once a year, with misc debugging at trace level 1, count the houses of each kind on the map. */

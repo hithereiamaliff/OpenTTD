@@ -30,6 +30,7 @@
 
 #include "stdafx.h"
 #include "environment.h"
+#include "council.h"
 #include "commuting.h"
 #include "city_bus.h"
 #include "city_services.h"
@@ -461,9 +462,14 @@ static void UpdateEnvironmentMonthly()
 			}
 		}
 	};
+	/* Towns whose councils renewed their estates lately, and towns whose estates are run down (the suburbs). */
+	std::vector<uint8_t> estates_renewed(n, 0), estates_run_down(n, 0);
 	for (const Town *t : Town::Iterate()) {
 		if (HasOrdinance(t, Ordinance::LowEmissionZone)) mark_town_cells(t, HouseZone::TownInnerSuburb, low_emission);
 		if (HasOrdinance(t, Ordinance::CarFreeCentre)) mark_town_cells(t, HouseZone::TownCentre, car_free);
+		const int estates = GetCouncilLandValueBonus(t);
+		if (estates > 0) mark_town_cells(t, HouseZone::TownOuterSuburb, estates_renewed);
+		if (estates < 0) mark_town_cells(t, HouseZone::TownOuterSuburb, estates_run_down);
 	}
 
 	/* Roads, trees, water, industry and houses, row by row. */
@@ -613,6 +619,9 @@ static void UpdateEnvironmentMonthly()
 		if (industry[cell] != 0) value -= 5;
 		/* Streets without through traffic. */
 		if (car_free[cell] != 0) value += 5;
+		/* Estates renewed lately, or run down. */
+		if (estates_renewed[cell] != 0) value += 5;
+		if (estates_run_down[cell] != 0) value -= 5;
 		value -= std::min<int>(50, _env_pollution[cell] / 5);
 		const uint target = static_cast<uint>(Clamp(value, 0, static_cast<int>(LAND_VALUE_MAX)));
 		_env_land_value[cell] = static_cast<uint8_t>(first ? target : (_env_land_value[cell] * 3 + target + 2) / 4);

@@ -36,9 +36,11 @@
 //            mixed development, mosque, Chinese temple
 //   273-285: hospital, university, stadium (four parts each: (0,0), (1,0), (0,1), (1,1)), hawker centre
 //   286-289: icons: hospital, university, stadium, hawker centre
+//   290-298: shops: supermarket, shopping complex (along X: two parts, along Y: two parts),
+//            hypermarket (four parts: (0,0), (0,1), (1,0), (1,1))
 //
    -1 * 0	 0C "City fork graphics"
-   -1 * 5	 05 1C FF 22 01
+   -1 * 5	 05 1C FF 2B 01
    -1 sprites/city.png 8bpp    4    4   4  17   -1  -16 normal
    -1 sprites/city.png 8bpp   12    4   4  17   -1  -16 normal
    -1 sprites/city.png 8bpp   20    4   4  17   -1  -16 normal
@@ -304,10 +306,10 @@
    -1 sprites/city.png 8bpp  108 1230  54  47  -27  -19 normal
    -1 sprites/city.png 8bpp  166 1230  40  95  -19  -69 normal
    -1 sprites/city.png 8bpp  210 1230  36 186  -17 -161 normal
-   -1 sprites/city.png 8bpp  250 1230  60  56  -29  -24 normal
-   -1 sprites/city.png 8bpp  314 1230  60  56  -31  -25 normal
-   -1 sprites/city.png 8bpp  378 1230  60  56  -27  -25 normal
-   -1 sprites/city.png 8bpp  442 1230  60  56  -29  -26 normal
+   -1 sprites/city.png 8bpp  250 1230  60  60  -29  -28 normal
+   -1 sprites/city.png 8bpp  314 1230  60  60  -31  -29 normal
+   -1 sprites/city.png 8bpp  378 1230  60  60  -27  -29 normal
+   -1 sprites/city.png 8bpp  442 1230  60  60  -29  -30 normal
    -1 sprites/city.png 8bpp    4 1470  40 205  -19 -179 normal
    -1 sprites/city.png 8bpp   48 1470  56 127  -27  -97 normal
    -1 sprites/city.png 8bpp  108 1470  44  51  -19  -25 normal
@@ -329,3 +331,12 @@
    -1 sprites/city.png 8bpp   22 1930  14  15    0    0 normal
    -1 sprites/city.png 8bpp   40 1930  14  15    0    0 normal
    -1 sprites/city.png 8bpp   58 1930  14  15    0    0 normal
+   -1 sprites/city.png 8bpp    4 1950  57  44  -30  -12 normal
+   -1 sprites/city.png 8bpp   65 1950  54  70  -27  -40 normal
+   -1 sprites/city.png 8bpp  123 1950  54  51  -25  -22 normal
+   -1 sprites/city.png 8bpp  181 1950  54  70  -25  -40 normal
+   -1 sprites/city.png 8bpp  239 1950  54  51  -27  -22 normal
+   -1 sprites/city.png 8bpp  297 1950  56  48  -27  -16 normal
+   -1 sprites/city.png 8bpp  357 1950  56  48  -31  -18 normal
+   -1 sprites/city.png 8bpp  417 1950  63  32  -30    0 normal
+   -1 sprites/city.png 8bpp    4 2190  62  39  -30   -7 normal

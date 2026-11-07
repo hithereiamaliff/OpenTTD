@@ -21,6 +21,7 @@
 #include "city_services_type.h"
 #include "town_budget_type.h"
 #include "commuting_type.h"
+#include "council_type.h"
 
 /** The air where a town's people live and what their land is worth, updated monthly (see environment.cpp). */
 struct TownEnvironment {
@@ -209,6 +210,7 @@ struct Town : TownPool::PoolItem<&_town_pool> {
 	TownEnvironment environment{}; ///< City fork: the air where its people live and what their land is worth (saved in chunk TENV).
 	TownBudget budget{}; ///< City fork: its taxes, spending, reserves and ordinances (saved in chunk TBUD).
 	TownCommuting commuting{}; ///< City fork: where its people work and how they get there (saved in chunk TCOM).
+	TownCouncil council{}; ///< City fork: its council, the services it builds and the estates it runs (saved in chunk TCNL).
 
 	uint8_t fund_buildings_months = 0; ///< fund buildings program in action?
 	uint8_t road_build_months = 0; ///< fund road reconstruction in action?
@@ -328,6 +330,7 @@ using TownActions = EnumBitSet<TownAction, uint8_t>;
 
 void ClearTownHouse(Town *t, TileIndex tile);
 void GenerateServicePassengers(Town *t, TileIndex tile, uint people);
+void RebuildOldEstateBlock(Town *t);
 void UpdateTownMaxPass(Town *t);
 void UpdateTownRadius(Town *t);
 CommandCost CheckIfAuthorityAllowsNewStation(TileIndex tile, DoCommandFlags flags);
