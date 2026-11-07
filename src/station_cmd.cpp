@@ -10,6 +10,7 @@
 #include "stdafx.h"
 #include "fare.h"
 #include "brt.h"
+#include "interchange.h"
 #include "core/flatset_type.hpp"
 #include "aircraft.h"
 #include "bridge.h"
@@ -3523,6 +3524,8 @@ static void DrawTile_Station(TileInfo *ti)
 	/* A BRT station's platforms take the place of the stop's shelters. */
 	if (!IsDriveThroughStopTile(ti->tile) || !DrawBrtStation(ti)) DrawRailTileSeq(ti, t, TransparencyOption::Buildings, total_offset, relocation, palette);
 	if (IsAnyRoadStop(ti->tile) && HasStopCharger(ti->tile)) DrawStopCharger(ti);
+	/* The roof of a bus interchange; BRT stations have their own. */
+	if (IsAnyRoadStop(ti->tile) && IsBusStop(ti->tile) && !HasBrtStation(ti->tile)) DrawInterchangeRoof(ti);
 	DrawBridgeMiddle(ti, GetStationBlockedPillars(bridgeable_info, GetStationGfx(ti->tile)));
 }
 
@@ -4065,17 +4068,20 @@ static void UpdateStationRating(Station *st)
 			if (waittime <= 3) rating += 35;
 
 			rating -= 90;
-			if (ge->max_waiting_cargo <= 1500) rating += 55;
-			if (ge->max_waiting_cargo <= 1000) rating += 35;
-			if (ge->max_waiting_cargo <= 600) rating += 10;
-			if (ge->max_waiting_cargo <= 300) rating += 20;
-			if (ge->max_waiting_cargo <= 100) rating += 10;
+			/* The covered concourse of a bus interchange holds a crowd: passengers waiting there count half. */
+			uint waiting = ge->max_waiting_cargo;
+			if (IsCargoInClass(cs->Index(), CargoClass::Passengers) && st->interchange != 0 && IsActiveInterchange(st)) waiting /= 2;
+			if (waiting <= 1500) rating += 55;
+			if (waiting <= 1000) rating += 35;
+			if (waiting <= 600) rating += 10;
+			if (waiting <= 300) rating += 20;
+			if (waiting <= 100) rating += 10;
 		}
 
 		if (Company::IsValidID(st->owner) && st->town->statues.Test(st->owner)) rating += 26;
 
 		/* Riders weigh the fares of the vehicles leaving here. */
-		if (IsCargoInClass(cs->Index(), CargoClass::Passengers)) rating += GetStationFareRatingBonus(st) + GetStationBrtRatingBonus(st);
+		if (IsCargoInClass(cs->Index(), CargoClass::Passengers)) rating += GetStationFareRatingBonus(st) + GetStationBrtRatingBonus(st) + GetStationInterchangeRatingBonus(st);
 
 		uint8_t age = ge->last_age;
 		if (age < 3) rating += 10;

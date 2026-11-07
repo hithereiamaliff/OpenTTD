@@ -44,6 +44,8 @@
 #include "bus_priority.h"
 #include "brt.h"
 #include "road_pricing.h"
+#include "interchange.h"
+#include "station_base.h"
 #include "economy_func.h"
 #include "station_map.h"
 #include "object_map.h"
@@ -248,6 +250,16 @@ public:
 			const Town *charging = ClosestTownFromTile(this->tile, UINT_MAX);
 			if (charging != nullptr && IsInCongestionChargeZone(charging, this->tile)) {
 				this->landinfo_data.push_back(GetString(STR_LAND_AREA_INFORMATION_CHARGE_ZONE, charging->index, GetPrice(Price::BuildObject, 1, nullptr)));
+			}
+		}
+
+		/* Bus interchanges and transport hubs */
+		if (IsTileType(this->tile, TileType::Station) && Station::IsValidID(GetStationIndex(this->tile))) {
+			const Station *st = Station::GetByTile(this->tile);
+			if (IsActiveTransportHub(st)) {
+				this->landinfo_data.push_back(GetString(STR_LAND_AREA_INFORMATION_HUB));
+			} else if (IsActiveInterchange(st)) {
+				this->landinfo_data.push_back(GetString(STR_LAND_AREA_INFORMATION_INTERCHANGE, CountBusStops(st)));
 			}
 		}
 

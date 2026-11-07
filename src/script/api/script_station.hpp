@@ -277,6 +277,40 @@ public:
 	static bool IsAirportClosed(StationID station_id);
 
 	/**
+	 * Make a station with at least six bus stops a bus interchange.
+	 * @param station_id The station.
+	 * @pre IsValidStation(station_id).
+	 * @game @pre ScriptCompanyMode::IsValid().
+	 * @return True if it was upgraded.
+	 */
+	static bool BuildInterchange(StationID station_id);
+
+	/**
+	 * Make a bus interchange with a railway station an integrated transport hub.
+	 * @param station_id The station.
+	 * @pre IsValidStation(station_id).
+	 * @game @pre ScriptCompanyMode::IsValid().
+	 * @return True if it was upgraded.
+	 */
+	static bool BuildTransportHub(StationID station_id);
+
+	/**
+	 * Get how far a station was upgraded.
+	 * @param station_id The station.
+	 * @pre IsValidStation(station_id).
+	 * @return 0 an ordinary station, 1 a bus interchange, 2 a transport hub; -1 for an invalid station.
+	 */
+	static SQInteger GetInterchangeLevel(StationID station_id);
+
+	/**
+	 * Is a station an integrated transport hub now (upgraded, with enough bus stops and a railway station)?
+	 * @param station_id The station.
+	 * @pre IsValidStation(station_id).
+	 * @return True if it is.
+	 */
+	static bool IsTransportHub(StationID station_id);
+
+	/**
 	 * Toggle the open/closed state of an airport.
 	 * @param station_id The airport to modify.
 	 * @game @pre ScriptCompanyMode::IsValid().

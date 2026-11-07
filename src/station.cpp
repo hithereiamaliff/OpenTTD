@@ -8,6 +8,7 @@
 /** @file station.cpp Implementation of the station base class. */
 
 #include "stdafx.h"
+#include "interchange.h"
 #include "core/flatset_type.hpp"
 #include "company_func.h"
 #include "roadveh.h"
@@ -358,6 +359,9 @@ uint Station::GetCatchmentRadius() const
 			ret = CA_UNMODIFIED;
 		}
 	}
+
+	/* People come from further away to an integrated transport hub. */
+	if (ret != CA_NONE && this->interchange != 0 && IsActiveTransportHub(this)) ret = std::min<uint>(MAX_CATCHMENT, ret + 2);
 
 	return ret;
 }

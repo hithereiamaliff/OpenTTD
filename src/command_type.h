@@ -398,6 +398,7 @@ enum class Commands : uint8_t {
 	BuildTollPlaza, ///< build, remove or upgrade a toll plaza on an expressway
 	SetTollPolicy, ///< change a company's toll level or scheme
 	ProposeCongestionCharge, ///< ask a town to bring in a congestion charge
+	UpgradeStation, ///< make a station a bus interchange or a transport hub
 
 	End, ///< @important Must ALWAYS be on the end of this list!! (period)
 };

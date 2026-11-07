@@ -31,6 +31,7 @@ enum StationViewWidgets : WidgetID {
 	WID_SV_PLANES,             ///< List of scheduled planes button.
 	WID_SV_CATCHMENT,          ///< Toggle catchment area highlight.
 	WID_SV_DEPARTURES,         ///< Show the departure board.
+	WID_SV_INTERCHANGE,        ///< Make the station a bus interchange or a transport hub.
 };
 
 /** Widgets of the #CompanyStationsWindow class. */

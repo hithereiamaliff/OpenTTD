@@ -16,6 +16,8 @@
 #include "../../roadstop_base.h"
 #include "../../town.h"
 #include "../../station_cmd.h"
+#include "../../interchange.h"
+#include "../../interchange_cmd.h"
 
 #include "../../safeguards.h"
 
@@ -242,4 +244,32 @@ template <bool Tfrom, bool Tvia>
 	EnforcePrecondition(false, HasStationType(station_id, STATION_AIRPORT));
 
 	return ScriptObject::Command<Commands::OpenCloseAirport>::Do(station_id);
+}
+
+/* static */ bool ScriptStation::BuildInterchange(StationID station_id)
+{
+	EnforceCompanyModeValid(false);
+	EnforcePrecondition(false, IsValidStation(station_id));
+
+	return ScriptObject::Command<Commands::UpgradeStation>::Do(station_id, InterchangeLevel::Interchange);
+}
+
+/* static */ bool ScriptStation::BuildTransportHub(StationID station_id)
+{
+	EnforceCompanyModeValid(false);
+	EnforcePrecondition(false, IsValidStation(station_id));
+
+	return ScriptObject::Command<Commands::UpgradeStation>::Do(station_id, InterchangeLevel::Hub);
+}
+
+/* static */ SQInteger ScriptStation::GetInterchangeLevel(StationID station_id)
+{
+	if (!IsValidStation(station_id)) return -1;
+	return ::Station::Get(station_id)->interchange;
+}
+
+/* static */ bool ScriptStation::IsTransportHub(StationID station_id)
+{
+	if (!IsValidStation(station_id)) return false;
+	return ::IsActiveTransportHub(::Station::Get(station_id));
 }

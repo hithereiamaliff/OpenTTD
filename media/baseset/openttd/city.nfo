@@ -26,9 +26,10 @@
 //   229-230: expressway lanes and barrier (road along X, along Y)
 //   231-238: toll plazas: roof, far booth, near booth (road along X, then along Y); free-flow gantries (X, Y)
 //   239-241: icons: tolls, toll plaza, free-flow gantry
+//   242-243: roof over the bus stops of a bus interchange, and of an integrated transport hub
 //
    -1 * 0	 0C "City fork graphics"
-   -1 * 3	 05 1C F2
+   -1 * 3	 05 1C F4
    -1 sprites/city.png 8bpp    4    4   4  17   -1  -16 normal
    -1 sprites/city.png 8bpp   12    4   4  17   -1  -16 normal
    -1 sprites/city.png 8bpp   20    4   4  17   -1  -16 normal
@@ -271,3 +272,5 @@
    -1 sprites/city.png 8bpp  150  870  16  10    0    0 normal
    -1 sprites/city.png 8bpp  170  870  16  10    0    0 normal
    -1 sprites/city.png 8bpp  190  870  16  10    0    0 normal
+   -1 sprites/city.png 8bpp  220  870  62  45  -30  -15 normal
+   -1 sprites/city.png 8bpp  292  870  62  45  -30  -15 normal

@@ -1331,6 +1331,26 @@ icon(190, 870, [
 ], {'K': K_, 'W': W_, 'G': G_, 'D': rgb_index((40, 40, 44))}, "icon free flow")
 
 assert len(sprites) == 242, len(sprites)
+
+# Bus interchanges: a roof over each bus stop on posts at the three near corners (the far
+# one would stand in front of the buses), white with a company colour edge; the roof of
+# an integrated transport hub has glass panels and air-conditioning units on it.
+AC_GREY = (150, 152, 158)
+for i, hub in enumerate((False, True)):
+    b = Building()
+    for (px_, py_) in ((14.6, 1.4), (1.4, 14.6), (14.6, 14.6)):
+        b.box(px_ - 0.35, py_ - 0.35, px_ + 0.35, py_ + 0.35, 0, 14, STEEL, STEEL)
+    if hub:
+        glass = lambda x, y: GLASS_LIGHT if (int(x * 2) % 4 == 1 and 2 < y < 14) else None
+        b.box(0.3, 0.3, 15.7, 15.7, 14, 15.4, (225, 228, 232), (200, 215, 230), sw=lambda u, v: CC_BAND, se=lambda u, v: CC_BAND, roof=glass)
+        for (ax, ay) in ((4.0, 4.5), (9.0, 4.5), (4.0, 10.5), (9.0, 10.5)):
+            b.box(ax, ay, ax + 2.4, ay + 2.0, 15.4, 17.2, AC_GREY, (185, 187, 192))
+    else:
+        ridge = lambda x, y: rgb_index((205, 205, 200)) if int(y) % 4 == 0 else None
+        b.box(0.3, 0.3, 15.7, 15.7, 14, 15.4, (238, 238, 235), (232, 232, 228), sw=lambda u, v: CC_BAND, se=lambda u, v: CC_BAND, roof=ridge)
+    b.emit(220 + i * 72, 870, "interchange roof hub" if hub else "interchange roof")
+
+assert len(sprites) == 244, len(sprites)
 sheet.save(f"{SRC}/city.png", optimize=True)
 
 header = """// This file is part of OpenTTD.
@@ -1361,6 +1381,7 @@ header = """// This file is part of OpenTTD.
 //   229-230: expressway lanes and barrier (road along X, along Y)
 //   231-238: toll plazas: roof, far booth, near booth (road along X, then along Y); free-flow gantries (X, Y)
 //   239-241: icons: tolls, toll plaza, free-flow gantry
+//   242-243: roof over the bus stops of a bus interchange, and of an integrated transport hub
 //
    -1 * 0\t 0C "City fork graphics"
    -1 * 3\t 05 1C %02X

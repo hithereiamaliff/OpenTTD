@@ -8,6 +8,8 @@
 /** @file station_gui.cpp The GUI for stations. */
 
 #include "stdafx.h"
+#include "interchange.h"
+#include "interchange_cmd.h"
 #include "line.h"
 #include "fare.h"
 #include "debug.h"
@@ -871,6 +873,7 @@ static constexpr std::initializer_list<NWidgetPart> _nested_station_view_widgets
 		EndContainer(),
 		NWidget(WWT_TEXTBTN, Colours::Grey, WID_SV_CATCHMENT), SetMinimalSize(45, 12), SetResize(1, 0), SetFill(1, 1), SetStringTip(STR_BUTTON_CATCHMENT, STR_TOOLTIP_CATCHMENT),
 		NWidget(WWT_PUSHTXTBTN, Colours::Grey, WID_SV_DEPARTURES), SetMinimalSize(45, 12), SetResize(1, 0), SetFill(1, 1), SetStringTip(STR_STATION_VIEW_DEPARTURES_BUTTON, STR_STATION_VIEW_DEPARTURES_TOOLTIP),
+		NWidget(WWT_PUSHTXTBTN, Colours::Grey, WID_SV_INTERCHANGE), SetMinimalSize(45, 12), SetResize(1, 0), SetFill(1, 1), SetStringTip(STR_STATION_VIEW_INTERCHANGE_BUTTON, STR_STATION_VIEW_INTERCHANGE_TOOLTIP),
 		NWidget(WWT_PUSHTXTBTN, Colours::Grey, WID_SV_TRAINS), SetAspect(WidgetDimensions::ASPECT_VEHICLE_ICON), SetFill(0, 1), SetStringTip(STR_TRAIN, STR_STATION_VIEW_SCHEDULED_TRAINS_TOOLTIP),
 		NWidget(WWT_PUSHTXTBTN, Colours::Grey, WID_SV_ROADVEHS), SetAspect(WidgetDimensions::ASPECT_VEHICLE_ICON), SetFill(0, 1), SetStringTip(STR_LORRY, STR_STATION_VIEW_SCHEDULED_ROAD_VEHICLES_TOOLTIP),
 		NWidget(WWT_PUSHTXTBTN, Colours::Grey, WID_SV_SHIPS), SetAspect(WidgetDimensions::ASPECT_VEHICLE_ICON), SetFill(0, 1), SetStringTip(STR_SHIP, STR_STATION_VIEW_SCHEDULED_SHIPS_TOOLTIP),
@@ -1473,6 +1476,7 @@ struct StationViewWindow : public Window {
 
 		extern const Station *_viewport_highlight_station;
 		this->SetWidgetDisabledState(WID_SV_CATCHMENT, st->facilities.None());
+		this->SetWidgetDisabledState(WID_SV_INTERCHANGE, st->owner != _local_company || st->interchange >= to_underlying(InterchangeLevel::Hub) || !st->facilities.Test(StationFacility::BusStop));
 		this->SetWidgetLoweredState(WID_SV_CATCHMENT, _viewport_highlight_station == st);
 
 		this->DrawWidgets();
@@ -1516,6 +1520,11 @@ struct StationViewWindow : public Window {
 
 	std::string GetWidgetString(WidgetID widget, StringID stringid) const override
 	{
+		if (widget == WID_SV_INTERCHANGE) {
+			const Station *st = Station::Get(this->window_number);
+			if (st->interchange == 0) return GetString(STR_STATION_VIEW_INTERCHANGE_BUTTON);
+			return GetString(STR_STATION_VIEW_HUB_BUTTON);
+		}
 		if (widget == WID_SV_CAPTION) {
 			const Station *st = Station::Get(this->window_number);
 			return GetString(STR_STATION_VIEW_CAPTION, st->index, st->facilities);
@@ -1959,6 +1968,20 @@ struct StationViewWindow : public Window {
 			DrawString(tr.Indent(WidgetDimensions::scaled.hsep_indent, rtl), GetString(bonus >= 0 ? STR_STATION_VIEW_FARE_CHEAP : STR_STATION_VIEW_FARE_DEAR, st->fare_level, std::abs(bonus) * 100 / 255));
 			tr.top += GetCharacterHeight(FontSize::Normal);
 		}
+
+		/* A bus interchange or transport hub. */
+		if (st->interchange != 0) {
+			StringID status;
+			if (IsActiveTransportHub(st)) {
+				status = STR_STATION_VIEW_HUB_ACTIVE;
+			} else if (IsActiveInterchange(st)) {
+				status = st->interchange >= to_underlying(InterchangeLevel::Hub) ? STR_STATION_VIEW_HUB_NO_RAIL : STR_STATION_VIEW_INTERCHANGE_ACTIVE;
+			} else {
+				status = STR_STATION_VIEW_INTERCHANGE_TOO_FEW;
+			}
+			DrawString(tr.Indent(WidgetDimensions::scaled.hsep_indent, rtl), GetString(status, CountBusStops(st), INTERCHANGE_MIN_BUS_STOPS));
+			tr.top += GetCharacterHeight(FontSize::Normal);
+		}
 		return CeilDiv(tr.top - r.top - WidgetDimensions::scaled.framerect.top, GetCharacterHeight(FontSize::Normal));
 	}
 
@@ -2019,6 +2042,13 @@ struct StationViewWindow : public Window {
 			case WID_SV_DEPARTURES:
 				ShowDeparturesWindow(StationID(this->window_number));
 				break;
+
+			case WID_SV_INTERCHANGE: {
+				const Station *st = Station::Get(this->window_number);
+				InterchangeLevel level = st->interchange == 0 ? InterchangeLevel::Interchange : InterchangeLevel::Hub;
+				Command<Commands::UpgradeStation>::Post(level == InterchangeLevel::Interchange ? STR_ERROR_CAN_T_BUILD_INTERCHANGE : STR_ERROR_CAN_T_BUILD_HUB, StationID(this->window_number), level);
+				break;
+			}
 
 			case WID_SV_LOCATION:
 				if (_ctrl_pressed) {

@@ -262,6 +262,9 @@ add_files(
     industry_map.h
     industry_type.h
     industrytype.h
+    interchange.cpp
+    interchange.h
+    interchange_cmd.h
     ini.cpp
     ini_load.cpp
     ini_type.h

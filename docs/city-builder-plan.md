@@ -1077,6 +1077,56 @@ saves `city-tolls-demo.csav`, `city-freeflow-demo.csav`,
   free-flow gantry, the Tolls toolbar and window ("concession to December
   2069, 18% cut"), the Transit window with the charge.
 
+## Done: transit part 10, interchanges and transport hubs
+
+A new button in the station window (bottom row, after Departures):
+**Interchange**, and once that is built, **Transport hub**.
+
+- **Bus interchange**: a station with at least six bus stops (bays or
+  drive-through, any mix, joined stops further away count too) gets a roof
+  over its bus stops (BRT stations keep their own). 2,000 per bus stop at
+  base prices, upkeep 200 per bus stop a year. Passengers rate it 8% better,
+  and a crowd waiting there counts half for the rating. It closes, keeping
+  the upgrade, while the station has fewer than six bus stops.
+- **Integrated transport hub**: a bus interchange with a railway station in
+  the same station becomes air-conditioned (the roof gets glass and
+  air-conditioning units): 30,000, upkeep 4,000 a year more. Passengers rate
+  it 16% better instead of 8%, its catchment is 2 tiles wider (people walk
+  further to it), and its town's transit counts a quarter more towards
+  taking cars off its roads, because changing between bus and train is easy
+  (part 2's car reduction).
+- **Towns pay half** of either upgrade from their transit budget when they
+  have it to spare (Singapore's LTA builds the interchanges; the operators
+  run them).
+- The station window's ratings view shows the interchange or hub, the land
+  info says so on its tiles.
+- Saved: each station's upgrade in chunk FSTA, each town's hubs in TTRA.
+- Script API: `ScriptStation.BuildInterchange`, `BuildTransportHub`,
+  `GetInterchangeLevel`, `IsTransportHub`.
+- Code: `src/interchange*.{h,cpp}`; hooks in `station_cmd.cpp` (rating,
+  roofs), `station.cpp` (catchment), `town_traffic.cpp`, `station_gui.cpp`,
+  `misc_gui.cpp`.
+
+Tests (test AI HubTest: six drive-through stops around Kinningbury's centre
+joined into one station, a railway platform of one tile in it (a house
+pulled down), six buses to a stop on the far side of town; interchange after
+four months, hub after eight; save `city-hub-demo.csav`):
+
+- 99/99 unit tests; all 32 test saves load, save and reload; part 7's bus
+  line runs exactly as before.
+- The town paid half of both upgrades: the company paid 4,511 for the
+  interchange and 11,271 for the hub. The catchment went from 4 to 6 tiles.
+- Passenger ratings against the plain stop at the far end of the line:
+  76-80% both before; 87% against 80% as an interchange; 91-96% against
+  74-80% as a hub. Without any upgrade the same station rated 93% in 2021,
+  as an interchange 98-100%.
+- The town centre's congestion was 1.2-1.4 after the hub, 1.5-1.6 with the
+  interchange alone.
+- An interchange of a single stop, a hub before the interchange, and a hub
+  without a railway station are refused.
+- Screenshots: the hub roofs over the bus stops next to the platform, the
+  station window with its Transport hub button and ratings line.
+
 ## Roadmap
 
 Sizes are rough: S = one session, M = a few, L = many, XL = a project in itself.

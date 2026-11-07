@@ -57,6 +57,8 @@ static uint GetTownTransitShare(const Town *t)
 		transported += it->history[LAST_MONTH].transported;
 	}
 	if (produced == 0) return 0;
+	/* Changing between bus and train is easy at an integrated transport hub: transit takes a quarter more cars off the road. */
+	if (t->transit.hubs > 0) transported = transported * 5 / 4;
 	return static_cast<uint>(std::min<uint64_t>(256, transported * 256 / produced));
 }
 

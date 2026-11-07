@@ -419,7 +419,9 @@ static constexpr SpriteID SPR_TOLL_PLAZA_BASE = SPR_TRAFFIC_LIGHTS_BASE + 231; /
 static constexpr SpriteID SPR_IMG_TOLLS = SPR_TRAFFIC_LIGHTS_BASE + 239; ///< Icon of the road toolbar button that opens the tolls toolbar.
 static constexpr SpriteID SPR_IMG_TOLL_PLAZA = SPR_TRAFFIC_LIGHTS_BASE + 240; ///< Icon of the toll plaza tool.
 static constexpr SpriteID SPR_IMG_FREE_FLOW = SPR_TRAFFIC_LIGHTS_BASE + 241; ///< Icon of the free-flow gantry tool.
-static constexpr uint16_t TRAFFIC_LIGHTS_SPRITE_COUNT = 242;
+static constexpr SpriteID SPR_INTERCHANGE_ROOF = SPR_TRAFFIC_LIGHTS_BASE + 242; ///< Roof over a bus stop of a bus interchange.
+static constexpr SpriteID SPR_INTERCHANGE_ROOF_HUB = SPR_TRAFFIC_LIGHTS_BASE + 243; ///< Roof over a bus stop of an integrated transport hub, with air-conditioning.
+static constexpr uint16_t TRAFFIC_LIGHTS_SPRITE_COUNT = 244;
 
 static const SpriteID SPR_NEWGRFS_BASE = SPR_TRAFFIC_LIGHTS_BASE + TRAFFIC_LIGHTS_SPRITE_COUNT;
 

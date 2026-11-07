@@ -3358,6 +3358,8 @@ STR_LAND_AREA_INFORMATION_ELEVATED_STOP                         :{BLACK}Stop on 
 STR_LAND_AREA_INFORMATION_TOLL_PLAZA                            :{BLACK}Toll plaza: {LTBLUE}{NUM} town{P "" s} linked{BLACK}; last month {NUM} trip{P "" s}, {NUM} vehicle{P "" s}, {CURRENCY_LONG}; concession to {DATE_SHORT}
 STR_LAND_AREA_INFORMATION_TOLL_FREE_FLOW                        :{BLACK}Free-flow toll gantry: {LTBLUE}{NUM} town{P "" s} linked{BLACK}; last month {NUM} trip{P "" s}, {NUM} vehicle{P "" s}, {CURRENCY_LONG}; concession to {DATE_SHORT}
 STR_LAND_AREA_INFORMATION_CHARGE_ZONE                           :{BLACK}Congestion charge zone of {TOWN}: {LTBLUE}{CURRENCY_LONG}{BLACK} to drive in (lorries twice, buses free)
+STR_LAND_AREA_INFORMATION_INTERCHANGE                           :{BLACK}Bus interchange: {LTBLUE}{NUM} bus stops under one roof
+STR_LAND_AREA_INFORMATION_HUB                                   :{BLACK}Integrated transport hub: {LTBLUE}air-conditioned, bus and train
 STR_LAND_AREA_INFORMATION_CITY_SERVICES_HERE                    :{BLACK}City services here: {LTBLUE}{RAW_STRING}
 STR_LAND_AREA_INFORMATION_LANDINFO_COORDS                       :{BLACK}Coordinates: {LTBLUE}{NUM} x {NUM} x {NUM}
 STR_LAND_AREA_INFORMATION_LANDINFO_INDEX                        :{BLACK}Tile index: {LTBLUE}{NUM} ({HEX})
@@ -4108,6 +4110,10 @@ STR_STATION_VIEW_SUPPLY_RATINGS_TITLE_MINUTE                    :{BLACK}Supply p
 STR_STATION_VIEW_CARGO_SUPPLY_RATING                            :{WHITE}{STRING}: {YELLOW}{COMMA} / {STRING} ({COMMA}%)
 STR_STATION_VIEW_FARE_CHEAP                                     :{BLACK}Riders from here paid {GREEN}{NUM}%{BLACK} of the classic fare: passengers {GREEN}+{NUM}%
 STR_STATION_VIEW_FARE_DEAR                                      :{BLACK}Riders from here paid {RED}{NUM}%{BLACK} of the classic fare: passengers {RED}-{NUM}%
+STR_STATION_VIEW_INTERCHANGE_ACTIVE                             :{BLACK}Bus interchange ({NUM} stops): passengers {GREEN}+8%{BLACK}, crowds count half
+STR_STATION_VIEW_HUB_ACTIVE                                     :{BLACK}Transport hub ({NUM} stops): passengers {GREEN}+16%{BLACK}, catchment +2
+STR_STATION_VIEW_HUB_NO_RAIL                                    :{BLACK}Transport hub without a railway station: a bus interchange ({NUM} stops)
+STR_STATION_VIEW_INTERCHANGE_TOO_FEW                            :{BLACK}Bus interchange closed: {NUM} bus stops of {NUM} needed
 
 STR_STATION_VIEW_GROUP                                          :{BLACK}Group by
 STR_STATION_VIEW_WAITING_STATION                                :Station: Waiting
@@ -4156,6 +4162,9 @@ STR_STATION_VIEW_CLOSE_AIRPORT                                  :{BLACK}Close ai
 STR_STATION_VIEW_CLOSE_AIRPORT_TOOLTIP                          :{BLACK}Prevent aircraft from landing on this airport
 STR_STATION_VIEW_DEPARTURES_BUTTON                              :{BLACK}Departures
 STR_STATION_VIEW_DEPARTURES_TOOLTIP                             :{BLACK}Show the next departures from this station, with their lines
+STR_STATION_VIEW_INTERCHANGE_BUTTON                             :Interchange
+STR_STATION_VIEW_HUB_BUTTON                                     :Transport hub
+STR_STATION_VIEW_INTERCHANGE_TOOLTIP                            :{BLACK}Make this station a bus interchange (it needs 6 bus stops; they get a roof): passengers rate it 8% better and a crowd waiting counts half. Then, with a railway station in it, an air-conditioned integrated transport hub: passengers rate it 16% better, its catchment is 2 tiles wider, and its town takes more cars off the road. The town pays half when its transit budget allows
 
 # Waypoint/buoy view window
 STR_WAYPOINT_VIEW_CAPTION                                       :{WHITE}{WAYPOINT}
@@ -5797,6 +5806,11 @@ STR_ERROR_CONGESTION_CHARGE_ALREADY                             :{WHITE}... it a
 STR_ERROR_CONGESTION_CHARGE_TOWN_TOO_SMALL                      :{WHITE}... it needs 5,000 people first
 STR_ERROR_CONGESTION_CHARGE_NOT_CONGESTED                       :{WHITE}... its centre isn't congested enough (level 2 on average)
 STR_ERROR_CONGESTION_CHARGE_RATING                              :{WHITE}... it doesn't rate your company Good or better
+STR_ERROR_CAN_T_BUILD_INTERCHANGE                               :{WHITE}Can't make this station a bus interchange...
+STR_ERROR_CAN_T_BUILD_HUB                                       :{WHITE}Can't make this station a transport hub...
+STR_ERROR_INTERCHANGE_TOO_FEW_STOPS                             :{WHITE}... it needs at least 6 bus stops
+STR_ERROR_HUB_NEEDS_INTERCHANGE                                 :{WHITE}... make it a bus interchange first
+STR_ERROR_HUB_NEEDS_RAILWAY                                     :{WHITE}... it needs a railway station in the same station
 STR_ERROR_CAN_T_CHANGE_BUS_SIGNAL                               :{WHITE}Can't change the bus signals here...
 STR_ERROR_BUS_SIGNAL_NONE                                       :{WHITE}... these traffic lights have no bus signals
 STR_ERROR_TRAFFIC_LIGHTS_NEED_JUNCTION                          :traffic lights need a road junction
