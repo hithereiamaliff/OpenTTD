@@ -2075,7 +2075,12 @@ ordinances), on by default; it needs town budgets. Off works as before.
 | Majlis Bandaraya (city council) | 12,000 people and £108,000 a year, three years after becoming a municipality | also a university |
 
 Real thresholds are 150,000 and 500,000 people (and RM20 and 100 million a
-year); towns here are smaller. A new game's towns, and an old game's when it
+year); towns here are smaller. **Council names** (Settings, Environment,
+Towns, after Town councils; a player's own setting, not saved with the
+game): Malay (Majlis Perbandaran Funnford, with "a municipal council" beside
+it in the windows) or English (Funnford Municipal Council, District Council,
+City Council), as the owner asked. News already in the list keeps the
+names it was written with. A new game's towns, and an old game's when it
 is loaded, start with the standing they qualify for; after that they go up
 each January, with news ("Gredinghall becomes a municipality: Majlis
 Perbandaran Gredinghall", "City status for Gredinghall! Majlis Bandaraya
@@ -2214,7 +2219,8 @@ co-fund the biggest town's next service at a set month; land value on):
   `city-council-demo.csav`) load, save and reload.
 - Screenshots: Gredinghall in 2010 (23,003 people; the council's hospital,
   university and stadium, a mall, a hypermarket, supermarkets); its town
-  window with the council line; its council's Budget window.
+  window with the council line; its council's Budget window, with Malay and
+  with English names.
 
 ## Roadmap
 

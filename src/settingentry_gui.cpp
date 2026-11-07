@@ -835,6 +835,7 @@ SettingsContainer &GetSettingsTree()
 				towns->Add(new SettingEntry("economy.town_building_style"));
 				towns->Add(new SettingEntry("economy.town_budgets"));
 				towns->Add(new SettingEntry("economy.town_councils"));
+				towns->Add(new SettingEntry("gui.council_names"));
 				towns->Add(new SettingEntry("economy.commuting"));
 				towns->Add(new SettingEntry("economy.allow_town_roads"));
 				towns->Add(new SettingEntry("economy.allow_town_level_crossings"));

@@ -2192,6 +2192,10 @@ STR_CONFIG_SETTING_TOWN_BUILDING_STYLE_MALAYSIAN                :Malaysian and S
 STR_CONFIG_SETTING_TOWN_BUILDING_STYLE_BOTH                     :Both
 STR_CONFIG_SETTING_TOWN_BUDGETS                                 :Town budgets and ordinances: {STRING2}
 STR_CONFIG_SETTING_TOWN_COUNCILS                                :Town councils: {STRING2}
+STR_CONFIG_SETTING_COUNCIL_NAMES                                :Council names: {STRING2}
+STR_CONFIG_SETTING_COUNCIL_NAMES_HELPTEXT                       :How towns' councils are called in windows and news: in Malay (Majlis Daerah, Majlis Perbandaran and Majlis Bandaraya Funnford) or in English (Funnford District Council, Municipal Council and City Council). News already in the list keeps its names
+STR_CONFIG_SETTING_COUNCIL_NAMES_MALAY                          :Malay (Majlis Perbandaran Funnford)
+STR_CONFIG_SETTING_COUNCIL_NAMES_ENGLISH                        :English (Funnford Municipal Council)
 STR_CONFIG_SETTING_TOWN_COUNCILS_HELPTEXT                       :Towns are run by councils, as in Malaysia: a district council (majlis daerah) at first, a municipal council (majlis perbandaran) from 4,000 people with the income to match, a city council (majlis bandaraya) from 12,000 after three years as a municipality. Beside the town's taxes, councils collect business licences from shops and offices, and they build city services from what they save: clinics, schools, police and fire stations, parks and hawker centres where the town lacks them; a hospital and a stadium once a municipality, a university once a city. Companies can co-fund the next one in the town's Budget window. Councils also run the estates of flats as Singapore's town councils do: service and conservancy charges pay for upkeep and for repainting every six years; old estates are renewed and the oldest blocks rebuilt. Needs town budgets{}Off: towns as before
 STR_CONFIG_SETTING_TOWN_BUDGETS_HELPTEXT                        :Towns collect taxes, more from bigger towns and dearer land. A quarter goes to transit (the transit budget for contracts, passes and concessions), 60% to running the town; the rest pays for ordinances or builds reserves. Towns cut taxes when they have money put by and raise them when they run short; high taxes make a town less happy and slow its growth.{}Towns bring in ordinances when their problems call for them and they can afford them: parking limits, a low-emission zone, a car-free centre, tree planting, transit-oriented development, a transit fund. Companies can propose them in the town's Budget window.{}Off: no budgets and no ordinances; transit budgets as before
 STR_CONFIG_SETTING_COMMUTING                                    :Commuting: {STRING2}
@@ -3996,7 +4000,8 @@ STR_TOWN_VIEW_POPULATION_HOUSES                                 :{BLACK}Populati
 STR_TOWN_VIEW_ZONING_BALANCED                                   :{BLACK}Homes for {ORANGE}{COMMA}{BLACK}, jobs for {ORANGE}{COMMA}{BLACK}: balanced
 STR_TOWN_VIEW_ZONING_WANTS_COMMERCIAL                           :{BLACK}Homes for {ORANGE}{COMMA}{BLACK}, jobs for {ORANGE}{COMMA}{BLACK}: wants more shops and offices
 STR_TOWN_VIEW_ZONING_WANTS_RESIDENTIAL                          :{BLACK}Homes for {ORANGE}{COMMA}{BLACK}, jobs for {ORANGE}{COMMA}{BLACK}: wants more homes
-STR_TOWN_VIEW_COUNCIL                                           :{BLACK}Council: {ORANGE}{STRING} {TOWN}{BLACK} ({STRING})
+STR_TOWN_VIEW_COUNCIL                                           :{BLACK}Council: {ORANGE}{STRING1}{BLACK}{RAW_STRING}
+STR_TOWN_VIEW_COUNCIL_KIND                                      :{BLACK} ({STRING})
 STR_TOWN_VIEW_HAPPINESS                                         :{BLACK}Happiness: {ORANGE}{NUM}%{BLACK}. City services reach:
 STR_TOWN_VIEW_HAPPINESS_SATISFACTION                            :{BLACK}Happiness: {ORANGE}{NUM}%{BLACK} (riders' satisfaction {ORANGE}{NUM}%{BLACK}). City services reach:
 STR_TOWN_VIEW_SERVICE_PERCENT                                   :{BLACK}{NUM}%
@@ -5437,8 +5442,9 @@ STR_TOWN_BUDGET_LIST_TOOLTIP                                    :{BLACK}Rules th
 STR_TOWN_BUDGET_PROPOSE_BUTTON                                  :{BLACK}Propose
 STR_TOWN_BUDGET_COFUND_BUTTON                                   :{BLACK}Co-fund the next service
 STR_TOWN_BUDGET_COFUND_TOOLTIP                                  :{BLACK}Pay what the council lacks for its next new service (at least a quarter of its cost): it builds it at once, and thinks better of your company
-STR_TOWN_BUDGET_CAPTION_COUNCIL                                 :{WHITE}{STRING} {TOWN} - Council budget and ordinances
-STR_TOWN_BUDGET_COUNCIL                                         :{BLACK}Council: {ORANGE}{STRING} {TOWN}{BLACK}, a {STRING}{RAW_STRING}
+STR_TOWN_BUDGET_CAPTION_COUNCIL                                 :{WHITE}{STRING1} - Budget and ordinances
+STR_TOWN_BUDGET_COUNCIL                                         :{BLACK}Council: {ORANGE}{STRING1}{BLACK}{RAW_STRING}{RAW_STRING}
+STR_TOWN_BUDGET_COUNCIL_KIND                                    :{BLACK}, a {STRING}
 STR_TOWN_BUDGET_COUNCIL_SINCE                                   :{BLACK} since {NUM}
 STR_TOWN_BUDGET_COUNCIL_NEXT_MUNICIPAL                          :{BLACK}Municipality at {COMMA} people and {CURRENCY_LONG} a year in taxes and licences
 STR_TOWN_BUDGET_COUNCIL_NEXT_CITY                               :{BLACK}City status at {COMMA} people and {CURRENCY_LONG} a year, after 3 years as a municipality
@@ -5455,9 +5461,12 @@ STR_COUNCIL_BAND_NONE                                           :{BLACK}-
 STR_COUNCIL_BAND_GREEN                                          :{GREEN}green{BLACK}
 STR_COUNCIL_BAND_AMBER                                          :{YELLOW}amber{BLACK}
 STR_COUNCIL_BAND_RED                                            :{RED}red{BLACK}
-STR_COUNCIL_PREFIX_DISTRICT                                     :Majlis Daerah
-STR_COUNCIL_PREFIX_MUNICIPAL                                    :Majlis Perbandaran
-STR_COUNCIL_PREFIX_CITY                                         :Majlis Bandaraya
+STR_COUNCIL_NAME_DISTRICT                                       :Majlis Daerah {TOWN}
+STR_COUNCIL_NAME_MUNICIPAL                                      :Majlis Perbandaran {TOWN}
+STR_COUNCIL_NAME_CITY                                           :Majlis Bandaraya {TOWN}
+STR_COUNCIL_NAME_DISTRICT_ENGLISH                               :{TOWN} District Council
+STR_COUNCIL_NAME_MUNICIPAL_ENGLISH                              :{TOWN} Municipal Council
+STR_COUNCIL_NAME_CITY_ENGLISH                                   :{TOWN} City Council
 STR_COUNCIL_KIND_DISTRICT                                       :district council
 STR_COUNCIL_KIND_MUNICIPAL                                      :municipal council
 STR_COUNCIL_KIND_CITY                                           :city council
@@ -5561,11 +5570,11 @@ STR_NEWS_TOLL_FREEZE                                            :{BIG_FONT}{BLAC
 STR_NEWS_TRANSIT_BUDGET_GONE                                    :{BIG_FONT}{BLACK}{TOWN}'s transit budget is used up for this year: passes and concessions are paid only in part until the new year
 STR_NEWS_TOWN_AIR_UNHEALTHY                                     :{BIG_FONT}{BLACK}Haze over {TOWN}!{}The air where its people live is unhealthy (API {NUM}). Traffic, diesel vehicles and industry pollute; electric buses and trains, parks and trees help
 STR_NEWS_ORDINANCE_ADOPTED                                      :{BIG_FONT}{BLACK}{TOWN} brings in a new ordinance: {STRING}!
-STR_NEWS_COUNCIL_MUNICIPAL                                      :{BIG_FONT}{BLACK}{0:TOWN} becomes a municipality: {1:STRING} {0:TOWN}
-STR_NEWS_COUNCIL_CITY                                           :{BIG_FONT}{BLACK}City status for {0:TOWN}! {1:STRING} {0:TOWN}
-STR_NEWS_COUNCIL_SERVICE                                        :{BIG_FONT}{BLACK}{STRING} {TOWN} opens a new {STRING}
-STR_NEWS_COUNCIL_SERVICE_COFUNDED                               :{BIG_FONT}{BLACK}{STRING} {TOWN} opens a new {STRING}, co-funded by {COMPANY}
-STR_NEWS_COUNCIL_REPAINT                                        :{BIG_FONT}{BLACK}{STRING} {TOWN} repaints its estates in new colours
+STR_NEWS_COUNCIL_MUNICIPAL                                      :{BIG_FONT}{BLACK}{TOWN} becomes a municipality: {STRING1}
+STR_NEWS_COUNCIL_CITY                                           :{BIG_FONT}{BLACK}City status for {TOWN}! {STRING1}
+STR_NEWS_COUNCIL_SERVICE                                        :{BIG_FONT}{BLACK}{STRING1} opens a new {STRING}
+STR_NEWS_COUNCIL_SERVICE_COFUNDED                               :{BIG_FONT}{BLACK}{STRING1} opens a new {STRING}, co-funded by {COMPANY}
+STR_NEWS_COUNCIL_REPAINT                                        :{BIG_FONT}{BLACK}{STRING1} repaints its estates in new colours
 STR_NEWS_COUNCIL_RENEWAL                                        :{BIG_FONT}{BLACK}Neighbourhood renewal for {TOWN}'s estates, {NUM} years old on average
 STR_NEWS_ORDINANCE_PROPOSED                                     :{BIG_FONT}{BLACK}{TOWN} brings in a new ordinance: {STRING}, as {COMPANY} proposed!
 STR_NEWS_ORDINANCE_REPEALED                                     :{BIG_FONT}{BLACK}{TOWN} repeals its ordinance {STRING} to balance its budget

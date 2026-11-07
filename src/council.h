@@ -29,7 +29,8 @@ static constexpr uint COUNCIL_SERVICES_PERCENT = 10;
 
 bool AreTownCouncilsOn();
 CouncilLevel GetCouncilLevel(const Town *t);
-StringID GetCouncilPrefix(CouncilLevel level);
+bool AreCouncilNamesEnglish();
+StringID GetCouncilName(CouncilLevel level);
 StringID GetCouncilKind(CouncilLevel level);
 bool IsEstateFlat(const HouseSpec &hs);
 uint8_t GetEstatePaint(const Town *t);

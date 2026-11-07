@@ -119,15 +119,28 @@ CouncilLevel GetCouncilLevel(const Town *t)
 }
 
 /**
- * The start of a council's name: "Majlis Perbandaran" in "Majlis Perbandaran Funnford".
+ * Are councils called by their names in English (Funnford Municipal Council)
+ * rather than in Malay (Majlis Perbandaran Funnford)? The player's choice
+ * (setting gui.council_names).
+ * @return True for English.
+ */
+bool AreCouncilNamesEnglish()
+{
+	return _settings_client.gui.council_names != 0;
+}
+
+/**
+ * A council's name, which takes the town as its parameter: "Majlis
+ * Perbandaran Funnford", or "Funnford Municipal Council" in English.
  * @param level The kind of council.
  * @return The string.
  */
-StringID GetCouncilPrefix(CouncilLevel level)
+StringID GetCouncilName(CouncilLevel level)
 {
-	static constexpr StringID PREFIXES[] = {STR_COUNCIL_PREFIX_DISTRICT, STR_COUNCIL_PREFIX_MUNICIPAL, STR_COUNCIL_PREFIX_CITY};
-	static_assert(std::size(PREFIXES) == to_underlying(CouncilLevel::End));
-	return PREFIXES[to_underlying(level)];
+	static constexpr StringID MALAY[] = {STR_COUNCIL_NAME_DISTRICT, STR_COUNCIL_NAME_MUNICIPAL, STR_COUNCIL_NAME_CITY};
+	static constexpr StringID ENGLISH[] = {STR_COUNCIL_NAME_DISTRICT_ENGLISH, STR_COUNCIL_NAME_MUNICIPAL_ENGLISH, STR_COUNCIL_NAME_CITY_ENGLISH};
+	static_assert(std::size(MALAY) == to_underlying(CouncilLevel::End) && std::size(ENGLISH) == to_underlying(CouncilLevel::End));
+	return AreCouncilNamesEnglish() ? ENGLISH[to_underlying(level)] : MALAY[to_underlying(level)];
 }
 
 /**
@@ -477,10 +490,10 @@ static bool BuildCouncilService(Town *t, CityService service, CompanyID cofunder
 	if (service == CityService::University) c.counts.universities++;
 	if (service == CityService::Stadium) c.counts.stadiums++;
 	if (Company::IsValidID(cofunder)) {
-		AddNewsItem(GetEncodedString(STR_NEWS_COUNCIL_SERVICE_COFUNDED, GetCouncilPrefix(c.level), t->index, GetCityServiceShortName(service), cofunder),
+		AddNewsItem(GetEncodedString(STR_NEWS_COUNCIL_SERVICE_COFUNDED, GetCouncilName(c.level), t->index, GetCityServiceShortName(service), cofunder),
 				NewsType::General, NewsStyle::Normal, {}, tile);
 	} else {
-		AddNewsItem(GetEncodedString(STR_NEWS_COUNCIL_SERVICE, GetCouncilPrefix(c.level), t->index, GetCityServiceShortName(service)),
+		AddNewsItem(GetEncodedString(STR_NEWS_COUNCIL_SERVICE, GetCouncilName(c.level), t->index, GetCityServiceShortName(service)),
 				NewsType::General, NewsStyle::Normal, {}, tile);
 	}
 	SetWindowDirty(WindowClass::TownBudget, t->index);
@@ -724,7 +737,7 @@ static void ReviewEstates(Town *t)
 			c.estate_condition = 100;
 			c.paint++;
 			c.repainted = year;
-			if (n.flats >= 500) AddNewsItem(GetEncodedString(STR_NEWS_COUNCIL_REPAINT, GetCouncilPrefix(c.level), t->index), NewsType::General, NewsStyle::Small, {}, t->index);
+			if (n.flats >= 500) AddNewsItem(GetEncodedString(STR_NEWS_COUNCIL_REPAINT, GetCouncilName(c.level), t->index), NewsType::General, NewsStyle::Small, {}, t->index);
 			MarkWholeScreenDirty();
 		}
 	}
@@ -789,7 +802,7 @@ void ReviewTownCouncil(Town *t)
 		c.since = TimerGameEconomy::year.base();
 		Debug(Facility::Misc, Severity::Trace1, "[council] town {} becomes council level {} with {} people", t->index, to_underlying(level), t->cache.population);
 		const StringID news = level == CouncilLevel::City ? STR_NEWS_COUNCIL_CITY : STR_NEWS_COUNCIL_MUNICIPAL;
-		AddNewsItem(GetEncodedString(news, t->index, GetCouncilPrefix(level)), NewsType::General, NewsStyle::Normal, {}, t->index);
+		AddNewsItem(GetEncodedString(news, t->index, GetCouncilName(level), t->index), NewsType::General, NewsStyle::Normal, {}, t->index);
 		SetWindowDirty(WindowClass::TownView, t->index);
 	}
 	/* A council that needs nothing new gives what it saved beyond two years' worth back to the town, which may then cut its taxes. */

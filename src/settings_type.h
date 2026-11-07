@@ -251,6 +251,7 @@ struct GUISettings {
 	bool autosave_on_exit; ///< save an autosave when you quit the game, but do not ask "Do you really want to quit?"
 	bool autosave_on_network_disconnect; ///< save an autosave when you get disconnected from a network game with an error?
 	uint8_t date_format_in_default_names; ///< should the default savegame/screenshot name use long dates (31th Dec 2008), short dates (31-12-2008) or ISO dates (2008-12-31)
+	uint8_t council_names; ///< City fork: how town councils are called: 0 in Malay (Majlis Perbandaran Funnford), 1 in English (Funnford Municipal Council)
 	uint8_t max_num_autosaves; ///< controls how many autosavegames are made before the game starts to overwrite (names them 0 to max_num_autosaves - 1)
 	bool population_in_label; ///< show the population of a town in its label?
 	uint8_t right_mouse_btn_emulation; ///< should we emulate right mouse clicking?

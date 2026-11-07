@@ -418,6 +418,14 @@ static void TownBudgetsChanged(int32_t)
 	MarkWholeScreenDirty();
 }
 
+/** Town councils are called in Malay or in English now: windows show their names. */
+static void CouncilNamesChanged(int32_t)
+{
+	InvalidateWindowClassesData(WindowClass::TownBudget);
+	SetWindowClassesDirty(WindowClass::TownView);
+	SetWindowClassesDirty(WindowClass::TownBudget);
+}
+
 /** Town councils were switched on or off: the budget windows change, and the estates' colours. */
 static void TownCouncilsChanged(int32_t new_value)
 {

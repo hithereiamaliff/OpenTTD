@@ -408,7 +408,8 @@ public:
 		/* Its council. */
 		if (AreTownCouncilsOn() && this->town->council.started) {
 			const CouncilLevel level = this->town->council.level;
-			DrawString(tr, GetString(STR_TOWN_VIEW_COUNCIL, GetCouncilPrefix(level), this->town->index, GetCouncilKind(level)));
+			const std::string kind = AreCouncilNamesEnglish() ? std::string{} : GetString(STR_TOWN_VIEW_COUNCIL_KIND, GetCouncilKind(level));
+			DrawString(tr, GetString(STR_TOWN_VIEW_COUNCIL, GetCouncilName(level), this->town->index, kind));
 			tr.top += GetCharacterHeight(FontSize::Normal);
 		}
 
