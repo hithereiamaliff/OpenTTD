@@ -26,6 +26,9 @@ struct TownCommuting {
 	std::vector<uint8_t> job_share; ///< Per cell: share of the commutes to jobs there taken by transit, in percent.
 	std::vector<uint8_t> home_appeal; ///< Per cell: share of the commutes from homes there the journey times alone send to transit, in percent.
 	std::vector<uint8_t> job_appeal; ///< Per cell: share of the commutes to jobs there the journey times alone send to transit, in percent.
+	std::vector<uint16_t> link_towns; ///< Other towns its people work in.
+	std::vector<uint32_t> link_commuters; ///< For each of those, its people who work there, a day.
+	std::vector<uint32_t> link_transit; ///< For each of those, the ones who take transit.
 	std::vector<uint32_t> flow_tiles; ///< Road tiles commuters drive along, in ascending order.
 	std::vector<uint16_t> flow_cars; ///< For each of those tiles, commuters' cars a day in one direction.
 };

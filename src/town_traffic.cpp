@@ -159,9 +159,13 @@ uint8_t GetTownTrafficTarget(TileIndex tile, const Town *t)
 	/* Town traffic doesn't use bus-only roads. */
 	if (GetRoadTypeRoad(tile) == ROADTYPE_BUS) return 0;
 
-	/* Far outside the town there is nothing to make traffic. */
+	/* With commuting, commuters' cars come along the routes they take, also between towns. */
+	const uint64_t commute_cars = IsCommutingOn() ? GetCommuteCars(tile) : 0;
+
+	/* Far outside the town there is nothing else to make traffic. */
 	uint town_radius_sq = t->cache.squared_town_zone_radius[to_underlying(HouseZone::TownEdge)];
-	if (DistanceSquare(tile, t->xy) > town_radius_sq * 4 + 64) return 0;
+	const bool far = DistanceSquare(tile, t->xy) > town_radius_sq * 4 + 64;
+	if (far && commute_cars == 0) return 0;
 
 	/* How much of the traffic around the road ends up on it, in millionths. */
 	const uint capacity = GetRoadCapacity(tile);
@@ -172,12 +176,10 @@ uint8_t GetTownTrafficTarget(TileIndex tile, const Town *t)
 	share = share * GetCongestionChargeTrafficPercent(t, tile) / 100;
 	share = share * GetOrdinanceTrafficPercent(t, tile) / 100;
 
-	/* With commuting, commuters' cars come along the routes they take, and the homes and jobs around add their errands. */
-	uint64_t commute_traffic = 0;
-	if (IsTownCommutingKnown(t)) {
-		commute_traffic = static_cast<uint64_t>(GetCommuteCars(tile)) * COMMUTE_TRAFFIC_PER_CAR * SETTING_FACTOR[setting] * policy / capacity / 100;
-		share = share * LOCAL_TRAFFIC_PERCENT / 100;
-	}
+	/* The homes and jobs around add their errands: half the traffic they made before commuting, when their town counts its commutes. */
+	const uint64_t commute_traffic = commute_cars * COMMUTE_TRAFFIC_PER_CAR * SETTING_FACTOR[setting] * policy / capacity / 100;
+	if (IsTownCommutingKnown(t)) share = share * LOCAL_TRAFFIC_PERCENT / 100;
+	if (far) share = 0;
 
 	/* Even the densest blocks don't make enough traffic for small towns and their edges to congest. */
 	if (share * MAX_TRAFFIC_ACTIVITY / 1'000'000 + commute_traffic < TRAFFIC_LEVEL_THRESHOLDS[0]) return 0;
@@ -185,7 +187,7 @@ uint8_t GetTownTrafficTarget(TileIndex tile, const Town *t)
 	/* Trips start and end at the homes, jobs and city services around the road. */
 	uint64_t activity = 0;
 	TileArea catchment(tile, 1, 1);
-	catchment.Expand(TRAFFIC_CATCHMENT_RADIUS);
+	catchment.Expand(share == 0 ? 0 : TRAFFIC_CATCHMENT_RADIUS);
 	for (TileIndex near : catchment) {
 		switch (GetTileType(near)) {
 			case TileType::House: {

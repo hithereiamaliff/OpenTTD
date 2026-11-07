@@ -452,6 +452,13 @@ public:
 					DrawString(tr, GetString(STR_TOWN_VIEW_COMMUTE_TIMES_CAR, GetCommuteMinutes(c.car_time)));
 				}
 				tr.top += GetCharacterHeight(FontSize::Normal);
+				/* Between towns: its people who work in other towns, and the people of other towns who work here. */
+				const auto [out, out_transit] = GetCommutersLeaving(this->town);
+				const auto [in, in_transit] = GetCommutersComingTo(this->town);
+				if (out > 0 || in > 0) {
+					DrawString(tr, GetString(STR_TOWN_VIEW_COMMUTERS_BETWEEN_TOWNS, out, out == 0 ? 0 : out_transit * 100 / out, in, in == 0 ? 0 : in_transit * 100 / in));
+					tr.top += GetCharacterHeight(FontSize::Normal);
+				}
 			} else {
 				if (IsCommutingOn()) {
 					DrawString(tr, STR_TOWN_VIEW_COMMUTERS_UNKNOWN);
@@ -632,6 +639,7 @@ public:
 	uint GetDesiredInfoHeight(int width) const
 	{
 		uint traffic_lines = (_settings_game.economy.town_traffic != to_underlying(TownTrafficSetting::Off) ? (IsCommutingOn() ? 3 : 2) : 0) + (IsEnvironmentOn() ? 1 : 0);
+		if (IsTownCommutingKnown(this->town) && (GetCommutersLeaving(this->town).first > 0 || GetCommutersComingTo(this->town).first > 0)) traffic_lines++;
 		uint aimed_height = static_cast<uint>(3 + traffic_lines + CargoSpec::town_production_cargoes[TownProductionEffect::Passengers].size() + CargoSpec::town_production_cargoes[TownProductionEffect::Mail].size()) * GetCharacterHeight(FontSize::Normal);
 		aimed_height += GetServiceRowHeight();
 

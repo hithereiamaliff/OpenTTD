@@ -40,6 +40,9 @@ static const SaveLoad _town_commuting_desc[] = {
 	SaveLoad::Vector<VarFileType::U8>("job_share", SLE_OBJECT_ADDRESS(Town, commuting.job_share)),
 	SaveLoad::Vector<VarFileType::U8>("home_appeal", SLE_OBJECT_ADDRESS(Town, commuting.home_appeal)),
 	SaveLoad::Vector<VarFileType::U8>("job_appeal", SLE_OBJECT_ADDRESS(Town, commuting.job_appeal)),
+	SaveLoad::Vector<VarFileType::U16>("link_towns", SLE_OBJECT_ADDRESS(Town, commuting.link_towns)),
+	SaveLoad::Vector<VarFileType::U32>("link_commuters", SLE_OBJECT_ADDRESS(Town, commuting.link_commuters)),
+	SaveLoad::Vector<VarFileType::U32>("link_transit", SLE_OBJECT_ADDRESS(Town, commuting.link_transit)),
 	SaveLoad::Vector<VarFileType::U32>("flow_tiles", SLE_OBJECT_ADDRESS(Town, commuting.flow_tiles)),
 	SaveLoad::Vector<VarFileType::U16>("flow_cars", SLE_OBJECT_ADDRESS(Town, commuting.flow_cars)),
 };
@@ -71,7 +74,8 @@ struct TCOMChunkHandler : ChunkHandler {
 			/* Figures that don't fit together, or roads off the map, are of no use: the town works them out again. */
 			const size_t cells = static_cast<size_t>(c.grid_w) * c.grid_h;
 			bool sane = (c.cell_size == 4 || c.cell_size == 8) && c.home_share.size() == cells && c.job_share.size() == cells &&
-					c.home_appeal.size() == cells && c.job_appeal.size() == cells && c.flow_tiles.size() == c.flow_cars.size();
+					c.home_appeal.size() == cells && c.job_appeal.size() == cells && c.flow_tiles.size() == c.flow_cars.size() &&
+					c.link_towns.size() == c.link_commuters.size() && c.link_towns.size() == c.link_transit.size();
 			for (size_t i = 0; sane && i < c.flow_tiles.size(); i++) {
 				if (c.flow_tiles[i] >= Map::Size() || (i > 0 && c.flow_tiles[i] <= c.flow_tiles[i - 1])) sane = false;
 			}

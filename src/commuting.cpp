@@ -14,6 +14,11 @@
  * living there (homes; offices, shops and public buildings have a few flats
  * too), to the cells by their jobs (offices, shops, public buildings, city
  * services, industries), fewer the further those are (a gravity model).
+ * The jobs include those of up to four other towns within 64 tiles, the
+ * ones that draw the most (big and near): commuters go there along the
+ * roads between the towns, or by transit, if they can. Jobs that can't be
+ * reached by road or transit draw nobody; by transit alone only people
+ * living within reach of a stop, to jobs within reach of one.
  *
  * Each commuter can drive or take transit. Times are in ticks, counting a
  * town tile as about 75 m and a tick as about a third of a second:
@@ -59,6 +64,7 @@
 #include "industry.h"
 #include "line.h"
 #include "map_func.h"
+#include "object_base.h"
 #include "object_map.h"
 #include "order_base.h"
 #include "road.h"
@@ -104,6 +110,12 @@ static constexpr uint PUBLIC_RESIDENTS = 10, PUBLIC_JOBS = 100;
 static constexpr uint COMMUTE_DAYS = 30;
 /** Tiles around the town's edge that still belong to its area. */
 static constexpr uint COMMUTE_AREA_MARGIN = 6;
+/** People commute to other towns up to this far (between the towns' centres, in tiles). */
+static constexpr uint COMMUTE_AWAY_DISTANCE = 64;
+/** People commute to at most this many other towns: the ones that draw them most (big and near). */
+static constexpr uint COMMUTE_AWAY_TOWNS = 4;
+/** The area a town works its commutes out over is at most this many tiles. */
+static constexpr uint COMMUTE_MAX_AREA = 200 * 200;
 /** With more cells than this with homes, a town uses cells of 8 tiles instead of 4. */
 static constexpr uint COMMUTE_MAX_ORIGINS = 200;
 /** Distance (squared, in tiles) at which a job draws half as many commuters as one next door. */
@@ -293,6 +305,68 @@ void OnTownCommutingRemoved(Town *t)
 {
 	ApplyTownFlows(t->commuting, false);
 	t->commuting = {};
+	/* Nobody commutes to it any more. */
+	for (Town *other : Town::Iterate()) {
+		TownCommuting &c = other->commuting;
+		for (size_t i = 0; i < c.link_towns.size();) {
+			if (c.link_towns[i] == t->index.base()) {
+				c.link_towns.erase(c.link_towns.begin() + i);
+				c.link_commuters.erase(c.link_commuters.begin() + i);
+				c.link_transit.erase(c.link_transit.begin() + i);
+			} else {
+				i++;
+			}
+		}
+	}
+}
+
+/**
+ * Commuters from one town to another.
+ * @param from The town they live in.
+ * @param to The town they work in.
+ * @return Commuters a day, and of them the ones who take transit.
+ */
+std::pair<uint32_t, uint32_t> GetCommutersBetween(const Town *from, const Town *to)
+{
+	if (!IsTownCommutingKnown(from)) return {0, 0};
+	const TownCommuting &c = from->commuting;
+	for (size_t i = 0; i < c.link_towns.size(); i++) {
+		if (c.link_towns[i] == to->index.base()) return {c.link_commuters[i], c.link_transit[i]};
+	}
+	return {0, 0};
+}
+
+/**
+ * Commuters who come to work in a town from other towns.
+ * @param t The town.
+ * @return Commuters a day, and of them the ones who take transit.
+ */
+std::pair<uint32_t, uint32_t> GetCommutersComingTo(const Town *t)
+{
+	uint32_t in = 0, by_transit = 0;
+	for (const Town *other : Town::Iterate()) {
+		if (other == t) continue;
+		const auto [commuters, transit] = GetCommutersBetween(other, t);
+		in += commuters;
+		by_transit += transit;
+	}
+	return {in, by_transit};
+}
+
+/**
+ * Commuters who live in a town and work in other towns.
+ * @param t The town.
+ * @return Commuters a day, and of them the ones who take transit.
+ */
+std::pair<uint32_t, uint32_t> GetCommutersLeaving(const Town *t)
+{
+	if (!IsTownCommutingKnown(t)) return {0, 0};
+	uint32_t out = 0, by_transit = 0;
+	for (size_t i = 0; i < t->commuting.link_commuters.size(); i++) {
+		out += t->commuting.link_commuters[i];
+		by_transit += t->commuting.link_transit[i];
+	}
+	return {out, by_transit};
 }
 
 /** Count all towns' commuters' cars on the roads again, e.g. after loading a game. */
@@ -418,6 +492,7 @@ struct CommuteCell {
 	uint64_t weight = 0; ///< Homes and jobs, for the centre and for transit coverage.
 	uint64_t covered = 0; ///< Homes and jobs within reach of a stop.
 	TileIndex centre = INVALID_TILE; ///< Centre of its homes and jobs.
+	const Town *job_town = nullptr; ///< The town its jobs belong to (of the first job found), or nullptr.
 	int32_t road = -1; ///< Road node where its car trips start and end, or -1.
 	uint32_t arrive = 0; ///< Parking and walking to work by car, in ticks.
 	uint32_t charge = 0; ///< Extra cost of driving there: a congestion charge, in ticks.
@@ -547,20 +622,49 @@ void UpdateTownCommuting(Town *t)
 		return;
 	}
 
-	/* The town's area. */
-	const uint radius = IntSqrt(t->cache.squared_town_zone_radius[to_underlying(HouseZone::TownEdge)]) + COMMUTE_AREA_MARGIN;
-	const uint x0 = static_cast<uint>(std::max<int>(1, static_cast<int>(TileX(t->xy)) - static_cast<int>(radius)));
-	const uint y0 = static_cast<uint>(std::max<int>(1, static_cast<int>(TileY(t->xy)) - static_cast<int>(radius)));
-	const uint x1 = std::min<uint>(Map::MaxX() - 1, TileX(t->xy) + radius);
-	const uint y1 = std::min<uint>(Map::MaxY() - 1, TileY(t->xy) + radius);
+	/* The town's area, and the area of each town its people may work in: up to four nearby ones that draw them most, big and near. */
+	auto area_of = [](const Town *town) {
+		const uint r = IntSqrt(town->cache.squared_town_zone_radius[to_underlying(HouseZone::TownEdge)]) + COMMUTE_AREA_MARGIN;
+		return std::array<uint, 4>{
+			static_cast<uint>(std::max<int>(1, static_cast<int>(TileX(town->xy)) - static_cast<int>(r))),
+			static_cast<uint>(std::max<int>(1, static_cast<int>(TileY(town->xy)) - static_cast<int>(r))),
+			std::min<uint>(Map::MaxX() - 1, TileX(town->xy) + r),
+			std::min<uint>(Map::MaxY() - 1, TileY(town->xy) + r)};
+	};
+	const std::array<uint, 4> home_area = area_of(t);
+	uint x0 = home_area[0], y0 = home_area[1], x1 = home_area[2], y1 = home_area[3];
 	if (x1 <= x0 || y1 <= y0) return;
+	std::vector<const Town *> away;
+	{
+		std::vector<std::pair<uint64_t, const Town *>> candidates;
+		for (const Town *other : Town::Iterate()) {
+			if (other == t || other->cache.population < COMMUTE_MIN_POPULATION) continue;
+			const uint64_t d = DistanceManhattan(t->xy, other->xy);
+			if (d > COMMUTE_AWAY_DISTANCE) continue;
+			candidates.emplace_back(static_cast<uint64_t>(other->cache.population) * 1'000'000 / ((d + 20) * (d + 20)), other);
+		}
+		std::ranges::sort(candidates, [](const auto &a, const auto &b) { return a.first != b.first ? a.first > b.first : a.second->index < b.second->index; });
+		for (const auto &[pull, other] : candidates) {
+			if (away.size() >= COMMUTE_AWAY_TOWNS) break;
+			const std::array<uint, 4> a = area_of(other);
+			const uint nx0 = std::min(x0, a[0]), ny0 = std::min(y0, a[1]), nx1 = std::max(x1, a[2]), ny1 = std::max(y1, a[3]);
+			if ((nx1 - nx0 + 1) * (ny1 - ny0 + 1) > COMMUTE_MAX_AREA) continue;
+			x0 = nx0;
+			y0 = ny0;
+			x1 = nx1;
+			y1 = ny1;
+			away.push_back(other);
+		}
+	}
+	auto works_in = [&](const Town *town) { return town == t || std::ranges::find(away, town) != away.end(); };
 	const uint w = x1 - x0 + 1;
 	const uint h = y1 - y0 + 1;
 	auto local = [&](uint x, uint y) { return (y - y0) * w + (x - x0); };
 
-	/* Homes and jobs on each tile; roads. */
+	/* Homes (of the town's people) and jobs (in it and the towns around) on each tile; roads. */
 	std::vector<uint32_t> tile_residents(static_cast<size_t>(w) * h, 0);
 	std::vector<uint32_t> tile_jobs(static_cast<size_t>(w) * h, 0);
+	std::vector<const Town *> tile_town(static_cast<size_t>(w) * h, nullptr);
 	std::vector<int32_t> node_of(static_cast<size_t>(w) * h, -1);
 	std::vector<CommuteRoadNode> nodes;
 	std::vector<TileIndex> bridge_ends;
@@ -569,31 +673,34 @@ void UpdateTownCommuting(Town *t)
 			const TileIndex tile = TileXY(x, y);
 			switch (GetTileType(tile)) {
 				case TileType::House: {
-					if (GetTownIndex(tile) != t->index || !IsHouseCompleted(tile)) break;
+					if (!IsHouseCompleted(tile)) break;
+					const Town *town = Town::GetByTile(tile);
+					if (!works_in(town)) break;
 					const HouseSpec *hs = HouseSpec::Get(GetHouseType(tile));
+					uint residents = 0, jobs = 0;
 					switch (GetHouseKind(*hs)) {
-						case HouseKind::Home:
-							tile_residents[local(x, y)] = hs->population * HOME_RESIDENTS;
-							tile_jobs[local(x, y)] = hs->population * HOME_JOBS;
-							break;
-						case HouseKind::Business:
-							tile_residents[local(x, y)] = hs->population * BUSINESS_RESIDENTS;
-							tile_jobs[local(x, y)] = hs->population * BUSINESS_JOBS;
-							break;
-						case HouseKind::Public:
-							tile_residents[local(x, y)] = hs->population * PUBLIC_RESIDENTS;
-							tile_jobs[local(x, y)] = hs->population * PUBLIC_JOBS;
-							break;
+						case HouseKind::Home: residents = HOME_RESIDENTS; jobs = HOME_JOBS; break;
+						case HouseKind::Business: residents = BUSINESS_RESIDENTS; jobs = BUSINESS_JOBS; break;
+						case HouseKind::Public: residents = PUBLIC_RESIDENTS; jobs = PUBLIC_JOBS; break;
 					}
+					if (town == t) tile_residents[local(x, y)] = hs->population * residents;
+					tile_jobs[local(x, y)] = hs->population * jobs;
+					tile_town[local(x, y)] = town;
 					break;
 				}
 
 				case TileType::Object:
-					if (IsCityServiceObjectType(GetObjectType(tile))) tile_jobs[local(x, y)] = 30 * 100;
+					if (IsCityServiceObjectType(GetObjectType(tile)) && works_in(Object::GetByTile(tile)->town)) {
+						tile_jobs[local(x, y)] = 30 * 100;
+						tile_town[local(x, y)] = Object::GetByTile(tile)->town;
+					}
 					break;
 
 				case TileType::Industry:
-					if (Industry::GetByTile(tile)->town == t) tile_jobs[local(x, y)] = 10 * 100;
+					if (works_in(Industry::GetByTile(tile)->town)) {
+						tile_jobs[local(x, y)] = 10 * 100;
+						tile_town[local(x, y)] = Industry::GetByTile(tile)->town;
+					}
 					break;
 
 				default: {
@@ -655,6 +762,7 @@ void UpdateTownCommuting(Town *t)
 			CommuteCell &cell = cells[cell_of(x, y)];
 			cell.residents += residents;
 			cell.jobs += jobs;
+			if (jobs > 0 && cell.job_town == nullptr) cell.job_town = tile_town[local(x, y)];
 			cell.sum_x += static_cast<uint64_t>(x) * (residents + jobs);
 			cell.sum_y += static_cast<uint64_t>(y) * (residents + jobs);
 			cell.weight += residents + jobs;
@@ -664,7 +772,6 @@ void UpdateTownCommuting(Town *t)
 	/* Each cell's centre, its road and what arriving there by car costs. */
 	std::vector<std::vector<int32_t>> cell_nodes(cells.size());
 	for (size_t i = 0; i < nodes.size(); i++) cell_nodes[cell_of(TileX(nodes[i].tile), TileY(nodes[i].tile))].push_back(static_cast<int32_t>(i));
-	const bool charging = t->transit.congestion_charge;
 	for (uint cy = 0; cy < gh; cy++) {
 		for (uint cx = 0; cx < gw; cx++) {
 			CommuteCell &cell = cells[cy * gw + cx];
@@ -684,9 +791,11 @@ void UpdateTownCommuting(Town *t)
 					}
 				}
 			}
-			const HouseZone zone = GetTownRadiusGroup(t, cell.centre);
-			cell.arrive = GetParkingTicks(t, zone) + (best == UINT_MAX ? 0 : best * WALK_TICKS_PER_TILE);
-			if (charging && IsInCongestionChargeZone(t, cell.centre)) cell.charge = CHARGE_TICKS;
+			/* Parking, ordinances and charges are those of the town the jobs are in. */
+			const Town *there = cell.job_town != nullptr ? cell.job_town : t;
+			const HouseZone zone = GetTownRadiusGroup(there, cell.centre);
+			cell.arrive = GetParkingTicks(there, zone) + (best == UINT_MAX ? 0 : best * WALK_TICKS_PER_TILE);
+			if (there->transit.congestion_charge && IsInCongestionChargeZone(there, cell.centre)) cell.charge = CHARGE_TICKS;
 		}
 	}
 
@@ -838,21 +947,9 @@ void UpdateTownCommuting(Town *t)
 		const CommuteCell &from = cells[o];
 		if (from.residents == 0) continue;
 
-		/* Where they work: jobs, fewer the further away. */
-		uint64_t total_pull = 0;
-		std::vector<uint64_t> pull(cells.size(), 0);
-		for (uint32_t d = 0; d < cells.size(); d++) {
-			const CommuteCell &to = cells[d];
-			if (d == o || to.jobs == 0) continue;
-			const uint64_t dist = DistanceManhattan(from.centre, to.centre);
-			pull[d] = static_cast<uint64_t>(to.jobs) * 16 * GRAVITY_DISTANCE_SQ / (GRAVITY_DISTANCE_SQ + dist * dist);
-			total_pull += pull[d];
-		}
-		if (total_pull == 0) continue;
-		const uint64_t leaving = all_leaving * from.residents / all_residents;
-
 		drive_from(from);
 		const size_t pairs_before = pairs.size();
+		const uint64_t leaving = all_leaving * from.residents / all_residents;
 
 		/* Transit: the best way to every station, from the stops within reach. */
 		std::ranges::fill(transit_cost, UNREACHED);
@@ -882,39 +979,64 @@ void UpdateTownCommuting(Town *t)
 			}
 		}
 
-		/* Each destination: drive or ride? */
+		/* How each destination can be reached: by car, by transit, or not at all. */
+		struct Reach {
+			uint32_t car = UNREACHED; ///< How long driving feels.
+			uint32_t car_time = 0; ///< How long driving takes.
+			uint32_t transit = UNREACHED; ///< How long transit feels.
+			uint32_t ride_time = 0; ///< How long transit takes.
+		};
+		std::vector<Reach> reach(cells.size());
 		for (uint32_t d = 0; d < cells.size(); d++) {
-			if (pull[d] == 0) continue;
 			const CommuteCell &to = cells[d];
-			const uint64_t trips = leaving * pull[d] / total_pull;
-			if (trips == 0) continue;
-
-			CommutePair pair{o, d, trips, UNREACHED, 0, 0, 0, 0, 0};
+			if (d == o || to.jobs == 0) continue;
+			Reach &r = reach[d];
 			if (to.road >= 0 && car_dist[to.road] != UNREACHED) {
-				pair.car_time = car_dist[to.road] + to.arrive;
-				pair.car = pair.car_time + to.charge;
+				r.car_time = car_dist[to.road] + to.arrive;
+				r.car = r.car_time + to.charge;
 			}
-			uint32_t transit = UNREACHED;
 			for (const CommuteAccess &a : to.access) {
 				const uint32_t post = 2 * a.station + 1;
 				if (transit_cost[post] == UNREACHED) continue;
 				const uint32_t walk = static_cast<uint32_t>(a.walk_sum / a.weight) * WALK_TICKS_PER_TILE + WALK_TICKS_PER_TILE / 2;
 				const uint32_t cost = transit_cost[post] + walk * WALK_WEIGHT;
-				if (cost < transit) {
-					transit = cost;
-					pair.ride_time = transit_time[post] + walk;
+				if (cost < r.transit) {
+					r.transit = cost;
+					r.ride_time = transit_time[post] + walk;
 				}
 			}
-			if (pair.car == UNREACHED && transit == UNREACHED) continue;
+		}
 
-			if (pair.car == UNREACHED) {
-				/* Without a road, everyone rides. */
+		/* Where they work: jobs they can get to, fewer the further away; by transit alone only those within reach of stops. */
+		uint64_t total_pull = 0;
+		std::vector<uint64_t> pull(cells.size(), 0);
+		for (uint32_t d = 0; d < cells.size(); d++) {
+			const CommuteCell &to = cells[d];
+			const Reach &r = reach[d];
+			if (d == o || to.jobs == 0 || (r.car == UNREACHED && r.transit == UNREACHED)) continue;
+			const uint64_t dist = DistanceManhattan(from.centre, to.centre);
+			pull[d] = static_cast<uint64_t>(to.jobs) * 16 * GRAVITY_DISTANCE_SQ / (GRAVITY_DISTANCE_SQ + dist * dist);
+			if (r.car == UNREACHED) pull[d] = pull[d] * from.covered / from.weight * to.covered / to.weight;
+			total_pull += pull[d];
+		}
+
+		/* Each destination: drive or ride? */
+		for (uint32_t d = 0; d < cells.size() && total_pull > 0; d++) {
+			if (pull[d] == 0) continue;
+			const CommuteCell &to = cells[d];
+			const Reach &r = reach[d];
+			const uint64_t trips = leaving * pull[d] / total_pull;
+			if (trips == 0) continue;
+
+			CommutePair pair{o, d, trips, r.car, r.car_time, r.ride_time, 0, 0, 0};
+			if (r.car == UNREACHED) {
+				/* Without a road, they ride. */
 				pair.transit = trips;
-			} else if (transit != UNREACHED) {
+			} else if (r.transit != UNREACHED) {
 				/* Only the homes and jobs within reach of stops can choose transit. */
-				const uint64_t reach = static_cast<uint64_t>(1000) * from.covered / from.weight * to.covered / to.weight;
-				pair.transit = trips * TransitSharePermille(pair.car, transit) / 1000 * reach / 1000;
-				const uint64_t most = trips * MAX_TRANSIT_SHARE / 100 * reach / 1000;
+				const uint64_t within = static_cast<uint64_t>(1000) * from.covered / from.weight * to.covered / to.weight;
+				pair.transit = trips * TransitSharePermille(r.car, r.transit) / 1000 * within / 1000;
+				const uint64_t most = trips * MAX_TRANSIT_SHARE / 100 * within / 1000;
 				pair.room = most > pair.transit ? most - pair.transit : 0;
 			}
 			pair.chosen = pair.transit;
@@ -959,6 +1081,7 @@ void UpdateTownCommuting(Town *t)
 	/* The drivers' routes: back from each destination along the quickest ways. */
 	std::vector<uint64_t> car_acc(nodes.size(), 0), flow(nodes.size(), 0);
 	std::vector<uint64_t> home_total(cells.size(), 0), home_transit(cells.size(), 0), job_total(cells.size(), 0), job_transit(cells.size(), 0);
+	std::vector<std::array<uint64_t, 2>> away_trips(away.size(), {0, 0}); // Commuters to each other town, and of them by transit.
 	std::vector<uint64_t> home_appeal(cells.size(), 0), job_appeal(cells.size(), 0);
 	uint64_t by_transit = 0, by_car = 0, car_time_sum = 0, timed_riders = 0, transit_time_sum = 0, could_ride = 0, could_ride_time_sum = 0;
 	for (size_t i = 0; i < pairs.size();) {
@@ -982,6 +1105,11 @@ void UpdateTownCommuting(Town *t)
 			home_appeal[o] += pair.chosen;
 			job_total[pair.to] += pair.trips;
 			job_transit[pair.to] += pair.transit;
+			if (const Town *there = cells[pair.to].job_town; there != nullptr && there != t) {
+				const size_t a = std::ranges::find(away, there) - away.begin();
+				away_trips[a][0] += pair.trips;
+				away_trips[a][1] += pair.transit;
+			}
 			job_appeal[pair.to] += pair.chosen;
 			if (car_trips > 0) car_acc[cells[pair.to].road] += car_trips;
 		}
@@ -1045,27 +1173,47 @@ void UpdateTownCommuting(Town *t)
 	} else {
 		c.transit_time = could_ride == 0 ? 0 : static_cast<uint32_t>(could_ride_time_sum / could_ride);
 	}
-	c.grid_x = static_cast<uint16_t>(gx);
-	c.grid_y = static_cast<uint16_t>(gy);
-	c.grid_w = static_cast<uint16_t>(gw);
-	c.grid_h = static_cast<uint16_t>(gh);
-	c.home_share.assign(cells.size(), 0);
-	c.job_share.assign(cells.size(), 0);
-	c.home_appeal.assign(cells.size(), 0);
-	c.job_appeal.assign(cells.size(), 0);
-	for (size_t i = 0; i < cells.size(); i++) {
-		if (home_total[i] > 0) {
-			c.home_share[i] = static_cast<uint8_t>(home_transit[i] * 100 / home_total[i]);
-			c.home_appeal[i] = static_cast<uint8_t>(home_appeal[i] * 100 / home_total[i]);
-		}
-		if (job_total[i] > 0) {
-			c.job_share[i] = static_cast<uint8_t>(job_transit[i] * 100 / job_total[i]);
-			c.job_appeal[i] = static_cast<uint8_t>(job_appeal[i] * 100 / job_total[i]);
+	/* The shares by cell, kept for the town's own area. */
+	const uint hx = home_area[0] / cell_size, hy = home_area[1] / cell_size;
+	const uint hw = home_area[2] / cell_size - hx + 1, hh = home_area[3] / cell_size - hy + 1;
+	c.grid_x = static_cast<uint16_t>(hx);
+	c.grid_y = static_cast<uint16_t>(hy);
+	c.grid_w = static_cast<uint16_t>(hw);
+	c.grid_h = static_cast<uint16_t>(hh);
+	c.home_share.assign(static_cast<size_t>(hw) * hh, 0);
+	c.job_share.assign(static_cast<size_t>(hw) * hh, 0);
+	c.home_appeal.assign(static_cast<size_t>(hw) * hh, 0);
+	c.job_appeal.assign(static_cast<size_t>(hw) * hh, 0);
+	for (uint cy = 0; cy < hh; cy++) {
+		for (uint cx = 0; cx < hw; cx++) {
+			const size_t i = static_cast<size_t>(cy + hy - gy) * gw + (cx + hx - gx);
+			const size_t j = static_cast<size_t>(cy) * hw + cx;
+			if (home_total[i] > 0) {
+				c.home_share[j] = static_cast<uint8_t>(home_transit[i] * 100 / home_total[i]);
+				c.home_appeal[j] = static_cast<uint8_t>(home_appeal[i] * 100 / home_total[i]);
+			}
+			if (job_total[i] > 0) {
+				c.job_share[j] = static_cast<uint8_t>(job_transit[i] * 100 / job_total[i]);
+				c.job_appeal[j] = static_cast<uint8_t>(job_appeal[i] * 100 / job_total[i]);
+			}
 		}
 	}
 
-	Debug(Facility::Misc, Severity::Debug2, "[commuting] town {} pop {} cells {}x{} of {} origins {} roads {} stations {} lines {} commuters {} transit {} (journey times {}) car {} pt {} in {} us",
-			t->index, t->cache.population, gw, gh, cell_size, origins, nodes.size(), stations.size(), town_lines.size(), c.commuters, c.by_transit, model_riders / TRIP_UNIT, c.car_time, c.transit_time,
+	/* Commuters to other towns, by town. */
+	c.link_towns.clear();
+	c.link_commuters.clear();
+	c.link_transit.clear();
+	for (size_t a = 0; a < away.size(); a++) {
+		const uint32_t to = static_cast<uint32_t>(away_trips[a][0] / TRIP_UNIT);
+		if (to == 0) continue;
+		c.link_towns.push_back(away[a]->index.base());
+		c.link_commuters.push_back(to);
+		c.link_transit.push_back(static_cast<uint32_t>(away_trips[a][1] / TRIP_UNIT));
+	}
+
+	Debug(Facility::Misc, Severity::Debug2, "[commuting] town {} pop {} cells {}x{} of {} origins {} towns {} roads {} stations {} lines {} commuters {} transit {} (journey times {}) out {} (transit {}) car {} pt {} in {} us",
+			t->index, t->cache.population, gw, gh, cell_size, origins, away.size(), nodes.size(), stations.size(), town_lines.size(), c.commuters, c.by_transit, model_riders / TRIP_UNIT,
+			GetCommutersLeaving(t).first, GetCommutersLeaving(t).second, c.car_time, c.transit_time,
 			std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - started).count());
 	if (IsVisibleSeverity(Facility::Misc, Severity::Trace1)) {
 		for (size_t i = 0; i < cells.size(); i++) {

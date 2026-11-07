@@ -351,6 +351,18 @@
 	return by_transit ? t->commuting.transit_time : t->commuting.car_time;
 }
 
+/* static */ SQInteger ScriptTown::GetCommutersTo(TownID from_town_id, TownID to_town_id)
+{
+	if (!IsValidTown(from_town_id) || !IsValidTown(to_town_id)) return -1;
+	return ::GetCommutersBetween(::Town::Get(from_town_id), ::Town::Get(to_town_id)).first;
+}
+
+/* static */ SQInteger ScriptTown::GetTransitCommutersTo(TownID from_town_id, TownID to_town_id)
+{
+	if (!IsValidTown(from_town_id) || !IsValidTown(to_town_id)) return -1;
+	return ::GetCommutersBetween(::Town::Get(from_town_id), ::Town::Get(to_town_id)).second;
+}
+
 /* static */ Money ScriptTown::GetReserves(TownID town_id)
 {
 	if (!IsValidTown(town_id) || !::AreTownBudgetsOn()) return 0;

@@ -573,6 +573,26 @@ public:
 	static SQInteger GetCommuteTime(TownID town_id, bool by_transit);
 
 	/**
+	 * Get how many people of one town work in another, a day: people commute
+	 * to up to four nearby towns that draw them most (big and near, at most
+	 * 64 tiles between the centres).
+	 * @param from_town_id The town they live in.
+	 * @param to_town_id The town they work in.
+	 * @pre IsValidTown(from_town_id) && IsValidTown(to_town_id).
+	 * @return The number, 0 if none or not worked out yet, or -1 for an invalid town.
+	 */
+	static SQInteger GetCommutersTo(TownID from_town_id, TownID to_town_id);
+
+	/**
+	 * Get how many people of one town who work in another take transit there.
+	 * @param from_town_id The town they live in.
+	 * @param to_town_id The town they work in.
+	 * @pre IsValidTown(from_town_id) && IsValidTown(to_town_id).
+	 * @return The number, 0 if none or not worked out yet, or -1 for an invalid town.
+	 */
+	static SQInteger GetTransitCommutersTo(TownID from_town_id, TownID to_town_id);
+
+	/**
 	 * Get the land value where a town's people live, from 0 to 100, weighted by population, as of last month.
 	 * @param town_id The town.
 	 * @pre IsValidTown(town_id).

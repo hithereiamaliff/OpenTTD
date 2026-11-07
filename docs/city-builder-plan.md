@@ -1783,6 +1783,68 @@ Kinningbury, about 11,000 people, 17 months from mid-2021):
   over Kinningbury with the 20-bus loop, and land info on a road (872 cars
   a day).
 
+## Done: M5 part 2, commuting between towns
+
+People also work in other towns. Each town's commuters can now go to the
+jobs of up to four other towns within 64 tiles (between the centres): the
+ones that draw them most, big and near (people / (distance + 20)^2). The
+same gravity model spreads them over the jobs of their own town and those
+towns, so a suburb next to a big city sends many of its people there, two
+towns of the same size few.
+
+- **Only where they can get to.** Commuters go only to jobs they can reach:
+  by road (the town's area, the other towns' areas and the land between
+  them make one road network; OpenTTD doesn't connect towns by road, so
+  that is up to you), or by transit (any line with stops in both). A job
+  reachable only by transit draws only people living within reach of a
+  stop, to jobs within reach of the other stop. Jobs nobody can reach draw
+  nobody: those people work in their own town. (Before, inside a town, too:
+  commuters sent to unreachable jobs were lost.)
+- **On the roads between towns.** Drivers' routes run over country roads
+  and expressways, so roads far from any town now get commuter traffic and
+  congestion too (town traffic used to stop at twice a town's radius).
+  Parking, ordinances and congestion charges are those of the town the job
+  is in.
+- **Transit between towns.** Trains, trams and buses with stops in both
+  towns carry commuters as inside a town: walking, waiting, riding, changing
+  and the fare against the drive. The share of a town's passengers its
+  services carry still sets the least share taking transit, now of all its
+  commuters, those to other towns included.
+- **Town window**: a line "Other towns: 502 work there (0% by transit), 510
+  come to work here (0%)", when there are any.
+- Saved: each town's commuters to each other town (TCOM).
+- Script API: `ScriptTown.GetCommutersTo(from, to)`,
+  `GetTransitCommutersTo(from, to)`.
+- Cost: a town works out the roads of the other towns too: 0.2-0.6 ms for
+  a town of 10,000 people, 5.5 ms for 28,000 and 7.4 ms for 41,000 (linked
+  by expressway), once a month.
+
+Tests:
+
+- TollTest's 11-tile expressway with a toll plaza between Grubourne (5,600
+  people) and Brondinghattan Ridge (7,400), 28 tiles apart: about 500
+  commuters a day each way, all by car; 2,008 commuters' cars a day on the
+  expressway (level 1 of 7, flows freely); the average commuters' cars on
+  the two towns' roads up from 596 to 747 and from 478 to 734; their
+  drivers' door-to-door time up from 8 to 9 minutes (longer trips). Without
+  the expressway, nobody commutes between them.
+- The saved game with an expressway between towns of 41,000 and 28,000
+  people (and buses between them): 4,077 of the big city's 18,497
+  commuters work in the other town (282 by bus), 3,994 of the other's
+  12,659 the other way.
+- MetroTest's railway between Trinborough (2,400-3,300 people) and
+  Slundston (7,100-8,500) with its stations at the towns' edges and 3
+  trains: 10 commuters a day from Trinborough by train and 1 back. A
+  station at the edge reaches few homes and jobs; stations in the centres,
+  or feeder buses to them, would bring more.
+- Kinningbury has no town within 64 tiles: its figures are those of part 1.
+- With the setting off, part 13's and part 14's baseline runs give
+  identical monthly results; 99/99 unit tests; all 40 test saves (with the
+  new `city-commute-towns-demo.csav`) load, save and reload.
+- Screenshots: Brondinghattan Ridge's town window ("Other towns: 502 work
+  there, 510 come to work here"); the commuter traffic map with the
+  expressway red and land info on it (2,008 cars a day).
+
 ## Roadmap
 
 Sizes are rough: S = one session, M = a few, L = many, XL = a project in itself.
@@ -1792,15 +1854,14 @@ Sizes are rough: S = one session, M = a few, L = many, XL = a project in itself.
 | M2 | Traffic realism | Done: give way, light settings, traffic map and overlay, amber, routing around jams. | — | |
 | M3 | Zoning | Done: zones, town growth follows them, homes/jobs line in the town window, zones in land info. | — | |
 | M4 | City services and happiness | Part 1 done: police, fire, clinic, school and park with coverage, happiness, growth, ratings and upkeep. Later: bigger buildings (hospital, university), services that also make passengers. | L | |
-| M5 | Town car traffic | Done within towns: commuters drive between homes and jobs along real roads, or take transit when it is quick enough; traffic follows their routes; transit takes cars off them (see M5, commuting). Left: commuting between towns (suburbs to the city by rail or expressway). | M | The most SimCity-like part. |
+| M5 | Town car traffic | Done: commuters drive between homes and jobs along real roads, in their town and up to four towns around, or take transit when it is quick enough; traffic follows their routes, also between towns; transit takes cars off them (see M5, commuting, and part 2). | — | |
 | M6 | City budget and ordinances | Done: towns collect taxes and spend them on transit, running the town and ordinances; they set their own tax rates and bring in ordinances (transit fund, parking limits, low-emission zone, car-free centre, tree planting, transit-oriented development); companies propose them. | — | The owner's call: towns decide, companies lobby. |
 | M7 | Land value and pollution | Done as transit part 14: traffic, diesel vehicles and industry pollute; parks, services and good stations raise land value; map views, tints and lines show both; towns build to fit. | — | |
 | M8 | Utilities | Power and water networks. | XL | Probably skip, or keep it light (arctic/tropic towns already need food/water). |
 
-Recommended order: commuting between towns next (M5's second part: people
-living in one town and working in another, by road, expressway or rail),
-which makes intercity and suburban rail matter to traffic; then M4's bigger
-buildings; M8 only if wanted.
+Recommended order: M4's bigger buildings next (hospital, university,
+stadium: services that also make passengers and commuters), then M8 only if
+wanted.
 
 ## Getting it onto the owner's computer (Windows)
 
@@ -1826,6 +1887,7 @@ Savegame locations (files end in `.sav`; autosaves are in `save/autosave`):
 ## Open questions for the owner
 
 1. Can you share one of your saves, so it can be tested before you play it?
-2. Which milestone next? Recommendation: commuting between towns, so trains
-   and expressways between a town and its suburbs take cars off the roads.
+2. Which milestone next? Recommendation: M4 part 2, bigger city buildings
+   (hospital, university, stadium) that serve a whole town and draw
+   commuters and passengers.
 3. A name for the fork.
