@@ -902,6 +902,20 @@ static const TransitContract *GetScriptLineTender(VehicleID vehicle_id)
 	return score.known ? static_cast<SQInteger>(score.busway) : -1;
 }
 
+/* static */ SQInteger ScriptOrder::GetLineSatisfaction(VehicleID vehicle_id)
+{
+	const OrderList *list = GetScriptLine(vehicle_id);
+	if (list == nullptr || list->line.satisfaction == SATISFACTION_UNKNOWN) return -1;
+	return list->line.satisfaction;
+}
+
+/* static */ SQInteger ScriptOrder::GetLineSatisfactionPart(VehicleID vehicle_id, SQInteger part)
+{
+	const OrderList *list = GetScriptLine(vehicle_id);
+	if (list == nullptr || list->line.satisfaction == SATISFACTION_UNKNOWN || part < 0 || part >= ::to_underlying(SatisfactionPart::End)) return -1;
+	return list->line.satisfaction_parts[part];
+}
+
 /* static */ SQInteger ScriptOrder::GetLineAverageGap(VehicleID vehicle_id)
 {
 	const OrderList *list = GetScriptLine(vehicle_id);

@@ -273,3 +273,10 @@ template <bool Tfrom, bool Tvia>
 	if (!IsValidStation(station_id)) return false;
 	return ::IsActiveTransportHub(::Station::Get(station_id));
 }
+
+/* static */ SQInteger ScriptStation::GetSatisfaction(StationID station_id)
+{
+	if (!IsValidStation(station_id)) return -1;
+	const uint8_t satisfaction = ::Station::Get(station_id)->satisfaction;
+	return satisfaction == UINT8_MAX ? -1 : satisfaction;
+}

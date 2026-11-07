@@ -439,6 +439,14 @@ public:
 	static SQInteger GetCentreCongestion(TownID town_id);
 
 	/**
+	 * Get how satisfied riders were last month with the town's stations.
+	 * @param town_id The town.
+	 * @pre IsValidTown(town_id).
+	 * @return The satisfaction from 0 to 100, or -1 if none is known or the town is invalid.
+	 */
+	static SQInteger GetTransitSatisfaction(TownID town_id);
+
+	/**
 	 * Find out if the town is a city.
 	 * @param town_id The town to check.
 	 * @pre IsValidTown(town_id).

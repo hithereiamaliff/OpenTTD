@@ -10,6 +10,7 @@
 #include "stdafx.h"
 #include "line.h"
 #include "brt.h"
+#include "satisfaction.h"
 #include "line_cmd.h"
 #include "command_func.h"
 #include "company_func.h"
@@ -213,6 +214,17 @@ struct LineWindow : Window {
 			lines.push_back(GetString(STR_LINE_ON_TIME_UNKNOWN));
 		}
 
+		/* How satisfied its passengers are. */
+		if (line.satisfaction != SATISFACTION_UNKNOWN) {
+			const auto &p = line.satisfaction_parts;
+			lines.push_back(GetString(STR_LINE_SATISFACTION, line.satisfaction));
+			lines.push_back(GetString(STR_LINE_SATISFACTION_PARTS, p[to_underlying(SatisfactionPart::Waiting)], p[to_underlying(SatisfactionPart::Crowding)],
+					p[to_underlying(SatisfactionPart::Punctuality)], p[to_underlying(SatisfactionPart::Fare)], p[to_underlying(SatisfactionPart::Condition)], p[to_underlying(SatisfactionPart::Comfort)]));
+		} else {
+			lines.push_back(GetString(IsPassengerLine(list) ? STR_LINE_SATISFACTION_UNKNOWN : STR_LINE_SATISFACTION_NO_PASSENGERS));
+			lines.emplace_back();
+		}
+
 		/* The BRT score of bus lines. */
 		if (IsBusLine(list)) {
 			const BrtScore brt = GetLineBrtScore(list);
@@ -248,7 +260,7 @@ struct LineWindow : Window {
 	}
 
 	/** Number of lines in the info panel, below the badge row. */
-	static constexpr uint INFO_LINES = 11;
+	static constexpr uint INFO_LINES = 13;
 
 	void UpdateWidgetSize(WidgetID widget, Dimension &size, [[maybe_unused]] const Dimension &padding, [[maybe_unused]] Dimension &fill, [[maybe_unused]] Dimension &resize) override
 	{

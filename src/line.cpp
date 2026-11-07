@@ -10,6 +10,7 @@
 #include "stdafx.h"
 #include "line.h"
 #include "brt.h"
+#include "satisfaction.h"
 #include "line_cmd.h"
 #include "command_func.h"
 #include "company_func.h"
@@ -178,6 +179,7 @@ static const IntervalTimer<TimerGameEconomy> _economy_lines_monthly({TimerGameEc
 		list->line.this_month = {};
 	}
 	BrtMonthlyLoop();
+	SatisfactionMonthlyLoop();
 	InvalidateWindowClassesData(WindowClass::Line);
 });
 

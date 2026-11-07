@@ -776,6 +776,23 @@ public:
 	static SQInteger GetLineBuswayShare(VehicleID vehicle_id);
 
 	/**
+	 * Get how satisfied a line's passengers were last month.
+	 * @param vehicle_id Any vehicle of the line.
+	 * @pre ScriptVehicle::IsPrimaryVehicle(vehicle_id).
+	 * @return The satisfaction from 0 to 100, or -1 if the vehicle is invalid or it isn't known yet.
+	 */
+	static SQInteger GetLineSatisfaction(VehicleID vehicle_id);
+
+	/**
+	 * Get one part of how satisfied a line's passengers were last month.
+	 * @param vehicle_id Any vehicle of the line.
+	 * @param part 0 waiting, 1 crowding, 2 punctuality, 3 fares, 4 vehicle condition, 5 comfort.
+	 * @pre ScriptVehicle::IsPrimaryVehicle(vehicle_id).
+	 * @return The part from 0 to 100, or -1 if the vehicle or part is invalid or it isn't known yet.
+	 */
+	static SQInteger GetLineSatisfactionPart(VehicleID vehicle_id, SQInteger part);
+
+	/**
 	 * Get the average time between a line's recent departures from its first stop.
 	 * @param vehicle_id Any vehicle of the line.
 	 * @pre ScriptVehicle::IsPrimaryVehicle(vehicle_id).

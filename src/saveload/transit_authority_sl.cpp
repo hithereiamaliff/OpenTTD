@@ -47,6 +47,7 @@ static const SaveLoad _town_transit_desc[] = {
 	SaveLoad::Variable<VarFileType::I64>("charge_income_this_month", SLE_OBJECT_ADDRESS(Town, transit.charge_income_this_month)),
 	SaveLoad::Variable<VarFileType::I64>("charge_income_last_month", SLE_OBJECT_ADDRESS(Town, transit.charge_income_last_month)),
 	SaveLoad::Variable<VarFileType::U8>("hubs", SLE_OBJECT_ADDRESS(Town, transit.hubs)),
+	SaveLoad::Variable<VarFileType::U8>("satisfaction", SLE_OBJECT_ADDRESS(Town, transit.satisfaction)),
 };
 
 static const SaveLoad _transit_contract_desc[] = {

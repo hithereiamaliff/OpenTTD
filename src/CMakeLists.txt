@@ -449,6 +449,8 @@ add_files(
     screenshot_bmp.cpp
     screenshot_gui.cpp
     screenshot_gui.h
+    satisfaction.cpp
+    satisfaction.h
     screenshot.cpp
     screenshot.h
     screenshot_type.h

@@ -311,6 +311,14 @@ public:
 	static bool IsTransportHub(StationID station_id);
 
 	/**
+	 * Get how satisfied riders were last month with the lines that stop at a station.
+	 * @param station_id The station.
+	 * @pre IsValidStation(station_id).
+	 * @return The satisfaction from 0 to 100, or -1 if no passenger line stops there or the station is invalid.
+	 */
+	static SQInteger GetSatisfaction(StationID station_id);
+
+	/**
 	 * Toggle the open/closed state of an airport.
 	 * @param station_id The airport to modify.
 	 * @game @pre ScriptCompanyMode::IsValid().

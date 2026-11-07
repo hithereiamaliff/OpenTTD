@@ -104,6 +104,7 @@ struct TownTransit {
 	Money charge_income_last_month = 0; ///< Charges taken last month, from company road vehicles and the town's own drivers.
 
 	uint8_t hubs = 0; ///< Integrated transport hubs in the town last month (see interchange.cpp).
+	uint8_t satisfaction = UINT8_MAX; ///< Passengers' satisfaction with the town's stations last month, 0 to 100 or UINT8_MAX if none (see satisfaction.cpp).
 };
 
 static constexpr uint RESIDENT_PASS_SHARE = 33; ///< Share of riders (in percent) boarding in a town with a resident pass that hold one.

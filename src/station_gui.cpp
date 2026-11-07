@@ -9,6 +9,7 @@
 
 #include "stdafx.h"
 #include "interchange.h"
+#include "satisfaction.h"
 #include "interchange_cmd.h"
 #include "line.h"
 #include "fare.h"
@@ -1966,6 +1967,13 @@ struct StationViewWindow : public Window {
 		if (passengers && st->fare_level != 100) {
 			int bonus = GetStationFareRatingBonus(st);
 			DrawString(tr.Indent(WidgetDimensions::scaled.hsep_indent, rtl), GetString(bonus >= 0 ? STR_STATION_VIEW_FARE_CHEAP : STR_STATION_VIEW_FARE_DEAR, st->fare_level, std::abs(bonus) * 100 / 255));
+			tr.top += GetCharacterHeight(FontSize::Normal);
+		}
+
+		/* How satisfied riders are with the lines that stop here. */
+		if (passengers && st->satisfaction != UINT8_MAX) {
+			const int bonus = GetStationSatisfactionRatingBonus(st);
+			DrawString(tr.Indent(WidgetDimensions::scaled.hsep_indent, rtl), GetString(bonus >= 0 ? STR_STATION_VIEW_SATISFACTION_GOOD : STR_STATION_VIEW_SATISFACTION_BAD, st->satisfaction, std::abs(bonus) * 100 / 255));
 			tr.top += GetCharacterHeight(FontSize::Normal);
 		}
 

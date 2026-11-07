@@ -11,6 +11,7 @@
 #include "fare.h"
 #include "brt.h"
 #include "interchange.h"
+#include "satisfaction.h"
 #include "core/flatset_type.hpp"
 #include "aircraft.h"
 #include "bridge.h"
@@ -4081,7 +4082,7 @@ static void UpdateStationRating(Station *st)
 		if (Company::IsValidID(st->owner) && st->town->statues.Test(st->owner)) rating += 26;
 
 		/* Riders weigh the fares of the vehicles leaving here. */
-		if (IsCargoInClass(cs->Index(), CargoClass::Passengers)) rating += GetStationFareRatingBonus(st) + GetStationBrtRatingBonus(st) + GetStationInterchangeRatingBonus(st);
+		if (IsCargoInClass(cs->Index(), CargoClass::Passengers)) rating += GetStationFareRatingBonus(st) + GetStationBrtRatingBonus(st) + GetStationInterchangeRatingBonus(st) + GetStationSatisfactionRatingBonus(st);
 
 		uint8_t age = ge->last_age;
 		if (age < 3) rating += 10;

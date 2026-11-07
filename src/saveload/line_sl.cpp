@@ -56,6 +56,8 @@ static const SaveLoad _line_desc[] = {
 	SaveLoad::Variable<VarFileType::U8>("next_gap", SLE_OBJECT_ADDRESS(LineInfo, next_gap)),
 	LINE_MONTH_FIELDS("this_month", this_month),
 	LINE_MONTH_FIELDS("last_month", last_month),
+	SaveLoad::Variable<VarFileType::U8>("satisfaction", SLE_OBJECT_ADDRESS(LineInfo, satisfaction)),
+	SaveLoad::Array<VarFileType::U8, to_underlying(SatisfactionPart::End)>("satisfaction_parts", SLE_OBJECT_ADDRESS(LineInfo, satisfaction_parts)),
 };
 
 #undef LINE_MONTH_FIELDS

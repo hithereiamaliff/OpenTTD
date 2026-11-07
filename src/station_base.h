@@ -561,6 +561,7 @@ public:
 	uint16_t fare_level = 100; ///< City fork: what riders who boarded here paid last month, in percent of the classic fare (0 = free).
 	uint8_t brt_grade = 0; ///< City fork: the best #BrtGrade of the BRT lines that served the station last month (saved in chunk FSTA).
 	uint8_t interchange = 0; ///< City fork: the #InterchangeLevel the station was upgraded to (saved in chunk FSTA).
+	uint8_t satisfaction = UINT8_MAX; ///< City fork: passengers' satisfaction with the lines that stop here, 0 to 100 or UINT8_MAX if none (saved in chunk FSTA).
 	CargoTypes always_accepted{}; ///< Bitmask of always accepted cargo types (by houses, HQs, industry tiles when industry doesn't accept cargo)
 
 	IndustryList industries_near{}; ///< Cached list of industries near the station that can accept cargo, @see DeliverGoodsToIndustry()

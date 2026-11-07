@@ -264,6 +264,13 @@
 	return ::Town::Get(town_id)->transit.charged_last_month;
 }
 
+/* static */ SQInteger ScriptTown::GetTransitSatisfaction(TownID town_id)
+{
+	if (!IsValidTown(town_id)) return -1;
+	const uint8_t satisfaction = ::Town::Get(town_id)->transit.satisfaction;
+	return satisfaction == UINT8_MAX ? -1 : satisfaction;
+}
+
 /* static */ SQInteger ScriptTown::GetCentreCongestion(TownID town_id)
 {
 	if (!IsValidTown(town_id)) return -1;

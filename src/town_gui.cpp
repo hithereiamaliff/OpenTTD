@@ -406,7 +406,11 @@ public:
 		tr.top += GetCharacterHeight(FontSize::Normal);
 
 		/* Happiness, and how much of the town each city service reaches: an icon and a percentage each. */
-		DrawString(tr, GetString(STR_TOWN_VIEW_HAPPINESS, GetTownHappiness(this->town)));
+		if (this->town->transit.satisfaction != UINT8_MAX) {
+			DrawString(tr, GetString(STR_TOWN_VIEW_HAPPINESS_SATISFACTION, GetTownHappiness(this->town), this->town->transit.satisfaction));
+		} else {
+			DrawString(tr, GetString(STR_TOWN_VIEW_HAPPINESS, GetTownHappiness(this->town)));
+		}
 		tr.top += GetCharacterHeight(FontSize::Normal);
 		int row_height = GetServiceRowHeight();
 		int text_top = tr.top + (row_height - GetCharacterHeight(FontSize::Normal)) / 2;

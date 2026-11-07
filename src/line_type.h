@@ -21,6 +21,20 @@ static constexpr uint MAX_LENGTH_LINE_NAME_CHARS = 32;
 /** How many recent gaps between departures a line remembers. */
 static constexpr uint LINE_GAP_HISTORY = 16;
 
+/** Parts of the satisfaction of a line's passengers (see satisfaction.cpp). */
+enum class SatisfactionPart : uint8_t {
+	Waiting, ///< How long they wait, against how long the trip takes.
+	Crowding, ///< How full the vehicles are.
+	Punctuality, ///< Departures on time, or evenly spaced.
+	Fare, ///< What they pay.
+	Condition, ///< How reliable the vehicles are.
+	Comfort, ///< Air-conditioning, newer and quieter vehicles.
+	End, ///< End marker.
+};
+
+/** Satisfaction that isn't known yet. */
+static constexpr uint8_t SATISFACTION_UNKNOWN = UINT8_MAX;
+
 /** What a line did in one month. */
 struct LineMonthStats {
 	uint32_t riders = 0; ///< Passengers who got off (delivered or transferred) the line's vehicles.
@@ -60,6 +74,9 @@ struct LineInfo {
 
 	LineMonthStats this_month{}; ///< Statistics of the current month.
 	LineMonthStats last_month{}; ///< Statistics of the previous month.
+
+	uint8_t satisfaction = SATISFACTION_UNKNOWN; ///< How satisfied its passengers were last month, 0 to 100.
+	std::array<uint8_t, to_underlying(SatisfactionPart::End)> satisfaction_parts{}; ///< The parts of it, 0 to 100 each.
 
 	/**
 	 * Remember the gap before a departure from the first stop.

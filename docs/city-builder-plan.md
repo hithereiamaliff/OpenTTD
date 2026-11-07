@@ -1127,6 +1127,52 @@ four months, hub after eight; save `city-hub-demo.csav`):
 - Screenshots: the hub roofs over the bus stops next to the platform, the
   station window with its Transport hub button and ratings line.
 
+## Done: transit part 11, passenger satisfaction
+
+Each month every passenger line (any transport) gets a satisfaction score
+from 0 to 100% out of six parts, each 0 to 100:
+
+| Part | Weight | 100 when | Falling to |
+|---|---|---|---|
+| Waiting | 25% | the average wait at its first stop is at most a tenth of a round trip (two days at least) | a quarter less for each such stretch beyond |
+| Crowding | 20% | vehicles leave stops at most 60% full on average | two points less per percent above; 10 less when one left full |
+| Punctuality | 20% | departures on time (with a timetable), or evenly spaced (without) | 30 less for each extra wait as long as the wait with even spacing |
+| Fares | 15% | free, or half the standard fare | 75 at the standard fare, a point less per 2% dearer |
+| Vehicle condition | 10% | reliable vehicles | their average reliability |
+| Comfort | 10% | air-conditioned modern city buses (85), quieter electric ones (95) | older buses 55 (35 in the tropics), other vehicles 70; 2 less a year over five years old |
+
+- **Stations**: the average of the passenger lines that stop there;
+  passengers rate a station up to 5% better (at 100%) or 8% worse (at 0%),
+  neutral at 60%.
+- **Towns**: the average of their stations. Happiness goes up or down by up
+  to 10 points (neutral at 50%), and each company gains or loses standing
+  with the town every month from its own stations there (up to "very good").
+- Shown in the line window (score and parts), the station window's ratings
+  view and the town window's happiness line.
+- Saved: lines' satisfaction in LINE, stations' in FSTA, towns' in TTRA.
+- Script API: `ScriptOrder.GetLineSatisfaction`, `GetLineSatisfactionPart`;
+  `ScriptStation.GetSatisfaction`; `ScriptTown.GetTransitSatisfaction`.
+- Code: `src/satisfaction.{h,cpp}`; hooks in `line.cpp` (monthly),
+  `station_cmd.cpp` (rating), `city_services.cpp` (happiness),
+  `line_gui.cpp`, `station_gui.cpp`, `town_gui.cpp`.
+
+Tests (test AI BusTest with new settings `fare`, `maxbuses`, `oldonly`;
+part 7's 16-tile line through Kinningbury, 55,000 ticks, 17 monthly samples;
+save `city-satisfaction-demo.csav`):
+
+| Setup | Satisfaction | Weakest part | Station rating |
+|---|---|---|---|
+| 13 modern buses | 78% | punctuality 38 (the buses bunch) | 96% |
+| The same at 200% fares | 71% | fares 25 | 62% (with part 3's fare effect) |
+| Only 4 buses | 63% | waiting 32 | 79% |
+| 8 old buses (Foster) | 58% | comfort 55, punctuality 8 | 76% |
+
+- 99/99 unit tests; all 33 test saves load, save and reload.
+- Kinningbury's happiness went from 40% to 45% with its riders at 76%.
+- Screenshots: the line window ("Passengers' satisfaction last month: 76%",
+  waiting 95, crowding 100, punctuality 19, fares 75, condition 87, comfort
+  85), the station's ratings view, the town window.
+
 ## Roadmap
 
 Sizes are rough: S = one session, M = a few, L = many, XL = a project in itself.

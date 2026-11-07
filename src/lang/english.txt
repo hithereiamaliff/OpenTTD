@@ -3935,6 +3935,7 @@ STR_TOWN_VIEW_ZONING_BALANCED                                   :{BLACK}Homes fo
 STR_TOWN_VIEW_ZONING_WANTS_COMMERCIAL                           :{BLACK}Homes for {ORANGE}{COMMA}{BLACK}, jobs for {ORANGE}{COMMA}{BLACK}: wants more shops and offices
 STR_TOWN_VIEW_ZONING_WANTS_RESIDENTIAL                          :{BLACK}Homes for {ORANGE}{COMMA}{BLACK}, jobs for {ORANGE}{COMMA}{BLACK}: wants more homes
 STR_TOWN_VIEW_HAPPINESS                                         :{BLACK}Happiness: {ORANGE}{NUM}%{BLACK}. City services reach:
+STR_TOWN_VIEW_HAPPINESS_SATISFACTION                            :{BLACK}Happiness: {ORANGE}{NUM}%{BLACK} (riders' satisfaction {ORANGE}{NUM}%{BLACK}). City services reach:
 STR_TOWN_VIEW_SERVICE_PERCENT                                   :{BLACK}{NUM}%
 STR_TOWN_VIEW_TRAFFIC                                           :{BLACK}Traffic: {ORANGE}{STRING}{BLACK}, {NUM}% of roads congested
 STR_TOWN_VIEW_TRAFFIC_LIGHT                                     :light
@@ -4114,6 +4115,8 @@ STR_STATION_VIEW_INTERCHANGE_ACTIVE                             :{BLACK}Bus inte
 STR_STATION_VIEW_HUB_ACTIVE                                     :{BLACK}Transport hub ({NUM} stops): passengers {GREEN}+16%{BLACK}, catchment +2
 STR_STATION_VIEW_HUB_NO_RAIL                                    :{BLACK}Transport hub without a railway station: a bus interchange ({NUM} stops)
 STR_STATION_VIEW_INTERCHANGE_TOO_FEW                            :{BLACK}Bus interchange closed: {NUM} bus stops of {NUM} needed
+STR_STATION_VIEW_SATISFACTION_GOOD                              :{BLACK}Riders' satisfaction with the lines here: {GREEN}{NUM}%{BLACK}: passengers {GREEN}+{NUM}%
+STR_STATION_VIEW_SATISFACTION_BAD                               :{BLACK}Riders' satisfaction with the lines here: {RED}{NUM}%{BLACK}: passengers {RED}-{NUM}%
 
 STR_STATION_VIEW_GROUP                                          :{BLACK}Group by
 STR_STATION_VIEW_WAITING_STATION                                :Station: Waiting
@@ -5153,6 +5156,10 @@ STR_LINE_LOAD_UNKNOWN                                           :{BLACK}How full
 STR_LINE_ON_TIME                                                :{BLACK}On time: {LTBLUE}{COMMA}%{BLACK} of {COMMA} timetabled departure{P "" s} last month
 STR_LINE_ON_TIME_UNKNOWN                                        :{BLACK}On time: no running timetable to compare with
 STR_LINE_PROFIT                                                 :{BLACK}Profit this year: {CURRENCY_LONG} (last year: {CURRENCY_LONG})
+STR_LINE_SATISFACTION                                           :{BLACK}Passengers' satisfaction last month: {WHITE}{NUM}%
+STR_LINE_SATISFACTION_PARTS                                     :{BLACK}Waiting {NUM}, crowding {NUM}, punctuality {NUM}, fares {NUM}, condition {NUM}, comfort {NUM}
+STR_LINE_SATISFACTION_UNKNOWN                                   :{BLACK}Passengers' satisfaction: worked out each month
+STR_LINE_SATISFACTION_NO_PASSENGERS                             :{BLACK}Passengers' satisfaction: no passengers on this line
 STR_LINE_BRT_SCORE                                              :{BLACK}BRT score last month: {WHITE}{NUM}{BLACK} of 100, {WHITE}{STRING}
 STR_LINE_BRT_SCORE_PENALTY                                      :{BLACK}BRT score last month: {WHITE}{NUM}{BLACK} of 100, {WHITE}{STRING}{BLACK} ({NUM} off for shared sections)
 STR_LINE_BRT_UNKNOWN                                            :{BLACK}BRT score: worked out each month for bus lines
