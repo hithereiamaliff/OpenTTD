@@ -495,6 +495,53 @@ public:
 	static SQInteger GetStaffBudget(ScriptCompany::CompanyID company);
 
 	/**
+	 * Set the toll level of the company's toll plazas.
+	 * @param level The level in percent of the standard toll: 50 to 150, in steps of 10.
+	 * @pre level >= 50 && level <= 150 && level % 10 == 0.
+	 * @game @pre ScriptCompanyMode::IsValid().
+	 * @return True if the level was changed.
+	 * @api ai game
+	 */
+	static bool SetTollLevel(SQInteger level);
+
+	/**
+	 * Get a company's toll level.
+	 * @param company The company to check.
+	 * @pre ResolveCompanyID(company) != COMPANY_INVALID.
+	 * @return The level in percent of the standard toll, or -1 for an invalid company.
+	 * @api ai game
+	 */
+	static SQInteger GetTollLevel(ScriptCompany::CompanyID company);
+
+	/**
+	 * Set how town traffic pays at the company's toll plazas.
+	 * @param scheme 0 per km (a closed system), 1 flat (an open system).
+	 * @pre scheme == 0 || scheme == 1.
+	 * @game @pre ScriptCompanyMode::IsValid().
+	 * @return True if the scheme was changed.
+	 * @api ai game
+	 */
+	static bool SetTollScheme(SQInteger scheme);
+
+	/**
+	 * Get how town traffic pays at a company's toll plazas.
+	 * @param company The company to check.
+	 * @pre ResolveCompanyID(company) != COMPANY_INVALID.
+	 * @return 0 per km, 1 flat, or -1 for an invalid company.
+	 * @api ai game
+	 */
+	static SQInteger GetTollScheme(ScriptCompany::CompanyID company);
+
+	/**
+	 * Get what a company's toll plazas took last month, from town traffic and other companies' road vehicles.
+	 * @param company The company to check.
+	 * @pre ResolveCompanyID(company) != COMPANY_INVALID.
+	 * @return The tolls, or -1 for an invalid company.
+	 * @api ai game
+	 */
+	static Money GetTollIncome(ScriptCompany::CompanyID company);
+
+	/**
 	 * Set whether autorenew is enabled for your company.
 	 * @param autorenew The new autorenew status.
 	 * @game @pre ScriptCompanyMode::IsValid().

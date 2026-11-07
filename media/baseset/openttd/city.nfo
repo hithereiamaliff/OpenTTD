@@ -23,9 +23,12 @@
 //   219-222: kerbed busway (road along X, along Y), deck under a stop raised onto a viaduct (X, Y)
 //   223-226: BRT station sides: road along X far and near side, along Y far and near side
 //   227-228: icons: kerbed busway, BRT station
+//   229-230: expressway lanes and barrier (road along X, along Y)
+//   231-238: toll plazas: roof, far booth, near booth (road along X, then along Y); free-flow gantries (X, Y)
+//   239-241: icons: tolls, toll plaza, free-flow gantry
 //
    -1 * 0	 0C "City fork graphics"
-   -1 * 3	 05 1C E5
+   -1 * 3	 05 1C F2
    -1 sprites/city.png 8bpp    4    4   4  17   -1  -16 normal
    -1 sprites/city.png 8bpp   12    4   4  17   -1  -16 normal
    -1 sprites/city.png 8bpp   20    4   4  17   -1  -16 normal
@@ -255,3 +258,16 @@
    -1 sprites/city.png 8bpp  220  740  40  31  -31    1 normal
    -1 sprites/city.png 8bpp  292  740  16  10    0    0 normal
    -1 sprites/city.png 8bpp  312  740  16  10    0    0 normal
+   -1 sprites/city.png 8bpp    4  780  48  24  -23    4 normal
+   -1 sprites/city.png 8bpp   76  780  48  24  -23    4 normal
+   -1 sprites/city.png 8bpp    4  810  40  21  -19   -7 normal
+   -1 sprites/city.png 8bpp   76  810  24  20  -23   -4 normal
+   -1 sprites/city.png 8bpp  148  810  24  20    1    8 normal
+   -1 sprites/city.png 8bpp  220  810  40  21  -19   -7 normal
+   -1 sprites/city.png 8bpp  292  810  24  20    1   -4 normal
+   -1 sprites/city.png 8bpp  364  810  24  20  -23    8 normal
+   -1 sprites/city.png 8bpp  436  810  32  31  -15   -7 normal
+   -1 sprites/city.png 8bpp    4  870  32  31  -15   -7 normal
+   -1 sprites/city.png 8bpp  150  870  16  10    0    0 normal
+   -1 sprites/city.png 8bpp  170  870  16  10    0    0 normal
+   -1 sprites/city.png 8bpp  190  870  16  10    0    0 normal

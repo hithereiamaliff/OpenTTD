@@ -49,6 +49,7 @@
 #include "traffic_light_cmd.h"
 #include "stop_charger_cmd.h"
 #include "bus_priority.h"
+#include "road_pricing.h"
 #include "traffic_light.h"
 #include "road_traffic.h"
 
@@ -612,6 +613,11 @@ struct BuildRoadToolbarWindow : Window {
 			SndClickBeep();
 			return;
 		}
+		if (widget == WID_ROT_TOLLS) {
+			ShowTollsToolbar();
+			SndClickBeep();
+			return;
+		}
 
 		if (widget == WID_ROT_TRAFFIC_OVERLAY) {
 			/* A switch, not a building tool: leave the current tool alone. */
@@ -1018,6 +1024,7 @@ struct BuildRoadToolbarWindow : Window {
 		Hotkey('O', "traffic_overlay", WID_ROT_TRAFFIC_OVERLAY),
 		Hotkey('G', "stop_charger", WID_ROT_STOP_CHARGER),
 		Hotkey('Y', "bus_priority", WID_ROT_BUS_PRIORITY),
+		Hotkey('K', "tolls", WID_ROT_TOLLS),
 		Hotkey(WKC_L_BRACKET, "prev_roadtype", to_underlying(SpecialListHotkeys::PreviousItem)),
 		Hotkey(WKC_R_BRACKET, "next_roadtype", to_underlying(SpecialListHotkeys::NextItem)),
 		Hotkey(WKC_L_BRACKET | WKC_CTRL, "first_roadtype", to_underlying(SpecialListHotkeys::FirstItem)),
@@ -1080,6 +1087,8 @@ static constexpr std::initializer_list<NWidgetPart> _nested_build_road_widgets =
 						SetFill(0, 1), SetToolbarMinimalSize(1), SetSpriteTip(SPR_IMG_STOP_CHARGER, STR_ROAD_TOOLBAR_TOOLTIP_BUILD_STOP_CHARGER),
 		NWidget(WWT_PUSHIMGBTN, Colours::DarkGreen, WID_ROT_BUS_PRIORITY),
 						SetFill(0, 1), SetToolbarMinimalSize(1), SetSpriteTip(SPR_IMG_BUS_PRIORITY, STR_ROAD_TOOLBAR_TOOLTIP_BUS_PRIORITY),
+		NWidget(WWT_PUSHIMGBTN, Colours::DarkGreen, WID_ROT_TOLLS),
+						SetFill(0, 1), SetToolbarMinimalSize(1), SetSpriteTip(SPR_IMG_TOLLS, STR_ROAD_TOOLBAR_TOOLTIP_TOLLS),
 		NWidget(WWT_IMGBTN, Colours::DarkGreen, WID_ROT_BUILD_BRIDGE),
 						SetFill(0, 1), SetToolbarMinimalSize(2), SetSpriteTip(SPR_IMG_BRIDGE, STR_ROAD_TOOLBAR_TOOLTIP_BUILD_ROAD_BRIDGE),
 		NWidget(WWT_IMGBTN, Colours::DarkGreen, WID_ROT_BUILD_TUNNEL),

@@ -20,6 +20,7 @@
 
 #include "../town.h"
 #include "../transit_authority.h"
+#include "../road_pricing.h"
 
 #include "../safeguards.h"
 
@@ -37,6 +38,14 @@ static const SaveLoad _town_transit_desc[] = {
 	SaveLoad::Variable<VarFileType::I64>("last_pass_paid", SLE_OBJECT_ADDRESS(Town, transit.last_pass_paid)),
 	SaveLoad::Variable<VarFileType::I64>("last_concessions_paid", SLE_OBJECT_ADDRESS(Town, transit.last_concessions_paid)),
 	SaveLoad::Variable<VarFileType::Bool>("told_budget_gone", SLE_OBJECT_ADDRESS(Town, transit.told_budget_gone)),
+	SaveLoad::Variable<VarFileType::Bool>("congestion_charge", SLE_OBJECT_ADDRESS(Town, transit.congestion_charge)),
+	SaveLoad::Variable<VarFileType::I32>("charge_since", SLE_OBJECT_ADDRESS(Town, transit.charge_since)),
+	SaveLoad::Variable<VarFileType::I64>("charge_this_year", SLE_OBJECT_ADDRESS(Town, transit.charge_this_year)),
+	SaveLoad::Variable<VarFileType::I64>("charge_last_year", SLE_OBJECT_ADDRESS(Town, transit.charge_last_year)),
+	SaveLoad::Variable<VarFileType::U32>("charged_this_month", SLE_OBJECT_ADDRESS(Town, transit.charged_this_month)),
+	SaveLoad::Variable<VarFileType::U32>("charged_last_month", SLE_OBJECT_ADDRESS(Town, transit.charged_last_month)),
+	SaveLoad::Variable<VarFileType::I64>("charge_income_this_month", SLE_OBJECT_ADDRESS(Town, transit.charge_income_this_month)),
+	SaveLoad::Variable<VarFileType::I64>("charge_income_last_month", SLE_OBJECT_ADDRESS(Town, transit.charge_income_last_month)),
 };
 
 static const SaveLoad _transit_contract_desc[] = {
@@ -94,6 +103,7 @@ struct TTRAChunkHandler : ChunkHandler {
 			if (!Town::IsValidID(index)) SlErrorCorrupt("Transit figures for a town that doesn't exist");
 			SlObject(Town::Get(index), slt);
 		}
+		UpdateCongestionChargeTowns();
 	}
 };
 

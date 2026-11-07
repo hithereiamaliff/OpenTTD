@@ -24,6 +24,7 @@
 #include "../../misc_cmd.h"
 #include "../../object_cmd.h"
 #include "../../settings_cmd.h"
+#include "../../road_pricing_cmd.h"
 
 #include "table/strings.h"
 
@@ -406,6 +407,41 @@ static const FarePolicy *GetScriptFare(ScriptCompany::CompanyID company, ScriptC
 	company = ResolveCompanyID(company);
 	if (company == ScriptCompany::COMPANY_INVALID) return -1;
 	return ::Company::Get(ScriptCompany::FromScriptCompanyID(company))->settings.staff_budget;
+}
+
+/* static */ bool ScriptCompany::SetTollLevel(SQInteger level)
+{
+	EnforceCompanyModeValid(false);
+	EnforcePrecondition(false, level >= TOLL_LEVEL_MIN && level <= TOLL_LEVEL_MAX && level % TOLL_LEVEL_STEP == 0);
+	return ScriptObject::Command<Commands::SetTollPolicy>::Do(TollPolicyProperty::Level, static_cast<uint8_t>(level));
+}
+
+/* static */ SQInteger ScriptCompany::GetTollLevel(ScriptCompany::CompanyID company)
+{
+	company = ResolveCompanyID(company);
+	if (company == ScriptCompany::COMPANY_INVALID) return -1;
+	return ::Company::Get(ScriptCompany::FromScriptCompanyID(company))->tolls.level;
+}
+
+/* static */ bool ScriptCompany::SetTollScheme(SQInteger scheme)
+{
+	EnforceCompanyModeValid(false);
+	EnforcePrecondition(false, scheme >= 0 && scheme < ::to_underlying(TollScheme::End));
+	return ScriptObject::Command<Commands::SetTollPolicy>::Do(TollPolicyProperty::Scheme, static_cast<uint8_t>(scheme));
+}
+
+/* static */ SQInteger ScriptCompany::GetTollScheme(ScriptCompany::CompanyID company)
+{
+	company = ResolveCompanyID(company);
+	if (company == ScriptCompany::COMPANY_INVALID) return -1;
+	return ::to_underlying(::Company::Get(ScriptCompany::FromScriptCompanyID(company))->tolls.scheme);
+}
+
+/* static */ Money ScriptCompany::GetTollIncome(ScriptCompany::CompanyID company)
+{
+	company = ResolveCompanyID(company);
+	if (company == ScriptCompany::COMPANY_INVALID) return -1;
+	return ::Company::Get(ScriptCompany::FromScriptCompanyID(company))->tolls.income_last_month;
 }
 
 /* static */ bool ScriptCompany::SetAutoRenewStatus(bool autorenew)

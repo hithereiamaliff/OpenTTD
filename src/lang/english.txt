@@ -517,6 +517,7 @@ STR_RAIL_MENU_MAGLEV_CONSTRUCTION                               :Maglev construc
 STR_ROAD_MENU_ROAD_CONSTRUCTION                                 :Road construction
 STR_ROAD_MENU_TRAM_CONSTRUCTION                                 :Tramway construction
 STR_ROAD_MENU_BUS_ROAD_CONSTRUCTION                             :Bus-only road construction
+STR_ROAD_MENU_EXPRESSWAY_CONSTRUCTION                           :Expressway construction
 
 # Waterways construction menu
 STR_WATERWAYS_MENU_WATERWAYS_CONSTRUCTION                       :Waterways construction
@@ -3022,6 +3023,7 @@ STR_BRIDGE_NAME_CONCRETE_VIADUCT                                :Viaduct, Concre
 STR_ROAD_TOOLBAR_ROAD_CONSTRUCTION_CAPTION                      :{WHITE}Road Construction
 STR_ROAD_TOOLBAR_TRAM_CONSTRUCTION_CAPTION                      :{WHITE}Tramway Construction
 STR_ROAD_TOOLBAR_BUS_ROAD_CONSTRUCTION_CAPTION                  :{WHITE}Bus-only Road Construction
+STR_ROAD_TOOLBAR_EXPRESSWAY_CONSTRUCTION_CAPTION                :{WHITE}Expressway Construction
 STR_ROAD_TOOLBAR_TOOLTIP_BUILD_ROAD_SECTION                     :{BLACK}Build road section. Ctrl+Click to remove road section. Also press Shift to show cost estimate only
 STR_ROAD_TOOLBAR_TOOLTIP_BUILD_TRAMWAY_SECTION                  :{BLACK}Build tramway section. Ctrl+Click to remove tramway section. Also press Shift to show cost estimate only
 STR_ROAD_TOOLBAR_TOOLTIP_BUILD_AUTOROAD                         :{BLACK}Build road section using the Autoroad mode. Ctrl+Click to remove road section. Also press Shift to show cost estimate only
@@ -3038,6 +3040,7 @@ STR_ROAD_TOOLBAR_TOOLTIP_TOGGLE_ONE_WAY_ROAD                    :{BLACK}Activate
 STR_ROAD_TOOLBAR_TOOLTIP_TRAFFIC_OVERLAY                        :{BLACK}Show road traffic: colour roads by how much traffic is held up there (green flows, yellow some waiting, orange slow, red jammed)
 STR_ROAD_TOOLBAR_TOOLTIP_BUILD_STOP_CHARGER                     :{BLACK}Build a fast charger over a bus stop: electric buses top up while they stand there, and one below 40% waits until it gets there. Ctrl+Click removes the charger
 STR_ROAD_TOOLBAR_TOOLTIP_BUS_PRIORITY                           :{BLACK}Bus priority: bus lanes, give-way markings at stops and bus signals at traffic lights. Bus-only roads are a road type of their own (road construction menu)
+STR_ROAD_TOOLBAR_TOOLTIP_TOLLS                                  :{BLACK}Tolls: toll plazas on your expressways, free-flow gantries and your toll prices. Expressways are a road type of their own (road construction menu)
 STR_BUS_PRIORITY_CAPTION                                        :{WHITE}Bus Priority
 STR_BUS_PRIORITY_LANE_TOOLTIP                                   :{BLACK}Paint bus lanes, all day: drag along a road. Buses drive past town traffic at full speed; the other traffic, a lane short, is slower. Ctrl+Drag removes bus lanes
 STR_BUS_PRIORITY_LANE_PEAK_TOOLTIP                              :{BLACK}Paint bus lanes for the peak hours: drag along a road. Buses get through town traffic faster (two congestion levels less), and the other traffic keeps its lanes. Ctrl+Drag removes bus lanes
@@ -3045,6 +3048,28 @@ STR_BUS_PRIORITY_GIVE_WAY_TOOLTIP                               :{BLACK}Paint gi
 STR_BUS_PRIORITY_BUS_SIGNAL_TOOLTIP                             :{BLACK}Give traffic lights bus signals: buses get green a moment before the rest of the traffic; smart lights also turn green early for a waiting bus and stay green for a bus about to cross. Click a junction with traffic lights; Ctrl+Click switches the bus signals off
 STR_BUS_PRIORITY_BUSWAY_TOOLTIP                                 :{BLACK}Build a kerbed busway in the middle of the road: drag along a road, town roads too. Buses drive past town traffic at full speed and kerbs keep the traffic out, so it counts as a busway for the BRT score; the other traffic, a lane short, is slower. Ctrl+Drag removes it
 STR_BUS_PRIORITY_BRT_STATION_TOOLTIP                            :{BLACK}Make a drive-through bus stop a BRT station with fare gates and level platforms: riders pay before boarding and use every door, so buses load twice as fast, low-floor city buses three times. A stop between the ends of two concrete viaducts stands on the viaduct. Ctrl+Click makes it an ordinary stop again
+STR_TOLLS_TOOLBAR_CAPTION                                       :{WHITE}Tolls
+STR_TOLLS_TOOLBAR_PLAZA_TOOLTIP                                 :{BLACK}Build a toll plaza on your expressway: click a straight stretch. It takes tolls from town traffic between the towns your expressway links (roads that join it near them) and from other companies' road vehicles; everyone slows down at the booths. A 30-year concession, then 20 more years for an 18% toll cut. Ctrl+Click removes it
+STR_TOLLS_TOOLBAR_FREE_FLOW_TOOLTIP                             :{BLACK}Replace a toll plaza's booths with a free-flow gantry: nobody slows down to pay, there are 10% more trips, and it costs less to run. Click a toll plaza
+STR_TOLLS_TOOLBAR_OVERVIEW_TOOLTIP                              :{BLACK}Show your tolls: toll level, scheme and toll plazas
+STR_TOLLS_CAPTION                                               :{WHITE}{COMPANY} - Tolls
+STR_TOLLS_EXPLAIN                                               :{BLACK}Tolls come from town traffic between the towns your expressways link, and from other companies' road vehicles
+STR_TOLLS_FROZEN                                                :{BLACK}The government froze your tolls until {DATE_LONG}: at most {NUM}% now; it pays half of what that costs you
+STR_TOLLS_NOT_FROZEN                                            :{BLACK}No toll freeze
+STR_TOLLS_INCOME                                                :{BLACK}Last month: {CURRENCY_LONG} in tolls, {CURRENCY_LONG} compensation for a freeze
+STR_TOLLS_NO_PLAZAS                                             :{BLACK}No toll plazas yet: build an expressway, then a toll plaza on it with the Tolls toolbar
+STR_TOLLS_MORE                                                  :{BLACK}... and {NUM} more
+STR_TOLLS_PLAZA_NEAR                                            :{TOWN} ({NUM},{NUM})
+STR_TOLLS_PLAZA_AT                                              :({NUM},{NUM})
+STR_TOLLS_PLAZA_BOOTHS                                          :booths
+STR_TOLLS_PLAZA_FREE_FLOW                                       :free-flow
+STR_TOLLS_PLAZA                                                 :{BLACK}{RAW_STRING}, {STRING}: {NUM} town{P "" s} linked, {NUM} trip{P "" s}, {NUM} vehicle{P "" s}, {CURRENCY_LONG} last month; concession to {DATE_SHORT}, {NUM}% cut
+STR_TOLLS_LEVEL                                                 :Toll level: {NUM}%
+STR_TOLLS_LEVEL_ITEM                                            :{NUM}%
+STR_TOLLS_LEVEL_TOOLTIP                                         :{BLACK}Toll level, in percent of the standard toll. Higher tolls take more from each trip but put drivers off: at 150% a quarter fewer trips, at 50% a quarter more. The regulator allows at most 150%
+STR_TOLLS_SCHEME_PER_KM                                         :Per km (closed system)
+STR_TOLLS_SCHEME_FLAT                                           :Flat (open system)
+STR_TOLLS_SCHEME_TOOLTIP                                        :{BLACK}How town traffic pays: per km, by the distance between the towns a trip links (a closed system, like the North-South Expressway), or the same toll for every trip (an open system). Other companies' vehicles pay the standard toll at each plaza
 STR_ROAD_TOOLBAR_TOOLTIP_BUILD_TRAFFIC_LIGHTS                   :{BLACK}Build traffic lights at a road junction, or click lights to change their timings. Ctrl+Click to remove them. Also press Shift to show cost estimate only
 
 # Zoning toolbar
@@ -3111,6 +3136,7 @@ STR_ROAD_TOOLBAR_TOOLTIP_CONVERT_TRAM                           :{BLACK}Convert/
 STR_ROAD_NAME_ROAD                                              :Road
 STR_ROAD_NAME_TRAM                                              :Tramway
 STR_ROAD_NAME_BUS_ONLY                                          :Bus-only road
+STR_ROAD_NAME_EXPRESSWAY                                        :Expressway
 
 # Road depot construction window
 STR_BUILD_DEPOT_ROAD_ORIENTATION_CAPTION                        :{WHITE}Road Depot Orientation
@@ -3329,6 +3355,9 @@ STR_LAND_AREA_INFORMATION_GIVE_WAY                              :{BLACK}Give-way
 STR_LAND_AREA_INFORMATION_BUSWAY                                :{BLACK}Kerbed busway: {LTBLUE}buses pass town traffic, other traffic is slower
 STR_LAND_AREA_INFORMATION_BRT_STATION                           :{BLACK}BRT station: {LTBLUE}fare gates and level platforms{BLACK} (upkeep {CURRENCY_LONG} a year)
 STR_LAND_AREA_INFORMATION_ELEVATED_STOP                         :{BLACK}Stop on the viaduct: {LTBLUE}buses stay at the viaduct's height
+STR_LAND_AREA_INFORMATION_TOLL_PLAZA                            :{BLACK}Toll plaza: {LTBLUE}{NUM} town{P "" s} linked{BLACK}; last month {NUM} trip{P "" s}, {NUM} vehicle{P "" s}, {CURRENCY_LONG}; concession to {DATE_SHORT}
+STR_LAND_AREA_INFORMATION_TOLL_FREE_FLOW                        :{BLACK}Free-flow toll gantry: {LTBLUE}{NUM} town{P "" s} linked{BLACK}; last month {NUM} trip{P "" s}, {NUM} vehicle{P "" s}, {CURRENCY_LONG}; concession to {DATE_SHORT}
+STR_LAND_AREA_INFORMATION_CHARGE_ZONE                           :{BLACK}Congestion charge zone of {TOWN}: {LTBLUE}{CURRENCY_LONG}{BLACK} to drive in (lorries twice, buses free)
 STR_LAND_AREA_INFORMATION_CITY_SERVICES_HERE                    :{BLACK}City services here: {LTBLUE}{RAW_STRING}
 STR_LAND_AREA_INFORMATION_LANDINFO_COORDS                       :{BLACK}Coordinates: {LTBLUE}{NUM} x {NUM} x {NUM}
 STR_LAND_AREA_INFORMATION_LANDINFO_INDEX                        :{BLACK}Tile index: {LTBLUE}{NUM} ({HEX})
@@ -5208,6 +5237,8 @@ STR_TRANSIT_RESIDENT_PASS                                       :{BLACK}Resident
 STR_TRANSIT_NO_RESIDENT_PASS                                    :{BLACK}No resident pass
 STR_TRANSIT_CONCESSIONS                                         :{BLACK}Concessions: the town pays back concession fares from here: {CURRENCY_SHORT} last month
 STR_TRANSIT_NO_CONCESSIONS                                      :{BLACK}Concessions: not paid back by the town
+STR_TRANSIT_CONGESTION_CHARGE                                   :{BLACK}Congestion charge since {DATE_SHORT}: {NUM} company vehicle{P "" s} paid last month; {CURRENCY_LONG} last month, {CURRENCY_LONG} last year
+STR_TRANSIT_NO_CONGESTION_CHARGE                                :{BLACK}No congestion charge; roads in the centre are at congestion level {DECIMAL} on average
 STR_TRANSIT_LIST_TOOLTIP                                        :{BLACK}Tenders and contracts for lines in this town. Under a contract the town keeps the fares and pays a monthly fee; on a free line riders ride free and the town pays the fee. The fee shrinks with missed departures; regularity and punctuality earn up to 5% more or less. Click one to select it
 STR_TRANSIT_EMPTY                                               :{BLACK}No tenders or contracts yet. Now and then the town invites tenders for a line that serves it, those losing money first, if its budget allows
 STR_TRANSIT_TYPE_GROSS_COST                                     :contract
@@ -5235,6 +5266,8 @@ STR_TRANSIT_END_BUTTON                                          :{BLACK}End cont
 STR_TRANSIT_END_TOOLTIP                                         :{BLACK}End the selected contract early, for three months' fees
 STR_TRANSIT_LINE_BUTTON                                         :{BLACK}Line
 STR_TRANSIT_LINE_TOOLTIP                                        :{BLACK}Show the line of the selected tender or contract
+STR_TRANSIT_CHARGE_BUTTON                                       :Propose congestion charge
+STR_TRANSIT_CHARGE_TOOLTIP                                      :{BLACK}Campaign for a congestion charge: road vehicles except buses pay to drive into the centre and inner suburbs, town traffic there falls by about 30%, and the money goes to the town's transit budget. The town agrees from 5,000 people, when its centre is at congestion level 2 on average and it rates your company Good or better
 STR_TRANSIT_BID_MARGIN                                          :{NUM}% margin: {CURRENCY_LONG} a month
 STR_TRANSIT_BID_WITHDRAW                                        :Take the bid back
 STR_TRANSIT_LINE_NUMBER_NAME                                    :Line {RAW_STRING} ({RAW_STRING})
@@ -5305,6 +5338,9 @@ STR_NEWS_TRANSIT_RETENDER                                       :{BIG_FONT}{BLAC
 STR_NEWS_TRANSIT_ENDED_REVIEW                                   :{BIG_FONT}{BLACK}{TOWN} ends the contract for {RAW_STRING} after a review: too few riders for its cost
 STR_NEWS_TRANSIT_ENDED_NO_SERVICE                               :{BIG_FONT}{BLACK}{TOWN} ends the contract for {RAW_STRING}: the line stopped running
 STR_NEWS_TRANSIT_RESIDENT_PASS                                  :{BIG_FONT}{BLACK}{TOWN} gives its residents a free transit pass: a third of riders from the town ride free, and the town pays operators 30 fares a month for each pass
+STR_NEWS_CONGESTION_CHARGE                                      :{BIG_FONT}{BLACK}{TOWN} brings in a congestion charge!{}Road vehicles except buses pay to drive into the centre, and the money goes to transit
+STR_NEWS_TOLL_CONCESSION_EXTENDED                               :{BIG_FONT}{BLACK}{COMPANY}'s toll concession near {TOWN} extended to {DATE_LONG}, for a {NUM}% toll cut
+STR_NEWS_TOLL_FREEZE                                            :{BIG_FONT}{BLACK}Government freezes {COMPANY}'s tolls until {DATE_LONG}!{}It pays half of what the freeze costs
 STR_NEWS_TRANSIT_BUDGET_GONE                                    :{BIG_FONT}{BLACK}{TOWN}'s transit budget is used up for this year: passes and concessions are paid only in part until the new year
 STR_DEPARTURES_CAPTION                                          :{WHITE}{STATION} - Departures
 STR_DEPARTURES_LIST_TOOLTIP                                     :{BLACK}The next vehicles to leave, with their line and next stops. Click a departure to show the vehicle, Ctrl+Click to show its line
@@ -5749,6 +5785,18 @@ STR_ERROR_CAN_T_BUILD_BRT_STATION                               :{WHITE}Can't bu
 STR_ERROR_CAN_T_REMOVE_BRT_STATION                              :{WHITE}Can't make this an ordinary stop again...
 STR_ERROR_BRT_STATION_BUS_STOP_ONLY                             :{WHITE}... BRT stations are built on drive-through bus stops
 STR_ERROR_BRT_STATION_NONE                                      :{WHITE}... this stop is no BRT station
+STR_ERROR_CAN_T_BUILD_TOLL_PLAZA                                :{WHITE}Can't build a toll plaza here...
+STR_ERROR_CAN_T_REMOVE_TOLL_PLAZA                               :{WHITE}Can't remove the toll plaza here...
+STR_ERROR_CAN_T_BUILD_FREE_FLOW                                 :{WHITE}Can't build a free-flow gantry here...
+STR_ERROR_TOLL_PLAZA_EXPRESSWAY_ONLY                            :{WHITE}... toll plazas go on straight stretches of your expressways
+STR_ERROR_TOLL_PLAZA_NONE                                       :{WHITE}... there is no toll plaza here
+STR_ERROR_TOLL_LEVEL_CAPPED                                     :{WHITE}... the regulator allows tolls of 50% to 150%
+STR_ERROR_CAN_T_CHANGE_TOLLS                                    :{WHITE}Can't change the tolls...
+STR_ERROR_CAN_T_PROPOSE_CONGESTION_CHARGE                       :{WHITE}The town turns down a congestion charge...
+STR_ERROR_CONGESTION_CHARGE_ALREADY                             :{WHITE}... it already has one
+STR_ERROR_CONGESTION_CHARGE_TOWN_TOO_SMALL                      :{WHITE}... it needs 5,000 people first
+STR_ERROR_CONGESTION_CHARGE_NOT_CONGESTED                       :{WHITE}... its centre isn't congested enough (level 2 on average)
+STR_ERROR_CONGESTION_CHARGE_RATING                              :{WHITE}... it doesn't rate your company Good or better
 STR_ERROR_CAN_T_CHANGE_BUS_SIGNAL                               :{WHITE}Can't change the bus signals here...
 STR_ERROR_BUS_SIGNAL_NONE                                       :{WHITE}... these traffic lights have no bus signals
 STR_ERROR_TRAFFIC_LIGHTS_NEED_JUNCTION                          :traffic lights need a road junction

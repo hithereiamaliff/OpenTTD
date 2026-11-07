@@ -11,6 +11,7 @@
 #include "bridge.h"
 #include "roadveh.h"
 #include "brt.h"
+#include "road_pricing.h"
 #include "city_bus.h"
 #include "depot_yard.h"
 #include "stop_charger.h"
@@ -276,13 +277,15 @@ void RoadVehUpdateCache(RoadVehicle *v, bool same_length)
 }
 
 /**
- * The road types a road vehicle can drive on: those its road type powers, and bus-only roads for buses.
+ * The road types a road vehicle can drive on: those its road type powers, expressways, and bus-only roads for buses.
  * @param front The vehicle (front).
  * @return The road types.
  */
 RoadTypes GetRoadVehicleCompatibleRoadTypes(const RoadVehicle *front)
 {
 	RoadTypes rts = GetRoadTypeInfo(front->roadtype)->powered_roadtypes;
+	/* Road vehicles also drive on expressways; buses also on bus-only roads. */
+	if (rts.Test(ROADTYPE_ROAD)) rts.Set(ROADTYPE_EXPRESSWAY);
 	if (rts.Test(ROADTYPE_ROAD) && front->IsBus()) rts.Set(ROADTYPE_BUS);
 	return rts;
 }
@@ -301,6 +304,7 @@ CommandCost CmdBuildRoadVehicle(DoCommandFlags flags, TileIndex tile, const Engi
 	RoadType rt = e->VehInfo<RoadVehicleInfo>().roadtype;
 	const RoadTypeInfo *rti = GetRoadTypeInfo(rt);
 	RoadTypes usable = rti->powered_roadtypes;
+	if (usable.Test(ROADTYPE_ROAD)) usable.Set(ROADTYPE_EXPRESSWAY);
 	if (usable.Test(ROADTYPE_ROAD) && IsValidCargoType(e->GetDefaultCargoType()) && IsCargoInClass(e->GetDefaultCargoType(), CargoClass::Passengers)) usable.Set(ROADTYPE_BUS);
 	if (!HasTileAnyRoadType(tile, usable)) return CommandCost(STR_ERROR_DEPOT_WRONG_DEPOT_TYPE);
 
@@ -526,6 +530,9 @@ inline int RoadVehicle::GetCurrentMaxSpeed() const
 
 	/* Town traffic: everyone crawls along congested roads. */
 	max_speed = std::min(max_speed, GetRoadCongestionSpeedLimit(this->tile, this->IsBus()));
+
+	/* Everyone slows down to pay at toll booths. */
+	max_speed = std::min(max_speed, GetTollPlazaSpeedLimit(this->tile));
 
 	/* An electric bus with a flat battery crawls to a depot. */
 	if (this->battery_charge == 0 && IsBatteryFlat(this)) max_speed = std::min<int>(max_speed, FLAT_BATTERY_SPEED);
@@ -1388,8 +1395,11 @@ again:
 			v->tile = tile;
 			v->state = (uint8_t)dir;
 			v->frame = start_frame;
-			/* Count the tile for the line's BRT score. */
-			if (v->IsFrontEngine()) CountBrtTile(v, tile);
+			/* Count the tile for the line's BRT score; pay tolls and congestion charges. */
+			if (v->IsFrontEngine()) {
+				CountBrtTile(v, tile);
+				OnRoadVehicleEntersTile(v, old_tile, tile);
+			}
 			RoadTramType rtt = GetRoadTramType(v->roadtype);
 			if (GetRoadType(old_tile, rtt) != GetRoadType(tile, rtt)) {
 				if (v->IsFrontEngine()) {

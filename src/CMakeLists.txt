@@ -417,6 +417,11 @@ add_files(
     road.cpp
     road.h
     road_cmd.cpp
+    road_pricing.cpp
+    road_pricing.h
+    road_pricing_cmd.h
+    road_pricing_gui.cpp
+    road_pricing_type.h
     road_cmd.h
     road_func.h
     road_gui.cpp

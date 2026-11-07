@@ -37,6 +37,7 @@
 #include "stop_charger.h"
 #include "bus_priority.h"
 #include "brt.h"
+#include "road_pricing.h"
 #include "town.h"
 #include "viewport_kdtree.h"
 #include "newgrf_profiling.h"
@@ -168,6 +169,7 @@ void InitializeGame(uint size_x, uint size_y, bool reset_date, bool reset_settin
 	InitializeStopChargers();
 	InitializeBusPriority();
 	InitializeBrt();
+	InitializeRoadPricing();
 
 	InitializeCompanies();
 	AI::Initialize();

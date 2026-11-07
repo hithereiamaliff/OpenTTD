@@ -19,6 +19,7 @@
 #include "depot_base.h"
 #include "depot_yard.h"
 #include "bus_priority.h"
+#include "road_pricing.h"
 #include "newgrf.h"
 #include "autoslope.h"
 #include "tunnelbridge_map.h"
@@ -75,7 +76,7 @@ void ResetRoadTypes()
 	std::fill(insert, std::end(_roadtypes), RoadTypeInfo{});
 
 	_roadtypes_hidden_mask = {};
-	_roadtypes_road = {ROADTYPE_ROAD, ROADTYPE_BUS};
+	_roadtypes_road = {ROADTYPE_ROAD, ROADTYPE_BUS, ROADTYPE_EXPRESSWAY};
 	_roadtypes_tram = {ROADTYPE_TRAM};
 }
 
@@ -1751,8 +1752,11 @@ static void DrawRoadBits(TileInfo *ti)
 		}
 	}
 
-	/* Bus lanes and the red of bus-only roads. */
-	if (!HasRoadWorks(ti->tile)) DrawBusPriorityRoad(ti);
+	/* Bus lanes and the red of bus-only roads; the lanes and barrier of expressways. */
+	if (!HasRoadWorks(ti->tile)) {
+		DrawBusPriorityRoad(ti);
+		DrawExpressway(ti);
+	}
 
 	DrawRoadTrafficOverlay(ti);
 
@@ -1766,6 +1770,7 @@ static void DrawRoadBits(TileInfo *ti)
 	DrawRoadCatenary(ti);
 
 	if (HasTrafficLight(ti->tile)) DrawTrafficLights(ti, road | tram);
+	DrawTollPlaza(ti);
 
 	/* Return if full detail is disabled, or we are zoomed fully out. */
 	if (!_display_opt.Test(DisplayOption::FullDetail) || _cur_dpi->zoom > ZoomLevel::Detail) return;

@@ -87,7 +87,7 @@ static const RoadTypeInfo _original_roadtypes[] = {
 		{},
 
 		/* introduction road types */
-		{ROADTYPE_ROAD, ROADTYPE_BUS},
+		{ROADTYPE_ROAD, ROADTYPE_BUS, ROADTYPE_EXPRESSWAY},
 
 		/* sort order */
 		0x07,
@@ -258,6 +258,86 @@ static const RoadTypeInfo _original_roadtypes[] = {
 		{ nullptr },
 		{},
 	},
-};
 
+	/* City fork: expressway. No houses along it and no level crossings; it carries 2.5 times the traffic of a town road (see town_traffic.cpp). */
+	{
+		/* GUI sprites */
+		{
+			SPR_IMG_ROAD_X_DIR,
+			SPR_IMG_ROAD_Y_DIR,
+			SPR_IMG_AUTOROAD,
+			SPR_IMG_ROAD_DEPOT,
+			SPR_IMG_ROAD_TUNNEL,
+			SPR_IMG_CONVERT_ROAD,
+		},
+
+		{
+			SPR_CURSOR_ROAD_NESW,
+			SPR_CURSOR_ROAD_NWSE,
+			SPR_CURSOR_AUTOROAD,
+			SPR_CURSOR_ROAD_DEPOT,
+			SPR_CURSOR_ROAD_TUNNEL,
+			SPR_CURSOR_CONVERT_ROAD,
+		},
+
+		/* strings */
+		{
+			STR_ROAD_NAME_EXPRESSWAY,
+			STR_ROAD_TOOLBAR_EXPRESSWAY_CONSTRUCTION_CAPTION,
+			STR_ROAD_MENU_EXPRESSWAY_CONSTRUCTION,
+			STR_BUY_VEHICLE_ROAD_VEHICLE_CAPTION,
+			STR_REPLACE_ROAD_VEHICLES,
+			STR_ENGINE_PREVIEW_ROAD_VEHICLE,
+
+			STR_ERROR_CAN_T_BUILD_ROAD_HERE,
+			STR_ERROR_CAN_T_REMOVE_ROAD_FROM,
+			STR_ERROR_CAN_T_BUILD_ROAD_DEPOT,
+			{ STR_ERROR_CAN_T_BUILD_BUS_STATION,         STR_ERROR_CAN_T_BUILD_TRUCK_STATION },
+			{ STR_ERROR_CAN_T_REMOVE_BUS_STATION,        STR_ERROR_CAN_T_REMOVE_TRUCK_STATION },
+			STR_ERROR_CAN_T_CONVERT_ROAD,
+			{ STR_STATION_BUILD_BUS_ORIENTATION,         STR_STATION_BUILD_TRUCK_ORIENTATION },
+			{ STR_STATION_BUILD_BUS_ORIENTATION_TOOLTIP, STR_STATION_BUILD_TRUCK_ORIENTATION_TOOLTIP },
+		},
+
+		/* Powered roadtypes */
+		{ROADTYPE_EXPRESSWAY},
+
+		/* flags: towns don't build it or houses along it; railways cross it on bridges or in tunnels */
+		{RoadTypeFlag::NoHouses, RoadTypeFlag::NoLevelCrossing},
+
+		/* cost multiplier */
+		24,
+
+		/* maintenance cost multiplier */
+		32,
+
+		/* max speed */
+		0,
+
+		/* road type label */
+		ROADTYPE_LABEL_EXPRESSWAY,
+
+		/* alternate labels */
+		{},
+
+		/* map colour */
+		PC_ORANGE,
+
+		/* introduction date */
+		CalendarTime::MIN_DATE,
+
+		/* roadtypes required for this to be introduced */
+		{},
+
+		/* introduction road types */
+		{ROADTYPE_EXPRESSWAY},
+
+		/* sort order */
+		0x09,
+
+		{ nullptr },
+		{ nullptr },
+		{},
+	},
+};
 #endif /* ROADTYPES_H */

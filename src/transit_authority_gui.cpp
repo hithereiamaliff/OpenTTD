@@ -9,6 +9,9 @@
 
 #include "stdafx.h"
 #include "transit_authority.h"
+#include "road_pricing.h"
+#include "road_pricing_cmd.h"
+#include "company_base.h"
 #include "transit_authority_cmd.h"
 #include "command_func.h"
 #include "company_func.h"
@@ -82,7 +85,7 @@ struct TransitAuthorityWindow : Window {
 	{
 		switch (widget) {
 			case WID_TRA_BUDGET:
-				size.height = WidgetDimensions::scaled.framerect.Vertical() + 4 * GetCharacterHeight(FontSize::Normal);
+				size.height = WidgetDimensions::scaled.framerect.Vertical() + 5 * GetCharacterHeight(FontSize::Normal);
 				size.width = std::max<uint>(size.width, ScaleGUITrad(560));
 				break;
 
@@ -156,6 +159,12 @@ struct TransitAuthorityWindow : Window {
 				}
 				ir.top += GetCharacterHeight(FontSize::Normal);
 				DrawString(ir, GetString(STR_TRANSIT_FARES, t->transit.fares_last_year, t->transit.fares_this_year));
+				ir.top += GetCharacterHeight(FontSize::Normal);
+				if (t->transit.congestion_charge) {
+					DrawString(ir, GetString(STR_TRANSIT_CONGESTION_CHARGE, t->transit.charge_since, t->transit.charged_last_month, t->transit.charge_income_last_month, t->transit.charge_last_year));
+				} else {
+					DrawString(ir, GetString(STR_TRANSIT_NO_CONGESTION_CHARGE, GetCongestionChargeZoneLevel(t), 1));
+				}
 				ir.top += GetCharacterHeight(FontSize::Normal);
 				if (!t->transit.policy_set) {
 					DrawString(ir, STR_TRANSIT_SCHEMES_UNDECIDED);
@@ -235,6 +244,10 @@ struct TransitAuthorityWindow : Window {
 				if (const TransitContract *c = this->GetSelected(); c != nullptr) Command<Commands::TransitEndContract>::Post(STR_ERROR_CAN_T_END_CONTRACT, c->id);
 				break;
 
+			case WID_TRA_CHARGE:
+				Command<Commands::ProposeCongestionCharge>::Post(STR_ERROR_CAN_T_PROPOSE_CONGESTION_CHARGE, static_cast<TownID>(this->window_number));
+				break;
+
 			case WID_TRA_LINE:
 				if (const TransitContract *c = this->GetSelected(); c != nullptr) {
 					const OrderList *list = OrderList::GetIfValid(c->line);
@@ -269,6 +282,8 @@ struct TransitAuthorityWindow : Window {
 		this->SetWidgetDisabledState(WID_TRA_BID, !mine || c->state != TransitContractState::Tender);
 		this->SetWidgetDisabledState(WID_TRA_END, !mine || c->state != TransitContractState::Active);
 		this->SetWidgetDisabledState(WID_TRA_LINE, c == nullptr || OrderList::GetIfValid(c->line) == nullptr);
+		const Town *t = Town::Get(this->window_number);
+		this->SetWidgetDisabledState(WID_TRA_CHARGE, !Company::IsValidID(_local_company) || t->transit.congestion_charge);
 		this->SetDirty();
 	}
 };
@@ -291,6 +306,7 @@ static constexpr std::initializer_list<NWidgetPart> _nested_transit_authority_wi
 			NWidget(WWT_DROPDOWN, Colours::Brown, WID_TRA_BID), SetFill(1, 0), SetResize(1, 0), SetStringTip(STR_TRANSIT_BID_BUTTON, STR_TRANSIT_BID_TOOLTIP),
 			NWidget(WWT_PUSHTXTBTN, Colours::Brown, WID_TRA_END), SetFill(1, 0), SetResize(1, 0), SetStringTip(STR_TRANSIT_END_BUTTON, STR_TRANSIT_END_TOOLTIP),
 			NWidget(WWT_PUSHTXTBTN, Colours::Brown, WID_TRA_LINE), SetFill(1, 0), SetResize(1, 0), SetStringTip(STR_TRANSIT_LINE_BUTTON, STR_TRANSIT_LINE_TOOLTIP),
+			NWidget(WWT_PUSHTXTBTN, Colours::Brown, WID_TRA_CHARGE), SetFill(1, 0), SetResize(1, 0), SetStringTip(STR_TRANSIT_CHARGE_BUTTON, STR_TRANSIT_CHARGE_TOOLTIP),
 		EndContainer(),
 		NWidget(WWT_RESIZEBOX, Colours::Brown),
 	EndContainer(),

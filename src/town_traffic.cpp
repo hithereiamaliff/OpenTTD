@@ -10,6 +10,7 @@
 #include "stdafx.h"
 #include "town_traffic.h"
 #include "bus_priority.h"
+#include "road_pricing.h"
 #include "cargotype.h"
 #include "city_services_type.h"
 #include "house.h"
@@ -140,6 +141,8 @@ uint8_t GetTownTrafficTarget(TileIndex tile, const Town *t)
 	/* How much of the traffic around the road ends up on it, in millionths. */
 	uint64_t share = static_cast<uint64_t>(GetTownSizeFactor(t)) * GetCentralityFactor(GetTownRadiusGroup(t, tile)) *
 			(100 - GetTownCarReduction(t)) * SETTING_FACTOR[setting] / GetRoadCapacity(tile);
+	/* A congestion charge keeps cars out of the town centre. */
+	share = share * GetCongestionChargeTrafficPercent(t, tile) / 100;
 	/* Even the densest blocks don't make enough traffic for small towns and their edges to congest. */
 	if (share * MAX_TRAFFIC_ACTIVITY / 1'000'000 < TRAFFIC_LEVEL_THRESHOLDS[0]) return 0;
 

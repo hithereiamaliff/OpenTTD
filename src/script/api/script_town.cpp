@@ -18,6 +18,8 @@
 #include "../../station_base.h"
 #include "../../landscape.h"
 #include "../../town_cmd.h"
+#include "../../road_pricing.h"
+#include "../../road_pricing_cmd.h"
 
 #include "table/strings.h"
 
@@ -235,6 +237,37 @@
 
 	const Town *t = ::Town::Get(town_id);
 	return ((uint32_t)GetDistanceSquareToTile(town_id, tile) <= t->cache.squared_town_zone_radius[to_underlying(HouseZone::TownEdge)]);
+}
+
+/* static */ bool ScriptTown::HasCongestionCharge(TownID town_id)
+{
+	if (!IsValidTown(town_id)) return false;
+	return ::Town::Get(town_id)->transit.congestion_charge;
+}
+
+/* static */ bool ScriptTown::ProposeCongestionCharge(TownID town_id)
+{
+	EnforceCompanyModeValid(false);
+	EnforcePrecondition(false, IsValidTown(town_id));
+	return ScriptObject::Command<Commands::ProposeCongestionCharge>::Do(town_id);
+}
+
+/* static */ Money ScriptTown::GetCongestionChargeIncome(TownID town_id)
+{
+	if (!IsValidTown(town_id)) return -1;
+	return ::Town::Get(town_id)->transit.charge_income_last_month;
+}
+
+/* static */ SQInteger ScriptTown::GetCongestionChargeVehicles(TownID town_id)
+{
+	if (!IsValidTown(town_id)) return -1;
+	return ::Town::Get(town_id)->transit.charged_last_month;
+}
+
+/* static */ SQInteger ScriptTown::GetCentreCongestion(TownID town_id)
+{
+	if (!IsValidTown(town_id)) return -1;
+	return ::GetCongestionChargeZoneLevel(::Town::Get(town_id));
 }
 
 /* static */ bool ScriptTown::HasStatue(TownID town_id)

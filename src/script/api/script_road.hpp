@@ -58,6 +58,7 @@ public:
 		ROADTYPE_ROAD    = ::ROADTYPE_ROAD,    ///< Build road objects.
 		ROADTYPE_TRAM    = ::ROADTYPE_TRAM,    ///< Build tram objects.
 		ROADTYPE_BUS     = ::ROADTYPE_BUS,     ///< Build bus-only roads: only buses may use them, and town traffic doesn't.
+		ROADTYPE_EXPRESSWAY = ::ROADTYPE_EXPRESSWAY, ///< Build expressways: no houses along them and no level crossings; road vehicles drive on them, and they carry more traffic.
 
 		/* Custom added value, only valid for this API */
 		ROADTYPE_INVALID = -1,                 ///< Invalid RoadType.
@@ -738,6 +739,75 @@ public:
 	 * @return True if it is.
 	 */
 	static bool IsElevatedStation(TileIndex tile);
+
+	/**
+	 * Build a toll plaza on a straight stretch of the company's expressway.
+	 * @param tile The expressway tile.
+	 * @pre ScriptMap::IsValidTile(tile).
+	 * @game @pre ScriptCompanyMode::IsValid().
+	 * @return Whether it was built.
+	 */
+	static bool BuildTollPlaza(TileIndex tile);
+
+	/**
+	 * Remove a toll plaza.
+	 * @param tile The toll plaza.
+	 * @pre ScriptMap::IsValidTile(tile).
+	 * @game @pre ScriptCompanyMode::IsValid().
+	 * @return Whether it was removed.
+	 */
+	static bool RemoveTollPlaza(TileIndex tile);
+
+	/**
+	 * Replace a toll plaza's booths with a free-flow gantry.
+	 * @param tile The toll plaza.
+	 * @pre ScriptMap::IsValidTile(tile).
+	 * @game @pre ScriptCompanyMode::IsValid().
+	 * @return Whether it was upgraded.
+	 */
+	static bool UpgradeTollPlaza(TileIndex tile);
+
+	/**
+	 * Is there a toll plaza on a tile?
+	 * @param tile The tile.
+	 * @return True if there is.
+	 */
+	static bool HasTollPlaza(TileIndex tile);
+
+	/**
+	 * Is a toll plaza a free-flow gantry?
+	 * @param tile The toll plaza.
+	 * @return True if it is.
+	 */
+	static bool IsFreeFlowTollPlaza(TileIndex tile);
+
+	/**
+	 * Get what a toll plaza took last month.
+	 * @param tile The toll plaza.
+	 * @return The tolls, or -1 if there is no toll plaza.
+	 */
+	static Money GetTollPlazaIncome(TileIndex tile);
+
+	/**
+	 * Get how many trips of town traffic paid at a toll plaza last month.
+	 * @param tile The toll plaza.
+	 * @return The trips, or -1 if there is no toll plaza.
+	 */
+	static SQInteger GetTollPlazaTrips(TileIndex tile);
+
+	/**
+	 * Get how many road vehicles of other companies paid at a toll plaza last month.
+	 * @param tile The toll plaza.
+	 * @return The vehicles, or -1 if there is no toll plaza.
+	 */
+	static SQInteger GetTollPlazaVehicles(TileIndex tile);
+
+	/**
+	 * Get how many towns a toll plaza's expressway linked last month.
+	 * @param tile The toll plaza.
+	 * @return The towns, or -1 if there is no toll plaza.
+	 */
+	static SQInteger GetTollPlazaTowns(TileIndex tile);
 
 	/**
 	 * Switch the bus signals of traffic lights on or off: buses get green a moment

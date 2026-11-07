@@ -397,6 +397,48 @@ public:
 	static bool HasStatue(TownID town_id);
 
 	/**
+	 * Does a town have a congestion charge: road vehicles except buses pay to drive into its centre and inner suburbs?
+	 * @param town_id The town to check.
+	 * @pre IsValidTown(town_id).
+	 * @return True if it has.
+	 */
+	static bool HasCongestionCharge(TownID town_id);
+
+	/**
+	 * Campaign for a congestion charge in a town. It agrees from 5,000 people, when its centre is at
+	 * congestion level 2 on average and it rates the company Good or better.
+	 * @param town_id The town.
+	 * @pre IsValidTown(town_id).
+	 * @game @pre ScriptCompanyMode::IsValid().
+	 * @return True if the town brought in the charge.
+	 */
+	static bool ProposeCongestionCharge(TownID town_id);
+
+	/**
+	 * Get what a town's congestion charge took last month, from company road vehicles and its own drivers.
+	 * @param town_id The town.
+	 * @pre IsValidTown(town_id).
+	 * @return The money, or -1 for an invalid town.
+	 */
+	static Money GetCongestionChargeIncome(TownID town_id);
+
+	/**
+	 * Get how many company road vehicles paid a town's congestion charge last month.
+	 * @param town_id The town.
+	 * @pre IsValidTown(town_id).
+	 * @return The vehicles, or -1 for an invalid town.
+	 */
+	static SQInteger GetCongestionChargeVehicles(TownID town_id);
+
+	/**
+	 * Get how congested the centre and inner suburbs of a town are: the average congestion level of their roads.
+	 * @param town_id The town.
+	 * @pre IsValidTown(town_id).
+	 * @return The level in tenths, or -1 for an invalid town.
+	 */
+	static SQInteger GetCentreCongestion(TownID town_id);
+
+	/**
 	 * Find out if the town is a city.
 	 * @param town_id The town to check.
 	 * @pre IsValidTown(town_id).

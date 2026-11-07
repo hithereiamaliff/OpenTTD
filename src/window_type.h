@@ -797,6 +797,18 @@ enum class WindowClass : uint16_t {
 	 */
 	BusPriority,
 
+	/**
+	 * Tolls toolbar; %Window numbers:
+	 *   - 0 = #TollsToolbarWidgets
+	 */
+	TollsToolbar,
+
+	/**
+	 * Tolls of a company; %Window numbers:
+	 *   - #CompanyID = #TollsWidgets
+	 */
+	Tolls,
+
 	Invalid = 0xFFFF, ///< Invalid window.
 };
 

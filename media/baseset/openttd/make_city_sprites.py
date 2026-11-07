@@ -47,7 +47,7 @@ BROWN, BROWN_DARK = nearest((150, 90, 40)), nearest((90, 50, 20))
 YELLOW = nearest((252, 220, 0))
 TREE, TREE_DARK = nearest((60, 150, 40)), nearest((30, 90, 20))
 
-W, H = 512, 800
+W, H = 512, 930
 sheet = Image.new("P", (W, H), T)
 sheet.putpalette(pal)
 px = sheet.load()
@@ -1206,6 +1206,131 @@ icon(312, 740, [
 ], {'W': W_, 'C': rgb_index((40, 90, 200)), 'K': K_, 'L': GLASS_LIGHT, 'Y': Y_, 'G': G_}, "icon brt station")
 
 assert len(sprites) == 229, len(sprites)
+
+# Road pricing: expressway markings (road along X, along Y), toll plazas (roof, far booth,
+# near booth; road along X, then along Y), free-flow gantries (X, Y), then toolbar icons.
+BARRIER, BARRIER_SHADE = rgb_index((205, 205, 200)), rgb_index((110, 110, 108))
+EDGE_YELLOW = rgb_index((235, 200, 40))
+
+
+def expressway_fn(axis):
+    def fn(x, y):
+        w, u = across_along(axis, x, y)
+        if 7.55 <= w < 8.3:
+            return BARRIER
+        if 8.3 <= w < 8.6:
+            return BARRIER_SHADE
+        if abs(w - 5.6) < 0.2 or abs(w - 10.5) < 0.2:
+            return LINE_WHITE if u % 3.2 < 1.6 else None
+        if 3.85 <= w < 4.15 or 11.85 < w <= 12.15:
+            return LINE_WHITE
+        if 7.25 <= w < 7.55 or 8.6 <= w < 8.9:
+            return EDGE_YELLOW
+        return None
+    return fn
+
+
+for i, axis in enumerate(('x', 'y')):
+    b = Building()
+    b.ground(expressway_fn(axis))
+    b.emit(4 + i * 72, 780, f"expressway {axis}")
+
+BOOTH_WALL, BOOTH_ROOF = (228, 226, 216), (150, 150, 155)
+
+
+def toll_part(axis, part):
+    b = Building()
+
+    def box(u0, u1, w0, w1, z0, z1, wall, top, **kw):
+        if axis == 'x':
+            b.box(u0, w0, u1, w1, z0, z1, wall, top, **kw)
+        else:
+            b.box(w0, u0, w1, u1, z0, z1, wall, top, **kw)
+
+    band = lambda u, v: CC_BAND if v >= 4.6 else (GLASS_LIGHT if 2.0 <= v < 4.0 and (u % 2.0) < 1.4 else None)
+    end_band = lambda u, v: CC_BAND if v >= 4.6 else (GLASS_LIGHT if 2.0 <= v < 4.0 and 0.5 < u < 1.9 else None)
+    if part == 'roof':
+        # A narrow roof across the road in company colour, white on top.
+        box(6.0, 10.0, 0.0, 16.0, 12, 13.2, (235, 235, 232), (230, 230, 226),
+            se=lambda u, v: CC_BAND, sw=lambda u, v: CC_BAND)
+    elif part == 'far':
+        box(3.0, 13.0, 0.8, 3.2, 0, 5.5, BOOTH_WALL, BOOTH_ROOF,
+            se=band if axis == 'x' else end_band, sw=end_band if axis == 'x' else band)
+        for pu in (6.4, 9.6):
+            box(pu - 0.3, pu + 0.3, 1.7, 2.3, 5.5, 12, STEEL, STEEL)
+    else:
+        box(3.0, 13.0, 12.8, 15.2, 0, 5.5, BOOTH_WALL, BOOTH_ROOF,
+            se=band if axis == 'x' else end_band, sw=end_band if axis == 'x' else band)
+        for pu in (6.4, 9.6):
+            box(pu - 0.3, pu + 0.3, 13.7, 14.3, 5.5, 12, STEEL, STEEL)
+    return b
+
+
+toll_sprites = []
+for axis in ('x', 'y'):
+    for part in ('roof', 'far', 'near'):
+        toll_sprites.append((toll_part(axis, part), f"toll plaza {part} {axis}"))
+for axis in ('x', 'y'):
+    b = Building()
+
+    def at(u, w):
+        return (u, w) if axis == 'x' else (w, u)
+    for w in (0.7, 15.3):
+        cx, cy = at(8.0, w)
+        b.box(cx - 0.35, cy - 0.35, cx + 0.35, cy + 0.35, 0, 15, STEEL, STEEL)
+    ax0, ay0 = at(7.4, 0.4)
+    ax1, ay1 = at(8.6, 15.6)
+    b.box(min(ax0, ax1), min(ay0, ay1), max(ax0, ax1), max(ay0, ay1), 13, 15, (210, 210, 210), (210, 210, 210),
+          sw=lambda u, v: CC_BAND, se=lambda u, v: CC_BAND)
+    for w in (4.5, 6.8, 9.2, 11.5):
+        px0, py0 = at(7.6, w - 0.5)
+        px1, py1 = at(8.4, w + 0.5)
+        b.box(min(px0, px1), min(py0, py1), max(px0, px1), max(py0, py1), 11.8, 13, (40, 40, 44), (40, 40, 44))
+    toll_sprites.append((b, f"free-flow gantry {axis}"))
+for i, (bld, name) in enumerate(toll_sprites):
+    x0, y0 = (4 + (i % 7) * 72, 810) if i < 7 else (4 + (i - 7) * 72, 870)
+    w = bld.emit(x0, y0, name)
+    assert w <= 70, (name, w)
+
+R2 = rgb_index((210, 30, 30))
+icon(150, 870, [
+    "..KKKKK.........",
+    "..KWWWK.........",
+    "..KWGWK.........",
+    "..KWWWKRRWWRRWW.",
+    "..KWWWKRRWWRRWW.",
+    "..KWWWK.........",
+    "..KWWWK.........",
+    "..KKKKK.........",
+    "GGGGGGGGGGGGGGGG",
+    "GGGGGGGGGGGGGGGG",
+], {'K': K_, 'W': W_, 'G': G_, 'R': R2}, "icon tolls")
+icon(170, 870, [
+    "CCCCCCCCCCCCCCCC",
+    "CCCCCCCCCCCCCCCC",
+    ".K.....KK.....K.",
+    "KWK....KK....KWK",
+    "KGK....KK....KGK",
+    "KWK....KK....KWK",
+    "KWK..........KWK",
+    "KKK..........KKK",
+    "GGGGGGGGGGGGGGGG",
+    "GGGGGGGGGGGGGGGG",
+], {'K': K_, 'W': W_, 'G': G_, 'C': rgb_index((40, 90, 200))}, "icon toll plaza")
+icon(190, 870, [
+    "KKKKKKKKKKKKKKKK",
+    "KWWWWWWWWWWWWWWK",
+    "KKDDKKKDDKKKDDKK",
+    "K..............K",
+    "K..............K",
+    "K..............K",
+    "K..............K",
+    "K..............K",
+    "GGGGGGGGGGGGGGGG",
+    "GGGGGGGGGGGGGGGG",
+], {'K': K_, 'W': W_, 'G': G_, 'D': rgb_index((40, 40, 44))}, "icon free flow")
+
+assert len(sprites) == 242, len(sprites)
 sheet.save(f"{SRC}/city.png", optimize=True)
 
 header = """// This file is part of OpenTTD.
@@ -1233,6 +1358,9 @@ header = """// This file is part of OpenTTD.
 //   219-222: kerbed busway (road along X, along Y), deck under a stop raised onto a viaduct (X, Y)
 //   223-226: BRT station sides: road along X far and near side, along Y far and near side
 //   227-228: icons: kerbed busway, BRT station
+//   229-230: expressway lanes and barrier (road along X, along Y)
+//   231-238: toll plazas: roof, far booth, near booth (road along X, then along Y); free-flow gantries (X, Y)
+//   239-241: icons: tolls, toll plaza, free-flow gantry
 //
    -1 * 0\t 0C "City fork graphics"
    -1 * 3\t 05 1C %02X

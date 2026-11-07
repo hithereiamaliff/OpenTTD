@@ -980,6 +980,103 @@ Tests (test AI BusTest settings `prio` 8-12; the town line is part 7's: one
   and the line window ("BRT score last month: 90 of 100, BRT gold (2 off for
   shared sections)").
 
+## Done: transit part 9, expressways, tolls and road pricing
+
+- **Expressway** (road construction menu: "Expressway construction"): a
+  fourth built-in road type (label CEXP). No houses along it and towns don't
+  build it; no level crossings (railways cross it on bridges or in
+  tunnels); three times the building cost and twice the upkeep of road; no
+  speed limit. Road vehicles may drive on it. It takes 2.5 times the town
+  traffic of a town road (part 2's capacity rule for road types without
+  houses). Drawn with two lanes each way, edge lines and a barrier in the
+  middle on straight, flat stretches. Older games that had a NewGRF road type
+  at its index get it moved by the road type label map, as in part 7.
+- **Toll plazas** (road toolbar: new **Tolls** button, hotkey K, opens the
+  Tolls toolbar; Ctrl removes): on a straight stretch of your own
+  expressway, 12,000, upkeep 1,000 a year. Everyone slows to 20 km/h at the
+  booths. A **free-flow gantry** (8,000 to upgrade, upkeep 400 a year)
+  removes the slowdown and gives 10% more trips.
+  - **Town traffic pays**: each month the expressway network around a plaza
+    (your expressway tiles joined to it, through bridges and tunnels) is
+    followed to the roads that join it; each such road counts for the
+    closest town within 32 tiles. Between each pair of linked towns there are
+    population x population / 5,000,000 x 60 / (distance + 20) trips a month
+    (two towns of 10,000 people 40 tiles apart: 20), each standing for many
+    cars. A trip pays the standard toll (50 at base prices) per 40 tiles of
+    distance between the towns (closed system, the default) or once (open
+    system), times 1.1 for the mix of cars, motorbikes and lorries. A network
+    with several plazas is paid once; the figures are shared out over them.
+  - **Other companies' road vehicles pay** at each plaza they pass: the
+    standard toll times 0.75 for buses, 1 for mail vans, 2 for lorries
+    (Malaysian toll classes), booked as their running costs and your income.
+  - **Toll level** 50-150% (the regulator's cap) and **scheme** (per km or
+    flat) in the Tolls window (third button of the Tolls toolbar), which
+    also lists the plazas. Higher tolls put drivers off: 150% makes a
+    quarter fewer trips, 50% a quarter more.
+  - **Concessions**: 30 years from building; then extended by 20 years in
+    exchange for an 18% toll cut at that plaza (PLUS, 2011), up to 54%.
+  - **Toll freezes**: each year a company with toll plazas has a 1 in 8
+    chance that the government freezes its tolls for five years: at most
+    90% of the standard toll meanwhile, and the government pays half of the
+    income that costs (news message).
+- **Congestion charges**: a town with one charges road vehicles except
+  buses (and passenger trams) each time they drive into its centre and inner
+  suburbs: 40 at base prices, 80 for lorries. Town traffic there drops by
+  30% (London's charge cut traffic in the zone by about that). The town's
+  own drivers pay too (80 per thousand people a month, less the share of
+  car trips transit takes), and the money goes to the town's transit budget
+  the year after, like the fares of its contracts: more tenders and
+  contracts for bus lines. Towns of 15,000+ people whose centre is at
+  congestion level 3 on average bring one in on their own (news message); a
+  company can campaign for one from the town's Transit window ("Propose
+  congestion charge", 5,000): the town agrees from 5,000 people when its
+  centre is at level 2 on average and it rates the company Good or better.
+  The Transit window shows the charge, the land info the charging zone.
+- Saved: toll plazas in chunk TOLL, the companies' tolls in TOLC, the
+  towns' charges with their transit (TTRA). Old games start without them.
+- Script API: `ScriptRoad.ROADTYPE_EXPRESSWAY`, `BuildTollPlaza`,
+  `RemoveTollPlaza`, `UpgradeTollPlaza`, `HasTollPlaza`,
+  `IsFreeFlowTollPlaza`, `GetTollPlazaIncome`, `GetTollPlazaTrips`,
+  `GetTollPlazaVehicles`, `GetTollPlazaTowns`; `ScriptCompany.SetTollLevel`,
+  `GetTollLevel`, `SetTollScheme`, `GetTollScheme`, `GetTollIncome`;
+  `ScriptTown.HasCongestionCharge`, `ProposeCongestionCharge`,
+  `GetCongestionChargeIncome`, `GetCongestionChargeVehicles`,
+  `GetCentreCongestion`.
+- Code: `src/road_pricing*.{h,cpp}`, `src/saveload/road_pricing_sl.cpp`;
+  hooks in `table/roadtypes.h`, `road_cmd.cpp` (drawing), `roadveh_cmd.cpp`
+  (speed at booths, paying on entering a tile, expressway compatibility),
+  `town_traffic.cpp`, `transit_authority*.cpp`, `landscape.cpp`,
+  `road_gui.cpp`, `misc_gui.cpp`.
+
+Tests (test AI TollTest: role 1 links two towns with an expressway and a
+toll plaza, role 2 runs two buses and a mail van over it, role 3 runs mail
+vans through the biggest town's centre and proposes a congestion charge;
+saves `city-tolls-demo.csav`, `city-freeflow-demo.csav`,
+`city-tolls-long-demo.csav`, `city-charge-demo.csav`):
+
+- 99/99 unit tests; all 31 test saves load, save and reload; the new chunks
+  are in the saves. Part 7's bus line without any of this runs exactly as
+  before, month by month.
+- An 11-tile expressway between Grubourne (4,500 people) and Brondinghattan
+  Ridge (7,100), 28 tiles apart, with a plaza in the middle: 2 towns
+  linked, 8-9 trips and 4-7 of the other company's vehicles a month, about
+  420-460 a month at 100% per km. Flat at 150%: 6-7 trips (a quarter fewer),
+  670-720 a month; free-flow from month 6: 7 trips and more vehicles
+  through. A toll plaza on a town road is refused.
+- 31 years with the same two companies: the towns grew to 27,000 and
+  40,000 people, 270-280 trips and about 6,000-7,500 a month. A freeze from
+  2045 to 2050 took about 10% off each trip (half of it paid back); in
+  January 2050 the concession ran out and was extended to December 2069
+  for an 18% cut (income down 18.6% the month after).
+- Congestion charge in Kinningbury (10,600 people): its centre averaged
+  congestion 2.4; the company's proposal after six months was accepted; the
+  centre fell to 1.5-1.8 at once and stayed there. The charge took 730-860
+  a month (3-6 company vans paid each month, the rest from the town's
+  drivers), which shows up in the town's free transit budget the year after.
+- Screenshots: the expressway lanes and barrier, the toll plaza and the
+  free-flow gantry, the Tolls toolbar and window ("concession to December
+  2069, 18% cut"), the Transit window with the charge.
+
 ## Roadmap
 
 Sizes are rough: S = one session, M = a few, L = many, XL = a project in itself.

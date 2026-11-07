@@ -93,6 +93,15 @@ struct TownTransit {
 	Money last_pass_paid = 0; ///< Paid for passes last month.
 	Money last_concessions_paid = 0; ///< Paid back for concessions last month.
 	bool told_budget_gone = false; ///< Whether the news that this year's budget is used up came out.
+
+	bool congestion_charge = false; ///< The town charges road vehicles, except buses, that drive into its centre (see road_pricing.cpp).
+	TimerGameEconomy::Date charge_since{}; ///< When it brought the congestion charge in.
+	Money charge_this_year = 0; ///< Congestion charges taken this year; they go to the transit budget the year after.
+	Money charge_last_year = 0; ///< Congestion charges taken last year.
+	uint32_t charged_this_month = 0; ///< Company road vehicles charged this month.
+	uint32_t charged_last_month = 0; ///< Company road vehicles charged last month.
+	Money charge_income_this_month = 0; ///< Charges taken this month from company road vehicles.
+	Money charge_income_last_month = 0; ///< Charges taken last month, from company road vehicles and the town's own drivers.
 };
 
 static constexpr uint RESIDENT_PASS_SHARE = 33; ///< Share of riders (in percent) boarding in a town with a resident pass that hold one.

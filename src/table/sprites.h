@@ -414,7 +414,12 @@ static constexpr SpriteID SPR_ELEVATED_STOP_DECK_X = SPR_TRAFFIC_LIGHTS_BASE + 2
 static constexpr SpriteID SPR_BRT_STATION_BASE = SPR_TRAFFIC_LIGHTS_BASE + 223; ///< BRT station sides: road along X far and near side, along Y far and near side (4 sprites).
 static constexpr SpriteID SPR_IMG_BUSWAY = SPR_TRAFFIC_LIGHTS_BASE + 227; ///< Icon of the kerbed busway tool.
 static constexpr SpriteID SPR_IMG_BRT_STATION = SPR_TRAFFIC_LIGHTS_BASE + 228; ///< Icon of the BRT station tool.
-static constexpr uint16_t TRAFFIC_LIGHTS_SPRITE_COUNT = 229;
+static constexpr SpriteID SPR_EXPRESSWAY_X = SPR_TRAFFIC_LIGHTS_BASE + 229; ///< Lanes and barrier of an expressway along X; along Y follows.
+static constexpr SpriteID SPR_TOLL_PLAZA_BASE = SPR_TRAFFIC_LIGHTS_BASE + 231; ///< Toll plazas: roof, far and near booth along X, the same along Y, free-flow gantry along X and Y (8 sprites).
+static constexpr SpriteID SPR_IMG_TOLLS = SPR_TRAFFIC_LIGHTS_BASE + 239; ///< Icon of the road toolbar button that opens the tolls toolbar.
+static constexpr SpriteID SPR_IMG_TOLL_PLAZA = SPR_TRAFFIC_LIGHTS_BASE + 240; ///< Icon of the toll plaza tool.
+static constexpr SpriteID SPR_IMG_FREE_FLOW = SPR_TRAFFIC_LIGHTS_BASE + 241; ///< Icon of the free-flow gantry tool.
+static constexpr uint16_t TRAFFIC_LIGHTS_SPRITE_COUNT = 242;
 
 static const SpriteID SPR_NEWGRFS_BASE = SPR_TRAFFIC_LIGHTS_BASE + TRAFFIC_LIGHTS_SPRITE_COUNT;
 

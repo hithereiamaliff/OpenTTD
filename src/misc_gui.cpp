@@ -43,6 +43,8 @@
 #include "stop_charger.h"
 #include "bus_priority.h"
 #include "brt.h"
+#include "road_pricing.h"
+#include "economy_func.h"
 #include "station_map.h"
 #include "object_map.h"
 
@@ -236,6 +238,18 @@ public:
 			default: break;
 		}
 		if (HasGiveWayStop(this->tile)) this->landinfo_data.push_back(GetString(STR_LAND_AREA_INFORMATION_GIVE_WAY));
+
+		/* Road pricing */
+		if (const TollPlaza *plaza = GetTollPlaza(this->tile); plaza != nullptr) {
+			this->landinfo_data.push_back(GetString(plaza->free_flow ? STR_LAND_AREA_INFORMATION_TOLL_FREE_FLOW : STR_LAND_AREA_INFORMATION_TOLL_PLAZA,
+					plaza->towns, plaza->trips, plaza->vehicles, plaza->income, plaza->concession_end));
+		}
+		if (IsTileType(this->tile, TileType::Road)) {
+			const Town *charging = ClosestTownFromTile(this->tile, UINT_MAX);
+			if (charging != nullptr && IsInCongestionChargeZone(charging, this->tile)) {
+				this->landinfo_data.push_back(GetString(STR_LAND_AREA_INFORMATION_CHARGE_ZONE, charging->index, GetPrice(Price::BuildObject, 1, nullptr)));
+			}
+		}
 
 		/* Bus rapid transit */
 		if (HasBrtStation(this->tile)) this->landinfo_data.push_back(GetString(STR_LAND_AREA_INFORMATION_BRT_STATION, GetBrtStationYearlyUpkeep()));

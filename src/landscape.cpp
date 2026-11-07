@@ -11,6 +11,7 @@
 
 #include "stdafx.h"
 #include "bus_priority.h"
+#include "road_pricing.h"
 #include "bridge_map.h"
 #include "heightmap.h"
 #include "clear_map.h"
@@ -550,6 +551,7 @@ void DoClearSquare(TileIndex tile)
 
 	bool remove = IsDockingTile(tile);
 	OnBusPriorityTileCleared(tile);
+	OnRoadPricingTileCleared(tile);
 	MakeClear(tile, ClearGround::Grass, _generating_world ? 3 : 0);
 	MarkTileDirtyByTile(tile);
 	if (remove) RemoveDockingTile(tile);

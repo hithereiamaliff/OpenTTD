@@ -124,13 +124,13 @@ Money GetTownTransitCommitted(const Town *t)
 }
 
 /**
- * What a town could still spend on contracts a year: its budget and last year's fares from its contracts, less its contracts.
+ * What a town could still spend on contracts a year: its budget, last year's fares from its contracts and congestion charges, less its contracts.
  * @param t The town.
  * @return The money.
  */
 Money GetTownTransitAvailable(const Town *t)
 {
-	return GetTownTransitBudget(t) + t->transit.fares_last_year - GetTownTransitCommitted(t);
+	return GetTownTransitBudget(t) + t->transit.fares_last_year + t->transit.charge_last_year - GetTownTransitCommitted(t);
 }
 
 /**

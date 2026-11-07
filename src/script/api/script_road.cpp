@@ -23,6 +23,8 @@
 #include "../../stop_charger_cmd.h"
 #include "../../bus_priority_cmd.h"
 #include "../../brt.h"
+#include "../../road_pricing.h"
+#include "../../road_pricing_cmd.h"
 #include "../../depot_map.h"
 #include "../../object_cmd.h"
 #include "../../object_map.h"
@@ -794,6 +796,70 @@ static bool NeighbourHasReachableRoad(::RoadType rt, TileIndex start_tile, DiagD
 /* static */ bool ScriptRoad::IsElevatedStation(TileIndex tile)
 {
 	return ::IsValidTile(tile) && ::IsElevatedRoadStop(tile);
+}
+
+/* static */ bool ScriptRoad::BuildTollPlaza(TileIndex tile)
+{
+	EnforceCompanyModeValid(false);
+	EnforcePrecondition(false, ::IsValidTile(tile));
+
+	return ScriptObject::Command<Commands::BuildTollPlaza>::Do(tile, TollPlazaAction::Build);
+}
+
+/* static */ bool ScriptRoad::RemoveTollPlaza(TileIndex tile)
+{
+	EnforceCompanyModeValid(false);
+	EnforcePrecondition(false, ::IsValidTile(tile));
+
+	return ScriptObject::Command<Commands::BuildTollPlaza>::Do(tile, TollPlazaAction::Remove);
+}
+
+/* static */ bool ScriptRoad::UpgradeTollPlaza(TileIndex tile)
+{
+	EnforceCompanyModeValid(false);
+	EnforcePrecondition(false, ::IsValidTile(tile));
+
+	return ScriptObject::Command<Commands::BuildTollPlaza>::Do(tile, TollPlazaAction::FreeFlow);
+}
+
+/* static */ bool ScriptRoad::HasTollPlaza(TileIndex tile)
+{
+	return ::IsValidTile(tile) && ::HasTollPlaza(tile);
+}
+
+/* static */ bool ScriptRoad::IsFreeFlowTollPlaza(TileIndex tile)
+{
+	if (!::IsValidTile(tile)) return false;
+	const TollPlaza *plaza = ::GetTollPlaza(tile);
+	return plaza != nullptr && plaza->free_flow;
+}
+
+/* static */ Money ScriptRoad::GetTollPlazaIncome(TileIndex tile)
+{
+	if (!::IsValidTile(tile)) return -1;
+	const TollPlaza *plaza = ::GetTollPlaza(tile);
+	return plaza == nullptr ? Money{-1} : plaza->income;
+}
+
+/* static */ SQInteger ScriptRoad::GetTollPlazaTrips(TileIndex tile)
+{
+	if (!::IsValidTile(tile)) return -1;
+	const TollPlaza *plaza = ::GetTollPlaza(tile);
+	return plaza == nullptr ? -1 : plaza->trips;
+}
+
+/* static */ SQInteger ScriptRoad::GetTollPlazaVehicles(TileIndex tile)
+{
+	if (!::IsValidTile(tile)) return -1;
+	const TollPlaza *plaza = ::GetTollPlaza(tile);
+	return plaza == nullptr ? -1 : plaza->vehicles;
+}
+
+/* static */ SQInteger ScriptRoad::GetTollPlazaTowns(TileIndex tile)
+{
+	if (!::IsValidTile(tile)) return -1;
+	const TollPlaza *plaza = ::GetTollPlaza(tile);
+	return plaza == nullptr ? -1 : plaza->towns;
 }
 
 /* static */ bool ScriptRoad::SetTrafficLightBusPriority(TileIndex tile, bool on)

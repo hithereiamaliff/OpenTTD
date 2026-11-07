@@ -19,6 +19,7 @@ enum TransitAuthorityWidgets : WidgetID {
 	WID_TRA_BID, ///< Bid for the selected tender.
 	WID_TRA_END, ///< End the selected contract.
 	WID_TRA_LINE, ///< Show the line of the selected tender or contract.
+	WID_TRA_CHARGE, ///< Propose a congestion charge.
 };
 
 #endif /* WIDGETS_TRANSIT_AUTHORITY_WIDGET_H */
