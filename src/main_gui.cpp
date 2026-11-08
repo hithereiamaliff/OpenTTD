@@ -252,19 +252,9 @@ struct MainWindow : Window
 	{
 		this->DrawWidgets();
 		if (_game_mode == GameMode::Menu) {
-			static const std::initializer_list<SpriteID> title_sprites = {SPR_OTTD_O, SPR_OTTD_P, SPR_OTTD_E, SPR_OTTD_N, SPR_OTTD_T, SPR_OTTD_T, SPR_OTTD_D};
-			uint letter_spacing = ScaleGUITrad(10);
-			int name_width = static_cast<int>(std::size(title_sprites) - 1) * letter_spacing;
-
-			for (const SpriteID &sprite : title_sprites) {
-				name_width += GetSpriteSize(sprite).width;
-			}
-			int off_x = (this->width - name_width) / 2;
-
-			for (const SpriteID &sprite : title_sprites) {
-				DrawSprite(sprite, PAL_NONE, off_x, ScaleGUITrad(50));
-				off_x += GetSpriteSize(sprite).width + letter_spacing;
-			}
+			/* The game's name over the menu: Wira Bandar, a fork of OpenTTD, whose title letters this replaces. */
+			const int name_width = GetSpriteSize(SPR_WIRA_BANDAR_LOGO).width;
+			DrawSprite(SPR_WIRA_BANDAR_LOGO, PAL_NONE, (this->width - name_width) / 2, ScaleGUITrad(50));
 
 			int text_y = this->height - GetCharacterHeight(FontSize::Normal) * 2;
 			DrawString(0, this->width - 1, text_y, STR_INTRO_VERSION, TextColour::White, {AlignmentH::Centre, AlignmentV::Middle});

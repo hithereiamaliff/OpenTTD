@@ -923,6 +923,48 @@ extern std::string CocoaGetAppSupportDir();
 std::string _personal_dir;
 
 /**
+ * Bring the settings and saves over from OpenTTD's folder, the first time Wira Bandar starts with a folder of
+ * its own: only while its folder has no settings file and OpenTTD's has one. The settings files and the save
+ * folder are copied; nothing is moved or deleted, and files already there are kept. Graphics, NewGRFs, AIs and
+ * scenarios stay where they are: OpenTTD's folder is still searched for them.
+ * @param from OpenTTD's folder, ending in a path separator.
+ * @param to Wira Bandar's folder, ending in a path separator.
+ * @return Whether anything was copied.
+ */
+bool CopyOpenTTDFolder(const std::string &from, const std::string &to)
+{
+	namespace fs = std::filesystem;
+	std::error_code ec;
+	const fs::path source(OTTD2FS(from));
+	const fs::path target(OTTD2FS(to));
+	if (fs::exists(target / "openttd.cfg", ec) || !fs::exists(source / "openttd.cfg", ec)) return false;
+
+	fs::create_directories(target, ec);
+	if (ec) {
+		Debug(Facility::Misc, Severity::Error, "Can't make {} to copy OpenTTD's settings into: {}", to, ec.message());
+		return false;
+	}
+	uint copied = 0;
+	static const std::string_view FILES[] = {"openttd.cfg", "hotkeys.cfg", "windows.cfg", "private.cfg", "secrets.cfg", "favs.cfg", "hs.dat"};
+	for (std::string_view name : FILES) {
+		const fs::path file = source / fs::path(name);
+		if (!fs::is_regular_file(file, ec)) continue;
+		if (fs::copy_file(file, target / fs::path(name), fs::copy_options::skip_existing, ec)) copied++;
+		if (ec) Debug(Facility::Misc, Severity::Error, "Can't copy {} from {}: {}", name, from, ec.message());
+	}
+	if (fs::is_directory(source / "save", ec)) {
+		fs::copy(source / "save", target / "save", fs::copy_options::recursive | fs::copy_options::skip_existing, ec);
+		if (ec) {
+			Debug(Facility::Misc, Severity::Error, "Can't copy the saves from {}: {}", from, ec.message());
+		} else {
+			copied++;
+		}
+	}
+	Debug(Facility::Misc, Severity::Error, "Copied OpenTTD's settings and saves from {} to {} ({} items)", from, to, copied);
+	return copied > 0;
+}
+
+/**
  * Acquire the base paths (personal dir and game data dir),
  * fill all other paths (save dir, autosave dir etc) and
  * make the save and scenario directories.
@@ -953,6 +995,11 @@ void DeterminePaths(std::string_view exe, bool only_local_path)
 	for (Searchpath sp : _valid_searchpaths) {
 		if (sp == Searchpath::WorkingDir && !_do_scan_working_directory) continue;
 		Debug(Facility::Misc, Severity::Notice, "{} added as search path", _searchpaths[sp]);
+	}
+
+	/* Wira Bandar keeps its own folder: the first time, the settings and saves come over from OpenTTD's. */
+	if (_config_file.empty() && IsValidSearchPath(Searchpath::OpenTTDDir) && IsValidSearchPath(Searchpath::PersonalDir)) {
+		CopyOpenTTDFolder(_searchpaths[Searchpath::OpenTTDDir], _searchpaths[Searchpath::PersonalDir]);
 	}
 
 	std::string config_dir;

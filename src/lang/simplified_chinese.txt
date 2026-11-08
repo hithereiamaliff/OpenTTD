@@ -412,12 +412,10 @@ STR_TOOLBAR_TOOLTIP_BUILD_AIRPORTS                              :{BLACK}建设�
 STR_TOOLBAR_TOOLTIP_LANDSCAPING                                 :{BLACK}打开地形工具栏以修改地形、种植树木或放置标志等
 STR_TOOLBAR_TOOLTIP_SHOW_SOUND_MUSIC_WINDOW                     :{BLACK}显示声音与音乐控制菜单
 STR_TOOLBAR_TOOLTIP_SHOW_LAST_MESSAGE_NEWS                      :{BLACK}显示最新消息、新闻，消息历史或删除所有消息
-STR_TOOLBAR_TOOLTIP_LAND_BLOCK_INFORMATION                      :{BLACK}查询地块信息、截图、关于 OpenTTD 和开发者工具
 STR_TOOLBAR_TOOLTIP_SWITCH_TOOLBAR                              :{BLACK}切换工具栏
 
 # Extra tooltips for the scenario editor toolbar
 STR_SCENEDIT_TOOLBAR_SAVE_SCENARIO_LOAD_SCENARIO_TOOLTIP        :{BLACK}保存场景、读取场景、放弃场景、退出
-STR_SCENEDIT_TOOLBAR_OPENTTD                                    :{YELLOW}OpenTTD
 STR_SCENEDIT_TOOLBAR_SCENARIO_EDITOR                            :{YELLOW}场景编辑器
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_BACKWARD_TOOLTIP    :{BLACK}将开始年份向前调整 1 年
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_FORWARD_TOOLTIP     :{BLACK}将开始年份向后调整 1 年
@@ -543,7 +541,6 @@ STR_ABOUT_MENU_TOGGLE_CONSOLE                                   :切换到控制
 STR_ABOUT_MENU_AI_DEBUG                                         :AI / 游戏脚本调试
 STR_ABOUT_MENU_SCREENSHOT                                       :屏幕截图
 STR_ABOUT_MENU_SHOW_FRAMERATE                                   :显示帧率
-STR_ABOUT_MENU_ABOUT_OPENTTD                                    :关于 OpenTTD
 STR_ABOUT_MENU_SPRITE_ALIGNER                                   :Sprite 对齐
 STR_ABOUT_MENU_TOGGLE_BOUNDING_BOXES                            :切换边界框
 STR_ABOUT_MENU_TOGGLE_DIRTY_BLOCKS                              :切换脏方块的颜色
@@ -1071,7 +1068,6 @@ STR_GAME_OPTIONS_LANGUAGE_TOOLTIP                               :选择界面语
 STR_GAME_OPTIONS_LANGUAGE_PERCENTAGE                            :{STRING}（已完成 {NUM}%）
 
 STR_GAME_OPTIONS_FULLSCREEN                                     :全屏幕
-STR_GAME_OPTIONS_FULLSCREEN_TOOLTIP                             :启用以在全屏幕模式下游玩 OpenTTD
 
 STR_GAME_OPTIONS_RESOLUTION                                     :屏幕分辨率
 STR_GAME_OPTIONS_RESOLUTION_TOOLTIP                             :选择屏幕分辨率
@@ -1079,7 +1075,6 @@ STR_GAME_OPTIONS_RESOLUTION_OTHER                               :其他
 STR_GAME_OPTIONS_RESOLUTION_ITEM                                :{NUM}×{NUM}
 
 STR_GAME_OPTIONS_VIDEO_ACCELERATION                             :硬件加速
-STR_GAME_OPTIONS_VIDEO_ACCELERATION_TOOLTIP                     :启用以允许 OpenTTD 尝试使用硬件加速。修改后的设置将在游戏重启后生效
 STR_GAME_OPTIONS_VIDEO_ACCELERATION_RESTART                     :{WHITE}修改后的设置将在游戏重启后生效
 
 STR_GAME_OPTIONS_VIDEO_VSYNC                                    :垂直同步
@@ -2256,8 +2251,6 @@ STR_VIDEO_DRIVER_ERROR_NO_HARDWARE_ACCELERATION                 :找不到合适
 STR_VIDEO_DRIVER_ERROR_HARDWARE_ACCELERATION_CRASH              :GPU 驱动程序导致游戏崩溃。硬件加速已禁用
 
 # Intro window
-STR_INTRO_CAPTION                                               :{WHITE}OpenTTD
-STR_INTRO_VERSION                                               :OpenTTD {REV}
 
 STR_INTRO_NEW_GAME                                              :{BLACK}新游戏
 STR_INTRO_LOAD_GAME                                             :{BLACK}读取存档
@@ -2288,14 +2281,11 @@ STR_INTRO_TOOLTIP_GAME_OPTIONS                                  :{BLACK}显示�
 STR_INTRO_TOOLTIP_HIGHSCORE                                     :{BLACK}显示高分榜
 STR_INTRO_TOOLTIP_HELP                                          :{BLACK}获取说明和在线资源
 STR_INTRO_TOOLTIP_ONLINE_CONTENT                                :{BLACK}检查有无最新或可更新的内容可供下载
-STR_INTRO_TOOLTIP_QUIT                                          :{BLACK}退出 OpenTTD
 
 STR_INTRO_BASESET                                               :{BLACK}当前选定的基础图形组缺少 {NUM} 个贴图。请检查基础图形组有无更新。
-STR_INTRO_TRANSLATION                                           :{BLACK}简体中文翻译缺失了 {NUM} 条字符串。请注册成为翻译人员以帮助开发 OpenTTD。详见 readme.txt。
 
 # Quit window
 STR_QUIT_CAPTION                                                :{WHITE}退出
-STR_QUIT_ARE_YOU_SURE_YOU_WANT_TO_EXIT_OPENTTD                  :{YELLOW}你确定要退出 OpenTTD 吗？
 STR_QUIT_YES                                                    :{BLACK}是
 STR_QUIT_NO                                                     :{BLACK}否
 
@@ -2390,7 +2380,6 @@ STR_FACE_SIMPLE                                                 :{BLACK}简易
 STR_FACE_SIMPLE_TOOLTIP                                         :{BLACK}切换到简易头像选单
 STR_FACE_LOAD                                                   :{BLACK}载入头像
 STR_FACE_LOAD_TOOLTIP                                           :{BLACK}载入预存喜好的头像
-STR_FACE_LOAD_DONE                                              :喜好的头像已经从 OpenTTD 配置文件中读取
 STR_FACE_FACECODE                                               :{BLACK}头像编号
 STR_FACE_FACECODE_TOOLTIP                                       :{BLACK}检视或设定公司总裁头像编号
 STR_FACE_FACECODE_CAPTION                                       :{WHITE}检视或设定公司总裁头像编号
@@ -2398,7 +2387,6 @@ STR_FACE_FACECODE_SET                                           :已应用新头
 STR_FACE_FACECODE_ERR                                           :无法设置总裁头像编号，编号必须在 0 ~ 4,294,967,295 范围内！
 STR_FACE_SAVE                                                   :{BLACK}储存头像
 STR_FACE_SAVE_TOOLTIP                                           :{BLACK}储存喜好的头像
-STR_FACE_SAVE_DONE                                              :该头像将作为你的喜好储存至 OpenTTD 配置文件中
 STR_FACE_SETTING_TOGGLE                                         :{STRING} {ORANGE}{STRING}
 STR_FACE_SETTING_NUMERIC                                        :{STRING} {ORANGE}{NUM} / {NUM}
 STR_FACE_YES                                                    :是
@@ -2713,8 +2701,6 @@ STR_CONTENT_UNSELECT_ALL_CAPTION                                :{BLACK}取消�
 STR_CONTENT_UNSELECT_ALL_CAPTION_TOOLTIP                        :{BLACK}取消全部选择
 STR_CONTENT_SEARCH_EXTERNAL                                     :{BLACK}在外部网站搜索
 STR_CONTENT_SEARCH_EXTERNAL_TOOLTIP                             :{BLACK}在与 OpenTTD 没有联系的网站搜索没有纳入 OpenTTD 内容服务的内容
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER_CAPTION                  :{WHITE}正在离开游戏！
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER                          :{WHITE}内容下载的规则和条款依网站而定。{}请参照相关网站以了解在 OpenTTD 中使用相关内容的规则与其他信息。{}是否继续？
 STR_CONTENT_FILTER_TITLE                                        :{BLACK}搜索标签与名称：
 STR_CONTENT_OPEN_URL                                            :{BLACK}主页
 STR_CONTENT_OPEN_URL_TOOLTIP                                    :{BLACK}访问此项目的网站
@@ -2728,7 +2714,6 @@ STR_CONTENT_DETAIL_SUBTITLE_UNSELECTED                          :{SILVER}您尚�
 STR_CONTENT_DETAIL_SUBTITLE_SELECTED                            :{SILVER}您已经选择下载此项目
 STR_CONTENT_DETAIL_SUBTITLE_AUTOSELECTED                        :{SILVER}已自动选择下载此依赖项目
 STR_CONTENT_DETAIL_SUBTITLE_ALREADY_HERE                        :{SILVER}您已经下载过此项目
-STR_CONTENT_DETAIL_SUBTITLE_DOES_NOT_EXIST                      :{SILVER}此未知内容无法于 OpenTTD 中下载
 
 STR_CONTENT_DETAIL_UPDATE                                       :{SILVER}这是现有 {STRING} 的替代版本
 STR_CONTENT_DETAIL_NAME                                         :{SILVER}名称：{WHITE}{STRING}
@@ -2740,7 +2725,6 @@ STR_CONTENT_DETAIL_FILESIZE                                     :{SILVER}大小�
 STR_CONTENT_DETAIL_SELECTED_BECAUSE_OF                          :{SILVER}按 {WHITE}{STRING} 选择
 STR_CONTENT_DETAIL_DEPENDENCIES                                 :{SILVER}依存：{WHITE}{STRING}
 STR_CONTENT_DETAIL_TAGS                                         :{SILVER}标签：{WHITE}{STRING}
-STR_CONTENT_NO_ZLIB                                             :编译 OpenTTD 时未编译"zlib"模块……
 STR_CONTENT_NO_ZLIB_SUB                                         :无法下载内容！
 
 # Order of these is important!
@@ -2769,13 +2753,10 @@ STR_CONTENT_ERROR_COULD_NOT_DOWNLOAD_FILE_NOT_WRITABLE          :文件无法写
 STR_CONTENT_ERROR_COULD_NOT_EXTRACT                             :无法解压已下载的文件
 
 STR_MISSING_GRAPHICS_SET_CAPTION                                :{WHITE}缺失图形组
-STR_MISSING_GRAPHICS_SET_MESSAGE                                :{BLACK}OpenTTD 需要基础图形组用以绘制界面。您是否希望 OpenTTD 下载并安装以下图形组？
 STR_MISSING_GRAPHICS_YES_DOWNLOAD                               :{BLACK}是，开始下载
-STR_MISSING_GRAPHICS_NO_QUIT                                    :{BLACK}不，退出 OpenTTD
 
 STR_MISSING_GRAPHICS_ERROR_TITLE                                :{WHITE}下载失败
 STR_MISSING_GRAPHICS_ERROR                                      :{BLACK}下载图形组失败。{}请手动下载图形组。
-STR_MISSING_GRAPHICS_ERROR_QUIT                                 :{BLACK}退出 OpenTTD
 
 # Transparency settings window
 STR_TRANSPARENCY_CAPTION                                        :{WHITE}透明选项
@@ -3316,9 +3297,7 @@ STR_LAI_OBJECT_DESCRIPTION_COMPANY_HEADQUARTERS                 :公司总部
 STR_LAI_OBJECT_DESCRIPTION_COMPANY_OWNED_LAND                   :公司所有土地
 
 # About OpenTTD window
-STR_ABOUT_OPENTTD                                               :{WHITE}关于 OpenTTD
 STR_ABOUT_ORIGINAL_COPYRIGHT                                    :{BLACK}原始版权由 {COPYRIGHT} 1995 Chris Sawyer 所有，保留所有权利
-STR_ABOUT_VERSION                                               :{BLACK}OpenTTD 版本 {REV}
 STR_ABOUT_COPYRIGHT_OPENTTD                                     :{BLACK}OpenTTD {COPYRIGHT} 2002-{STRING} OpenTTD 团队
 
 # Framerate display window
@@ -3449,7 +3428,6 @@ STR_MAPGEN_QUANTITY_OF_RIVERS                                   :{BLACK}河流�
 STR_MAPGEN_SMOOTHNESS                                           :{BLACK}平滑程度：
 STR_MAPGEN_VARIETY                                              :{BLACK}多样地形：
 STR_MAPGEN_GENERATE                                             :{WHITE}生成
-STR_MAPGEN_GENERATE_TOOLTIP                                     :{BLACK}创建世界并开始游玩 OpenTTD！
 STR_MAPGEN_NEWGRF_SETTINGS                                      :{BLACK}NewGRF 设置
 STR_MAPGEN_NEWGRF_SETTINGS_TOOLTIP                              :{BLACK}显示 NewGRF 设置
 STR_MAPGEN_AI_SETTINGS                                          :{BLACK}AI 设置
@@ -3504,7 +3482,6 @@ STR_MAPGEN_HEIGHTMAP_ROTATION                                   :{BLACK}高度�
 STR_MAPGEN_HEIGHTMAP_NAME                                       :{BLACK}高度图名称：
 STR_MAPGEN_HEIGHTMAP_NAME_TOOLTIP                               :{BLACK}高度图图像文件的名字
 STR_MAPGEN_HEIGHTMAP_SIZE_LABEL                                 :{BLACK}地图尺寸：
-STR_MAPGEN_HEIGHTMAP_SIZE_LABEL_TOOLTIP                         :{BLACK}高度图的长宽大小。建议选择长宽符合游戏地图大小的图片作为高度图，如 256、512、1024 等
 STR_MAPGEN_HEIGHTMAP_SIZE                                       :{ORANGE}{NUM} × {NUM}
 
 STR_MAPGEN_TERRAIN_TYPE_QUERY_CAPT                              :{WHITE}最高峰目标高度
@@ -3695,7 +3672,6 @@ STR_NEWGRF_ERROR_INDPROD_CALLBACK                               :无效的生产
 
 # NewGRF related 'general' warnings
 STR_NEWGRF_POPUP_CAUTION_CAPTION                                :{WHITE}注意！
-STR_NEWGRF_CONFIRMATION_TEXT                                    :{YELLOW}此操作将改变一个进行中的游戏，可能导致游戏崩溃或破坏游戏资料。修改后遇到错误时请不要向开发者报告。{}真的确定继续吗？
 
 STR_NEWGRF_DUPLICATE_GRFID                                      :不能添加文件：重复的 NewGRF ID
 STR_NEWGRF_COMPATIBLE_LOADED                                    :{ORANGE}未找到匹配的文件（已载入兼容的 NewGRF）
@@ -3704,7 +3680,6 @@ STR_NEWGRF_TOO_MANY_NEWGRFS                                     :加入的 NewGR
 STR_NEWGRF_COMPATIBLE_LOAD_WARNING                              :已为缺失的文件载入兼容的 NewGRF
 STR_NEWGRF_DISABLED_WARNING                                     :已禁用缺失的 NewGRF 文件
 STR_NEWGRF_UNPAUSE_WARNING_TITLE                                :{YELLOW}无法找到 NewGRF 文件
-STR_NEWGRF_UNPAUSE_WARNING                                      :{WHITE}取消暂停可能造成 OpenTTD 游戏错误，请不要将向开发人员报告接下来可能出现的错误情形。{}真的确定取消暂停吗？
 
 # NewGRF status
 STR_NEWGRF_LIST_NONE                                            :无
@@ -5044,7 +5019,6 @@ STR_TEXTFILE_README_CAPTION                                     :{WHITE}{STRING}
 STR_TEXTFILE_CHANGELOG_CAPTION                                  :{WHITE}{STRING} {STRING} 的更新日志
 STR_TEXTFILE_LICENCE_CAPTION                                    :{WHITE}{STRING} {STRING} {WHITE}的版权信息
 STR_TEXTFILE_SURVEY_RESULT_CAPTION                              :{WHITE}预览调查结果
-STR_TEXTFILE_GAME_MANUAL_CAPTION                                :{WHITE}OpenTTD 文档“{STRING}”
 
 
 # Vehicle loading indicators

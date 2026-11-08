@@ -26,6 +26,7 @@ std::string_view FiosGetScreenshotDir();
 void SanitizeFilename(std::string &filename);
 void AppendPathSeparator(std::string &buf);
 void DeterminePaths(std::string_view exe, bool only_local_path);
+bool CopyOpenTTDFolder(const std::string &from, const std::string &to);
 std::unique_ptr<char[]> ReadFileToMem(const std::string &filename, size_t &lenp, size_t maxsize);
 bool FileExists(std::string_view filename);
 bool ExtractTar(const std::string &tar_filename, Subdirectory subdir);

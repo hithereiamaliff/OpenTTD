@@ -349,12 +349,10 @@ STR_TOOLBAR_TOOLTIP_BUILD_AIRPORTS                              :{BLACK}Aireport
 STR_TOOLBAR_TOOLTIP_LANDSCAPING                                 :{BLACK}Zabaldu paisaia eraldatzeko lanabesak lurra igotzeko/beheratzeko, zuhaitzak landatu, etab.
 STR_TOOLBAR_TOOLTIP_SHOW_SOUND_MUSIC_WINDOW                     :{BLACK}Erakutsi soinu/musika leihoa
 STR_TOOLBAR_TOOLTIP_SHOW_LAST_MESSAGE_NEWS                      :{BLACK}Erakutsi azken mezu/albiste erreportaia, erakutsi mezu aukerak
-STR_TOOLBAR_TOOLTIP_LAND_BLOCK_INFORMATION                      :{BLACK}Lur arearen informazioa, konsola, script debug, screenshots, OpenTTDri buruz
 STR_TOOLBAR_TOOLTIP_SWITCH_TOOLBAR                              :{BLACK}Tresna barra aldatu
 
 # Extra tooltips for the scenario editor toolbar
 STR_SCENEDIT_TOOLBAR_SAVE_SCENARIO_LOAD_SCENARIO_TOOLTIP        :{BLACK}Eszenarioa gorde, eszenarioa kargatu, eszenarioaren editorea itxi, irten
-STR_SCENEDIT_TOOLBAR_OPENTTD                                    :{YELLOW}OpenTTD
 STR_SCENEDIT_TOOLBAR_SCENARIO_EDITOR                            :{YELLOW}Eszenario Editorea
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_BACKWARD_TOOLTIP    :{BLACK}Mugitu hasierako data urte 1 atzerago
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_FORWARD_TOOLTIP     :{BLACK}Mugitu hasierako data urte 1 aurrerago
@@ -462,7 +460,6 @@ STR_ABOUT_MENU_LAND_BLOCK_INFO                                  :Lur arearen inf
 STR_ABOUT_MENU_TOGGLE_CONSOLE                                   :Konsola aktibatu
 STR_ABOUT_MENU_AI_DEBUG                                         :IA/Joko script-aren garbitzailea
 STR_ABOUT_MENU_SCREENSHOT                                       :Pantailan dagoenaren argazkia hartu (Ctrl+S)
-STR_ABOUT_MENU_ABOUT_OPENTTD                                    :'OpenTTD'-ri buruz
 STR_ABOUT_MENU_SPRITE_ALIGNER                                   :"Sprit" lerrokatzailea
 STR_ABOUT_MENU_TOGGLE_BOUNDING_BOXES                            :Kaxen neurriak aldatu
 STR_ABOUT_MENU_TOGGLE_DIRTY_BLOCKS                              :Txandakatu bloke zikinen kolorea
@@ -896,7 +893,6 @@ STR_GAME_OPTIONS_LANGUAGE                                       :Hizkuntza
 STR_GAME_OPTIONS_LANGUAGE_TOOLTIP                               :Aukeratu interfazean erabiltzeko hizkuntza
 
 STR_GAME_OPTIONS_FULLSCREEN                                     :Pantaila osoa
-STR_GAME_OPTIONS_FULLSCREEN_TOOLTIP                             :Markatu kaxa hau OpenTTD pantaila osoko moduan jolasteko
 
 STR_GAME_OPTIONS_RESOLUTION                                     :Pantailaren resoluzioa
 STR_GAME_OPTIONS_RESOLUTION_TOOLTIP                             :Pantailaren resulozioa aukeratu
@@ -1813,9 +1809,7 @@ STR_INTRO_TOOLTIP_TOYLAND_LANDSCAPE                             :{BLACK}Aukeratu
 STR_INTRO_TOOLTIP_GAME_OPTIONS                                  :{BLACK}Jokoaren aukerak erakutsi
 STR_INTRO_TOOLTIP_HIGHSCORE                                     :{BLACK}Puntuazioen taula erakutsi
 STR_INTRO_TOOLTIP_ONLINE_CONTENT                                :{BLACK}Bilatu eduki berria eta eguneratua deskargatzeko
-STR_INTRO_TOOLTIP_QUIT                                          :{BLACK}'OpenTTD'-tik Irten
 
-STR_INTRO_TRANSLATION                                           :{BLACK}Itzultze honi {NUM} string falta zaio/zaizkio. Mesedez OpenTTD hobeago egiten lagundu itzultzaile bezala aritzen. Ikusi readme.txt xehetasunentzako.
 
 # Quit window
 STR_QUIT_CAPTION                                                :{WHITE}Irten
@@ -1889,7 +1883,6 @@ STR_FACE_SIMPLE                                                 :{BLACK}Oinarriz
 STR_FACE_SIMPLE_TOOLTIP                                         :{BLACK}Oinarrizko aurpegi aukera
 STR_FACE_LOAD                                                   :{BLACK}Kargatu
 STR_FACE_LOAD_TOOLTIP                                           :{BLACK}Aurpegi kargatu
-STR_FACE_LOAD_DONE                                              :{WHITE}Zure aurpegia OpenTTD konfigurazio artxibotik kargatu da
 STR_FACE_FACECODE                                               :{BLACK}Jokalariaren aurpegi zenbakia
 STR_FACE_FACECODE_TOOLTIP                                       :{BLACK}Lehendakariaren aurpegi zenbakia aukeratu/ikusi
 STR_FACE_FACECODE_CAPTION                                       :{WHITE}Lehendakariaren aurpegi zenbakia aldatu/ikusi
@@ -1897,7 +1890,6 @@ STR_FACE_FACECODE_SET                                           :{WHITE}Aurpegi 
 STR_FACE_FACECODE_ERR                                           :{WHITE}Ezin izan da aurpegi berrirako zenbakia ezarri - 0 eta 4,294,967,295 arteko zenbakia izan behar du!
 STR_FACE_SAVE                                                   :{BLACK}Gorde
 STR_FACE_SAVE_TOOLTIP                                           :{BLACK}Aurpegia gorde
-STR_FACE_SAVE_DONE                                              :{WHITE}Aurpegia zure aurpegi gogoko bezala gorde da OpenTTDko konfigurazio artxiboan
 STR_FACE_YES                                                    :Bai
 STR_FACE_NO                                                     :Ez
 STR_FACE_HAIR                                                   :Ilea:
@@ -2115,7 +2107,6 @@ STR_CONTENT_SELECT_UPDATES_CAPTION_TOOLTIP                      :{BLACK}Haukerat
 STR_CONTENT_UNSELECT_ALL_CAPTION                                :{BLACK}Guztia desmarkatu
 STR_CONTENT_UNSELECT_ALL_CAPTION_TOOLTIP                        :{BLACK}Dekargatuak izango ez diren eduki guztiak markatu
 STR_CONTENT_SEARCH_EXTERNAL                                     :{BLACK}Kanpoko webguneak bilatu
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER_CAPTION                  :{WHITE}OpenTTD uzten zaude!
 STR_CONTENT_FILTER_TITLE                                        :{BLACK}Etiketa/izen iragazkia:
 STR_CONTENT_OPEN_URL                                            :{BLACK}Webgunera joan
 STR_CONTENT_OPEN_URL_TOOLTIP                                    :{BLACK}Eduki honen webgunera joan
@@ -2129,7 +2120,6 @@ STR_CONTENT_DETAIL_SUBTITLE_UNSELECTED                          :{SILVER}Ez duzu
 STR_CONTENT_DETAIL_SUBTITLE_SELECTED                            :{SILVER}Desgarkatzeko aukeratu duzu
 STR_CONTENT_DETAIL_SUBTITLE_AUTOSELECTED                        :{SILVER}Mendekotasun hau deskargatzeko aukeratua izan da
 STR_CONTENT_DETAIL_SUBTITLE_ALREADY_HERE                        :{SILVER}Iada eduki hau daukazu
-STR_CONTENT_DETAIL_SUBTITLE_DOES_NOT_EXIST                      :{SILVER}Edukia ezezaguna da eta ezin da OpenTTD-n deskargatu
 
 STR_CONTENT_DETAIL_UPDATE                                       :{SILVER} {STRING} ordezkoa da
 STR_CONTENT_DETAIL_NAME                                         :{SILVER}Izena: {WHITE}{STRING}
@@ -2141,7 +2131,6 @@ STR_CONTENT_DETAIL_FILESIZE                                     :{SILVER}Deskarg
 STR_CONTENT_DETAIL_SELECTED_BECAUSE_OF                          :{SILVER}Honengatik aurkeratua: {WHITE}{STRING}
 STR_CONTENT_DETAIL_DEPENDENCIES                                 :{SILVER}Menpekotasunak: {WHITE}{STRING}
 STR_CONTENT_DETAIL_TAGS                                         :{SILVER}Etiketak: {WHITE}{STRING}
-STR_CONTENT_NO_ZLIB                                             :{WHITE}OpenTTD "zlib" euskarria gabe eraikita dago...
 STR_CONTENT_NO_ZLIB_SUB                                         :{WHITE}... ezin da edukia deskargatu!
 
 # Order of these is important!
@@ -2170,9 +2159,7 @@ STR_CONTENT_ERROR_COULD_NOT_DOWNLOAD_FILE_NOT_WRITABLE          :{WHITE}... idat
 STR_CONTENT_ERROR_COULD_NOT_EXTRACT                             :{WHITE}Ezin izan da deskonprimitu deskargatutako artxiboa
 
 STR_MISSING_GRAPHICS_SET_CAPTION                                :{WHITE}Grafikoak faltatzen dira
-STR_MISSING_GRAPHICS_SET_MESSAGE                                :{BLACK}OpenTTD-k grafikoak behar ditu funtzionatzeko baina ez ditu aurkitzen. Baimena ematen diozu grafiko hauek deskargatu eta instalatzeko?
 STR_MISSING_GRAPHICS_YES_DOWNLOAD                               :{BLACK}Bai, grafikoak jaitsi
-STR_MISSING_GRAPHICS_NO_QUIT                                    :{BLACK}Ez, OpenTTD itxi
 
 
 # Transparency settings window
@@ -2593,9 +2580,7 @@ STR_LAI_OBJECT_DESCRIPTION_COMPANY_HEADQUARTERS                 :Konpainiaren eg
 STR_LAI_OBJECT_DESCRIPTION_COMPANY_OWNED_LAND                   :Konpainia jabe den lur saila
 
 # About OpenTTD window
-STR_ABOUT_OPENTTD                                               :{WHITE}OpenTTD-ri buruz
 STR_ABOUT_ORIGINAL_COPYRIGHT                                    :{BLACK}Original copyright {COPYRIGHT} 1995 Chris Sawyer, All rights reserved
-STR_ABOUT_VERSION                                               :{BLACK}OpenTTD bertsioa {REV}
 STR_ABOUT_COPYRIGHT_OPENTTD                                     :{BLACK}OpenTTD {COPYRIGHT} 2002-{STRING} The OpenTTD team
 
 # Framerate display window
@@ -2843,7 +2828,6 @@ STR_NEWGRF_ERROR_INVALID_SPRITE_LAYOUT                          :Grafiko deseinu
 
 # NewGRF related 'general' warnings
 STR_NEWGRF_POPUP_CAUTION_CAPTION                                :{WHITE}Kontuz!
-STR_NEWGRF_CONFIRMATION_TEXT                                    :{YELLOW}Abiarazitako jokoan aldaketak egin behar dituzu. Honek akatsak sortu ditzake OpenTTD-n edo jokoan. Ez bidali arazo hauen informerik{}Ziur zaude egin nahi duzula?
 
 STR_NEWGRF_DUPLICATE_GRFID                                      :{WHITE}Ezin artxiboa gehitu: GRF ID bikoiztua
 STR_NEWGRF_COMPATIBLE_LOADED                                    :{ORANGE}Bat datorren artxiboa ez da aurkitu (GRF bateragarria kargatua)
@@ -2852,7 +2836,6 @@ STR_NEWGRF_TOO_MANY_NEWGRFS                                     :{WHITE}Ezin da 
 STR_NEWGRF_COMPATIBLE_LOAD_WARNING                              :{WHITE}Falta diren artxiboentzako GRF bateragarria deskargatua
 STR_NEWGRF_DISABLED_WARNING                                     :{WHITE}Falta de GRF artxiboa desgaitua izan da
 STR_NEWGRF_UNPAUSE_WARNING_TITLE                                :{YELLOW}Fata diren GRF artxiboak
-STR_NEWGRF_UNPAUSE_WARNING                                      :{WHITE}Pausa kentzeak Openttd hautsi dezake. Ez bidali arazo informerik gerta daitezkeen hausturengatik.{}Benetan pausa kendu nahi duzu?
 
 # NewGRF status
 STR_NEWGRF_LIST_NONE                                            :Bat ere ez

@@ -540,12 +540,10 @@ STR_TOOLBAR_TOOLTIP_BUILD_AIRPORTS                              :{BLACK}Tog port
 STR_TOOLBAR_TOOLTIP_LANDSCAPING                                 :{BLACK}Fosgail am bàr-innealan cruth-tìre gus an tìr àrdachadh/ìsleachadh, craobhan a chur agus msaa.
 STR_TOOLBAR_TOOLTIP_SHOW_SOUND_MUSIC_WINDOW                     :{BLACK}Seall uinneag fhuaime/chiùil
 STR_TOOLBAR_TOOLTIP_SHOW_LAST_MESSAGE_NEWS                      :{BLACK}Seall am brath/aithris naidheachd mu dheireadh, seall roghainnean nam brath
-STR_TOOLBAR_TOOLTIP_LAND_BLOCK_INFORMATION                      :{BLACK}Fiosrachadh mun raon tìre, consoil, dì-bhugadh sgriobt, glacaidhean-sgrìn, mu dheidhinn OpenTTD
 STR_TOOLBAR_TOOLTIP_SWITCH_TOOLBAR                              :{BLACK}Suids bàraichean-innealan
 
 # Extra tooltips for the scenario editor toolbar
 STR_SCENEDIT_TOOLBAR_SAVE_SCENARIO_LOAD_SCENARIO_TOOLTIP        :{BLACK}Sàbhail cnàmh-sgeul, luchdaich cnàmh-sgeul, fàg deasaiche nan cnàmh-sgeul, fàg an-seo
-STR_SCENEDIT_TOOLBAR_OPENTTD                                    :{YELLOW}OpenTTD
 STR_SCENEDIT_TOOLBAR_SCENARIO_EDITOR                            :{YELLOW}Deasaiche nan cnàmh-sgeul
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_BACKWARD_TOOLTIP    :{BLACK}Gluais an latha tòiseachaidh air ais 1 bhliadhna
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_FORWARD_TOOLTIP     :{BLACK}Gluais an latha tòiseachaidh air adhart 1 bhliadhna
@@ -654,7 +652,6 @@ STR_ABOUT_MENU_LAND_BLOCK_INFO                                  :Fiosrachadh rao
 STR_ABOUT_MENU_TOGGLE_CONSOLE                                   :Toglaich a' chonsoil
 STR_ABOUT_MENU_AI_DEBUG                                         :Dì-bhugaich IF/sgriobt geama
 STR_ABOUT_MENU_SCREENSHOT                                       :Glacadh-sgrìn
-STR_ABOUT_MENU_ABOUT_OPENTTD                                    :Mu dheidhinn “OpenTTD"
 STR_ABOUT_MENU_SPRITE_ALIGNER                                   :Co-thaobhaichear nan sprite
 STR_ABOUT_MENU_TOGGLE_BOUNDING_BOXES                            :Toglaich bogsaichean-iadhaidh
 STR_ABOUT_MENU_TOGGLE_DIRTY_BLOCKS                              :Toglaich dathadh nam blocaichean salach
@@ -1109,7 +1106,6 @@ STR_GAME_OPTIONS_LANGUAGE                                       :Cànan
 STR_GAME_OPTIONS_LANGUAGE_TOOLTIP                               :Tagh cànan an eadar-aghaidh a chleachdas tu
 
 STR_GAME_OPTIONS_FULLSCREEN                                     :Làn-sgrìn
-STR_GAME_OPTIONS_FULLSCREEN_TOOLTIP                             :Cuir cromag sa bhogsa seo gus OpenTTD a chluiche sa mhodh làn-sgrìn
 
 STR_GAME_OPTIONS_RESOLUTION                                     :Dùmhlachd-bhreacaidh na sgrìn
 STR_GAME_OPTIONS_RESOLUTION_TOOLTIP                             :Tagh dùmhlachd-bhreacaidh na sgrìn a chleachdas tu
@@ -2094,10 +2090,8 @@ STR_INTRO_TOOLTIP_TOYLAND_LANDSCAPE                             :{BLACK}Tagh an 
 STR_INTRO_TOOLTIP_GAME_OPTIONS                                  :{BLACK}Seall roghainnean a' gheama
 STR_INTRO_TOOLTIP_HIGHSCORE                                     :{BLACK}Seall clàr nan sgòran àrda
 STR_INTRO_TOOLTIP_ONLINE_CONTENT                                :{BLACK}Thoir sùil airson susbainte ùire no air a h-ùrachadh ri luchdadh a-nuas
-STR_INTRO_TOOLTIP_QUIT                                          :{BLACK}Fàg “OpenTTD"
 
 STR_INTRO_BASESET                                               :{BLACK}Tha {NUM} {P sprìd sprìd sprìdean sprìd} a dhìth air an t-seata grafaigeachd bhunasach a thagh thu. Thoir sùil airson ùrachaidhean an t-seata bhunasaich.
-STR_INTRO_TRANSLATION                                           :{BLACK}Tha {NUM} {P sreang shreang sreangan sreang} a dhìth air an eadar-theangachadh seo. Nach toir thu cuideachadh dhuinn gus piseach a thort air OpenTTD ’s tu a' clàradh mar eadar-theangaiche? Thoir sùil air readme.txt airson fiosrachaidh.
 
 # Quit window
 STR_QUIT_CAPTION                                                :{WHITE}Fàg an-seo
@@ -2174,7 +2168,6 @@ STR_FACE_SIMPLE                                                 :{BLACK}Simplidh
 STR_FACE_SIMPLE_TOOLTIP                                         :{BLACK}Taghadh aodainn simplidh
 STR_FACE_LOAD                                                   :{BLACK}Luchdaich
 STR_FACE_LOAD_TOOLTIP                                           :{BLACK}Luchdaich aodann as fhearr leat
-STR_FACE_LOAD_DONE                                              :{WHITE}Chaidh an t-aodann as fhearr leat a luchdadh on fhaidhle rèiteachaidh OpenTTD
 STR_FACE_FACECODE                                               :{BLACK}Àireamh aodann a' chluicheadair
 STR_FACE_FACECODE_TOOLTIP                                       :{BLACK}Seall is/no suidhich àireamh aodainn aig ceann-suidhe na companaidh
 STR_FACE_FACECODE_CAPTION                                       :{WHITE}Seall is/no suidhich àireamh aodann a' cheann-suidhe
@@ -2182,7 +2175,6 @@ STR_FACE_FACECODE_SET                                           :{WHITE}Chaidh c
 STR_FACE_FACECODE_ERR                                           :{WHITE}Cha do ghabh àireamh aodann a' cheann-suidhe a shuidheachadh - feumaidh e bhith na h-àireamh eadar 0 is 4,294,967,295!
 STR_FACE_SAVE                                                   :{BLACK}Sàbhail
 STR_FACE_SAVE_TOOLTIP                                           :{BLACK}Sàbhail mar an t-aodann as fhearr leat
-STR_FACE_SAVE_DONE                                              :{WHITE}Thèid an t-aodann seo a shàbhaladh mar am fear as fhearr leat san fhaidhle rèiteachaidh aig OpenTTD
 STR_FACE_YES                                                    :Air/Oirre
 STR_FACE_NO                                                     :—
 STR_FACE_HAIR                                                   :Falt:
@@ -2401,8 +2393,6 @@ STR_CONTENT_UNSELECT_ALL_CAPTION                                :{BLACK}Neo-thag
 STR_CONTENT_UNSELECT_ALL_CAPTION_TOOLTIP                        :{BLACK}Comharraich nach tèid susbaint sam bith a luchdadh a-nuas
 STR_CONTENT_SEARCH_EXTERNAL                                     :{BLACK}Lorg air làraichean-lìn taobh a-muigh
 STR_CONTENT_SEARCH_EXTERNAL_TOOLTIP                             :{BLACK}Lorg susbaint nach eil ri làimh air seirbheise susbaint OpenTTD is a bheil ri làimh air làraichean lìn nach eil ceangailte ri OpenTTD
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER_CAPTION                  :{WHITE}Tha thu a' fàgail OpenTTD!
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER                          :{WHITE}Dh'fhaoidte gum bi na teirmichean ’s na cumhaichean gus susbaint a luchdadh a-nuas bho làraichean-lìn eile eadar-dhealaichte.{}Feumaidh tu sùil a thoirt air na làraichean-lìn a-muigh mu mar a stàlaicheas tu an t-susbaint ann an OpenTTD.{}A bheil thu airson leantainn air adhart?
 STR_CONTENT_FILTER_TITLE                                        :{BLACK}Criathrag taga/ainm:
 STR_CONTENT_OPEN_URL                                            :{BLACK}Tadhail air an làrach-lìn
 STR_CONTENT_OPEN_URL_TOOLTIP                                    :{BLACK}Tadhail air làrach-lìn na susbainte seo
@@ -2416,7 +2406,6 @@ STR_CONTENT_DETAIL_SUBTITLE_UNSELECTED                          :{SILVER}Cha do 
 STR_CONTENT_DETAIL_SUBTITLE_SELECTED                            :{SILVER}Thagh thu seo gus a luchdadh a-nuas
 STR_CONTENT_DETAIL_SUBTITLE_AUTOSELECTED                        :{SILVER}Chaidh an eisimeileachd seo a thaghadh gus a luchdadh a-nuas
 STR_CONTENT_DETAIL_SUBTITLE_ALREADY_HERE                        :{SILVER}Tha seo agad mu thràth
-STR_CONTENT_DETAIL_SUBTITLE_DOES_NOT_EXIST                      :{SILVER}Tha an t-susbaint seo neo-aithnichte is cha ghabh luchdadh a-nuas ann an OpenTTD
 
 STR_CONTENT_DETAIL_UPDATE                                       :{SILVER}Thèid seo a chur an àite {STRING} a tha ann mu thràth
 STR_CONTENT_DETAIL_NAME                                         :{SILVER}Ainm: {WHITE}{STRING}
@@ -2428,7 +2417,6 @@ STR_CONTENT_DETAIL_FILESIZE                                     :{SILVER}Meud an
 STR_CONTENT_DETAIL_SELECTED_BECAUSE_OF                          :{SILVER}Air a thaghadh air sàilleibh: {WHITE}{STRING}
 STR_CONTENT_DETAIL_DEPENDENCIES                                 :{SILVER}Eisimeileachdan: {WHITE}{STRING}
 STR_CONTENT_DETAIL_TAGS                                         :{SILVER}Tagaichean: {WHITE}{STRING}
-STR_CONTENT_NO_ZLIB                                             :{WHITE}Chaidh OpenTTD a thogail às aonais taic dha “zlib"...
 STR_CONTENT_NO_ZLIB_SUB                                         :{WHITE}... cha ghabh susbaint sam bith luchdadh a-nuas!
 
 # Order of these is important!
@@ -2457,9 +2445,7 @@ STR_CONTENT_ERROR_COULD_NOT_DOWNLOAD_FILE_NOT_WRITABLE          :{WHITE}... cha 
 STR_CONTENT_ERROR_COULD_NOT_EXTRACT                             :{WHITE}Cha ghabh am faidhle air a luchdadh a-nuas dì-dhùmhlachadh
 
 STR_MISSING_GRAPHICS_SET_CAPTION                                :{WHITE}Grafaigean a dhìth
-STR_MISSING_GRAPHICS_SET_MESSAGE                                :{BLACK}Tha grafaigeachd a dhìth air OpenTTD ach an obraich e ach cha deach gin sam bith a lorg. an toir thu cead dha OpenTTD gus a' ghrafaigeachd seo a luchdadh a-nuas is a stàladh?
 STR_MISSING_GRAPHICS_YES_DOWNLOAD                               :{BLACK}Bheir, luchdaich a' ghrafaigeachd a-nuas
-STR_MISSING_GRAPHICS_NO_QUIT                                    :{BLACK}Cha toir, fàg OpenTTD
 
 
 # Transparency settings window
@@ -2922,9 +2908,7 @@ STR_LAI_OBJECT_DESCRIPTION_COMPANY_HEADQUARTERS                 :Ionad na compan
 STR_LAI_OBJECT_DESCRIPTION_COMPANY_OWNED_LAND                   :Tìr a' chompanaidh
 
 # About OpenTTD window
-STR_ABOUT_OPENTTD                                               :{WHITE}Mu dheidhinn OpenTTD
 STR_ABOUT_ORIGINAL_COPYRIGHT                                    :{BLACK}Còir-lethbhreac tùsail {COPYRIGHT} 1995 Chris Sawyer, a h-uile còir glèidhte
-STR_ABOUT_VERSION                                               :{BLACK}OpenTTD tionndadh {REV}
 STR_ABOUT_COPYRIGHT_OPENTTD                                     :{BLACK}OpenTTD {COPYRIGHT} 2002-{STRING} An sgioba OpenTTD
 
 # Framerate display window
@@ -3199,7 +3183,6 @@ STR_NEWGRF_ERROR_INVALID_SPRITE_LAYOUT                          :Fòrmat co-dhea
 
 # NewGRF related 'general' warnings
 STR_NEWGRF_POPUP_CAUTION_CAPTION                                :{WHITE}An aire!
-STR_NEWGRF_CONFIRMATION_TEXT                                    :{YELLOW}Tha thu an impis geama a tha a’ ruith atharrachadh. Dh’fhaoidte gun tuislich seo OpenTTD no gum bris e cor a' gheama. Na dèan aithisg air buga mu na duilgheadasan seo.{}A bheil thu cinnteach dha-rìribh mu dheidhinn seo?
 
 STR_NEWGRF_DUPLICATE_GRFID                                      :{WHITE}Cha ghabh am faidhle cur ris: ID GRF dùblaichte
 STR_NEWGRF_COMPATIBLE_LOADED                                    :{ORANGE}Cha deach faidhle a dh'fhreagras a lorg (chaidh GRF co-chòrdail a luchdadh)
@@ -3208,7 +3191,6 @@ STR_NEWGRF_TOO_MANY_NEWGRFS                                     :{WHITE}Cha ghab
 STR_NEWGRF_COMPATIBLE_LOAD_WARNING                              :{WHITE}Chaidh GRF(an) co-chòrdail a luchdadh airson nam faidhlichean a tha a dhìth
 STR_NEWGRF_DISABLED_WARNING                                     :{WHITE}Chaidh am faidhle/na faidhlichean GRF a tha a dhìth a chur à comas
 STR_NEWGRF_UNPAUSE_WARNING_TITLE                                :{YELLOW}Faidhle/faidhlichean GRF a dhìth
-STR_NEWGRF_UNPAUSE_WARNING                                      :{WHITE}Dh'fhaoidte gun tuislich OpenTTD ma leanas tu air a' gheama. Na dèan aithisg air buga mu thuisleachaidhean an uairsin.{}A bheil thu cinnteach dha-rìribh gu bheil thu airson leantainn air a' gheama?
 
 # NewGRF status
 STR_NEWGRF_LIST_NONE                                            :Chan eil gin

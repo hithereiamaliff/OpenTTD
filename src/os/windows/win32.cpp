@@ -231,7 +231,7 @@ void ShowInfoI(std::string_view str)
 			 * them anyway. */
 			DialogBoxParam(GetModuleHandle(nullptr), MAKEINTRESOURCE(101), nullptr, HelpDialogFunc, reinterpret_cast<LPARAM>(&native_str));
 		} else {
-			MessageBox(GetActiveWindow(), native_str.c_str(), L"OpenTTD", MB_ICONINFORMATION | MB_OK);
+			MessageBox(GetActiveWindow(), native_str.c_str(), L"Wira Bandar", MB_ICONINFORMATION | MB_OK);
 		}
 		MyShowCursor(old);
 	}
@@ -263,6 +263,19 @@ void DetermineBasePaths(std::string_view exe)
 		tmp += "content_download";
 		AppendPathSeparator(tmp);
 		_searchpaths[Searchpath::AutodownloadPersonalDir] = tmp;
+
+		/* Wira Bandar has its own folder; OpenTTD's (Documents\OpenTTD) is still searched for graphics, NewGRFs,
+		 * AIs and scenarios, and the settings and saves are copied from it the first time (see CopyOpenTTDFolder). */
+		if (std::string_view{PERSONAL_DIR} != "OpenTTD") {
+			std::string openttd(FS2OTTD(path));
+			AppendPathSeparator(openttd);
+			openttd += "OpenTTD";
+			AppendPathSeparator(openttd);
+			_searchpaths[Searchpath::OpenTTDDir] = openttd;
+			openttd += "content_download";
+			AppendPathSeparator(openttd);
+			_searchpaths[Searchpath::OpenTTDAutodownloadDir] = openttd;
+		}
 	} else {
 		_searchpaths[Searchpath::PersonalDir].clear();
 	}

@@ -332,12 +332,10 @@ STR_TOOLBAR_TOOLTIP_BUILD_AIRPORTS                              :{BLACK}Byggja f
 STR_TOOLBAR_TOOLTIP_LANDSCAPING                                 :{BLACK}Opna landslags verkfæraslána til að hækka/lækka land, gróðursetja tré o.s.frv.
 STR_TOOLBAR_TOOLTIP_SHOW_SOUND_MUSIC_WINDOW                     :{BLACK}Sýna hljóð/tónlistar glugga
 STR_TOOLBAR_TOOLTIP_SHOW_LAST_MESSAGE_NEWS                      :{BLACK}Sýna síðustu skilaboð/fréttatilkynningu, sýna skilaboðastillingar
-STR_TOOLBAR_TOOLTIP_LAND_BLOCK_INFORMATION                      :{BLACK}Landsvæðisupplýsingar, stjórnborð, aflúsunu forskrifta, skjáskot, um OpenTTD
 STR_TOOLBAR_TOOLTIP_SWITCH_TOOLBAR                              :{BLACK}Skipta á tækjaslá
 
 # Extra tooltips for the scenario editor toolbar
 STR_SCENEDIT_TOOLBAR_SAVE_SCENARIO_LOAD_SCENARIO_TOOLTIP        :{BLACK}Vista kort, opna kort, hætta í kortagerð, hætta í OpenTTD
-STR_SCENEDIT_TOOLBAR_OPENTTD                                    :{YELLOW}OpenTTD
 STR_SCENEDIT_TOOLBAR_SCENARIO_EDITOR                            :{YELLOW}Kortagerð
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_BACKWARD_TOOLTIP    :{BLACK}Færa byrjunardagsetninguna aftur um 1 ár
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_FORWARD_TOOLTIP     :{BLACK}Færa byrjunardagsetninguna fram um 1 ár
@@ -445,7 +443,6 @@ STR_ABOUT_MENU_LAND_BLOCK_INFO                                  :Landssvæðisup
 STR_ABOUT_MENU_TOGGLE_CONSOLE                                   :Kveikja á stýriskjá
 STR_ABOUT_MENU_AI_DEBUG                                         :Aflúsun gervigreindar/forskrifta
 STR_ABOUT_MENU_SCREENSHOT                                       :Skjámynd
-STR_ABOUT_MENU_ABOUT_OPENTTD                                    :Um 'OpenTTD'
 STR_ABOUT_MENU_SPRITE_ALIGNER                                   :Samstilla hreyfimynd
 STR_ABOUT_MENU_TOGGLE_BOUNDING_BOXES                            :Sýna/fela afmörkunar kassa
 STR_ABOUT_MENU_TOGGLE_DIRTY_BLOCKS                              :Sýna/fela litun á endurteiknuðum hlutum
@@ -876,7 +873,6 @@ STR_GAME_OPTIONS_LANGUAGE                                       :Tungumál
 STR_GAME_OPTIONS_LANGUAGE_TOOLTIP                               :Tungumál viðmóts
 
 STR_GAME_OPTIONS_FULLSCREEN                                     :Fylla út í skjá
-STR_GAME_OPTIONS_FULLSCREEN_TOOLTIP                             :Smelltu hér til að OpenTTD fylli út í skjáinn
 
 STR_GAME_OPTIONS_RESOLUTION                                     :Skjáupplausn
 STR_GAME_OPTIONS_RESOLUTION_TOOLTIP                             :Stilla skjáupplausn
@@ -1766,9 +1762,7 @@ STR_INTRO_TOOLTIP_TOYLAND_LANDSCAPE                             :{BLACK}Leikfang
 STR_INTRO_TOOLTIP_GAME_OPTIONS                                  :{BLACK}Stilla OpenTTD
 STR_INTRO_TOOLTIP_HIGHSCORE                                     :{BLACK}Birta stigatöflu
 STR_INTRO_TOOLTIP_ONLINE_CONTENT                                :{BLACK}Skoða viðbætur sem hægt er að ná í af netinu
-STR_INTRO_TOOLTIP_QUIT                                          :{BLACK}Hætta í OpenTTD
 
-STR_INTRO_TRANSLATION                                           :{BLACK}Það vantar {NUM} þýðing{P u ar} í þetta tungumál. Vinsamlegast hjálpaðu við að gera OpenTTD betra með því að skrá þig sem þýðanda. Nánari upplýsingar í readme.txt.
 
 # Quit window
 STR_QUIT_CAPTION                                                :{WHITE}Hætta
@@ -1842,7 +1836,6 @@ STR_FACE_SIMPLE                                                 :{BLACK}Einfalt
 STR_FACE_SIMPLE_TOOLTIP                                         :{BLACK}Einföld breyting á andlitinu
 STR_FACE_LOAD                                                   :{BLACK}Hlaða
 STR_FACE_LOAD_TOOLTIP                                           :{BLACK}Hlaða uppáhalds andliti
-STR_FACE_LOAD_DONE                                              :{WHITE}Þitt uppáhalds andlit hefur verið sótt úr OpenTTD stilliskrá
 STR_FACE_FACECODE                                               :{BLACK}Andlit nr.
 STR_FACE_FACECODE_TOOLTIP                                       :{BLACK}Skoða og/eða stilla andlitsnúmer á forstjóra fyrirtækisins
 STR_FACE_FACECODE_CAPTION                                       :{WHITE}Skoða og/eða stilla andlitsnúmer forstjóra
@@ -1850,7 +1843,6 @@ STR_FACE_FACECODE_SET                                           :{WHITE}Nýtt an
 STR_FACE_FACECODE_ERR                                           :{WHITE}Gat ekki stillt andlitsnúmer forstjóra - verður að vera tala á bilinu 0 og upp í 4.294.967.295!
 STR_FACE_SAVE                                                   :{BLACK}Vista
 STR_FACE_SAVE_TOOLTIP                                           :{BLACK}Vista uppáhalds andlit
-STR_FACE_SAVE_DONE                                              :{WHITE}Þetta andlit mun verða vistað sem þitt uppahald í OpenTTD stilliskrá
 STR_FACE_YES                                                    :Já
 STR_FACE_NO                                                     :Nei
 STR_FACE_HAIR                                                   :Hár:
@@ -2069,8 +2061,6 @@ STR_CONTENT_UNSELECT_ALL_CAPTION                                :{BLACK}Af-velja
 STR_CONTENT_UNSELECT_ALL_CAPTION_TOOLTIP                        :{BLACK}Afvelja allt frá niðurhali
 STR_CONTENT_SEARCH_EXTERNAL                                     :{BLACK}Leita á utanaðkomandi vefsíðum
 STR_CONTENT_SEARCH_EXTERNAL_TOOLTIP                             :{BLACK}Leita eftir efni sem ekki er fáanlegt á OpenTTD efnisveitunni, á vefsíðum sem ekki eru hluti af OpenTTD
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER_CAPTION                  :{WHITE}Þú ert að fara úr OpenTTD!
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER                          :{WHITE}Skilyrði og skilmálar til að sækja efni frá utanaðkomandi vefsíðum eru mismunandi.{}Þú verður að fara eftir upplýsingum frá þeim vefsíðum um hvernig setja á inn efni í OpenTTD.{}Viltu halda áfram?
 STR_CONTENT_FILTER_TITLE                                        :{BLACK}Leitarstrengur:
 STR_CONTENT_OPEN_URL                                            :{BLACK}Skoða vefsíðu
 STR_CONTENT_OPEN_URL_TOOLTIP                                    :{BLACK}Kíktu á vefsíðu tengda þessu efni
@@ -2084,7 +2074,6 @@ STR_CONTENT_DETAIL_SUBTITLE_UNSELECTED                          :{SILVER}Pakkinn
 STR_CONTENT_DETAIL_SUBTITLE_SELECTED                            :{SILVER}Pakkinn er valinn til niðurhals
 STR_CONTENT_DETAIL_SUBTITLE_AUTOSELECTED                        :{SILVER}Þessi pakki er nauðsynlegur undirstaða fyrir annan pakka sem er valinn til niðurhals
 STR_CONTENT_DETAIL_SUBTITLE_ALREADY_HERE                        :{SILVER}Þú hefur þetta nú þegar
-STR_CONTENT_DETAIL_SUBTITLE_DOES_NOT_EXIST                      :{SILVER}Þetta innihald er óþekkt og ekki er hægt að niðurhala í gegnum OpenTTD
 
 STR_CONTENT_DETAIL_UPDATE                                       :{SILVER}Þetta skiptir út því sem er fyrir {STRING}
 STR_CONTENT_DETAIL_NAME                                         :{SILVER}Heiti: {WHITE}{STRING}
@@ -2096,7 +2085,6 @@ STR_CONTENT_DETAIL_FILESIZE                                     :{SILVER}Stærð
 STR_CONTENT_DETAIL_SELECTED_BECAUSE_OF                          :{SILVER}Valinn vegna: {WHITE}{STRING}
 STR_CONTENT_DETAIL_DEPENDENCIES                                 :{SILVER}Byggir á: {WHITE}{STRING}
 STR_CONTENT_DETAIL_TAGS                                         :{SILVER}Stikkorð: {WHITE}{STRING}
-STR_CONTENT_NO_ZLIB                                             :{WHITE}OpenTTD er smíðað án „zlib“ stuðnings...
 STR_CONTENT_NO_ZLIB_SUB                                         :{WHITE}... ekki hægt að hlaða niður efni!
 
 # Order of these is important!
@@ -2125,9 +2113,7 @@ STR_CONTENT_ERROR_COULD_NOT_DOWNLOAD_FILE_NOT_WRITABLE          :{WHITE}... skr�
 STR_CONTENT_ERROR_COULD_NOT_EXTRACT                             :{WHITE}Gat ekki afþjappað niðurhöluðu skránni
 
 STR_MISSING_GRAPHICS_SET_CAPTION                                :{WHITE}Vantar grafík
-STR_MISSING_GRAPHICS_SET_MESSAGE                                :{BLACK}OpenTTD þarf á grafík til að virka en engin fannst. Leyfir þú OpenTTD að sækja og setja upp grafíkina?
 STR_MISSING_GRAPHICS_YES_DOWNLOAD                               :{BLACK}Já, sækja grafík
-STR_MISSING_GRAPHICS_NO_QUIT                                    :{BLACK}Nei, hætta í OpenTTD
 
 
 # Transparency settings window
@@ -2542,9 +2528,7 @@ STR_LAI_OBJECT_DESCRIPTION_COMPANY_HEADQUARTERS                 :Höfuðstöðva
 STR_LAI_OBJECT_DESCRIPTION_COMPANY_OWNED_LAND                   :Land í eigu fyrirtækis
 
 # About OpenTTD window
-STR_ABOUT_OPENTTD                                               :{WHITE}Um OpenTTD
 STR_ABOUT_ORIGINAL_COPYRIGHT                                    :{BLACK}Upphaflegur höfundarréttur {COPYRIGHT} 1995 Chris Sawyer, Öll réttindi áskilin
-STR_ABOUT_VERSION                                               :{BLACK}OpenTTD útgáfa {REV}
 STR_ABOUT_COPYRIGHT_OPENTTD                                     :{BLACK}OpenTTD {COPYRIGHT}2002-{STRING} OpenTTD hópurinn
 
 # Framerate display window
@@ -2781,7 +2765,6 @@ STR_NEWGRF_ERROR_INVALID_SPRITE_LAYOUT                          :Rangt/óþekkt 
 
 # NewGRF related 'general' warnings
 STR_NEWGRF_POPUP_CAUTION_CAPTION                                :{WHITE}Varúð!
-STR_NEWGRF_CONFIRMATION_TEXT                                    :{YELLOW}Þú ert í þann mund að eiga við leik í gangi, við það gæti OpenTTD hrunið. Vinsamlegast ekki senda inn upplýsingar um villu vegna þess.{}Ertu viss um að þú viljir halda áfram?
 
 STR_NEWGRF_DUPLICATE_GRFID                                      :{WHITE}Get ekki bætt skrá við: tvö eins GRF einkenni
 STR_NEWGRF_COMPATIBLE_LOADED                                    :{ORANGE}Viðeigandi skrá finnst ekki (samsvarandi GRF hlaðið)
@@ -2790,7 +2773,6 @@ STR_NEWGRF_TOO_MANY_NEWGRFS                                     :{WHITE}Get ekki
 STR_NEWGRF_COMPATIBLE_LOAD_WARNING                              :{WHITE}Samsvarandi GRF hlaðið í staðin týndrar skrár
 STR_NEWGRF_DISABLED_WARNING                                     :{WHITE}Týndar GRF skrár hafa verið gerðar óvirkar
 STR_NEWGRF_UNPAUSE_WARNING_TITLE                                :{YELLOW}Vantar GRF skrá(r)
-STR_NEWGRF_UNPAUSE_WARNING                                      :{WHITE}OpenTTD getur hrunið ef leikur er settur af stað. Ekki skrá villufærslur fyrir eftirfarandi hrun.{}Ertu viss um að þú viljir setja leikinn af stað?
 
 # NewGRF status
 STR_NEWGRF_LIST_NONE                                            :Engin

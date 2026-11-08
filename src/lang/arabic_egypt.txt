@@ -379,12 +379,10 @@ STR_TOOLBAR_TOOLTIP_BUILD_AIRPORTS                              :{BLACK}بناء
 STR_TOOLBAR_TOOLTIP_LANDSCAPING                                 :{BLACK}افتح مدير تحرير التضاريس لرفع / خفض الارض, زراعة الاشجار, الخ.
 STR_TOOLBAR_TOOLTIP_SHOW_SOUND_MUSIC_WINDOW                     :{BLACK}فتح نافذة الصوت/الموسيقى
 STR_TOOLBAR_TOOLTIP_SHOW_LAST_MESSAGE_NEWS                      :{BLACK}اظهار الرسالة الأخيرة/التقرير الأخير, خيارات الرسائل
-STR_TOOLBAR_TOOLTIP_LAND_BLOCK_INFORMATION                      :{BLACK}معلومات مناطق الخريطة
 STR_TOOLBAR_TOOLTIP_SWITCH_TOOLBAR                              :{BLACK}بدل صف الادوات
 
 # Extra tooltips for the scenario editor toolbar
 STR_SCENEDIT_TOOLBAR_SAVE_SCENARIO_LOAD_SCENARIO_TOOLTIP        :{BLACK}حفظ, فتح, خروج من محرر الخرائط
-STR_SCENEDIT_TOOLBAR_OPENTTD                                    :{YELLOW}النسخة المفتوحة
 STR_SCENEDIT_TOOLBAR_SCENARIO_EDITOR                            :{YELLOW}محرر الخريطة
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_BACKWARD_TOOLTIP    :{BLACK}العودة بتاريخ البدأ سنة واحدة
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_FORWARD_TOOLTIP     :{BLACK}تقديم تاريخ البدأ سنة واحدة لالأمام
@@ -498,7 +496,6 @@ STR_ABOUT_MENU_TOGGLE_CONSOLE                                   :اظهار/اخ
 STR_ABOUT_MENU_AI_DEBUG                                         :مكتشف اخطاء الذكاء الصناعي
 STR_ABOUT_MENU_SCREENSHOT                                       :صورة من الشاشة - Ctrl-S -
 STR_ABOUT_MENU_SHOW_FRAMERATE                                   :سرعة عرض الإطارات
-STR_ABOUT_MENU_ABOUT_OPENTTD                                    :حول 'OpenTTD'
 STR_ABOUT_MENU_SPRITE_ALIGNER                                   :موائم العفريتات
 STR_ABOUT_MENU_TOGGLE_BOUNDING_BOXES                            :اظهار/اخفاء حدود المربعات
 STR_ABOUT_MENU_TOGGLE_DIRTY_BLOCKS                              :تبديل ألوان الكتل المتسخة
@@ -949,14 +946,12 @@ STR_GAME_OPTIONS_LANGUAGE_TOOLTIP                               :اختر لغة
 STR_GAME_OPTIONS_LANGUAGE_PERCENTAGE                            :{STRING} ({NUM}% مكتمل)
 
 STR_GAME_OPTIONS_FULLSCREEN                                     :شاشة كاملة
-STR_GAME_OPTIONS_FULLSCREEN_TOOLTIP                             :اختر هذا المربع للعب OpenTTD على لشاشة الكاملة
 
 STR_GAME_OPTIONS_RESOLUTION                                     :دقة الشاشة
 STR_GAME_OPTIONS_RESOLUTION_TOOLTIP                             :اختر دقة الشاشة
 STR_GAME_OPTIONS_RESOLUTION_OTHER                               :اخرى
 
 STR_GAME_OPTIONS_VIDEO_ACCELERATION                             :تسريع الأجهزة
-STR_GAME_OPTIONS_VIDEO_ACCELERATION_TOOLTIP                     :اخترهذا المربع للسماح لـ OpenTTD بمحاولة استخدام تسريع الأجهزة. سيتم تطبيق الإعداد الذي تم تغييره فقط عند إعادة تشغيل اللعبة
 STR_GAME_OPTIONS_VIDEO_ACCELERATION_RESTART                     :{WHITE}لن يعمل الإعداد إلا بعد إعادة تشغيل اللعبة
 
 STR_GAME_OPTIONS_VIDEO_VSYNC                                    :VSync
@@ -1796,13 +1791,10 @@ STR_INTRO_TOOLTIP_TOYLAND_LANDSCAPE                             :{BLACK} اخت�
 STR_INTRO_TOOLTIP_GAME_OPTIONS                                  :{BLACK}عرض خيارات اللعبة
 STR_INTRO_TOOLTIP_HIGHSCORE                                     :{BLACK}عرض قائمه المتفوقين
 STR_INTRO_TOOLTIP_ONLINE_CONTENT                                :{BLACK} ابحث عن محتوى جديد او تحديث
-STR_INTRO_TOOLTIP_QUIT                                          :{BLACK}اغلاق'OpenTTD'
 
-STR_INTRO_TRANSLATION                                           :{BLACK}هذة الترجمة تفتقد لـ {NUM}عبارات/عبارة. فضلا اجعل الترجمة افضل بالتسجيل في موقع الترجمة, اقرأ ملف المساعدة readme
 
 # Quit window
 STR_QUIT_CAPTION                                                :{WHITE}انهاء
-STR_QUIT_ARE_YOU_SURE_YOU_WANT_TO_EXIT_OPENTTD                  :{YELLOW}هل أنت متأكد أنك تريد إغلاق OpenTTD؟
 STR_QUIT_YES                                                    :{BLACK}نعم
 STR_QUIT_NO                                                     :{BLACK}لا
 
@@ -1874,7 +1866,6 @@ STR_FACE_SIMPLE                                                 :{BLACK}بسيط
 STR_FACE_SIMPLE_TOOLTIP                                         :{BLACK}اختيار الوجة المبسط
 STR_FACE_LOAD                                                   :{BLACK}حمل
 STR_FACE_LOAD_TOOLTIP                                           :{BLACK}حمل الوجه المفضل
-STR_FACE_LOAD_DONE                                              :{WHITE}وجهك المفضل تم تحميله من ملف التكوين الخاص بـ OpenTTD.
 STR_FACE_FACECODE                                               :{BLACK}رقم وجة اللاعب
 STR_FACE_FACECODE_TOOLTIP                                       :{BLACK}عرض او تغيير رقم الوجة
 STR_FACE_FACECODE_CAPTION                                       :{WHITE}عرض او تغيير رقم وجة اللاعب
@@ -1882,7 +1873,6 @@ STR_FACE_FACECODE_SET                                           :{WHITE}رقم �
 STR_FACE_FACECODE_ERR                                           :{WHITE}لا نتمكن من تغيير رقم الوجة. - يجب ان يكون من 0 الى 4,294,967,295 !
 STR_FACE_SAVE                                                   :{BLACK}حفظ
 STR_FACE_SAVE_TOOLTIP                                           :{BLACK}حفظ الوجه المفضل
-STR_FACE_SAVE_DONE                                              :{WHITE}هذا الوجه سيحفظ كالمفضل في ملف تكوينك الخاص بـ Open TTD.
 STR_FACE_YES                                                    :نعم
 STR_FACE_NO                                                     :لا
 STR_FACE_HAIR                                                   :الشعر:
@@ -2122,7 +2112,6 @@ STR_CONTENT_UNSELECT_ALL_CAPTION                                :{BLACK} مسح 
 STR_CONTENT_UNSELECT_ALL_CAPTION_TOOLTIP                        :{BLACK} ضع علامة على المحتوى التي لن يتم تحميلها
 STR_CONTENT_SEARCH_EXTERNAL                                     :{BLACK}بحث المواقع الخارجية
 STR_CONTENT_SEARCH_EXTERNAL_TOOLTIP                             :{BLACK} محتوى البحث غير متوفر في في خدمة محتوى OpenTTD على مواقع الويب غير التابعة لـ OpenTTD
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER                          :{WHITE}تختلف شروط وأحكام تنزيل المحتوى من مواقع الويب الخارجية.{}يجب عليك الرجوع إلى المواقع الخارجية للحصول على إرشادات حول كيفية تثبيت المحتوى في OpenTTD.{}هل تريد أن تكمل؟
 STR_CONTENT_FILTER_TITLE                                        :{BLACK}مُرَشِح:
 STR_CONTENT_OPEN_URL                                            :{BLACK} زيارة الموقع
 STR_CONTENT_OPEN_URL_TOOLTIP                                    :{BLACK}قم بزيارة الموقع لهذا المحتوى
@@ -2136,7 +2125,6 @@ STR_CONTENT_DETAIL_SUBTITLE_UNSELECTED                          :{SILVER} لم �
 STR_CONTENT_DETAIL_SUBTITLE_SELECTED                            :{SILVER} لقد اخترت هذا المحتوى ليتم تحميله
 STR_CONTENT_DETAIL_SUBTITLE_AUTOSELECTED                        :{SILVER} هذا الدعم قد اختير للتحميل
 STR_CONTENT_DETAIL_SUBTITLE_ALREADY_HERE                        :{SILVER} هذا المحتوى موجود لديك مسبقا
-STR_CONTENT_DETAIL_SUBTITLE_DOES_NOT_EXIST                      :{SILVER}هذا المحتوى غير معروف و لا يمكت تحميله في OpenTTD
 
 STR_CONTENT_DETAIL_UPDATE                                       :{SILVER}هذا استبدال للملف الموجود {STRING}
 STR_CONTENT_DETAIL_NAME                                         :{SILVER}الاسم: {WHITE}{STRING}
@@ -2148,7 +2136,6 @@ STR_CONTENT_DETAIL_FILESIZE                                     :{SILVER}حجم 
 STR_CONTENT_DETAIL_SELECTED_BECAUSE_OF                          :{SILVER} اختير بسبب: {WHITE}{STRING}
 STR_CONTENT_DETAIL_DEPENDENCIES                                 :{SILVER} الاعتمادية: {WHITE}{STRING}
 STR_CONTENT_DETAIL_TAGS                                         :{SILVER} الاسم الرمزي: {WHITE}{STRING}
-STR_CONTENT_NO_ZLIB                                             :{WHITE}بنيت OpenTTD بدون دعم "zlib"...
 STR_CONTENT_NO_ZLIB_SUB                                         :{WHITE}تحميل محتويات zlib غير ممكن
 
 # Order of these is important!
@@ -2175,11 +2162,8 @@ STR_CONTENT_ERROR_COULD_NOT_DOWNLOAD_FILE_NOT_WRITABLE          :{WHITE}... لا
 STR_CONTENT_ERROR_COULD_NOT_EXTRACT                             :{WHITE}لم يتمكن من فك ضغط الملف المحمل
 
 STR_MISSING_GRAPHICS_SET_CAPTION                                :{WHITE}رسومات مفقودة
-STR_MISSING_GRAPHICS_SET_MESSAGE                                :{BLACK}تحتاج اللعبة الى رسومات و لم يتم التعرف على اي منها. هل قمت يتحميل الرسومات و تنصيبها؟
 STR_MISSING_GRAPHICS_YES_DOWNLOAD                               :{BLACK}نعم, حمل الرسومات
-STR_MISSING_GRAPHICS_NO_QUIT                                    :{BLACK}لا, اغلق اللعبة
 
-STR_MISSING_GRAPHICS_ERROR_QUIT                                 :{BLACK}الخروج من OpenTTD
 
 # Transparency settings window
 STR_TRANSPARENCY_CAPTION                                        :{WHITE}خيارات الشفافية
@@ -2639,9 +2623,7 @@ STR_LAI_OBJECT_DESCRIPTION_COMPANY_HEADQUARTERS                 :مبنى الش
 STR_LAI_OBJECT_DESCRIPTION_COMPANY_OWNED_LAND                   :ارض مملوكة لشركة
 
 # About OpenTTD window
-STR_ABOUT_OPENTTD                                               :{WHITE}حول النسخة المفتوحة
 STR_ABOUT_ORIGINAL_COPYRIGHT                                    :{BLACK}الحقوق الاصلية {COPYRIGHT} كريس سوير 1995 , جميع الحقوق محفوظة
-STR_ABOUT_VERSION                                               :{BLACK}النسخة المفتوحة رقم {REV}
 STR_ABOUT_COPYRIGHT_OPENTTD                                     :{BLACK}النسخة المفتوحة {COPYRIGHT}2002-{STRING} فريق النسخة المفتوحة
 
 # Framerate display window
@@ -2774,7 +2756,6 @@ STR_MAPGEN_HEIGHTMAP_ROTATION                                   :{BLACK}اتجا
 STR_MAPGEN_HEIGHTMAP_NAME                                       :{BLACK}اسم خريطة المرتفعات (heightmap):
 STR_MAPGEN_HEIGHTMAP_NAME_TOOLTIP                               :{BLACK}اسم ملف صورة خريطة الارتفاع (heightmap)
 STR_MAPGEN_HEIGHTMAP_SIZE_LABEL                                 :{BLACK}الحجم:
-STR_MAPGEN_HEIGHTMAP_SIZE_LABEL_TOOLTIP                         :{BLACK}حجم صورة خريطة الارتفاع (heightmap). للحصول على أفضل نتيجة، يجب أن يتطابق كل جانب مع طول حافة متاح في OpenTTD، مثل 256، 512، 1024، الخ.
 STR_MAPGEN_HEIGHTMAP_SIZE                                       :{ORANGE}{NUM} * {NUM}
 
 STR_MAPGEN_HEIGHTMAP_HEIGHT_QUERY_CAPT                          :{WHITE}أعلى قمة
@@ -2928,7 +2909,6 @@ STR_NEWGRF_ERROR_FORCEFULLY_DISABLED                            :{1:STRING}تم 
 
 # NewGRF related 'general' warnings
 STR_NEWGRF_POPUP_CAUTION_CAPTION                                :{WHITE}تحذير!
-STR_NEWGRF_CONFIRMATION_TEXT                                    :{YELLOW}انت على وشك ان تحدث تغييرات في لعبة مفتوحه. قد يتسبب هذا في حدوث إنهيار.{} امتأكد من رغبتك فى هذا؟
 
 STR_NEWGRF_DUPLICATE_GRFID                                      :{WHITE}لا يمكن اضافة الملف: نسخة سابقة منه مضافة
 STR_NEWGRF_COMPATIBLE_LOADED                                    :{ORANGE}الملف المطابق غير موجود (ملف متوافق من NewGRFحمل)
@@ -2937,7 +2917,6 @@ STR_NEWGRF_TOO_MANY_NEWGRFS                                     :{WHITE}لا ي�
 STR_NEWGRF_COMPATIBLE_LOAD_WARNING                              :{WHITE}تم تحميل ملف GFR مطابق بدلا من المفقود
 STR_NEWGRF_DISABLED_WARNING                                     :{WHITE}تم تعطيل ملف GRF المفقود
 STR_NEWGRF_UNPAUSE_WARNING_TITLE                                :{YELLOW}ملف NewGRF مفقود
-STR_NEWGRF_UNPAUSE_WARNING                                      :{WHITE}عدم الايقاف قد يتسبب في تعطل النسخة المفتوحة. لا تنشأ ملف اخطاء لاالخطاء التالية.{} هل تود بالفعل اكمال اللعب؟
 
 # NewGRF status
 STR_NEWGRF_LIST_NONE                                            :لا يوجد

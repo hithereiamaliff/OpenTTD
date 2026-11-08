@@ -1,7 +1,13 @@
 cmake_minimum_required(VERSION 3.17)
 
 if(NOT BINARY_NAME)
-    set(BINARY_NAME openttd)
+    # The game is Wira Bandar PC, a fork of OpenTTD. On Windows, where it is played, the program is
+    # wirabandar.exe; test builds on other systems keep the name openttd, which the test kit expects.
+    if(CMAKE_HOST_WIN32)
+        set(BINARY_NAME wirabandar)
+    else()
+        set(BINARY_NAME openttd)
+    endif()
 endif()
 
 project(${BINARY_NAME}

@@ -380,12 +380,10 @@ STR_TOOLBAR_TOOLTIP_BUILD_AIRPORTS                              :{BLACK}Tóg aer
 STR_TOOLBAR_TOOLTIP_LANDSCAPING                                 :{BLACK}Oscail an barra uirlisí tírdhreacha chun talamh a ardú/ísliú, crainnte a chur, srl.
 STR_TOOLBAR_TOOLTIP_SHOW_SOUND_MUSIC_WINDOW                     :{BLACK}Taispeáin an fhuinneoig fuaime/ceoil
 STR_TOOLBAR_TOOLTIP_SHOW_LAST_MESSAGE_NEWS                      :{BLACK}Taispeáin an teachtaireacht/tuairisc nuachta deiridh, taispeáin roghanna do theachtaireachtaí
-STR_TOOLBAR_TOOLTIP_LAND_BLOCK_INFORMATION                      :{BLACK}Faisnéis faoin bpíosa talún, consól, dífhabhtú scripteanna, seatanna scáileáin, maidir le OpenTTD
 STR_TOOLBAR_TOOLTIP_SWITCH_TOOLBAR                              :{BLACK}Athraigh barraí uirlisí
 
 # Extra tooltips for the scenario editor toolbar
 STR_SCENEDIT_TOOLBAR_SAVE_SCENARIO_LOAD_SCENARIO_TOOLTIP        :{BLACK}Sábháil scéal, lódáil scéal, fág eagarthóir na scéalta, scoir
-STR_SCENEDIT_TOOLBAR_OPENTTD                                    :{YELLOW}OpenTTD
 STR_SCENEDIT_TOOLBAR_SCENARIO_EDITOR                            :{YELLOW}Eagarthóir Scéalta
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_BACKWARD_TOOLTIP    :{BLACK}Cuir an dáta tosaigh siar bliain amháin
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_FORWARD_TOOLTIP     :{BLACK}Cuir an dáta tosaigh ar aghaidh bliain amháin
@@ -499,7 +497,6 @@ STR_ABOUT_MENU_TOGGLE_CONSOLE                                   :Scoránaigh con
 STR_ABOUT_MENU_AI_DEBUG                                         :Dífhabhtú AI/Scripteanna Cluiche
 STR_ABOUT_MENU_SCREENSHOT                                       :Seat scáileáin
 STR_ABOUT_MENU_SHOW_FRAMERATE                                   :Taispeáin an ráta frámaí
-STR_ABOUT_MENU_ABOUT_OPENTTD                                    :Maidir le 'OpenTTD'
 STR_ABOUT_MENU_SPRITE_ALIGNER                                   :Ailínóir spriteanna
 STR_ABOUT_MENU_TOGGLE_BOUNDING_BOXES                            :Scoránaigh boscaí imill
 STR_ABOUT_MENU_TOGGLE_DIRTY_BLOCKS                              :Scor anaigh dath na mbloc salacha
@@ -955,7 +952,6 @@ STR_GAME_OPTIONS_LANGUAGE_TOOLTIP                               :Roghnaigh an te
 STR_GAME_OPTIONS_LANGUAGE_PERCENTAGE                            :{STRING} ({NUM}% críochnaithe)
 
 STR_GAME_OPTIONS_FULLSCREEN                                     :Lánscáileán
-STR_GAME_OPTIONS_FULLSCREEN_TOOLTIP                             :Cuir tic sa bhosca seo chun OpenTTD a imirt sa mhód lánscáileáin
 
 STR_GAME_OPTIONS_RESOLUTION                                     :Taifeach scáileáin
 STR_GAME_OPTIONS_RESOLUTION_TOOLTIP                             :Roghnaigh an taifeach scáileáin le húsáid
@@ -963,7 +959,6 @@ STR_GAME_OPTIONS_RESOLUTION_OTHER                               :eile
 STR_GAME_OPTIONS_RESOLUTION_ITEM                                :{NUM}x{NUM}
 
 STR_GAME_OPTIONS_VIDEO_ACCELERATION                             :Luasghéarú crua-earraí
-STR_GAME_OPTIONS_VIDEO_ACCELERATION_TOOLTIP                     :Cuir tic sa bhosca seo chun cead a thabhairt do OpenTTD iarracht a dhéanamh luasghéarú crua-earraí a úsáid. Má athraítear an socrú seo, ní chuirfear i bhfeidhm é ach tar éis an cluiche a atosú.
 STR_GAME_OPTIONS_VIDEO_ACCELERATION_RESTART                     :{WHITE}Ní chuirfear an socrú i bhfeidhm go dtí go ndéanfar an cluiche a atosú
 
 STR_GAME_OPTIONS_VIDEO_VSYNC                                    :VSync
@@ -2024,14 +2019,11 @@ STR_INTRO_TOOLTIP_TOYLAND_LANDSCAPE                             :{BLACK}Roghnaig
 STR_INTRO_TOOLTIP_GAME_OPTIONS                                  :{BLACK}Taispeáin roghanna an chluiche
 STR_INTRO_TOOLTIP_HIGHSCORE                                     :{BLACK}Taispeáin tábla na n-ardscór
 STR_INTRO_TOOLTIP_ONLINE_CONTENT                                :{BLACK}Seiceáil le haghaidh inneachar nua agus nuashonruithe le híoslódáil
-STR_INTRO_TOOLTIP_QUIT                                          :{BLACK}Téigh amach as 'OpenTTD'
 
 STR_INTRO_BASESET                                               :{BLACK}Tá {NUM} sprít in easnamh sa bhuntacar grafaicí. Seiceáil an bhfuil nuashonruithe ar fáil don bhuntacar.
-STR_INTRO_TRANSLATION                                           :{BLACK}Tá {NUM} {P th th th dt t}eaghrán in easnamh san aistriúchán seo. Is féidir leat cabhrú chun OpenTTD a fheabhsú má chláraíonn tú mar aistritheoir. Féach léighmé.txt chun mionsonraí a fháil.
 
 # Quit window
 STR_QUIT_CAPTION                                                :{WHITE}Scoir
-STR_QUIT_ARE_YOU_SURE_YOU_WANT_TO_EXIT_OPENTTD                  :{YELLOW}An bhfuil tú cinnte gur mhaith leat dul amach as OpenTTD?
 STR_QUIT_YES                                                    :{BLACK}Tá
 STR_QUIT_NO                                                     :{BLACK}Níl
 
@@ -2105,7 +2097,6 @@ STR_FACE_SIMPLE                                                 :{BLACK}Simplí
 STR_FACE_SIMPLE_TOOLTIP                                         :{BLACK}Roghnú aghaidhe simplí
 STR_FACE_LOAD                                                   :{BLACK}Lódáil
 STR_FACE_LOAD_TOOLTIP                                           :{BLACK}Lódáil an aghaidh is fearr leat
-STR_FACE_LOAD_DONE                                              :{WHITE}Lódáladh an aghaidh is fearr leat ó chomhad cumraíochta OpenTTD
 STR_FACE_FACECODE                                               :{BLACK}Uimh. aghaidh an imreora
 STR_FACE_FACECODE_TOOLTIP                                       :{BLACK}Amharc ar agus/nó socraigh uimhir aghaidh uachtarán na cuideachta
 STR_FACE_FACECODE_CAPTION                                       :{WHITE}Amharc ar agus/nó socraigh uimhir aghaidh an uachtaráin
@@ -2113,7 +2104,6 @@ STR_FACE_FACECODE_SET                                           :{WHITE}Socraío
 STR_FACE_FACECODE_ERR                                           :{WHITE}Níorbh fhéidir uimhir aghaidhe an imreora a shocrú - ní mór dó a bheith ina uimhir idir 0 agus 4,294,967,295!
 STR_FACE_SAVE                                                   :{BLACK}Sábháil
 STR_FACE_SAVE_TOOLTIP                                           :{BLACK}Sábháil aghaidh is fearr leat
-STR_FACE_SAVE_DONE                                              :{WHITE}Sábhálfar an aghaidh mar an ceann is fearr leat i gcomhad cumraíochta OpenTTD
 STR_FACE_YES                                                    :Tá
 STR_FACE_NO                                                     :Níl
 STR_FACE_HAIR                                                   :Gruaig:
@@ -2406,8 +2396,6 @@ STR_CONTENT_UNSELECT_ALL_CAPTION                                :{BLACK}Díroghn
 STR_CONTENT_UNSELECT_ALL_CAPTION_TOOLTIP                        :{BLACK}Marcáil an t-inneachar ar fad le nach n-íoslódálfar é
 STR_CONTENT_SEARCH_EXTERNAL                                     :{BLACK}Cuardaigh suíomhanna gréasáin seachtracha
 STR_CONTENT_SEARCH_EXTERNAL_TOOLTIP                             :{BLACK}Cuardaigh inneachar nach bhfuil ar fáil ar sheirbhís inneachair OpenTTD ar shuíomhanna gréasáin nach bhfuil baint acu le OpenTTD
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER_CAPTION                  :{WHITE}Tá tú ag imeacht ó OpenTTD!
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER                          :{WHITE}Bíonn téarmaí agus cionníolacha éagsúla i bhfeidhm maidir le hinneachar a íoslódáil ó shuíomhanna gréasáin seachtracha.{}Beidh ort féachaint sna suíomhanna seachtracha chun treoracha a fháil conas an t-inneachar a shuiteáil in OpenTTD.{}An mian leat leanúint ar aghaidh?
 STR_CONTENT_FILTER_TITLE                                        :{BLACK}Scagaire clibe/ainm:
 STR_CONTENT_OPEN_URL                                            :{BLACK}Tabhair cuairt ar an suíomh gréasáin
 STR_CONTENT_OPEN_URL_TOOLTIP                                    :{BLACK}Tabhair cuairt ar an suíomh gréasáin don inneachar seo
@@ -2421,7 +2409,6 @@ STR_CONTENT_DETAIL_SUBTITLE_UNSELECTED                          :{SILVER}Roghnai
 STR_CONTENT_DETAIL_SUBTITLE_SELECTED                            :{SILVER}Roghnaigh tú é seo a íoslódáil
 STR_CONTENT_DETAIL_SUBTITLE_AUTOSELECTED                        :{SILVER}Roghnaíodh go bhfuil an spleáchas seo le híoslódáil
 STR_CONTENT_DETAIL_SUBTITLE_ALREADY_HERE                        :{SILVER}Tá sé seo agat cheana féin
-STR_CONTENT_DETAIL_SUBTITLE_DOES_NOT_EXIST                      :{SILVER}Is inneachar anaithnid é seo agus ní féidir é a íoslódáil in OpenTTD
 
 STR_CONTENT_DETAIL_UPDATE                                       :{SILVER}Téann sé seo in ionad {STRING} reatha
 STR_CONTENT_DETAIL_NAME                                         :{SILVER}Ainm: {WHITE}{STRING}
@@ -2433,7 +2420,6 @@ STR_CONTENT_DETAIL_FILESIZE                                     :{SILVER}Méid �
 STR_CONTENT_DETAIL_SELECTED_BECAUSE_OF                          :{SILVER}Roghnaithe mar gheall ar: {WHITE}{STRING}
 STR_CONTENT_DETAIL_DEPENDENCIES                                 :{SILVER}Nithe atá spleách air: {WHITE}{STRING}
 STR_CONTENT_DETAIL_TAGS                                         :{SILVER}Clibeanna: {WHITE}{STRING}
-STR_CONTENT_NO_ZLIB                                             :{WHITE}Tá OpenTTD tógtha gan tacaíocht "zlib"...
 STR_CONTENT_NO_ZLIB_SUB                                         :{WHITE}... ní féidir inneachar a íoslódáil!
 
 # Order of these is important!
@@ -2462,13 +2448,10 @@ STR_CONTENT_ERROR_COULD_NOT_DOWNLOAD_FILE_NOT_WRITABLE          :{WHITE}... níl
 STR_CONTENT_ERROR_COULD_NOT_EXTRACT                             :{WHITE}Níorbh fhéidir an comhad íoslódáilte a dhíchomhbhrú
 
 STR_MISSING_GRAPHICS_SET_CAPTION                                :{WHITE}Grafaicí ar lár
-STR_MISSING_GRAPHICS_SET_MESSAGE                                :{BLACK}Tá grafaicí ag teastáil le go n-oibreoidh OpenTTD ach níorbh fhéidir teacht orthu. An dtugann tú cead do OpenTTD na grafaicí seo a íoslódáil agus a shuiteáil?
 STR_MISSING_GRAPHICS_YES_DOWNLOAD                               :{BLACK}Tugann, íoslódáil na grafaicí
-STR_MISSING_GRAPHICS_NO_QUIT                                    :{BLACK}Ní thugann, scoir de OpenTTD
 
 STR_MISSING_GRAPHICS_ERROR_TITLE                                :{WHITE}Theip ar an íoslódáil
 STR_MISSING_GRAPHICS_ERROR                                      :{BLACK}Níorbh fhéidir na grafaicí a íoslódáil.{}Íoslódáil na grafaicí de láimh.
-STR_MISSING_GRAPHICS_ERROR_QUIT                                 :{BLACK}Téigh amach as OpenTTD
 
 # Transparency settings window
 STR_TRANSPARENCY_CAPTION                                        :{WHITE}Roghanna Trédhearcachta
@@ -2916,9 +2899,7 @@ STR_LAI_OBJECT_DESCRIPTION_COMPANY_HEADQUARTERS                 :Ceanncheathrú 
 STR_LAI_OBJECT_DESCRIPTION_COMPANY_OWNED_LAND                   :Talamh faoi úinéireacht cuideachta
 
 # About OpenTTD window
-STR_ABOUT_OPENTTD                                               :{WHITE}Maidir le OpenTTD
 STR_ABOUT_ORIGINAL_COPYRIGHT                                    :{BLACK}Cóipcheart bunaidh {COPYRIGHT} 1995 Chris Sawyer, Gach ceart ar cosaint
-STR_ABOUT_VERSION                                               :{BLACK}OpenTTD leagan {REV}
 STR_ABOUT_COPYRIGHT_OPENTTD                                     :{BLACK}OpenTTD {COPYRIGHT} 2002-{STRING} An fhoireann OpenTTD
 
 # Framerate display window
@@ -3245,7 +3226,6 @@ STR_NEWGRF_ERROR_INDPROD_CALLBACK                               :Aisghlach neamh
 
 # NewGRF related 'general' warnings
 STR_NEWGRF_POPUP_CAUTION_CAPTION                                :{WHITE}Rabhadh!
-STR_NEWGRF_CONFIRMATION_TEXT                                    :{YELLOW}Tá tú ar tí athruithe a dhéanamh ar chluiche atá ar rith. D'fhéadfadh sé go gclisfidh OpenTTD dá bharr. Ná seol isteach tuairiscí ar fhabhtanna maidir leis na ceisteanna seo.{}An bhfuil tú cinnte dearfa faoi seo?
 
 STR_NEWGRF_DUPLICATE_GRFID                                      :{WHITE}Ní féidir comhad a chur leis: ID GRF dúbailte
 STR_NEWGRF_COMPATIBLE_LOADED                                    :{ORANGE}Níor aimsíodh comhad a mheaitseálann (GRF comhoiriúnach lódáilte)
@@ -3254,7 +3234,6 @@ STR_NEWGRF_TOO_MANY_NEWGRFS                                     :{WHITE}Ní féi
 STR_NEWGRF_COMPATIBLE_LOAD_WARNING                              :{WHITE}Lódáladh GRF(anna) comhoiriúnacha do na comhaid atá ar lár
 STR_NEWGRF_DISABLED_WARNING                                     :{WHITE}Díchumasaíodh na comha(i)d GRF atá ar lár
 STR_NEWGRF_UNPAUSE_WARNING_TITLE                                :{YELLOW}Comha(i)d GRF ar lár
-STR_NEWGRF_UNPAUSE_WARNING                                      :{WHITE}Is féidir go ndéanfar OpenTTD a thuairteáil má chuirtear deireadh leis an sos. Ná seol isteach tuairiscí ar fabhtanna le haghaidh tuairteálacha ina dhiaidh seo.{}An bhfuil tú cinnte gur mian leat deireadh a chur leis an sos?
 
 # NewGRF status
 STR_NEWGRF_LIST_NONE                                            :Ceann ar bith

@@ -121,7 +121,7 @@ std::optional<std::string_view> VideoDriver_Dedicated::Start(const StringList &)
 	/* For win32 we need to allocate a console (debug mode does the same) */
 	CreateConsole();
 	CreateWindowsConsoleThread();
-	SetConsoleTitle(L"OpenTTD Dedicated Server");
+	SetConsoleTitle(L"Wira Bandar Dedicated Server");
 #endif
 
 #ifdef _MSC_VER

@@ -412,12 +412,10 @@ STR_TOOLBAR_TOOLTIP_BUILD_AIRPORTS                              :{BLACK}Hanga i 
 STR_TOOLBAR_TOOLTIP_LANDSCAPING                                 :{BLACK}Huaki i te tahua hanga whenua, te tahua rākau rānei, makaia he tohu rānei
 STR_TOOLBAR_TOOLTIP_SHOW_SOUND_MUSIC_WINDOW                     :{BLACK}Huaki i te matapihi oro/pūoro
 STR_TOOLBAR_TOOLTIP_SHOW_LAST_MESSAGE_NEWS                      :{BLACK}Huaki i te karere/pūrongo kua hipa, te hītori karere rānei, muku rānei i ngā karere katoa
-STR_TOOLBAR_TOOLTIP_LAND_BLOCK_INFORMATION                      :{BLACK}Huaki i te pārongo whenua, te tahua kapomata, ngā mihi a OpenTTD, ngā utauta rānei mā ngā kaihanga pūmanawa
 STR_TOOLBAR_TOOLTIP_SWITCH_TOOLBAR                              :{BLACK}Whitiwhiti i ngā paeutauta
 
 # Extra tooltips for the scenario editor toolbar
 STR_SCENEDIT_TOOLBAR_SAVE_SCENARIO_LOAD_SCENARIO_TOOLTIP        :{BLACK}Tiaki, uta, waiho rānei i te takiwā, puta atu rānei i te taupānga
-STR_SCENEDIT_TOOLBAR_OPENTTD                                    :{YELLOW}OpenTTD
 STR_SCENEDIT_TOOLBAR_SCENARIO_EDITOR                            :{YELLOW}Pūtakatā Takiwā
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_BACKWARD_TOOLTIP    :{BLACK}Neke i te rā tīmata kia 1 tau ki mua
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_FORWARD_TOOLTIP     :{BLACK}Neke i te rā tīmata kia 1 tau ki muri
@@ -543,7 +541,6 @@ STR_ABOUT_MENU_TOGGLE_CONSOLE                                   :Hohoko i te tā
 STR_ABOUT_MENU_AI_DEBUG                                         :Patuiro kaitākaro hangahanga/hōtuhi kēmu
 STR_ABOUT_MENU_SCREENSHOT                                       :Kapomata
 STR_ABOUT_MENU_SHOW_FRAMERATE                                   :Whakaari i te pāpātanga kapohanga
-STR_ABOUT_MENU_ABOUT_OPENTTD                                    :Pārongo mō OpenTTD
 STR_ABOUT_MENU_SPRITE_ALIGNER                                   :Tīaroaro ata
 STR_ABOUT_MENU_TOGGLE_BOUNDING_BOXES                            :Hohoko pouaka tāparepare
 STR_ABOUT_MENU_TOGGLE_DIRTY_BLOCKS                              :Hohoko i te kara o ngā paraka paru
@@ -1071,7 +1068,6 @@ STR_GAME_OPTIONS_LANGUAGE_TOOLTIP                               :Kōwhiri i te r
 STR_GAME_OPTIONS_LANGUAGE_PERCENTAGE                            :{STRING} ({NUM}% kua oti)
 
 STR_GAME_OPTIONS_FULLSCREEN                                     :Mata whārahi
-STR_GAME_OPTIONS_FULLSCREEN_TOOLTIP                             :Whakakā kia tākaro i OpenTTD i te aratau mata whārahi
 
 STR_GAME_OPTIONS_RESOLUTION                                     :Ariari mata
 STR_GAME_OPTIONS_RESOLUTION_TOOLTIP                             :Kōwhiri i te ariari mata hei whakamahi
@@ -1079,7 +1075,6 @@ STR_GAME_OPTIONS_RESOLUTION_OTHER                               :kē atu
 STR_GAME_OPTIONS_RESOLUTION_ITEM                                :{NUM}x{NUM}
 
 STR_GAME_OPTIONS_VIDEO_ACCELERATION                             :Whakahohoro pūmārō
-STR_GAME_OPTIONS_VIDEO_ACCELERATION_TOOLTIP                     :Whakakā kia tuku i OpenTTD kia tarai ki te whakamahi i te whakahohoro pūmārō. Ka kitea te tautuhinga hou i muri i tētahi whakaara anō i te kēmu
 STR_GAME_OPTIONS_VIDEO_ACCELERATION_RESTART                     :{WHITE}Ka kitea te tautuhinga i muri i tētahi whakaara anō i te kēmu
 
 STR_GAME_OPTIONS_VIDEO_VSYNC                                    :Tukutahi poutū
@@ -2256,8 +2251,6 @@ STR_VIDEO_DRIVER_ERROR_NO_HARDWARE_ACCELERATION                 :kāore he pūtu
 STR_VIDEO_DRIVER_ERROR_HARDWARE_ACCELERATION_CRASH              :I whakahingaia te kēmu e te pūtāhono pūtukatuka whakairoiro. Kua whakapokoa te whakahohoro pūmārō
 
 # Intro window
-STR_INTRO_CAPTION                                               :{WHITE}OpenTTD
-STR_INTRO_VERSION                                               :OpenTTD {REV}
 
 STR_INTRO_NEW_GAME                                              :{BLACK}Kēmu hou
 STR_INTRO_LOAD_GAME                                             :{BLACK}Utaina he kēmu
@@ -2288,14 +2281,11 @@ STR_INTRO_TOOLTIP_GAME_OPTIONS                                  :{BLACK}Huaki i 
 STR_INTRO_TOOLTIP_HIGHSCORE                                     :{BLACK}Huaki i te tūtohi tautike
 STR_INTRO_TOOLTIP_HELP                                          :{BLACK}Tiki i te mauhanga me ngētahi rauemi tuihono
 STR_INTRO_TOOLTIP_ONLINE_CONTENT                                :{BLACK}Kimi i tētahi ihirangi hou hei tiki ake
-STR_INTRO_TOOLTIP_QUIT                                          :{BLACK}Puta atu i "OpenTTD"
 
 STR_INTRO_BASESET                                               :{BLACK}{NUM} {P te ngā} ata e ngaro ana i te kohinga whakairoiro mātāmua kua tīpakona. Kimihia koa he whakahoutanga mō te kohinga.
-STR_INTRO_TRANSLATION                                           :{BLACK}{NUM} {P te ngā} aho e ngaro ana i tēnei whakamāoritanga. Āwhina mai koa kia whakapai atu a OpenTTD, kia uru mai hei kaiwhakamāori. Tirohia a readme.txt mō ngā taipitopito.
 
 # Quit window
 STR_QUIT_CAPTION                                                :{WHITE}Puta Atu
-STR_QUIT_ARE_YOU_SURE_YOU_WANT_TO_EXIT_OPENTTD                  :{YELLOW}Kei te tino hiahia rānei koe ki te puta atu i OpenTTD?
 STR_QUIT_YES                                                    :{BLACK}Āe
 STR_QUIT_NO                                                     :{BLACK}Kāo
 
@@ -2390,7 +2380,6 @@ STR_FACE_SIMPLE                                                 :{BLACK}Māmā
 STR_FACE_SIMPLE_TOOLTIP                                         :{BLACK}Tīpakonga mata māmā
 STR_FACE_LOAD                                                   :{BLACK}Uta
 STR_FACE_LOAD_TOOLTIP                                           :{BLACK}Uta i te tino mata
-STR_FACE_LOAD_DONE                                              :Kua utaina tō tino mata nō te kōnae whirihoranga o OpenTTD
 STR_FACE_FACECODE                                               :{BLACK}Waehere mata o te kaitākaro
 STR_FACE_FACECODE_TOOLTIP                                       :{BLACK}Titiro, tautuhi rānei i te waehere mata o te perehitene o te umanga
 STR_FACE_FACECODE_CAPTION                                       :{WHITE}Titiro, tautuhi rānei i te waehere mata o te perehitene o te umanga
@@ -2398,7 +2387,6 @@ STR_FACE_FACECODE_SET                                           :Kua tautuhitia 
 STR_FACE_FACECODE_ERR                                           :Tē taea te tautuhi te waehere mata o te perehitene - me tika te tapanga me te nama
 STR_FACE_SAVE                                                   :{BLACK}Tiaki
 STR_FACE_SAVE_TOOLTIP                                           :{BLACK}Tiaki hei tō tino mata
-STR_FACE_SAVE_DONE                                              :Ka tiakina tēnei hei tō tino mata i roto i te kōnae whirihoranga o OpenTTD
 STR_FACE_SETTING_TOGGLE                                         :{STRING} {ORANGE}{STRING}
 STR_FACE_SETTING_NUMERIC                                        :{STRING} {ORANGE}{NUM} / {NUM}
 STR_FACE_YES                                                    :Āe
@@ -2713,8 +2701,6 @@ STR_CONTENT_UNSELECT_ALL_CAPTION                                :{BLACK}Wetetīp
 STR_CONTENT_UNSELECT_ALL_CAPTION_TOOLTIP                        :{BLACK}Māka i ngā ihirangi katoa kia kore ai e tiki ake
 STR_CONTENT_SEARCH_EXTERNAL                                     :{BLACK}Kimi i ngā pae tukutuku kei waho
 STR_CONTENT_SEARCH_EXTERNAL_TOOLTIP                             :{BLACK}Kimi i ngā ihirangi kāore i te wātea i te ratonga a OpenTTD, i ngētahi pae tukutuku kāore i te pāhekoheko ki OpenTTD
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER_CAPTION                  :{WHITE}Kei te wehe atu koe i OpenTTD!
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER                          :{WHITE}Ka rerekē ngā ture me ngā here mō te tiki ihirangi ake i ngā pae tukutuku i waho.{}Me whirinaki koe ki ngā pae tukutuku mō ngā tohutohu me pēwhea te tāuta ihirangi ki roto i OpenTTD.{}Kei te hiahia rānei koe ki te haere tonu?
 STR_CONTENT_FILTER_TITLE                                        :{BLACK}Tātari tapanga/ingoa:
 STR_CONTENT_OPEN_URL                                            :{BLACK}Pae tukutuku
 STR_CONTENT_OPEN_URL_TOOLTIP                                    :{BLACK}Toro i te pae tukutuku mō tēnei ihirangi
@@ -2728,7 +2714,6 @@ STR_CONTENT_DETAIL_SUBTITLE_UNSELECTED                          :{SILVER}Kāore 
 STR_CONTENT_DETAIL_SUBTITLE_SELECTED                            :{SILVER}Kua tīpako koe i tēnei hei tiki ake
 STR_CONTENT_DETAIL_SUBTITLE_AUTOSELECTED                        :{SILVER}Kua tīpakona tēnei whirinaki hei tiki ake
 STR_CONTENT_DETAIL_SUBTITLE_ALREADY_HERE                        :{SILVER}Kua whiwhi kē koe i tēnei
-STR_CONTENT_DETAIL_SUBTITLE_DOES_NOT_EXIST                      :{SILVER}Kāore ngēnei ihirangi i te mōhiotia, tē taea te tiki ake i OpenTTD
 
 STR_CONTENT_DETAIL_UPDATE                                       :{SILVER}He whakakapi tēnei mō tētahi {STRING} kua tāutangia kē
 STR_CONTENT_DETAIL_NAME                                         :{SILVER}Ingoa: {WHITE}{STRING}
@@ -2740,7 +2725,6 @@ STR_CONTENT_DETAIL_FILESIZE                                     :{SILVER}Rahi o 
 STR_CONTENT_DETAIL_SELECTED_BECAUSE_OF                          :{SILVER}Kua tīpakona nā te: {WHITE}{STRING}
 STR_CONTENT_DETAIL_DEPENDENCIES                                 :{SILVER}Whirinaki: {WHITE}{STRING}
 STR_CONTENT_DETAIL_TAGS                                         :{SILVER}Tapanga: {WHITE}{STRING}
-STR_CONTENT_NO_ZLIB                                             :Kua hangaia a OpenTTD kia kore he tautoko i zlib...
 STR_CONTENT_NO_ZLIB_SUB                                         :tē taea te tiki ihirangi ake!
 
 # Order of these is important!
@@ -2769,13 +2753,10 @@ STR_CONTENT_ERROR_COULD_NOT_DOWNLOAD_FILE_NOT_WRITABLE          :tē taea te tuh
 STR_CONTENT_ERROR_COULD_NOT_EXTRACT                             :Tē taea te wetehīnohi te kōnae kua tīkina ake
 
 STR_MISSING_GRAPHICS_SET_CAPTION                                :{WHITE}Whakairoiro ngaro
-STR_MISSING_GRAPHICS_SET_MESSAGE                                :{BLACK}Ka pīrangitia he whakairoiro e OpenTTD kia mahi ai, engari kāore he kohinga i kitea. Ka tuku rānei koe i OpenTTD kia tiki ake, tāuta hoki i ngaua whakairoiro?
 STR_MISSING_GRAPHICS_YES_DOWNLOAD                               :{BLACK}Āe, tīkina ake ngā whakairoiro
-STR_MISSING_GRAPHICS_NO_QUIT                                    :{BLACK}Kāo, puta atu i OpenTTD
 
 STR_MISSING_GRAPHICS_ERROR_TITLE                                :{WHITE}I mūhore te tiki ake
 STR_MISSING_GRAPHICS_ERROR                                      :{BLACK}I mūhore te tiki whakairoiro ake.{}Tīkina ake koa ngā whakairoiro ringa
-STR_MISSING_GRAPHICS_ERROR_QUIT                                 :{BLACK}Puta atu i OpenTTD
 
 # Transparency settings window
 STR_TRANSPARENCY_CAPTION                                        :{WHITE}Kōwhiringa Kōataata
@@ -3314,9 +3295,7 @@ STR_LAI_OBJECT_DESCRIPTION_COMPANY_HEADQUARTERS                 :Whare whakahaer
 STR_LAI_OBJECT_DESCRIPTION_COMPANY_OWNED_LAND                   :Whenua o te umanga
 
 # About OpenTTD window
-STR_ABOUT_OPENTTD                                               :{WHITE}Pārongo mō OpenTTD
 STR_ABOUT_ORIGINAL_COPYRIGHT                                    :{BLACK}Manatārua taketake {COPYRIGHT} 1995 Chris Sawyer, Ka puritia ngā mōtika katoa
-STR_ABOUT_VERSION                                               :{BLACK}Whakaputanga {REV} o OpenTTD
 STR_ABOUT_COPYRIGHT_OPENTTD                                     :{BLACK}OpenTTD {COPYRIGHT} 2002-{STRING} Te kapa o OpenTTD
 
 # Framerate display window
@@ -3447,7 +3426,6 @@ STR_MAPGEN_QUANTITY_OF_RIVERS                                   :{BLACK}Awa:
 STR_MAPGEN_SMOOTHNESS                                           :{BLACK}Maheni:
 STR_MAPGEN_VARIETY                                              :{BLACK}Tuari matatini:
 STR_MAPGEN_GENERATE                                             :{WHITE}Hanga
-STR_MAPGEN_GENERATE_TOOLTIP                                     :{BLACK}Hanga i te ao ka tākaro ai i OpenTTD!
 STR_MAPGEN_NEWGRF_SETTINGS                                      :{BLACK}Tautuhinga newGRF
 STR_MAPGEN_NEWGRF_SETTINGS_TOOLTIP                              :{BLACK}Huaki i ngā tautuhinga newGRF
 STR_MAPGEN_AI_SETTINGS                                          :{BLACK}Tautuhinga kaitākaro hangahanga
@@ -3502,7 +3480,6 @@ STR_MAPGEN_HEIGHTMAP_ROTATION                                   :{BLACK}Hurihang
 STR_MAPGEN_HEIGHTMAP_NAME                                       :{BLACK}Ingoa o te mahereteitei:
 STR_MAPGEN_HEIGHTMAP_NAME_TOOLTIP                               :{BLACK}Te ingoa o te kōnae ata mahereteitei
 STR_MAPGEN_HEIGHTMAP_SIZE_LABEL                                 :{BLACK}Rahi:
-STR_MAPGEN_HEIGHTMAP_SIZE_LABEL_TOOLTIP                         :{BLACK}Te rahi o te ata mahereteitei. Mō ngā otinga tino pai, me taurite ia tapa ki tētahi roa pū mō ngā tapa o ngā mahere i OpenTTD, hei tauira, 256, 512, 1024, te mea, te mea
 STR_MAPGEN_HEIGHTMAP_SIZE                                       :{ORANGE}{NUM} x {NUM}
 
 STR_MAPGEN_TERRAIN_TYPE_QUERY_CAPT                              :{WHITE}Teitei taumata e whāia ana
@@ -3693,7 +3670,6 @@ STR_NEWGRF_ERROR_INDPROD_CALLBACK                               :Karangamua whak
 
 # NewGRF related 'general' warnings
 STR_NEWGRF_POPUP_CAUTION_CAPTION                                :{WHITE}Kia tūpato!
-STR_NEWGRF_CONFIRMATION_TEXT                                    :{YELLOW}Ka mahia e koe he panonitanga i tētahi kēmu e hāere tonu ana. Ka taea te hinga e OpenTTD, te pakaru rānei te teihana kēmu. Kaua e tuku pūrongo iro mō ngaua raru.{}Kei te tino hiahia rānei koe ki tēnei?
 
 STR_NEWGRF_DUPLICATE_GRFID                                      :Tē taea te tāpiri te kōnae: He taurua te newGRF ID
 STR_NEWGRF_COMPATIBLE_LOADED                                    :{ORANGE}Kāore te kōnae taurite i kitea (kua utaina te newGRF hototahi)
@@ -3702,7 +3678,6 @@ STR_NEWGRF_TOO_MANY_NEWGRFS                                     :Tē taea te tā
 STR_NEWGRF_COMPATIBLE_LOAD_WARNING                              :Kua utaina he newGRF hototahi mō ngētahi kōnae ngaro
 STR_NEWGRF_DISABLED_WARNING                                     :Kua āraia he kōnae newGRF ngaro
 STR_NEWGRF_UNPAUSE_WARNING_TITLE                                :{YELLOW}Kōnae newGRF ngaro
-STR_NEWGRF_UNPAUSE_WARNING                                      :{WHITE}Ka taea te hinga e OpenTTD i te purei. Kaua e tuku pūrongo iro mō ngā hinga ā muri atu.{}Kei te tino hiahia rānei koe kia purei?
 
 # NewGRF status
 STR_NEWGRF_LIST_NONE                                            :Kore
@@ -5037,7 +5012,6 @@ STR_TEXTFILE_README_CAPTION                                     :{WHITE}Kōnae p
 STR_TEXTFILE_CHANGELOG_CAPTION                                  :{WHITE}Pānui panoni o te {STRING} ko {STRING}
 STR_TEXTFILE_LICENCE_CAPTION                                    :{WHITE}Raihana o te {STRING} ko {STRING}
 STR_TEXTFILE_SURVEY_RESULT_CAPTION                              :{WHITE}Tiro takamua i te otinga o te rangahau tauanga
-STR_TEXTFILE_GAME_MANUAL_CAPTION                                :{WHITE}Tuhinga o OpenTTD ko {STRING}
 
 
 # Vehicle loading indicators

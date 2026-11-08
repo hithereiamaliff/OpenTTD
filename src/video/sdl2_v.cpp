@@ -576,7 +576,7 @@ static std::optional<std::string_view> InitializeSDL()
 	if (SDL_WasInit(SDL_INIT_VIDEO) != 0) return std::nullopt;
 
 #ifdef SDL_HINT_APP_NAME
-	SDL_SetHint(SDL_HINT_APP_NAME, "OpenTTD");
+	SDL_SetHint(SDL_HINT_APP_NAME, "Wira Bandar");
 #endif
 
 	if (SDL_InitSubSystem(SDL_INIT_VIDEO) < 0) return SDL_GetError();

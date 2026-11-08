@@ -723,12 +723,10 @@ STR_TOOLBAR_TOOLTIP_BUILD_AIRPORTS                              :{BLACK}Буда
 STR_TOOLBAR_TOOLTIP_LANDSCAPING                                 :{BLACK}Панэлі змены ляндшафту , пасадкі дрэў, усталёўкі знакаў
 STR_TOOLBAR_TOOLTIP_SHOW_SOUND_MUSIC_WINDOW                     :{BLACK}Наладка гуку й музыкі
 STR_TOOLBAR_TOOLTIP_SHOW_LAST_MESSAGE_NEWS                      :{BLACK}Паказаць апошняе паведамленьне/навiну, гісторыю паведамленьняў ці выдаліць усе
-STR_TOOLBAR_TOOLTIP_LAND_BLOCK_INFORMATION                      :{BLACK}Інфармацыя пра тэрыторыю, пра распрацоўнікаў гульні; прылады распрацоўніка, здымкі экрана
 STR_TOOLBAR_TOOLTIP_SWITCH_TOOLBAR                              :{BLACK}Пераключыць панэлі інструмэнтаў
 
 # Extra tooltips for the scenario editor toolbar
 STR_SCENEDIT_TOOLBAR_SAVE_SCENARIO_LOAD_SCENARIO_TOOLTIP        :{BLACK}Захаваньне/загрузка сцэнара, выхад з рэдактара, выхад
-STR_SCENEDIT_TOOLBAR_OPENTTD                                    :{YELLOW}OpenTTD
 STR_SCENEDIT_TOOLBAR_SCENARIO_EDITOR                            :{YELLOW}Рэдактар сцэнараў
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_BACKWARD_TOOLTIP    :{BLACK}Зьменшыць пачатковую дату гульні на 1 год
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_FORWARD_TOOLTIP     :{BLACK}Павялічыць пачатковую дату гульні на 1 год
@@ -844,7 +842,6 @@ STR_ABOUT_MENU_TOGGLE_CONSOLE                                   :Кансоль
 STR_ABOUT_MENU_AI_DEBUG                                         :Наладка штучнага інтэлекту (ШІ/AI) / скрыптоў
 STR_ABOUT_MENU_SCREENSHOT                                       :Здымак экрана (Ctrl+S)
 STR_ABOUT_MENU_SHOW_FRAMERATE                                   :Паказаць чашчыню кадраў
-STR_ABOUT_MENU_ABOUT_OPENTTD                                    :Аб гульні OpenTTD
 STR_ABOUT_MENU_SPRITE_ALIGNER                                   :Выраўноўваньне спрайтаў
 STR_ABOUT_MENU_TOGGLE_BOUNDING_BOXES                            :Пераключыць абмежавальныя рамкі
 STR_ABOUT_MENU_TOGGLE_DIRTY_BLOCKS                              :Падфарбоўваць блёкі, якія патрабуюць перамалёўкі
@@ -1355,7 +1352,6 @@ STR_GAME_OPTIONS_LANGUAGE_TOOLTIP                               :Выбраць 
 STR_GAME_OPTIONS_LANGUAGE_PERCENTAGE                            :{STRING} ({NUM}% перакладзены)
 
 STR_GAME_OPTIONS_FULLSCREEN                                     :Поўны экран
-STR_GAME_OPTIONS_FULLSCREEN_TOOLTIP                             :Уключыць/выключыць поўнаэкранны рэжым
 
 STR_GAME_OPTIONS_RESOLUTION                                     :Вырашэньне экрана
 STR_GAME_OPTIONS_RESOLUTION_TOOLTIP                             :Выбар вырашэньня экрана
@@ -1363,7 +1359,6 @@ STR_GAME_OPTIONS_RESOLUTION_OTHER                               :Iншае
 STR_GAME_OPTIONS_RESOLUTION_ITEM                                :{NUM}x{NUM}
 
 STR_GAME_OPTIONS_VIDEO_ACCELERATION                             :Апаратнае паскарэньне
-STR_GAME_OPTIONS_VIDEO_ACCELERATION_TOOLTIP                     :Уключыць/выключыць апаратнае паскарэньне. Пасля гэтага гульню запатрабуецца перазапусціць.
 STR_GAME_OPTIONS_VIDEO_ACCELERATION_RESTART                     :{WHITE}Гэта наладка будзе ўжыта толькі пасля перазапуску гульні
 
 STR_GAME_OPTIONS_VIDEO_VSYNC                                    :Вертыкальная сінхранізацыя
@@ -2524,14 +2519,11 @@ STR_INTRO_TOOLTIP_GAME_OPTIONS                                  :{BLACK}Адкр
 STR_INTRO_TOOLTIP_HIGHSCORE                                     :{BLACK}Паказаць табліцу рэкордаў
 STR_INTRO_TOOLTIP_HELP                                          :{BLACK}Спасылкі на дакументацыю і інтэрнэт-рэсурсы
 STR_INTRO_TOOLTIP_ONLINE_CONTENT                                :{BLACK}Праверыць новы й абноўлены кантэнт, каб спампаваць
-STR_INTRO_TOOLTIP_QUIT                                          :{BLACK}Выйсьці з OpenTTD
 
 STR_INTRO_BASESET                                               :{BLACK}У абраным наборы базавай графікі адсутнічае {NUM} спрайт{P "" а аў}. Калі ласка, абнавіце набор графікі.
-STR_INTRO_TRANSLATION                                           :{BLACK}На гэту мову не перакладзен{P 0 ы ы а} {NUM} рад{P ок кі коў}. Вы можаце дапамагчы праекту, калi зарэґіструецеся як перакладчык. Інструкцыі ў файле readme.txt.
 
 # Quit window
 STR_QUIT_CAPTION                                                :{WHITE}Выхад
-STR_QUIT_ARE_YOU_SURE_YOU_WANT_TO_EXIT_OPENTTD                  :{YELLOW}Вы ўпэўнены, што жадаеце выйсці з OpenTTD?
 STR_QUIT_YES                                                    :{BLACK}Так
 STR_QUIT_NO                                                     :{BLACK}Не
 
@@ -2625,7 +2617,6 @@ STR_FACE_SIMPLE                                                 :{BLACK}Прос
 STR_FACE_SIMPLE_TOOLTIP                                         :{BLACK}Просты выбар зьнешнасьці
 STR_FACE_LOAD                                                   :{BLACK}Загрузіць
 STR_FACE_LOAD_TOOLTIP                                           :{BLACK}Загрузіць улюбёны твар
-STR_FACE_LOAD_DONE                                              :{WHITE}Ваш улюбёны твар быў загружаны праз файл канфігурацыі OpenTTD
 STR_FACE_FACECODE                                               :{BLACK}Лічбавы нумар твару
 STR_FACE_FACECODE_TOOLTIP                                       :{BLACK}Паглядзець і/або выбраць нумар твару
 STR_FACE_FACECODE_CAPTION                                       :{WHITE}Лічбавы код зьнешнасьці
@@ -2633,7 +2624,6 @@ STR_FACE_FACECODE_SET                                           :{WHITE}Новы
 STR_FACE_FACECODE_ERR                                           :{WHITE}Немагчыма ўсталяваць лічбавы код зьнешнасьці: мусіць быць выражана лічбай паміж 0 і 4,294,967,295!
 STR_FACE_SAVE                                                   :{BLACK}Захаваць
 STR_FACE_SAVE_TOOLTIP                                           :{BLACK}Захаваць улюбёны твар
-STR_FACE_SAVE_DONE                                              :{WHITE}Гэты твар быў захаваны як ваш улюбёны ў файле канфігурацыі OpenTTD
 STR_FACE_YES                                                    :Так
 STR_FACE_NO                                                     :Не
 STR_FACE_HAIR                                                   :Валасы:
@@ -2938,8 +2928,6 @@ STR_CONTENT_UNSELECT_ALL_CAPTION                                :{BLACK}Нічо
 STR_CONTENT_UNSELECT_ALL_CAPTION_TOOLTIP                        :{BLACK}Адзначыць увесь кантэнт нявыбраным, нічога не запампоўваць
 STR_CONTENT_SEARCH_EXTERNAL                                     :{BLACK}Шукаць на іншых сайтах
 STR_CONTENT_SEARCH_EXTERNAL_TOOLTIP                             :{BLACK}Вынікі пошуку знаходзяцца на іншых сайтах, якія ня маюць дачыненьня да OpenTTD
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER_CAPTION                  :{WHITE}Вы пакідаеце OpenTTD!
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER                          :{WHITE}Умовы загрузкі змесціва зь іншых сайтаў могуць адрозьнівацца.{}За інструкцыямі па ўсталёўцы кампанэнтаў OpenTTD вам трэба зьвярнуцца на адпаведныя сайты.{}Вы жадаеце працягнуць?
 STR_CONTENT_FILTER_TITLE                                        :{BLACK}Фільтар па бірках/назвах:
 STR_CONTENT_OPEN_URL                                            :{BLACK}Вэб-сайт
 STR_CONTENT_OPEN_URL_TOOLTIP                                    :{BLACK}Наведаць вэб-старонку для гэтага кантэнту
@@ -2953,7 +2941,6 @@ STR_CONTENT_DETAIL_SUBTITLE_UNSELECTED                          :{SILVER}Вы г
 STR_CONTENT_DETAIL_SUBTITLE_SELECTED                            :{SILVER}Вы выбралі гэта для запампоўваньня
 STR_CONTENT_DETAIL_SUBTITLE_AUTOSELECTED                        :{SILVER}Гэты модуль залежыць ад іншага й будзе спампаваны
 STR_CONTENT_DETAIL_SUBTITLE_ALREADY_HERE                        :{SILVER}Ўжо маеце гэта
-STR_CONTENT_DETAIL_SUBTITLE_DOES_NOT_EXIST                      :{SILVER}Гэты кантэнт невядомы й ня можа быць спампаваны ў OpenTTD
 
 STR_CONTENT_DETAIL_UPDATE                                       :{SILVER}Гэта абнаўленьне існуюч{G ага ай ага ых} {STRING.gen}
 STR_CONTENT_DETAIL_NAME                                         :{SILVER}Назва: {WHITE}{STRING}
@@ -2965,7 +2952,6 @@ STR_CONTENT_DETAIL_FILESIZE                                     :{SILVER}Пам�
 STR_CONTENT_DETAIL_SELECTED_BECAUSE_OF                          :{SILVER}Выбрана разам з: {WHITE}{STRING}
 STR_CONTENT_DETAIL_DEPENDENCIES                                 :{SILVER}Залежнасьці: {WHITE}{STRING}
 STR_CONTENT_DETAIL_TAGS                                         :{SILVER}Ярлыкі: {WHITE}{STRING}
-STR_CONTENT_NO_ZLIB                                             :{WHITE}OpenTTD сабраны без падтрымкі бібліятэкі "zlib"...
 STR_CONTENT_NO_ZLIB_SUB                                         :{WHITE}... запампоўваньне кантэнту немагчыма!
 
 # Order of these is important!
@@ -3010,13 +2996,10 @@ STR_CONTENT_ERROR_COULD_NOT_DOWNLOAD_FILE_NOT_WRITABLE          :{WHITE}... не
 STR_CONTENT_ERROR_COULD_NOT_EXTRACT                             :{WHITE}Не ўдалося распакаваць запампаваны файл
 
 STR_MISSING_GRAPHICS_SET_CAPTION                                :{WHITE}Адсутная ґрафiка
-STR_MISSING_GRAPHICS_SET_MESSAGE                                :{BLACK}OpenTTD патрабуе ґрафiкi для функцыянаваньня, але ня можа знайсьцi нiякай. Вы дазваляеце OpenTTD спампаваць ды ўсталяваць гэтую ґрафiку?
 STR_MISSING_GRAPHICS_YES_DOWNLOAD                               :{BLACK}Так, спампаваць ґрафiку
-STR_MISSING_GRAPHICS_NO_QUIT                                    :{BLACK}Не, выйсьцi з OpenTTD
 
 STR_MISSING_GRAPHICS_ERROR_TITLE                                :{WHITE}Спампоўваньне не атрымалася
 STR_MISSING_GRAPHICS_ERROR                                      :{BLACK}Не атрымалася запампаваць графіку.{}Калі ласка, загрузіце графіку ўручную.
-STR_MISSING_GRAPHICS_ERROR_QUIT                                 :{BLACK}Выйсці з OpenTTD
 
 # Transparency settings window
 STR_TRANSPARENCY_CAPTION                                        :{WHITE}Наладкі празрыстасьці
@@ -3481,9 +3464,7 @@ STR_LAI_OBJECT_DESCRIPTION_COMPANY_HEADQUARTERS                 :Штаб-ква
 STR_LAI_OBJECT_DESCRIPTION_COMPANY_OWNED_LAND                   :Зямля належыць кампаніі
 
 # About OpenTTD window
-STR_ABOUT_OPENTTD                                               :{WHITE}Аб OpenTTD
 STR_ABOUT_ORIGINAL_COPYRIGHT                                    :{BLACK}Арыґінальныя аўтарскія правы {COPYRIGHT} 1995 Chris Sawyer. Усе правы абароненыя.
-STR_ABOUT_VERSION                                               :{BLACK}OpenTTD вэрсія {REV}
 STR_ABOUT_COPYRIGHT_OPENTTD                                     :{BLACK}OpenTTD {COPYRIGHT} 2002–{STRING} Каманда распрацоўнікаў OpenTTD
 
 # Framerate display window
@@ -3606,7 +3587,6 @@ STR_MAPGEN_QUANTITY_OF_RIVERS                                   :{BLACK}Коль
 STR_MAPGEN_SMOOTHNESS                                           :{BLACK}Гладкасьць:
 STR_MAPGEN_VARIETY                                              :{BLACK}Разнастайнасьць ляндшафту:
 STR_MAPGEN_GENERATE                                             :{WHITE}Стварыць
-STR_MAPGEN_GENERATE_TOOLTIP                                     :{BLACK}Згенераваць карту і пачаць гульню!
 STR_MAPGEN_NEWGRF_SETTINGS                                      :{BLACK}Наладкі NewGRF
 STR_MAPGEN_NEWGRF_SETTINGS_TOOLTIP                              :{BLACK}Адкрыць наладкі NewGRF
 STR_MAPGEN_AI_SETTINGS                                          :{BLACK}Наладкі ШІ
@@ -3656,7 +3636,6 @@ STR_MAPGEN_HEIGHTMAP_ROTATION                                   :{BLACK}Пава
 STR_MAPGEN_HEIGHTMAP_NAME                                       :{BLACK}Назва мапы:
 STR_MAPGEN_HEIGHTMAP_NAME_TOOLTIP                               :{BLACK}Імя файла з адлюстраваньнем, выкарыстаным для мапы вышынь
 STR_MAPGEN_HEIGHTMAP_SIZE_LABEL                                 :{BLACK}Памер:
-STR_MAPGEN_HEIGHTMAP_SIZE_LABEL_TOOLTIP                         :{BLACK}Памеры зыходнага адлюстраваньня для мапы вышынь. Для найлепшага выніку яны павінны адпавядаць памерам мапы OpenTTD: 256, 512, 1024 і{NBSP}г.{NBSP}д.
 STR_MAPGEN_HEIGHTMAP_SIZE                                       :{ORANGE}{NUM} * {NUM}
 
 STR_MAPGEN_TERRAIN_TYPE_QUERY_CAPT                              :{WHITE}Максімальная вышыня
@@ -3835,7 +3814,6 @@ STR_NEWGRF_ERROR_INDPROD_CALLBACK                               :Няверна�
 
 # NewGRF related 'general' warnings
 STR_NEWGRF_POPUP_CAUTION_CAPTION                                :{WHITE}Асьцярожна!
-STR_NEWGRF_CONFIRMATION_TEXT                                    :{YELLOW}Вы мадыфікуеце запушчаную гульню — гэта можа закрыць OpenTTD цi прывесьці да нестабільнай працы. Не прысылайце справаздачу з памылкамi ў гэтым выпадку.{}Вы сапраўды жадаеце гэта зрабіць?
 
 STR_NEWGRF_DUPLICATE_GRFID                                      :{WHITE}Немагчыма дадаць файл: дублююцца GRF ID
 STR_NEWGRF_COMPATIBLE_LOADED                                    :{ORANGE}Адпаведны файл ня знойдзены (загружаны сумяшчальны GRF)
@@ -3844,7 +3822,6 @@ STR_NEWGRF_TOO_MANY_NEWGRFS                                     :{WHITE}Не м�
 STR_NEWGRF_COMPATIBLE_LOAD_WARNING                              :{WHITE}Замест адсутных загружаны сумяшчальныя файлы NewGRF
 STR_NEWGRF_DISABLED_WARNING                                     :{WHITE}Адсутныя файлы NewGRF былі адключаны
 STR_NEWGRF_UNPAUSE_WARNING_TITLE                                :{YELLOW}Адсутныя GRF файлы
-STR_NEWGRF_UNPAUSE_WARNING                                      :{WHITE}Зьняцьце з паўзы можа прывесьці да памылкi OpenTTD.{}Вы хочаце запусьціць гульню?
 
 # NewGRF status
 STR_NEWGRF_LIST_NONE                                            :Няма
@@ -5151,7 +5128,6 @@ STR_TEXTFILE_README_CAPTION                                     :{WHITE}{STRING}
 STR_TEXTFILE_CHANGELOG_CAPTION                                  :{WHITE}{STRING} сьпiс зьменаў {STRING}
 STR_TEXTFILE_LICENCE_CAPTION                                    :{WHITE}{STRING} ліцэнзія {STRING}
 STR_TEXTFILE_SURVEY_RESULT_CAPTION                              :{WHITE}Сабраныя дадзеныя
-STR_TEXTFILE_GAME_MANUAL_CAPTION                                :{WHITE}Дакумент OpenTTD «{STRING}»
 
 
 # Vehicle loading indicators

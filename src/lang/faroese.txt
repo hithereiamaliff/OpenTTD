@@ -332,12 +332,10 @@ STR_TOOLBAR_TOOLTIP_BUILD_AIRPORTS                              :{BLACK}Bygg flo
 STR_TOOLBAR_TOOLTIP_LANDSCAPING                                 :{BLACK}Lat up landslags amboðskassan fyri at hækka/lækka land, planta trøð, osv.
 STR_TOOLBAR_TOOLTIP_SHOW_SOUND_MUSIC_WINDOW                     :{BLACK}Vís ljóð/musik vindeyga
 STR_TOOLBAR_TOOLTIP_SHOW_LAST_MESSAGE_NEWS                      :{BLACK}Vís sísta boð/nýggjheit frágreiðing, vís boð møguleikarnar
-STR_TOOLBAR_TOOLTIP_LAND_BLOCK_INFORMATION                      :{BLACK}Landslags økis kunning, console, script debug, skermmyndir, um OpenTTD
 STR_TOOLBAR_TOOLTIP_SWITCH_TOOLBAR                              :{BLACK}Skift amboðslinju
 
 # Extra tooltips for the scenario editor toolbar
 STR_SCENEDIT_TOOLBAR_SAVE_SCENARIO_LOAD_SCENARIO_TOOLTIP        :{BLACK}Goym tilburð, heinta tilburð, far frá tilburðs ritara, gevst
-STR_SCENEDIT_TOOLBAR_OPENTTD                                    :{YELLOW}OpenTTD
 STR_SCENEDIT_TOOLBAR_SCENARIO_EDITOR                            :{YELLOW}Tilburðs ritil
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_BACKWARD_TOOLTIP    :{BLACK}Flyt byrjunar dato 1 ár aftur
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_FORWARD_TOOLTIP     :{BLACK}Flyt byrjunar dato 1 ár fram
@@ -446,7 +444,6 @@ STR_ABOUT_MENU_TOGGLE_CONSOLE                                   :Console opið e
 STR_ABOUT_MENU_AI_DEBUG                                         :AI/Spæl script debug
 STR_ABOUT_MENU_SCREENSHOT                                       :Skermmynd
 STR_ABOUT_MENU_SHOW_FRAMERATE                                   :Vís mynda títtleika
-STR_ABOUT_MENU_ABOUT_OPENTTD                                    :Um 'OpenTTD'
 STR_ABOUT_MENU_SPRITE_ALIGNER                                   :Sprite aligner
 STR_ABOUT_MENU_TOGGLE_BOUNDING_BOXES                            :Skift millum bindingar kassar
 STR_ABOUT_MENU_TOGGLE_DIRTY_BLOCKS                              :Skift millum liting av skitnum blokkum
@@ -877,7 +874,6 @@ STR_GAME_OPTIONS_LANGUAGE                                       :Mál
 STR_GAME_OPTIONS_LANGUAGE_TOOLTIP                               :Vel mál at nýta í takførisflatu
 
 STR_GAME_OPTIONS_FULLSCREEN                                     :Fullan skerm
-STR_GAME_OPTIONS_FULLSCREEN_TOOLTIP                             :Marka hendan kassan fyri at spæla OpenTTD í fullum skermi
 
 STR_GAME_OPTIONS_RESOLUTION                                     :Skerm upploysn
 STR_GAME_OPTIONS_RESOLUTION_TOOLTIP                             :Vel hvørja skermupploysn tú vil brúka
@@ -1728,9 +1724,7 @@ STR_INTRO_TOOLTIP_TOYLAND_LANDSCAPE                             :{BLACK}Vel 'toy
 STR_INTRO_TOOLTIP_GAME_OPTIONS                                  :{BLACK}Vís spæli møguleikar
 STR_INTRO_TOOLTIP_HIGHSCORE                                     :{BLACK}Vís hástigs yvirlit
 STR_INTRO_TOOLTIP_ONLINE_CONTENT                                :{BLACK}Kanna um nýtt og betra tilfar er klárt at heinta niður
-STR_INTRO_TOOLTIP_QUIT                                          :{BLACK}Gevst at spæla 'OpenTTD'
 
-STR_INTRO_TRANSLATION                                           :{BLACK}Hesi umseting vantar {NUM} str{P ong eingir}. Vinarliga hjálp til við at gera OpenTTD betri, tekna teg sum umsetara. Sí readme.txt viðvíkjandi smálutum.
 
 # Quit window
 STR_QUIT_CAPTION                                                :{WHITE}Gevst
@@ -1804,7 +1798,6 @@ STR_FACE_SIMPLE                                                 :{BLACK}Einfalt
 STR_FACE_SIMPLE_TOOLTIP                                         :{BLACK}Einfalt andlits úrval
 STR_FACE_LOAD                                                   :{BLACK}Heinta
 STR_FACE_LOAD_TOOLTIP                                           :{BLACK}Heinta yndis andlit
-STR_FACE_LOAD_DONE                                              :{WHITE}Títt yndis andlit er heinta úr OpenTTD uppsetanar fíluni
 STR_FACE_FACECODE                                               :{BLACK}Spælara andlits nr.
 STR_FACE_FACECODE_TOOLTIP                                       :{BLACK}Sjá og/ella áset andlits nummar hjá fyritøku leiðaranum
 STR_FACE_FACECODE_CAPTION                                       :{WHITE}Sjá og/ella áset eitt tal fyri andlit
@@ -1812,7 +1805,6 @@ STR_FACE_FACECODE_SET                                           :{WHITE}Nýtt an
 STR_FACE_FACECODE_ERR                                           :{WHITE}Eydnaðist ikki at áseta andlits tal - má vera eitt tal millum 0 og 4,294,967,295!
 STR_FACE_SAVE                                                   :{BLACK}Goym
 STR_FACE_SAVE_TOOLTIP                                           :{BLACK}Goym yndis andlit
-STR_FACE_SAVE_DONE                                              :{WHITE}Hetta andliti verur goymt sum títt yndis andlit í OpenTTD uppsetanar fíluni
 STR_FACE_YES                                                    :Ja
 STR_FACE_NO                                                     :Nei
 STR_FACE_HAIR                                                   :Hár:
@@ -2031,8 +2023,6 @@ STR_CONTENT_UNSELECT_ALL_CAPTION                                :{BLACK}Vel eink
 STR_CONTENT_UNSELECT_ALL_CAPTION_TOOLTIP                        :{BLACK}Marka alt tilfar til ikki at vera heinta niður
 STR_CONTENT_SEARCH_EXTERNAL                                     :{BLACK}Leita á útihýsis heimasíðum
 STR_CONTENT_SEARCH_EXTERNAL_TOOLTIP                             :{BLACK}Leita eftir tilfari ikki tøkt á OpenTTD tilfars tænastu, á heimasíðum ikki knýttar at OpenTTD
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER_CAPTION                  :{WHITE}Tygum fara nú frá OpenTTD!
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER                          :{WHITE}Treytir og umstøður fyri niðurheintan av tilfari frá útihýsis heimasíðum eru ymiskar.{}Kunning um hvussu tygum installera hetta tilfari inn í OpenTTD mugu tygum finna á hesum útihýsis heimasíðunum.{}Vilja tygum halda á fram?
 STR_CONTENT_FILTER_TITLE                                        :{BLACK}Tag/navn filtur:
 STR_CONTENT_OPEN_URL                                            :{BLACK}Vitja heimasíðu
 STR_CONTENT_OPEN_URL_TOOLTIP                                    :{BLACK}Vitja heimasíðuna fyri hetta tilfari
@@ -2046,7 +2036,6 @@ STR_CONTENT_DETAIL_SUBTITLE_UNSELECTED                          :{SILVER}Tú hev
 STR_CONTENT_DETAIL_SUBTITLE_SELECTED                            :{SILVER}Tú hevur marka hetta at heinta niður
 STR_CONTENT_DETAIL_SUBTITLE_AUTOSELECTED                        :{SILVER}Hendan atbindingin er marka at heinta niður
 STR_CONTENT_DETAIL_SUBTITLE_ALREADY_HERE                        :{SILVER}Tú hevur longu hetta
-STR_CONTENT_DETAIL_SUBTITLE_DOES_NOT_EXIST                      :{SILVER}Hetta tilfari er ókent og kann ikki heintast niður í OpenTTD
 
 STR_CONTENT_DETAIL_UPDATE                                       :{SILVER}Hetta er ein útskifting fyri verðandi {STRING}
 STR_CONTENT_DETAIL_NAME                                         :{SILVER}Navn: {WHITE}{STRING}
@@ -2058,7 +2047,6 @@ STR_CONTENT_DETAIL_FILESIZE                                     :{SILVER}Niðurh
 STR_CONTENT_DETAIL_SELECTED_BECAUSE_OF                          :{SILVER}Valt orsaka av: {WHITE}{STRING}
 STR_CONTENT_DETAIL_DEPENDENCIES                                 :{SILVER}Atbindingar: {WHITE}{STRING}
 STR_CONTENT_DETAIL_TAGS                                         :{SILVER}Frámerki: {WHITE}{STRING}
-STR_CONTENT_NO_ZLIB                                             :{WHITE}OpenTTD er bygt uttan stuðul fyri "zlib"...
 STR_CONTENT_NO_ZLIB_SUB                                         :{WHITE}... niður heintan av tilfari ikki gjørlig!
 
 # Order of these is important!
@@ -2087,9 +2075,7 @@ STR_CONTENT_ERROR_COULD_NOT_DOWNLOAD_FILE_NOT_WRITABLE          :{WHITE}... kann
 STR_CONTENT_ERROR_COULD_NOT_EXTRACT                             :{WHITE}Eydnaðist ikki at pakka niðurheintaða fíl út
 
 STR_MISSING_GRAPHICS_SET_CAPTION                                :{WHITE}Vantandi grafikkur
-STR_MISSING_GRAPHICS_SET_MESSAGE                                :{BLACK}OpenTTD tørvar grafikk fyri at virka men eingin var funnin. Loyvir tú OpenTTD at heinta niður og installera henda grafikkin?
 STR_MISSING_GRAPHICS_YES_DOWNLOAD                               :{BLACK}Ja, heinta niður grafikkin
-STR_MISSING_GRAPHICS_NO_QUIT                                    :{BLACK}Nei, gevst at spæla OpenTTD
 
 
 # Transparency settings window
@@ -2436,9 +2422,7 @@ STR_LAI_OBJECT_DESCRIPTION_COMPANY_HEADQUARTERS                 :Fyritøku høvu
 STR_LAI_OBJECT_DESCRIPTION_COMPANY_OWNED_LAND                   :Ogn hjá fyritøku
 
 # About OpenTTD window
-STR_ABOUT_OPENTTD                                               :{WHITE}Um OpenTTD
 STR_ABOUT_ORIGINAL_COPYRIGHT                                    :{BLACK}Upprunalig upphavsrættindi {COPYRIGHT} 1995 Chris Sawyer, Øll rættindi umbiðin
-STR_ABOUT_VERSION                                               :{BLACK}OpenTTD útgáva {REV}
 STR_ABOUT_COPYRIGHT_OPENTTD                                     :{BLACK}OpenTTD {COPYRIGHT} 2002-{STRING} OpenTTD toymi
 
 # Framerate display window

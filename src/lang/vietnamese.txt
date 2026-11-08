@@ -412,12 +412,10 @@ STR_TOOLBAR_TOOLTIP_BUILD_AIRPORTS                              :{BLACK}Xây sâ
 STR_TOOLBAR_TOOLTIP_LANDSCAPING                                 :{BLACK}Mở thanh địa hình để nâng cao/hạ thấp ô đất, trồng cây, đặt biển hiệu
 STR_TOOLBAR_TOOLTIP_SHOW_SOUND_MUSIC_WINDOW                     :{BLACK}Hiện cửa sổ âm thanh/nhạc
 STR_TOOLBAR_TOOLTIP_SHOW_LAST_MESSAGE_NEWS                      :{BLACK}Hiện thông báo cuối cùng/bản tin tức, lịch sử thông báo hoặc xóa tất cả thông báo
-STR_TOOLBAR_TOOLTIP_LAND_BLOCK_INFORMATION                      :{BLACK}Thông tin vùng đất, chụp màn hình, công cụ dành cho nhà phát triển và thông tin về OpenTTD
 STR_TOOLBAR_TOOLTIP_SWITCH_TOOLBAR                              :{BLACK}Chuyển thanh công cụ
 
 # Extra tooltips for the scenario editor toolbar
 STR_SCENEDIT_TOOLBAR_SAVE_SCENARIO_LOAD_SCENARIO_TOOLTIP        :{BLACK}Lưu, nạp màn chơi kịch bản, thoát trình chỉnh sửa màn chơi, thoát chương trình
-STR_SCENEDIT_TOOLBAR_OPENTTD                                    :{YELLOW}OpenTTD
 STR_SCENEDIT_TOOLBAR_SCENARIO_EDITOR                            :{YELLOW}Biên Tập Màn Chơi Kịch Bản
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_BACKWARD_TOOLTIP    :{BLACK}Chuyển ngày bắt đầu về phía sau 1 năm
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_FORWARD_TOOLTIP     :{BLACK}Chuyển ngày bắt đầu về phía trước 1 năm
@@ -543,7 +541,6 @@ STR_ABOUT_MENU_TOGGLE_CONSOLE                                   :Bật/tắt b�
 STR_ABOUT_MENU_AI_DEBUG                                         :Gỡ rối AI / Game script
 STR_ABOUT_MENU_SCREENSHOT                                       :Ảnh chụp màn hình
 STR_ABOUT_MENU_SHOW_FRAMERATE                                   :Hiển thị tốc độ khung hình
-STR_ABOUT_MENU_ABOUT_OPENTTD                                    :Giới thiệu 'OpenTTD'
 STR_ABOUT_MENU_SPRITE_ALIGNER                                   :Trình điều chỉnh sprite
 STR_ABOUT_MENU_TOGGLE_BOUNDING_BOXES                            :Bật/tắt hiển thị khối nhà
 STR_ABOUT_MENU_TOGGLE_DIRTY_BLOCKS                              :Bật/tắt màu sắc trên các ô 'bẩn'
@@ -1071,7 +1068,6 @@ STR_GAME_OPTIONS_LANGUAGE_TOOLTIP                               :Lựa chọn s�
 STR_GAME_OPTIONS_LANGUAGE_PERCENTAGE                            :{STRING} (hoàn thành {NUM}%)
 
 STR_GAME_OPTIONS_FULLSCREEN                                     :Toàn màn hình
-STR_GAME_OPTIONS_FULLSCREEN_TOOLTIP                             :Đánh dấu vào ô này để chơi OpenTTD ở chế độ toàn màn hình
 
 STR_GAME_OPTIONS_RESOLUTION                                     :Độ phân giải màn hình
 STR_GAME_OPTIONS_RESOLUTION_TOOLTIP                             :Chọn độ phân giải màn hình để sử dụng
@@ -1079,7 +1075,6 @@ STR_GAME_OPTIONS_RESOLUTION_OTHER                               :khác
 STR_GAME_OPTIONS_RESOLUTION_ITEM                                :{NUM}x{NUM}
 
 STR_GAME_OPTIONS_VIDEO_ACCELERATION                             :Tăng tốc phần cứng
-STR_GAME_OPTIONS_VIDEO_ACCELERATION_TOOLTIP                     :Đánh dấu vào ô này để cho phép OpenTTD thử sử dụng tăng tốc phần cứng. Sẽ có tác dụng sau khi khởi động lại trò chơi
 STR_GAME_OPTIONS_VIDEO_ACCELERATION_RESTART                     :{WHITE}Thiết lập chỉ có tác dụng sau khi khởi động lại trò chơi
 
 STR_GAME_OPTIONS_VIDEO_VSYNC                                    :VSync
@@ -2256,8 +2251,6 @@ STR_VIDEO_DRIVER_ERROR_NO_HARDWARE_ACCELERATION                 :không tìm th�
 STR_VIDEO_DRIVER_ERROR_HARDWARE_ACCELERATION_CRASH              :Trình điều khiển GPU đã làm trò chơi bị lỗi. Tăng tốc phần cứng đã được tắt
 
 # Intro window
-STR_INTRO_CAPTION                                               :{WHITE}OpenTTD
-STR_INTRO_VERSION                                               :OpenTTD {REV}
 
 STR_INTRO_NEW_GAME                                              :{BLACK}Màn Chơi Mới
 STR_INTRO_LOAD_GAME                                             :{BLACK}Nạp Ván Chơi
@@ -2288,14 +2281,11 @@ STR_INTRO_TOOLTIP_GAME_OPTIONS                                  :{BLACK}Hiển t
 STR_INTRO_TOOLTIP_HIGHSCORE                                     :{BLACK}Hiện bảng thành tích
 STR_INTRO_TOOLTIP_HELP                                          :{BLACK}Truy cập vào tài liệu và tài nguyên trực tuyến
 STR_INTRO_TOOLTIP_ONLINE_CONTENT                                :{BLACK}Kiểm tra những nội dung mới & cập nhật để tải về
-STR_INTRO_TOOLTIP_QUIT                                          :{BLACK}Thoát 'OpenTTD'
 
 STR_INTRO_BASESET                                               :{BLACK}Gói đồ họa cơ sở đang chọn bị thiếu  {NUM} sprite. Hãy cập nhật gói cơ sở này.
-STR_INTRO_TRANSLATION                                           :{BLACK}Bản dịch này thiếu {NUM} chuỗi. Hãy giúp OpenTTD hoàn thiện hơn bằng cách đăng ký làm biên dịch viên. Xem readme.txt để biết thêm chi tiết.
 
 # Quit window
 STR_QUIT_CAPTION                                                :{WHITE}Thoát
-STR_QUIT_ARE_YOU_SURE_YOU_WANT_TO_EXIT_OPENTTD                  :{YELLOW}Bạn có chắc chắn muốn thoát khỏi OpenTTD?
 STR_QUIT_YES                                                    :{BLACK}Đồng ý
 STR_QUIT_NO                                                     :{BLACK}Không đồng ý
 
@@ -2390,7 +2380,6 @@ STR_FACE_SIMPLE                                                 :{BLACK}Đơn gi
 STR_FACE_SIMPLE_TOOLTIP                                         :{BLACK}Trình chọn vẻ mặt đơn giản.
 STR_FACE_LOAD                                                   :{BLACK}Nạp
 STR_FACE_LOAD_TOOLTIP                                           :{BLACK}Chọn vẻ mặt ưa thích
-STR_FACE_LOAD_DONE                                              :Gương mặt ưa thích đã được nạp từ file thiết lập của OpenTTD
 STR_FACE_FACECODE                                               :{BLACK}Mã số khuôn mặt
 STR_FACE_FACECODE_TOOLTIP                                       :{BLACK}Xem và/hoặc sửa mã số gương mặt của chủ tịch công ty
 STR_FACE_FACECODE_CAPTION                                       :{WHITE}Xem và/hoặc chọn mã số gương mặt chủ tịch
@@ -2398,7 +2387,6 @@ STR_FACE_FACECODE_SET                                           :Gương mặt c
 STR_FACE_FACECODE_ERR                                           :Không thể thiết lập mã số gương mặt - nhãn và mã số phải hợp lệ
 STR_FACE_SAVE                                                   :{BLACK}Lưu
 STR_FACE_SAVE_TOOLTIP                                           :{BLACK}Lưu gương mặt yêu thích
-STR_FACE_SAVE_DONE                                              :Gương mặt yêu thích này sẽ được lưu lại trong tập tin cấu hình OpenTTD
 STR_FACE_SETTING_TOGGLE                                         :{STRING} {ORANGE}{STRING}
 STR_FACE_SETTING_NUMERIC                                        :{STRING} {ORANGE}{NUM} / {NUM}
 STR_FACE_YES                                                    :Đồng ý
@@ -2713,8 +2701,6 @@ STR_CONTENT_UNSELECT_ALL_CAPTION                                :{BLACK}Bỏ ch�
 STR_CONTENT_UNSELECT_ALL_CAPTION_TOOLTIP                        :{BLACK}Chọn tất cả các nội dung không tải về
 STR_CONTENT_SEARCH_EXTERNAL                                     :{BLACK}Tìm kiếm những trang ngoài
 STR_CONTENT_SEARCH_EXTERNAL_TOOLTIP                             :{BLACK}Tìm những nội dung không có sẵn trên cổng dịch vụ OpenTTD tại những trang không trực thuộc OpenTTD
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER_CAPTION                  :{WHITE}Bạn đang thoát khỏi OpenTTD!
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER                          :{WHITE}Có nhiều điều kiện và điều khoản để tải nội dung từ những trang ngoài.{}Bạn sẽ phải tham khảo trang ngoài để đọc những hướng dẫn cài nội dung vào OpenTTD.{}Bạn có muốn tiếp tục?
 STR_CONTENT_FILTER_TITLE                                        :{BLACK}Lọc theo tên:
 STR_CONTENT_OPEN_URL                                            :{BLACK}Trang web
 STR_CONTENT_OPEN_URL_TOOLTIP                                    :{BLACK}Đến trang web của nội dung này
@@ -2728,7 +2714,6 @@ STR_CONTENT_DETAIL_SUBTITLE_UNSELECTED                          :{SILVER}Bạn c
 STR_CONTENT_DETAIL_SUBTITLE_SELECTED                            :{SILVER}Bạn đã chọn cái này để tải về
 STR_CONTENT_DETAIL_SUBTITLE_AUTOSELECTED                        :{SILVER}Cái này phụ thuộc, cần phải chọn để tải về
 STR_CONTENT_DETAIL_SUBTITLE_ALREADY_HERE                        :{SILVER}Bạn đã có cái này rồi
-STR_CONTENT_DETAIL_SUBTITLE_DOES_NOT_EXIST                      :{SILVER}Nội dung này không có và không thể tải về trong OpenTTD
 
 STR_CONTENT_DETAIL_UPDATE                                       :{SILVER}Cái này thay thế cái đã có {STRING}
 STR_CONTENT_DETAIL_NAME                                         :{SILVER}Tên: {WHITE}{STRING}
@@ -2740,7 +2725,6 @@ STR_CONTENT_DETAIL_FILESIZE                                     :{SILVER}Kích t
 STR_CONTENT_DETAIL_SELECTED_BECAUSE_OF                          :{SILVER}Được chọn vì: {WHITE}{STRING}
 STR_CONTENT_DETAIL_DEPENDENCIES                                 :{SILVER}Các phụ thuộc: {WHITE}{STRING}
 STR_CONTENT_DETAIL_TAGS                                         :{SILVER}Tags: {WHITE}{STRING}
-STR_CONTENT_NO_ZLIB                                             :OpenTTD được biên dịch mà không có hỗ trợ 'zlib'...
 STR_CONTENT_NO_ZLIB_SUB                                         :không thể tải nội dung này!
 
 # Order of these is important!
@@ -2769,13 +2753,10 @@ STR_CONTENT_ERROR_COULD_NOT_DOWNLOAD_FILE_NOT_WRITABLE          :không ghi đư
 STR_CONTENT_ERROR_COULD_NOT_EXTRACT                             :Không thể giải nén file đã tải
 
 STR_MISSING_GRAPHICS_SET_CAPTION                                :{WHITE}Thiếu thành phần đồ họa
-STR_MISSING_GRAPHICS_SET_MESSAGE                                :{BLACK}OpenTTD cần các thành phần đồ họa để hoạt động nhưng hiện tại chưa có sẵn. Bạn có cho phép OpenTTD tải về và cài đặt chúng?
 STR_MISSING_GRAPHICS_YES_DOWNLOAD                               :{BLACK}Có, cho phép tải chúng
-STR_MISSING_GRAPHICS_NO_QUIT                                    :{BLACK}Không, thoát OpenTTD
 
 STR_MISSING_GRAPHICS_ERROR_TITLE                                :{WHITE}Tải xuống thất bại
 STR_MISSING_GRAPHICS_ERROR                                      :{BLACK}Có lỗi khi tải gói đồ họa.{}Vui lòng tải và cài bằng tay.
-STR_MISSING_GRAPHICS_ERROR_QUIT                                 :{BLACK}Thoát OpenTTD
 
 # Transparency settings window
 STR_TRANSPARENCY_CAPTION                                        :{WHITE}Tuỳ Hiệu Ứng Trong Suốt
@@ -3319,9 +3300,7 @@ STR_LAI_OBJECT_DESCRIPTION_COMPANY_HEADQUARTERS                 :Trụ sở côn
 STR_LAI_OBJECT_DESCRIPTION_COMPANY_OWNED_LAND                   :Đất công ty sở hữu
 
 # About OpenTTD window
-STR_ABOUT_OPENTTD                                               :{WHITE}Về OpenTTD
 STR_ABOUT_ORIGINAL_COPYRIGHT                                    :{BLACK}Nguyên tác bản quyền {COPYRIGHT} 1995 Chris Sawyer, All rights reserved
-STR_ABOUT_VERSION                                               :{BLACK}OpenTTD phiên bản {REV}
 STR_ABOUT_COPYRIGHT_OPENTTD                                     :{BLACK}OpenTTD {COPYRIGHT} 2002-{STRING} Nhóm OpenTTD
 
 # Framerate display window
@@ -3452,7 +3431,6 @@ STR_MAPGEN_QUANTITY_OF_RIVERS                                   :{BLACK}Số sô
 STR_MAPGEN_SMOOTHNESS                                           :{BLACK}Độ phẳng phiu:
 STR_MAPGEN_VARIETY                                              :{BLACK}Phân bổ sự đa dạng:
 STR_MAPGEN_GENERATE                                             :{WHITE}Khởi tạo
-STR_MAPGEN_GENERATE_TOOLTIP                                     :{BLACK}Kiến tạo thế giới và chơi với OpenTTD!
 STR_MAPGEN_NEWGRF_SETTINGS                                      :{BLACK}Thiết lập NewGRF
 STR_MAPGEN_NEWGRF_SETTINGS_TOOLTIP                              :{BLACK}Hiển thị tùy chỉnh NewGRF
 STR_MAPGEN_AI_SETTINGS                                          :{BLACK}Thiết lập AI
@@ -3507,7 +3485,6 @@ STR_MAPGEN_HEIGHTMAP_ROTATION                                   :{BLACK}Xoay b�
 STR_MAPGEN_HEIGHTMAP_NAME                                       :{BLACK}Tên bản đồ địa hình:
 STR_MAPGEN_HEIGHTMAP_NAME_TOOLTIP                               :{BLACK}Tên tập tin bản đồ địa hình
 STR_MAPGEN_HEIGHTMAP_SIZE_LABEL                                 :{BLACK}Cỡ:
-STR_MAPGEN_HEIGHTMAP_SIZE_LABEL_TOOLTIP                         :{BLACK}Độ lớn của bản đồ địa hình. Để có kết quả tốt nhất, mỗi cạnh nên vừa với các độ dài cạnh của OpenTTD như là 256, 512, 1024, vv.
 STR_MAPGEN_HEIGHTMAP_SIZE                                       :{ORANGE}{NUM} x {NUM}
 
 STR_MAPGEN_TERRAIN_TYPE_QUERY_CAPT                              :{WHITE}Độ cao tối đa của đỉnh
@@ -3698,7 +3675,6 @@ STR_NEWGRF_ERROR_INDPROD_CALLBACK                               :Lại nhà máy
 
 # NewGRF related 'general' warnings
 STR_NEWGRF_POPUP_CAUTION_CAPTION                                :{WHITE}Chú Ý!
-STR_NEWGRF_CONFIRMATION_TEXT                                    :{YELLOW}Bạn định tiến hành thay đổi cho ván chơi đang chơi; việc này có thể làm lỗi hoặc treo OpenTTD. Đừng thông báo vễ những lỗi dạng này.{}Bạn có chắc sẽ thực hiện không?
 
 STR_NEWGRF_DUPLICATE_GRFID                                      :Không thể thêm file: trùng lặp NewGRF ID
 STR_NEWGRF_COMPATIBLE_LOADED                                    :{ORANGE}File hợp lệ không tìm thấy (GRF tương thích được nạp thay)
@@ -3707,7 +3683,6 @@ STR_NEWGRF_TOO_MANY_NEWGRFS                                     :Không thể th
 STR_NEWGRF_COMPATIBLE_LOAD_WARNING                              :GRF tương thích được nạp thay cho các file thiếu
 STR_NEWGRF_DISABLED_WARNING                                     :Các GRF file thiếu đã bị bỏ qua
 STR_NEWGRF_UNPAUSE_WARNING_TITLE                                :{YELLOW}Thiếu NewGRF file
-STR_NEWGRF_UNPAUSE_WARNING                                      :{WHITE}Tiếp tục có thể làm treo OpenTTD. Không nên báo cáo lỗi sau khi bị treo.{}Bạn có chắc là tiếp tục chơi?
 
 # NewGRF status
 STR_NEWGRF_LIST_NONE                                            :Không
@@ -5047,7 +5022,6 @@ STR_TEXTFILE_README_CAPTION                                     :{WHITE}Readme c
 STR_TEXTFILE_CHANGELOG_CAPTION                                  :{WHITE}Lịch sử thay đổi của {STRING} {STRING}
 STR_TEXTFILE_LICENCE_CAPTION                                    :{WHITE}Giấy phép của {STRING} {STRING}
 STR_TEXTFILE_SURVEY_RESULT_CAPTION                              :{WHITE}Xem trước kết quả khảo sát
-STR_TEXTFILE_GAME_MANUAL_CAPTION                                :{WHITE}Tài liệu OpenTTD '{STRING}'
 
 
 # Vehicle loading indicators

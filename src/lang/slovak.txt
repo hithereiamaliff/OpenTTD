@@ -472,12 +472,10 @@ STR_TOOLBAR_TOOLTIP_BUILD_AIRPORTS                              :{BLACK}Výstavb
 STR_TOOLBAR_TOOLTIP_LANDSCAPING                                 :{BLACK}Otvoriť panel nástrojov pre úpravy terénu, výsadbu stromov, alebo pokladanie značiek
 STR_TOOLBAR_TOOLTIP_SHOW_SOUND_MUSIC_WINDOW                     :{BLACK}Otvoriť okno zvuku a hudby
 STR_TOOLBAR_TOOLTIP_SHOW_LAST_MESSAGE_NEWS                      :{BLACK}Otvoriť poslednú správu/novinku, históriu správ alebo vymazať všetky správy
-STR_TOOLBAR_TOOLTIP_LAND_BLOCK_INFORMATION                      :{BLACK}Otvoriť informácie o pozemku, menu snímkov obrazovky, o OpenTTD a nástroje pre vývojárov
 STR_TOOLBAR_TOOLTIP_SWITCH_TOOLBAR                              :{BLACK}Prepnúť panely nástrojov
 
 # Extra tooltips for the scenario editor toolbar
 STR_SCENEDIT_TOOLBAR_SAVE_SCENARIO_LOAD_SCENARIO_TOOLTIP        :{BLACK}Uložiť scenár, nahrať scenár, opustiť editor scenára, ukončiť
-STR_SCENEDIT_TOOLBAR_OPENTTD                                    :{YELLOW}OpenTTD
 STR_SCENEDIT_TOOLBAR_SCENARIO_EDITOR                            :{YELLOW}Editor scenára
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_BACKWARD_TOOLTIP    :{BLACK}Posunúť začiatok o rok dozadu
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_FORWARD_TOOLTIP     :{BLACK}Posunúť začiatok o rok dopredu
@@ -593,7 +591,6 @@ STR_ABOUT_MENU_TOGGLE_CONSOLE                                   :Zobraziť / skr
 STR_ABOUT_MENU_AI_DEBUG                                         :Ladenie AI/skriptu
 STR_ABOUT_MENU_SCREENSHOT                                       :Snímka obrazovky
 STR_ABOUT_MENU_SHOW_FRAMERATE                                   :Zobraziť snímkovú frekvenciu
-STR_ABOUT_MENU_ABOUT_OPENTTD                                    :O hre 'OpenTTD'
 STR_ABOUT_MENU_SPRITE_ALIGNER                                   :Sprite zarovnávač
 STR_ABOUT_MENU_TOGGLE_BOUNDING_BOXES                            :Prepnúť okrajové boxy
 STR_ABOUT_MENU_TOGGLE_DIRTY_BLOCKS                              :Prepnutie zafarbenia blokov hliny
@@ -1096,7 +1093,6 @@ STR_GAME_OPTIONS_LANGUAGE_TOOLTIP                               :Výber jazyka r
 STR_GAME_OPTIONS_LANGUAGE_PERCENTAGE                            :{STRING} ({NUM}% hotovo)
 
 STR_GAME_OPTIONS_FULLSCREEN                                     :Celá obrazovka
-STR_GAME_OPTIONS_FULLSCREEN_TOOLTIP                             :Zaškrtnite, ak chcete hrať OpenTTD na celej obrazovke
 
 STR_GAME_OPTIONS_RESOLUTION                                     :Rozlíšenie obrazovky
 STR_GAME_OPTIONS_RESOLUTION_TOOLTIP                             :Výber rozlíšenia obrazovky
@@ -1104,7 +1100,6 @@ STR_GAME_OPTIONS_RESOLUTION_OTHER                               :iné
 STR_GAME_OPTIONS_RESOLUTION_ITEM                                :{NUM}x{NUM}
 
 STR_GAME_OPTIONS_VIDEO_ACCELERATION                             :Hardvérové zrýchlenie
-STR_GAME_OPTIONS_VIDEO_ACCELERATION_TOOLTIP                     :Zaškrtnutím políčka dovolíte, aby sa OpenTTD pokúsilo použiť hardvérové zrýchlenie. Zmena nastavenia sa uplatní až po reštartovaní hry
 STR_GAME_OPTIONS_VIDEO_ACCELERATION_RESTART                     :{WHITE}Nastavenie sa uplatní až po reštartovaní hry
 
 STR_GAME_OPTIONS_VIDEO_VSYNC                                    :VSync
@@ -2264,14 +2259,11 @@ STR_INTRO_TOOLTIP_GAME_OPTIONS                                  :{BLACK}Otvoriť
 STR_INTRO_TOOLTIP_HIGHSCORE                                     :{BLACK}Otvoriť tabuľku hráčov s najvyšším skóre
 STR_INTRO_TOOLTIP_HELP                                          :{BLACK}Získajte prístup k dokumentácií a on-line zdrojom
 STR_INTRO_TOOLTIP_ONLINE_CONTENT                                :{BLACK}Skontrolovať nový a aktualizovaný obsah pre stiahnutie
-STR_INTRO_TOOLTIP_QUIT                                          :{BLACK}Ukončiť 'OpenTTD'
 
 STR_INTRO_BASESET                                               :{BLACK}Vo vybranej základnej sade grafiky chýba {NUM} prv{P ok ky kov}. Prosím skontrolujte aktualizácie sady grafiky.
-STR_INTRO_TRANSLATION                                           :{BLACK}V preklade chýba {NUM} reťaz{P ec ce cov}. Prosím pomôžte urobiť OpenTTD lepším a prihláste sa ako prekladateľ. Viac detailov v readme.txt
 
 # Quit window
 STR_QUIT_CAPTION                                                :{WHITE}Ukončiť
-STR_QUIT_ARE_YOU_SURE_YOU_WANT_TO_EXIT_OPENTTD                  :{YELLOW}Ste si istý, že chcete ukončiť OpenTTD?
 STR_QUIT_YES                                                    :{BLACK}Áno
 STR_QUIT_NO                                                     :{BLACK}Nie
 
@@ -2365,7 +2357,6 @@ STR_FACE_SIMPLE                                                 :{BLACK}Jednoduc
 STR_FACE_SIMPLE_TOOLTIP                                         :{BLACK}Rýchla voľba vzhľadu
 STR_FACE_LOAD                                                   :{BLACK}Nahrať
 STR_FACE_LOAD_TOOLTIP                                           :{BLACK}Nahrať obľúbenú tvár
-STR_FACE_LOAD_DONE                                              :{WHITE}Tvoja obľúbená tvár bola nahratá z kofiguračného súboru OpenTTD.
 STR_FACE_FACECODE                                               :{BLACK}Kód tváre
 STR_FACE_FACECODE_TOOLTIP                                       :{BLACK}Zobraziť/nastaviť kód tváre
 STR_FACE_FACECODE_CAPTION                                       :{WHITE}Zobraziť a/alebo nastaviť kód tváre
@@ -2373,7 +2364,6 @@ STR_FACE_FACECODE_SET                                           :{WHITE}Nové č
 STR_FACE_FACECODE_ERR                                           :{WHITE}Nie je možné nastaviť kód tváre - povolené je číslo od 0 do 4 294 967 295!
 STR_FACE_SAVE                                                   :{BLACK}Uložiť
 STR_FACE_SAVE_TOOLTIP                                           :{BLACK}Uložiť obľúbenú tvár
-STR_FACE_SAVE_DONE                                              :{WHITE}Táto tvár bude uložená ako obľúbená do konfiguračného súboru OpenTTD
 STR_FACE_YES                                                    :áno
 STR_FACE_NO                                                     :nie
 STR_FACE_HAIR                                                   :Vlasy:
@@ -2680,8 +2670,6 @@ STR_CONTENT_UNSELECT_ALL_CAPTION                                :{BLACK}Odznači
 STR_CONTENT_UNSELECT_ALL_CAPTION_TOOLTIP                        :{BLACK}Označiť všetok obsah ktorý nemá byť stiahnutý
 STR_CONTENT_SEARCH_EXTERNAL                                     :{BLACK}Hľadanie na externých stránkach
 STR_CONTENT_SEARCH_EXTERNAL_TOOLTIP                             :{BLACK} Hľadanie obsahu nie je k dispozícii v obsahovej službe OpenTTD na stránkach, ktoré nie sú spojené s OpenTTD.
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER_CAPTION                  :{WHITE}Opúšťate OpenTTD!
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER                          :{WHITE}Pravidlá a podmienky pre sťahovanie obsahu z externých webových stránok sa líšia.{}Musíte sa obrátiť na externé webové stránky pre inštrukcie, ako inštalovať obsah do OpenTTD.{}Chcete pokračovať?
 STR_CONTENT_FILTER_TITLE                                        :{BLACK}Tag/meno filtra:
 STR_CONTENT_OPEN_URL                                            :{BLACK}Webstránka
 STR_CONTENT_OPEN_URL_TOOLTIP                                    :{BLACK}Choď na webstránku pre ďalší obsah
@@ -2695,7 +2683,6 @@ STR_CONTENT_DETAIL_SUBTITLE_UNSELECTED                          :{SILVER}Toto ni
 STR_CONTENT_DETAIL_SUBTITLE_SELECTED                            :{SILVER}Označili ste toto pre stiahnutie
 STR_CONTENT_DETAIL_SUBTITLE_AUTOSELECTED                        :{SILVER}Táto závislosť bola označená na stiahnutie
 STR_CONTENT_DETAIL_SUBTITLE_ALREADY_HERE                        :{SILVER}Už to máte
-STR_CONTENT_DETAIL_SUBTITLE_DOES_NOT_EXIST                      :{SILVER}Tento obsah je neznámy a nemôže byť stiahnutý v OpenTTD
 
 STR_CONTENT_DETAIL_UPDATE                                       :{SILVER}Toto je náhrada za existujúci {STRING}
 STR_CONTENT_DETAIL_NAME                                         :{SILVER}Meno: {WHITE}{STRING}
@@ -2707,7 +2694,6 @@ STR_CONTENT_DETAIL_FILESIZE                                     :{SILVER}Veľkos
 STR_CONTENT_DETAIL_SELECTED_BECAUSE_OF                          :{SILVER}Označené pretože: {WHITE}{STRING}
 STR_CONTENT_DETAIL_DEPENDENCIES                                 :{SILVER}Závislosti: {WHITE}{STRING}
 STR_CONTENT_DETAIL_TAGS                                         :{SILVER}Tagy: {WHITE}{STRING}
-STR_CONTENT_NO_ZLIB                                             :{WHITE}OpenTTD je skompilované bez "zlib" podpory...
 STR_CONTENT_NO_ZLIB_SUB                                         :{WHITE}... stiahnutie obsahu nie je možné!
 
 # Order of these is important!
@@ -2736,13 +2722,10 @@ STR_CONTENT_ERROR_COULD_NOT_DOWNLOAD_FILE_NOT_WRITABLE          :{WHITE}... do s
 STR_CONTENT_ERROR_COULD_NOT_EXTRACT                             :{WHITE}Nemôžem rozbaliť stiahnutý súbor
 
 STR_MISSING_GRAPHICS_SET_CAPTION                                :{WHITE}Chýbajúca grafika
-STR_MISSING_GRAPHICS_SET_MESSAGE                                :{BLACK}OpenTTD potrebuje grafické súbory ale žiadne nenašiel. Povolíte aby OpenTTD stiahol a nainštaloval tieto súbory?
 STR_MISSING_GRAPHICS_YES_DOWNLOAD                               :{BLACK}Áno, stiahnite si grafiku
-STR_MISSING_GRAPHICS_NO_QUIT                                    :{BLACK}Nie, ukončiť OpenTTD
 
 STR_MISSING_GRAPHICS_ERROR_TITLE                                :{WHITE}Sťahovanie zlyhalo
 STR_MISSING_GRAPHICS_ERROR                                      :{BLACK}Sťahovanie grafiky zlyhalo.{}Prosím stiahnite si grafiku manuálne.
-STR_MISSING_GRAPHICS_ERROR_QUIT                                 :{BLACK}Ukončiť OpenTTD
 
 # Transparency settings window
 STR_TRANSPARENCY_CAPTION                                        :{WHITE}Nastavenia priehľadnosti
@@ -3209,9 +3192,7 @@ STR_LAI_OBJECT_DESCRIPTION_COMPANY_HEADQUARTERS                 :Sídlo spoločn
 STR_LAI_OBJECT_DESCRIPTION_COMPANY_OWNED_LAND                   :Spoločnosťou vlastnený pozemok
 
 # About OpenTTD window
-STR_ABOUT_OPENTTD                                               :{WHITE}OpenTTD
 STR_ABOUT_ORIGINAL_COPYRIGHT                                    :{BLACK}Pôvodný copyright: {COPYRIGHT} 1995 Chris Sawyer, všetky práva vyhradené
-STR_ABOUT_VERSION                                               :{BLACK}OpenTTD verzia {REV}
 STR_ABOUT_COPYRIGHT_OPENTTD                                     :{BLACK}OpenTTD {COPYRIGHT} 2002-{STRING} team OpenTTD
 
 # Framerate display window
@@ -3334,7 +3315,6 @@ STR_MAPGEN_QUANTITY_OF_RIVERS                                   :{BLACK}Rieky:
 STR_MAPGEN_SMOOTHNESS                                           :{BLACK}Členitosť:
 STR_MAPGEN_VARIETY                                              :{BLACK}Rozmanitosť distribúcie:
 STR_MAPGEN_GENERATE                                             :{WHITE}Generovať
-STR_MAPGEN_GENERATE_TOOLTIP                                     :{BLACK}Vytvorte si svet a hrajte OpenTTD!
 STR_MAPGEN_NEWGRF_SETTINGS                                      :{BLACK}Nastavenia NewGRF
 STR_MAPGEN_NEWGRF_SETTINGS_TOOLTIP                              :{BLACK}Otvoriť nastavenia NewGRF
 STR_MAPGEN_AI_SETTINGS                                          :{BLACK}Nastavenia AI
@@ -3384,7 +3364,6 @@ STR_MAPGEN_HEIGHTMAP_ROTATION                                   :{BLACK}Orientá
 STR_MAPGEN_HEIGHTMAP_NAME                                       :{BLACK}Názov výškovej mapy:
 STR_MAPGEN_HEIGHTMAP_NAME_TOOLTIP                               :{BLACK}Názov obrazového súboru s výškovou mapou
 STR_MAPGEN_HEIGHTMAP_SIZE_LABEL                                 :{BLACK}Veľkosť:
-STR_MAPGEN_HEIGHTMAP_SIZE_LABEL_TOOLTIP                         :{BLACK}Veľkosť zdrojového obrázka výškovej mapy. Aby ste dosiahli čo najlepšie výsledky, každý okraj by mal zodpovedať dostupnej dĺžke okraja mapy v OpenTTD, ako napríklad 256, 512, 1024 atď.
 STR_MAPGEN_HEIGHTMAP_SIZE                                       :{ORANGE}{NUM} x {NUM}
 
 STR_MAPGEN_TERRAIN_TYPE_QUERY_CAPT                              :{WHITE}Cieľová výška vrcholu
@@ -3564,7 +3543,6 @@ STR_NEWGRF_ERROR_INDPROD_CALLBACK                               :Neplatný výsl
 
 # NewGRF related 'general' warnings
 STR_NEWGRF_POPUP_CAUTION_CAPTION                                :{WHITE}Upozornenie!
-STR_NEWGRF_CONFIRMATION_TEXT                                    :{YELLOW}Chystáte sa vykonať zmeny počas spustenej hry, čo môže spôsobiť pád hry alebo poškodiť uloženú hru. Neposielajte chybové hlásenia o tejto skutočnosti.{}Ste si naozaj istý, že chcete zmeny vykonať?
 
 STR_NEWGRF_DUPLICATE_GRFID                                      :{WHITE}Nie je možné pridať súbor: duplicitné GRF ID
 STR_NEWGRF_COMPATIBLE_LOADED                                    :{ORANGE}Príslušný súbor nenájdený (použitý kompatibilný GRF)
@@ -3573,7 +3551,6 @@ STR_NEWGRF_TOO_MANY_NEWGRFS                                     :{WHITE}Nie je m
 STR_NEWGRF_COMPATIBLE_LOAD_WARNING                              :{WHITE}Kompatibilné súbory GRF použité namiesto chýbajúcich
 STR_NEWGRF_DISABLED_WARNING                                     :{WHITE}Chýbajúce súbory GRF boli vypnuté
 STR_NEWGRF_UNPAUSE_WARNING_TITLE                                :{YELLOW}Chýba(jú) GRF súbor(y)
-STR_NEWGRF_UNPAUSE_WARNING                                      :{WHITE}Odpauzovanie môže spôsobit pád OpenTTD. Nezaznamenávajte nasledujúce chyby.{}Naozaj chcete odpauzovat?
 
 # NewGRF status
 STR_NEWGRF_LIST_NONE                                            :Žiadne
@@ -4858,7 +4835,6 @@ STR_TEXTFILE_README_CAPTION                                     :{WHITE}{STRING}
 STR_TEXTFILE_CHANGELOG_CAPTION                                  :{WHITE}{STRING} log zmien {STRING}
 STR_TEXTFILE_LICENCE_CAPTION                                    :{WHITE}{STRING} licencia {STRING}
 STR_TEXTFILE_SURVEY_RESULT_CAPTION                              :{WHITE}Náhľad výsledkov prieskumu
-STR_TEXTFILE_GAME_MANUAL_CAPTION                                :{WHITE}OpenTTD dokument '{STRING}'
 
 
 # Vehicle loading indicators

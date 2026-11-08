@@ -1,4 +1,8 @@
-# OpenTTD city-builder fork: feasibility and plan
+# Wira Bandar PC (a fork of OpenTTD): feasibility and plan
+
+Since 2026-11-08 this fork is called Wira Bandar PC: a fork of OpenTTD,
+OpenTTD's code with changes, not a game made from scratch (see "Done: the
+name Wira Bandar" below). The rest of this file was written as "the fork".
 
 Goal: add SimCity-style city-building depth to OpenTTD (traffic control,
 zoning, city services and so on), adapted to OpenTTD's transport-company game,
@@ -2401,6 +2405,54 @@ to the tribunal of the Law of the Sea in 2003).
   the region, English names); the federal territory's town window; the
   refusal to reclaim land in a region's waters.
 
+## Done: the name Wira Bandar (a fork of OpenTTD)
+
+The owner picked the name Wira Bandar ("town hero") for this game and for a
+future phone game (in the fork-future session), then said to rename the PC
+game here, with two calls: its own folder, with the settings and saves
+copied over from OpenTTD's, and the GitHub repo renamed to `wirabandar`. And:
+wherever it is named, say it is a fork of OpenTTD, so it never claims to be
+made from scratch.
+
+- Licence: OpenTTD is free software under the GNU GPL version 2, which lets
+  anyone change it and share it under another name, as long as the result
+  stays under the GPL with its source code available, and the copyright
+  notices and credits stay. Wira Bandar keeps OpenTTD's licence (COPYING.md),
+  credits (About window) and copyright lines; its source is the public repo.
+  A name of its own also keeps people from taking it for OpenTTD or reporting
+  its bugs to the OpenTTD team.
+- In the game: the window title "Wira Bandar PC (version) (a fork of
+  OpenTTD)"; a WIRA BANDAR wordmark over the main menu instead of OpenTTD's
+  letters (sprite 300); the menu's caption "Wira Bandar PC, a fork of
+  OpenTTD" and version line; the About window ("About Wira Bandar PC": a fork
+  of OpenTTD, OpenTTD's code with changes, not made from scratch, OpenTTD's
+  credits, the source link, OpenTTD's website and copyright); "Wira Bandar"
+  where text means this game (quit, full screen, missing graphics and the
+  like). Text that means OpenTTD itself keeps the name: its content service,
+  NewGRF version checks, the help window's website, comparisons in help
+  texts. The other languages lost their translations of the renamed lines
+  (1,394 lines in 64 files), so those lines show in English in every
+  language; the note on missing strings now says the city and transit
+  features are in English only.
+- Windows: `wirabandar.exe` with its own icon (a skyline and a red bus,
+  `os/windows/make_wirabandar_icon.py`) and file details ("Wira Bandar PC, a
+  fork of OpenTTD"); the zip `wirabandar-windows-x64.zip` from the release
+  `latest`. Test builds on Linux keep the program name `openttd`, which the
+  test kit expects.
+- Folder: `Documents\Wira Bandar` instead of `Documents\OpenTTD`. The first
+  time it starts (while its folder has no `openttd.cfg` and OpenTTD's has
+  one) it copies the settings files (`openttd.cfg`, `hotkeys.cfg`,
+  `windows.cfg`, `private.cfg`, `secrets.cfg`, `favs.cfg`, `hs.dat`) and the
+  `save` folder; it moves and deletes nothing, and keeps what is already
+  there. OpenTTD's folder and its `content_download` stay search paths
+  (searched last), so the graphics, NewGRFs, AIs, game scripts and scenarios
+  installed for OpenTTD are still found. Unit test `CopyOpenTTDFolder`.
+- OpenTTD's opt-in survey is off: it went to OpenTTD's servers, and is for
+  OpenTTD's own builds.
+- Internals keep their names (source files, `openttd.cfg`, the `.csav`
+  saves), so saves load as before and the fork can still take OpenTTD's
+  updates.
+
 ## Roadmap
 
 Sizes are rough: S = one session, M = a few, L = many, XL = a project in itself.
@@ -2421,22 +2473,25 @@ new ideas.
 
 ## Getting it onto the owner's computer (Windows)
 
-- The owner plays on Windows. The code goes to a GitHub fork of OpenTTD, and
+- The owner plays on Windows. The code goes to the GitHub repo
+  `hithereiamaliff/wirabandar` (a fork of OpenTTD), and
   `.github/workflows/city-windows.yml` builds a 64-bit Windows zip on every
-  push to `city`: a workflow artifact, plus the rolling `city-latest`
-  pre-release as a stable download link. Libraries come from vcpkg, cached in
+  push to `city`: a workflow artifact, plus the rolling `latest` pre-release
+  as a stable download link
+  (`releases/download/latest/wirabandar-windows-x64.zip`). Libraries come from vcpkg, cached in
   the Actions cache (no packages published). The exe isn't code-signed, so
   SmartScreen asks once ("More info", "Run anyway").
-- Unzip anywhere and run `openttd.exe`. It uses the same `Documents\OpenTTD`
-  folder as the normal game, so it sees the same saves, base graphics and
-  downloaded NewGRFs; its own saves are `.csav` (see ground rules).
+- Unzip anywhere and run `wirabandar.exe`. It keeps its own folder,
+  `Documents\Wira Bandar`, copies the settings and saves from
+  `Documents\OpenTTD` the first time, and still finds the base graphics and
+  downloaded NewGRFs there; its own saves are `.csav` (see ground rules).
 - Linux build exists on the VPS for testing.
 
 Savegame locations (files end in `.sav`; autosaves are in `save/autosave`):
 
 | OS | Folder |
 |---|---|
-| Windows | `Documents\OpenTTD\save` |
+| Windows | `Documents\OpenTTD\save`; Wira Bandar's in `Documents\Wira Bandar\save` |
 | macOS | `~/Documents/OpenTTD/save` |
 | Linux | `~/.local/share/openttd/save` |
 
@@ -2445,4 +2500,5 @@ Savegame locations (files end in `.sav`; autosaves are in `save/autosave`):
 1. Can you share one of your saves, so it can be tested before you play it?
 2. Which milestone next? Open: M4 part 3 is done (states were the last
    step); the rename to Wira Bandar is ready to do.
-3. A name for the fork.
+3. A name for the fork: Wira Bandar (PC: "Wira Bandar PC, a fork of
+   OpenTTD"); done 2026-11-08.

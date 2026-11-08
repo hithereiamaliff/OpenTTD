@@ -353,12 +353,10 @@ STR_TOOLBAR_TOOLTIP_BUILD_AIRPORTS                              :{BLACK}Bou flea
 STR_TOOLBAR_TOOLTIP_LANDSCAPING                                 :{BLACK}Iepenje it lânskipsark om it lân te ferheegje/ferleegje, beamen te plantsjen, etsetera
 STR_TOOLBAR_TOOLTIP_SHOW_SOUND_MUSIC_WINDOW                     :{BLACK}Lit lûd/musyk finster sjen
 STR_TOOLBAR_TOOLTIP_SHOW_LAST_MESSAGE_NEWS                      :{BLACK}Lit lêste (nijs)berjocht sjen, lit berjochtynstellings sjen
-STR_TOOLBAR_TOOLTIP_LAND_BLOCK_INFORMATION                      :{BLACK}Lânynformaasje, console, script-debug, skermôfbyldings, oer OpenTTD
 STR_TOOLBAR_TOOLTIP_SWITCH_TOOLBAR                              :{BLACK}Skeakelje tusken ark
 
 # Extra tooltips for the scenario editor toolbar
 STR_SCENEDIT_TOOLBAR_SAVE_SCENARIO_LOAD_SCENARIO_TOOLTIP        :{BLACK}Senario opslaan, senario lade, senariobouwer ferlitte, ôfslute
-STR_SCENEDIT_TOOLBAR_OPENTTD                                    :{YELLOW}Iepen TTD
 STR_SCENEDIT_TOOLBAR_SCENARIO_EDITOR                            :{YELLOW}Senariobouwer
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_BACKWARD_TOOLTIP    :{BLACK}Set it startjier 1 jier efterút
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_FORWARD_TOOLTIP     :{BLACK}Set it startjier 1 jier foarút
@@ -468,7 +466,6 @@ STR_ABOUT_MENU_TOGGLE_CONSOLE                                   :Skeakel console
 STR_ABOUT_MENU_AI_DEBUG                                         :AI/Gamescript debug
 STR_ABOUT_MENU_SCREENSHOT                                       :Skermôfbylding
 STR_ABOUT_MENU_SHOW_FRAMERATE                                   :Toan byldsnelheid
-STR_ABOUT_MENU_ABOUT_OPENTTD                                    :Oer 'OpenTTD'
 STR_ABOUT_MENU_SPRITE_ALIGNER                                   :Flakken rjochtsje
 STR_ABOUT_MENU_TOGGLE_BOUNDING_BOXES                            :Skeakel seleksjekaders oan/út
 STR_ABOUT_MENU_TOGGLE_DIRTY_BLOCKS                              :Kleurjen smoarge tegels oan/út
@@ -916,7 +913,6 @@ STR_GAME_OPTIONS_LANGUAGE                                       :Taal
 STR_GAME_OPTIONS_LANGUAGE_TOOLTIP                               :Selektearje de interfacetaal
 
 STR_GAME_OPTIONS_FULLSCREEN                                     :Folslein skerm
-STR_GAME_OPTIONS_FULLSCREEN_TOOLTIP                             :Finkje dit fakje oan om OpenTTD te boartsje yn in folslein skerm
 
 STR_GAME_OPTIONS_RESOLUTION                                     :Skermresolúsje
 STR_GAME_OPTIONS_RESOLUTION_TOOLTIP                             :Selektearje de skermresolutje om te brûken
@@ -1856,12 +1852,10 @@ STR_INTRO_TOOLTIP_TOYLAND_LANDSCAPE                             :{BLACK}Selektea
 STR_INTRO_TOOLTIP_GAME_OPTIONS                                  :{BLACK}Lit spul opsjes sjen
 STR_INTRO_TOOLTIP_HIGHSCORE                                     :{BLACK}Topskoretabel sjen litte
 STR_INTRO_TOOLTIP_ONLINE_CONTENT                                :{BLACK}Strún ynternet ôf om nije ynhâld del te heljen
-STR_INTRO_TOOLTIP_QUIT                                          :{BLACK}Slút 'OpenTTD' ôf
 
 
 # Quit window
 STR_QUIT_CAPTION                                                :{WHITE}Ôfslute
-STR_QUIT_ARE_YOU_SURE_YOU_WANT_TO_EXIT_OPENTTD                  :{YELLOW}Witte jo seker dat jo dit spul ôfslute wolle?
 STR_QUIT_YES                                                    :{BLACK}Ja
 STR_QUIT_NO                                                     :{BLACK}Nee
 
@@ -2134,7 +2128,6 @@ STR_CONTENT_TYPE_CAPTION                                        :{BLACK}Type
 STR_CONTENT_NAME_CAPTION                                        :{BLACK}Namme
 STR_CONTENT_SELECT_ALL_CAPTION                                  :{BLACK}Alles selektearje
 STR_CONTENT_UNSELECT_ALL_CAPTION                                :{BLACK}Alles deselektearje
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER_CAPTION                  :{WHITE}Do ferlitst OpenTTD!
 STR_CONTENT_OPEN_URL                                            :{BLACK}Webside besykje
 STR_CONTENT_OPEN_URL_TOOLTIP                                    :{BLACK}Webside foar dizze ynhâld besykje
 STR_CONTENT_DOWNLOAD_CAPTION                                    :{BLACK}Delhelje
@@ -2179,9 +2172,7 @@ STR_CONTENT_ERROR_COULD_NOT_EXTRACT                             :{WHITE}Kin it d
 
 STR_MISSING_GRAPHICS_SET_CAPTION                                :{WHITE}Missende ôfbyldings
 STR_MISSING_GRAPHICS_YES_DOWNLOAD                               :{BLACK}Ja, ôfbyldings delheljen
-STR_MISSING_GRAPHICS_NO_QUIT                                    :{BLACK}Nee, OpenTTD ôfslute
 
-STR_MISSING_GRAPHICS_ERROR_QUIT                                 :{BLACK}Slút OpenTTD ôf
 
 # Transparency settings window
 STR_TRANSPARENCY_CAPTION                                        :{WHITE}Trochsichtigenopsjes
@@ -2564,9 +2555,7 @@ STR_LAI_OBJECT_DESCRIPTION_COMPANY_HEADQUARTERS                 :Haadkantoar Bed
 STR_LAI_OBJECT_DESCRIPTION_COMPANY_OWNED_LAND                   :Lân fan bedriuw
 
 # About OpenTTD window
-STR_ABOUT_OPENTTD                                               :{WHITE}Oer OpenTTD
 STR_ABOUT_ORIGINAL_COPYRIGHT                                    :{BLACK}Orizjineel copyright {COPYRIGHT} 1995 Chris Sawyer, All rights reserved
-STR_ABOUT_VERSION                                               :{BLACK}OpenTTD-ferzje {REV}
 STR_ABOUT_COPYRIGHT_OPENTTD                                     :{BLACK}OpenTTD {COPYRIGHT}2002-{STRING} It OpenTTD team
 
 # Framerate display window
@@ -2824,7 +2813,6 @@ STR_NEWGRF_ERROR_INVALID_SPRITE_LAYOUT                          :Unjildich/ûnbe
 
 # NewGRF related 'general' warnings
 STR_NEWGRF_POPUP_CAUTION_CAPTION                                :{WHITE}Warskôging!
-STR_NEWGRF_CONFIRMATION_TEXT                                    :{YELLOW}Jo stean op it punt oanpassings te meitsjen yn in aktyf spul. Dit kin OpenTTD in flater oprinne litte of de it spul brekke. Fier gjin flatermeldings yn oer dizze probelem.{}Witte jo wierlik seker dat dat jo dit wolle?
 
 STR_NEWGRF_DUPLICATE_GRFID                                      :{WHITE}Kin bestând net tafoege: duplikaat GRF ID
 STR_NEWGRF_COMPATIBLE_LOADED                                    :{ORANGE}Keppele bestân koe net fûn wurde (kompatibel GRF ynladen)
@@ -2833,7 +2821,6 @@ STR_NEWGRF_TOO_MANY_NEWGRFS                                     :{WHITE}Kin best
 STR_NEWGRF_COMPATIBLE_LOAD_WARNING                              :{WHITE}Kompatibile GRF(s) ynladen foar de missende bestânen
 STR_NEWGRF_DISABLED_WARNING                                     :{WHITE}Missende GRF bestânen binne útskeakele
 STR_NEWGRF_UNPAUSE_WARNING_TITLE                                :{YELLOW}Missende GRF-bestânen
-STR_NEWGRF_UNPAUSE_WARNING                                      :{WHITE}Ferfetsje fan it spul kin in flater yn OpenTTD feroarsaaksje. Fier gjin flatermeldings yn at dit bart.{}Witte jo seker dat jo it spul ferfetjse wolle?
 
 # NewGRF status
 STR_NEWGRF_LIST_NONE                                            :gjin

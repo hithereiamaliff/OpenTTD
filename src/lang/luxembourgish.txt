@@ -412,12 +412,10 @@ STR_TOOLBAR_TOOLTIP_BUILD_AIRPORTS                              :{BLACK}Fluchhaf
 STR_TOOLBAR_TOOLTIP_LANDSCAPING                                 :{BLACK}Landschafts-Menu oder Bäm-Menu opman oder e Schëld setzen
 STR_TOOLBAR_TOOLTIP_SHOW_SOUND_MUSIC_WINDOW                     :{BLACK}Sound/Musik Fënster opman
 STR_TOOLBAR_TOOLTIP_SHOW_LAST_MESSAGE_NEWS                      :{BLACK}Weis déi lescht Meldung/Neiegkeet, Message-History oder läsch all Messagen
-STR_TOOLBAR_TOOLTIP_LAND_BLOCK_INFORMATION                      :{BLACK}Informatiounen zum Land, Screenshotmenu, OpenTTD Credits, oder Entwécklertools opman
 STR_TOOLBAR_TOOLTIP_SWITCH_TOOLBAR                              :{BLACK}Wiessel Toolbars
 
 # Extra tooltips for the scenario editor toolbar
 STR_SCENEDIT_TOOLBAR_SAVE_SCENARIO_LOAD_SCENARIO_TOOLTIP        :{BLACK}Szenario späicheren, Szenario lueden, Eraus aus dem Szenarioeditor, Eraus
-STR_SCENEDIT_TOOLBAR_OPENTTD                                    :{YELLOW}OpenTTD
 STR_SCENEDIT_TOOLBAR_SCENARIO_EDITOR                            :{YELLOW}Szenarien Editor
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_BACKWARD_TOOLTIP    :{BLACK}Änner de Startdatum 1 Joer nohannen
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_FORWARD_TOOLTIP     :{BLACK}Änner de Startdatum 1 Joer no vir
@@ -542,7 +540,6 @@ STR_ABOUT_MENU_TOGGLE_CONSOLE                                   :Schalt d'Konsol
 STR_ABOUT_MENU_AI_DEBUG                                         :KI / Spill-Script Debug
 STR_ABOUT_MENU_SCREENSHOT                                       :Screenshot (Ctrl+S)
 STR_ABOUT_MENU_SHOW_FRAMERATE                                   :Biller pro Sekonn uweisen
-STR_ABOUT_MENU_ABOUT_OPENTTD                                    :Iwwert 'OpenTTD'
 STR_ABOUT_MENU_SPRITE_ALIGNER                                   :Sprite Alignéirer
 STR_ABOUT_MENU_TOGGLE_BOUNDING_BOXES                            :Schalt Zeeche-Boxen em
 STR_ABOUT_MENU_TOGGLE_DIRTY_BLOCKS                              :Knaschteg blocks fierwen emschalten
@@ -1063,7 +1060,6 @@ STR_GAME_OPTIONS_LANGUAGE_TOOLTIP                               :Wielt d'Interfa
 STR_GAME_OPTIONS_LANGUAGE_PERCENTAGE                            :{STRING} ({NUM}% fäerdeg)
 
 STR_GAME_OPTIONS_FULLSCREEN                                     :Vollbild
-STR_GAME_OPTIONS_FULLSCREEN_TOOLTIP                             :Uschalte fir OpenTTD am Vollbild ze spillen
 
 STR_GAME_OPTIONS_RESOLUTION                                     :Bildopléisung
 STR_GAME_OPTIONS_RESOLUTION_TOOLTIP                             :Wielt d'Bildopléisung
@@ -1071,7 +1067,6 @@ STR_GAME_OPTIONS_RESOLUTION_OTHER                               :Aaner
 STR_GAME_OPTIONS_RESOLUTION_ITEM                                :{NUM}x{NUM}
 
 STR_GAME_OPTIONS_VIDEO_ACCELERATION                             :Hardwarebeschleunegung
-STR_GAME_OPTIONS_VIDEO_ACCELERATION_TOOLTIP                     :Uschalten, dass OpenTTD Hardwarebeschleunigung dierf notzen. Wäert just geännert ginn wann d'Spill nei gestart gëtt
 STR_GAME_OPTIONS_VIDEO_ACCELERATION_RESTART                     :{WHITE}D'Astellung huet réicht en Afloss no engem Neistart vum Spill
 
 STR_GAME_OPTIONS_VIDEO_VSYNC                                    :VSync
@@ -2243,8 +2238,6 @@ STR_VIDEO_DRIVER_ERROR_NO_HARDWARE_ACCELERATION                 :... keng kompat
 STR_VIDEO_DRIVER_ERROR_HARDWARE_ACCELERATION_CRASH              :GPU driver huet d'Spill gecrasht. Hardwarebeschleunegung ausgeschalt
 
 # Intro window
-STR_INTRO_CAPTION                                               :{WHITE}OpenTTD
-STR_INTRO_VERSION                                               :OpenTTD {REV}
 
 STR_INTRO_NEW_GAME                                              :{BLACK}Neit Spill
 STR_INTRO_LOAD_GAME                                             :{BLACK}Spill lueden
@@ -2275,14 +2268,11 @@ STR_INTRO_TOOLTIP_GAME_OPTIONS                                  :{BLACK}Spillopt
 STR_INTRO_TOOLTIP_HIGHSCORE                                     :{BLACK}Beschtelëscht opman
 STR_INTRO_TOOLTIP_HELP                                          :{BLACK}Hei kritt een Dokumentatiounen an online Ressourcen
 STR_INTRO_TOOLTIP_ONLINE_CONTENT                                :{BLACK}Check op neien Inhalt kann erofgelude ginn
-STR_INTRO_TOOLTIP_QUIT                                          :{BLACK}Aus 'OpenTTD' eraus goen
 
 STR_INTRO_BASESET                                               :{BLACK}Dem grad ausgewielte Basis Grafikset fehlen {NUM} Sprite{P "" s}. W.e.g. no Updates fir dëse Set sichen.
-STR_INTRO_TRANSLATION                                           :{BLACK}Dës Iwwersetzung huet {NUM} String{P "" s}. Hëllef OpenTTD besser ze man andems du dech als Iwwersetzer mells! Lies readme.txt fir d'Detailer.
 
 # Quit window
 STR_QUIT_CAPTION                                                :{WHITE}Eraus
-STR_QUIT_ARE_YOU_SURE_YOU_WANT_TO_EXIT_OPENTTD                  :{YELLOW}Bass du sécher, dass du aus OpenTTD eraus wëlls?
 STR_QUIT_YES                                                    :{BLACK}Jo
 STR_QUIT_NO                                                     :{BLACK}Nee
 
@@ -2377,7 +2367,6 @@ STR_FACE_SIMPLE                                                 :{BLACK}Einfach
 STR_FACE_SIMPLE_TOOLTIP                                         :{BLACK}Einfach Gesiichtsauswiel
 STR_FACE_LOAD                                                   :{BLACK}Lueden
 STR_FACE_LOAD_TOOLTIP                                           :{BLACK}Favoriséiert Gesiicht lueden
-STR_FACE_LOAD_DONE                                              :D'favoriséiert Gesiicht ass aus der OpenTTD Konfiguratiounsdatei geluede ginn
 STR_FACE_FACECODE                                               :{BLACK}Gesiichtscode
 STR_FACE_FACECODE_TOOLTIP                                       :{BLACK}Kuckt a wielt de Gesiichtscode vum Firmepresident
 STR_FACE_FACECODE_CAPTION                                       :{WHITE}Kuckt a wielt de Gesiichtscode
@@ -2385,7 +2374,6 @@ STR_FACE_FACECODE_SET                                           :Neit Gesiicht v
 STR_FACE_FACECODE_ERR                                           :Konnt de Gesiichtscode net astellen - muss e gültege Label an Nummer sinn
 STR_FACE_SAVE                                                   :{BLACK}Späicheren
 STR_FACE_SAVE_TOOLTIP                                           :{BLACK}Späichert favoriséiert Gesiicht
-STR_FACE_SAVE_DONE                                              :Dëst Gesiicht gëtt als favoriséiert an der OpenTTD Konfiguratiounsdatei gespäichert
 STR_FACE_SETTING_TOGGLE                                         :{STRING} {ORANGE}{STRING}
 STR_FACE_SETTING_NUMERIC                                        :{STRING} {ORANGE}{NUM} / {NUM}
 STR_FACE_YES                                                    :Jo
@@ -2700,8 +2688,6 @@ STR_CONTENT_UNSELECT_ALL_CAPTION                                :{BLACK}Alles of
 STR_CONTENT_UNSELECT_ALL_CAPTION_TOOLTIP                        :{BLACK}Alles markéiren fir net downzeloaden
 STR_CONTENT_SEARCH_EXTERNAL                                     :{BLACK}Extern Websäiten durchsichen
 STR_CONTENT_SEARCH_EXTERNAL_TOOLTIP                             :{BLACK}Sich Inhalter déi net op der OpenTTD Downloadwebsäit stin op aneren Websäiten
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER_CAPTION                  :{WHITE}Du verléiss OpenTTD!
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER                          :{WHITE}Terms and conditions fir Inhalter vun externe Websäiten ze downloade goufe geännert.{}Du muss op där Säit nokucken wéi een den Inhalt installéiert.{}Wellsde weiderman?
 STR_CONTENT_FILTER_TITLE                                        :{BLACK}Tag-/Nummfilter:
 STR_CONTENT_OPEN_URL                                            :{BLACK}Websäit
 STR_CONTENT_OPEN_URL_TOOLTIP                                    :{BLACK}Besicht d'Websäit vun dësem Inhalt
@@ -2715,7 +2701,6 @@ STR_CONTENT_DETAIL_SUBTITLE_UNSELECTED                          :{SILVER}Dest go
 STR_CONTENT_DETAIL_SUBTITLE_SELECTED                            :{SILVER}Du hues dest fir den Download gewielt
 STR_CONTENT_DETAIL_SUBTITLE_AUTOSELECTED                        :{SILVER}Des Ofhängegkeet gouf ausgewielt fir den Download
 STR_CONTENT_DETAIL_SUBTITLE_ALREADY_HERE                        :{SILVER}Du hues dest schon
-STR_CONTENT_DETAIL_SUBTITLE_DOES_NOT_EXIST                      :{SILVER}Dësen Inhalt ass net bekannt an kann net an OpenTTD downgeload ginn
 
 STR_CONTENT_DETAIL_UPDATE                                       :{SILVER}Dest ass en Austausch fir en existent/en {STRING}
 STR_CONTENT_DETAIL_NAME                                         :{SILVER}Numm: {WHITE}{STRING}
@@ -2727,7 +2712,6 @@ STR_CONTENT_DETAIL_FILESIZE                                     :{SILVER}Downloa
 STR_CONTENT_DETAIL_SELECTED_BECAUSE_OF                          :{SILVER}Ausgewielt wéinst: {WHITE}{STRING}
 STR_CONTENT_DETAIL_DEPENDENCIES                                 :{SILVER}Ofhängegkeeten: {WHITE}{STRING}
 STR_CONTENT_DETAIL_TAGS                                         :{SILVER}Tags: {WHITE}{STRING}
-STR_CONTENT_NO_ZLIB                                             :OpenTTD ass ouni "zlib" Support compiléiert...
 STR_CONTENT_NO_ZLIB_SUB                                         :Inhalt eroflueden ass net méiglech!
 
 # Order of these is important!
@@ -2756,13 +2740,10 @@ STR_CONTENT_ERROR_COULD_NOT_DOWNLOAD_FILE_NOT_WRITABLE          :Datei net besch
 STR_CONTENT_ERROR_COULD_NOT_EXTRACT                             :Konnt d'erofgelueden Datei net dekompriméiren
 
 STR_MISSING_GRAPHICS_SET_CAPTION                                :{WHITE}Feelend Grafiken
-STR_MISSING_GRAPHICS_SET_MESSAGE                                :{BLACK}OpenTTD brauch Grafiken fir ze funktionéiren, mee et konnten keng fonnt ginn. Wëllsde OpenTTD se downloaden an installéiren loossen ?
 STR_MISSING_GRAPHICS_YES_DOWNLOAD                               :{BLACK}Jo, download d'Grafiken
-STR_MISSING_GRAPHICS_NO_QUIT                                    :{BLACK}Nee, verlooss OpenTTD
 
 STR_MISSING_GRAPHICS_ERROR_TITLE                                :{WHITE}Download mësslong...
 STR_MISSING_GRAPHICS_ERROR                                      :{BLACK}Downloade vu Grafiken mësslong.{}W.e.g Grafik manuell eroflueden.
-STR_MISSING_GRAPHICS_ERROR_QUIT                                 :{BLACK}OpenTTD verloossen
 
 # Transparency settings window
 STR_TRANSPARENCY_CAPTION                                        :{WHITE}Transparenzoptiounen
@@ -3300,9 +3281,7 @@ STR_LAI_OBJECT_DESCRIPTION_COMPANY_HEADQUARTERS                 :Firmenhaaptgeba
 STR_LAI_OBJECT_DESCRIPTION_COMPANY_OWNED_LAND                   :Land am Firmenbesëtz
 
 # About OpenTTD window
-STR_ABOUT_OPENTTD                                               :{WHITE}Iwwert OpenTTD
 STR_ABOUT_ORIGINAL_COPYRIGHT                                    :{BLACK}Original Copyright {COPYRIGHT} 1995 Chris Sawyer, All Rechter virbehalen
-STR_ABOUT_VERSION                                               :{BLACK}OpenTTD Versioun {REV}
 STR_ABOUT_COPYRIGHT_OPENTTD                                     :{BLACK}OpenTTD {COPYRIGHT} 2002-{STRING} D'OpenTTD team
 
 # Framerate display window
@@ -3430,7 +3409,6 @@ STR_MAPGEN_QUANTITY_OF_RIVERS                                   :{BLACK}Flëss:
 STR_MAPGEN_SMOOTHNESS                                           :{BLACK}Mëllt:
 STR_MAPGEN_VARIETY                                              :{BLACK}Vielfaltverdeelung:
 STR_MAPGEN_GENERATE                                             :{WHITE}Generéiren
-STR_MAPGEN_GENERATE_TOOLTIP                                     :{BLACK}Welt erstellen an OpenTTD spillen!
 STR_MAPGEN_NEWGRF_SETTINGS                                      :{BLACK}NewGRF Astellungen
 STR_MAPGEN_NEWGRF_SETTINGS_TOOLTIP                              :{BLACK}NewGRF Astellungen opman
 STR_MAPGEN_AI_SETTINGS                                          :{BLACK}KI Astellungen
@@ -3485,7 +3463,6 @@ STR_MAPGEN_HEIGHTMAP_ROTATION                                   :{BLACK}Héichte
 STR_MAPGEN_HEIGHTMAP_NAME                                       :{BLACK}Héichtekaart-Numm:
 STR_MAPGEN_HEIGHTMAP_NAME_TOOLTIP                               :{BLACK}Den Numm vun der Héichtekaartbilddatei
 STR_MAPGEN_HEIGHTMAP_SIZE_LABEL                                 :{BLACK}Gréisst:
-STR_MAPGEN_HEIGHTMAP_SIZE_LABEL_TOOLTIP                         :{BLACK}D'Gréisst vum Héigtekaartbild. Déi bescht Resultater kritt ee wann d'Kant enger Zuel vun de Kaarten aus OpenTTD entsprécht, z.b 256, 512, 1024, etc.
 STR_MAPGEN_HEIGHTMAP_SIZE                                       :{ORANGE}{NUM} x {NUM}
 
 STR_MAPGEN_TERRAIN_TYPE_QUERY_CAPT                              :{WHITE}Zil Gipfelhéicht
@@ -3676,7 +3653,6 @@ STR_NEWGRF_ERROR_INDPROD_CALLBACK                               :Ongültegen Ind
 
 # NewGRF related 'general' warnings
 STR_NEWGRF_POPUP_CAUTION_CAPTION                                :{WHITE}Opgepasst!
-STR_NEWGRF_CONFIRMATION_TEXT                                    :{YELLOW}Du mëss Ännerungen an engem lafende Spill. Dest kann OpenTTD crashen.W.e.g dest net als Bug melden.{}Bass du sécher?
 
 STR_NEWGRF_DUPLICATE_GRFID                                      :Kann Datei net bäisetzen: Duplikat NewGRF ID
 STR_NEWGRF_COMPATIBLE_LOADED                                    :{ORANGE}Passend Datei net fonnt (kompatibel NewGRF gelued)
@@ -3685,7 +3661,6 @@ STR_NEWGRF_TOO_MANY_NEWGRFS                                     :Kann Datei net 
 STR_NEWGRF_COMPATIBLE_LOAD_WARNING                              :Kompatibel NewGRF(e) gelued fir feelend Dateien
 STR_NEWGRF_DISABLED_WARNING                                     :Feelend GRF Datei(en) sinn ausgeschalt
 STR_NEWGRF_UNPAUSE_WARNING_TITLE                                :{YELLOW}Feelend NewGRF Datei(en)
-STR_NEWGRF_UNPAUSE_WARNING                                      :{WHITE}Entpausen kann OpenTTD crashen.{} Wellsde wierklech entpausen ?
 
 # NewGRF status
 STR_NEWGRF_LIST_NONE                                            :Keng
@@ -5020,7 +4995,6 @@ STR_TEXTFILE_README_CAPTION                                     :{WHITE}{STRING}
 STR_TEXTFILE_CHANGELOG_CAPTION                                  :{WHITE}{STRING} Changelog vun {STRING}
 STR_TEXTFILE_LICENCE_CAPTION                                    :{WHITE}{STRING} Lizenz vun {STRING}
 STR_TEXTFILE_SURVEY_RESULT_CAPTION                              :{WHITE}Preview op d'Emfroresultat
-STR_TEXTFILE_GAME_MANUAL_CAPTION                                :{WHITE}OpenTTD Dokument '{STRING}'
 
 
 # Vehicle loading indicators

@@ -1,3 +1,29 @@
+# Wira Bandar PC
+
+Wira Bandar PC is a fork of [OpenTTD](https://www.openttd.org): OpenTTD's code with changes, not a game
+made from scratch. It turns OpenTTD into a city-building and public transport game set in Malaysia and
+Singapore ("wira bandar" means "town hero"). On top of OpenTTD it adds traffic lights and busy junctions,
+zoning, city services, commuting, air pollution and land value, Malaysian and Singaporean town buildings,
+town budgets and councils, states and elections, and a transit operator's tools: lines, fares, contracts,
+modern and electric buses, bus lanes, BRT, metro and more. What each step added, and how it was tested, is
+in [docs/city-builder-plan.md](docs/city-builder-plan.md).
+
+- Windows download, always the latest build:
+  https://github.com/hithereiamaliff/wirabandar/releases/download/latest/wirabandar-windows-x64.zip
+- It keeps its settings and saves in `Documents\Wira Bandar`. The first time it starts, it copies the
+  settings and saves from `Documents\OpenTTD` (copies; nothing there is moved or deleted), and it still
+  finds the graphics, NewGRFs and AIs installed for OpenTTD.
+- It loads OpenTTD's `.sav` files and saves its own games as `.csav`, which OpenTTD can't open.
+
+Like OpenTTD, Wira Bandar is free software under the GNU General Public License version 2 (see
+[COPYING.md](./COPYING.md)); its source code is this repository. OpenTTD's authors are
+credited in the game's About window and below. Wira Bandar is not made or supported by the OpenTTD team:
+please report its problems here, not to them.
+
+The rest of this file is OpenTTD's own readme.
+
+---
+
 # OpenTTD
 
 ## Table of contents

@@ -414,12 +414,10 @@ STR_TOOLBAR_TOOLTIP_BUILD_AIRPORTS                              :{BLACK}Bygg fly
 STR_TOOLBAR_TOOLTIP_LANDSCAPING                                 :{BLACK}Åpne landskapsmenyen, tremenyen eller plassere et skilt
 STR_TOOLBAR_TOOLTIP_SHOW_SOUND_MUSIC_WINDOW                     :{BLACK}Åpne lyd-/musikkinnstillinger
 STR_TOOLBAR_TOOLTIP_SHOW_LAST_MESSAGE_NEWS                      :{BLACK}Åpne siste melding/nyhet, meldingshistorikk eller slette alle meldinger
-STR_TOOLBAR_TOOLTIP_LAND_BLOCK_INFORMATION                      :{BLACK}Åpne informasjon om landområde, skjermbildemeny, om OpenTTD, eller utviklerverktøy
 STR_TOOLBAR_TOOLTIP_SWITCH_TOOLBAR                              :{BLACK}Skift verktøylinjer
 
 # Extra tooltips for the scenario editor toolbar
 STR_SCENEDIT_TOOLBAR_SAVE_SCENARIO_LOAD_SCENARIO_TOOLTIP        :{BLACK}Lagre scenario, last inn scenario, forlat scenarioredigering, avslutt OpenTTD
-STR_SCENEDIT_TOOLBAR_OPENTTD                                    :{YELLOW}OpenTTD
 STR_SCENEDIT_TOOLBAR_SCENARIO_EDITOR                            :{YELLOW}Rediger scenario
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_BACKWARD_TOOLTIP    :{BLACK}Flytt startdatoen tilbake ett år
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_FORWARD_TOOLTIP     :{BLACK}Flytt startdatoen frem ett år
@@ -545,7 +543,6 @@ STR_ABOUT_MENU_TOGGLE_CONSOLE                                   :Vis/skjul konso
 STR_ABOUT_MENU_AI_DEBUG                                         :KI/Game Script-feilsøking
 STR_ABOUT_MENU_SCREENSHOT                                       :Skjermbilde
 STR_ABOUT_MENU_SHOW_FRAMERATE                                   :Vis oppdateringsrate
-STR_ABOUT_MENU_ABOUT_OPENTTD                                    :Om 'OpenTTD'
 STR_ABOUT_MENU_SPRITE_ALIGNER                                   :Spriteforskyver
 STR_ABOUT_MENU_TOGGLE_BOUNDING_BOXES                            :Vis/skjul markeringsramme
 STR_ABOUT_MENU_TOGGLE_DIRTY_BLOCKS                              :Veksle mellom farger på skitne blokker
@@ -1073,7 +1070,6 @@ STR_GAME_OPTIONS_LANGUAGE_TOOLTIP                               :Velg språk som
 STR_GAME_OPTIONS_LANGUAGE_PERCENTAGE                            :{STRING} ({NUM}% fullført)
 
 STR_GAME_OPTIONS_FULLSCREEN                                     :Fullskjerm
-STR_GAME_OPTIONS_FULLSCREEN_TOOLTIP                             :Slå på for å spille OpenTTD i fullskjermmodus
 
 STR_GAME_OPTIONS_RESOLUTION                                     :Skjermoppløsning
 STR_GAME_OPTIONS_RESOLUTION_TOOLTIP                             :Velg skjermoppløsningen som skal brukes
@@ -1081,7 +1077,6 @@ STR_GAME_OPTIONS_RESOLUTION_OTHER                               :annet
 STR_GAME_OPTIONS_RESOLUTION_ITEM                                :{NUM}x{NUM}
 
 STR_GAME_OPTIONS_VIDEO_ACCELERATION                             :Maskinvareakselerasjon
-STR_GAME_OPTIONS_VIDEO_ACCELERATION_TOOLTIP                     :Slå på for å la OpenTTD prøve å bruke maskinvareakselerasjon. En endret innstilling blir bare brukt ved omstart av spillet
 STR_GAME_OPTIONS_VIDEO_ACCELERATION_RESTART                     :{WHITE}Innstillingen vil ikke tre i kraft før spillet er restartet
 
 STR_GAME_OPTIONS_VIDEO_VSYNC                                    :VSync
@@ -2258,8 +2253,6 @@ STR_VIDEO_DRIVER_ERROR_NO_HARDWARE_ACCELERATION                 :ingen kompatibe
 STR_VIDEO_DRIVER_ERROR_HARDWARE_ACCELERATION_CRASH              :GPU-driveren krasjet spillet. Maskinvareakselerasjon er deaktivert
 
 # Intro window
-STR_INTRO_CAPTION                                               :{WHITE}OpenTTD
-STR_INTRO_VERSION                                               :OpenTTD {REV}
 
 STR_INTRO_NEW_GAME                                              :{BLACK}Nytt spill
 STR_INTRO_LOAD_GAME                                             :{BLACK}Last inn spill
@@ -2290,14 +2283,11 @@ STR_INTRO_TOOLTIP_GAME_OPTIONS                                  :{BLACK}Åpne sp
 STR_INTRO_TOOLTIP_HIGHSCORE                                     :{BLACK}Åpne tabell med høyeste poengsummer
 STR_INTRO_TOOLTIP_HELP                                          :{BLACK}Få tilgang til dokumentasjon og ressurser på nettet
 STR_INTRO_TOOLTIP_ONLINE_CONTENT                                :{BLACK}Se etter nytt og oppdatert innhold for nedlasting
-STR_INTRO_TOOLTIP_QUIT                                          :{BLACK}Avslutt 'OpenTTD'
 
 STR_INTRO_BASESET                                               :{BLACK}Det valgte innebygde grafikksettet mangler {NUM} sprite{P "" r}. Se etter oppdateringer for settet.
-STR_INTRO_TRANSLATION                                           :{BLACK}Denne oversettelsen mangler {NUM} streng{P "" er}. Vennligst hjelp til å gjøre OpenTTD bedre ved å bli med i oversettergruppen. For detaljer, sjekk readme.txt.
 
 # Quit window
 STR_QUIT_CAPTION                                                :{WHITE}Avslutt
-STR_QUIT_ARE_YOU_SURE_YOU_WANT_TO_EXIT_OPENTTD                  :{YELLOW}Er du sikker på at du vil avslutte OpenTTD?
 STR_QUIT_YES                                                    :{BLACK}Ja
 STR_QUIT_NO                                                     :{BLACK}Nei
 
@@ -2392,7 +2382,6 @@ STR_FACE_SIMPLE                                                 :{BLACK}Enkelt
 STR_FACE_SIMPLE_TOOLTIP                                         :{BLACK}Enkelt ansiktsvalg
 STR_FACE_LOAD                                                   :{BLACK}Last inn
 STR_FACE_LOAD_TOOLTIP                                           :{BLACK}Last inn favorittansikt
-STR_FACE_LOAD_DONE                                              :Ditt favorittansikt har blitt lastet inn fra OpenTTDs konfigurasjonsfil
 STR_FACE_FACECODE                                               :{BLACK}Ansiktskode
 STR_FACE_FACECODE_TOOLTIP                                       :{BLACK}Vis og/eller endre ansiktskoden til selskapets president
 STR_FACE_FACECODE_CAPTION                                       :{WHITE}Vis og/eller endre lederens ansiktskode
@@ -2400,7 +2389,6 @@ STR_FACE_FACECODE_SET                                           :Nytt presidenta
 STR_FACE_FACECODE_ERR                                           :Kunne ikke endre lederens ansiktskode - må være et gyldig merke og nummer
 STR_FACE_SAVE                                                   :{BLACK}Lagre
 STR_FACE_SAVE_TOOLTIP                                           :{BLACK}Lagre favorittansikt
-STR_FACE_SAVE_DONE                                              :Dette ansiktet vil bli lagret som din favoritt i OpenTTDs konfigurasjonsfil
 STR_FACE_SETTING_TOGGLE                                         :{STRING} {ORANGE}{STRING}
 STR_FACE_SETTING_NUMERIC                                        :{STRING} {ORANGE}{NUM} / {NUM}
 STR_FACE_YES                                                    :Ja
@@ -2715,8 +2703,6 @@ STR_CONTENT_UNSELECT_ALL_CAPTION                                :{BLACK}Velg bor
 STR_CONTENT_UNSELECT_ALL_CAPTION_TOOLTIP                        :{BLACK}Merk alt innhold som ikke skal lastes ned
 STR_CONTENT_SEARCH_EXTERNAL                                     :{BLACK}Søk eksterne nettsider
 STR_CONTENT_SEARCH_EXTERNAL_TOOLTIP                             :{BLACK} Søk etter innhold som ikke er tilgjengelig på OpenTTD sin innholdstjeneste på nettsteder som ikke er tilknyttet OpenTTD
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER_CAPTION                  :{WHITE}Du forlater OpenTTD!
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER                          :{WHITE} Vilkårene for nedlasting av innhold fra eksterne nettsider kan variere.{}Du må henvende deg til de eksterne nettstedene for instruksjoner om hvordan du installerer innholdet i OpenTTD.{}Vil du fortsette?
 STR_CONTENT_FILTER_TITLE                                        :{BLACK}Merke/Navnefilter:
 STR_CONTENT_OPEN_URL                                            :{BLACK}Nettside
 STR_CONTENT_OPEN_URL_TOOLTIP                                    :{BLACK}Besøk hjemmesiden for dette innholdet
@@ -2730,7 +2716,6 @@ STR_CONTENT_DETAIL_SUBTITLE_UNSELECTED                          :{SILVER}Du har 
 STR_CONTENT_DETAIL_SUBTITLE_SELECTED                            :{SILVER}Du har valgt at dette skal lastes ned
 STR_CONTENT_DETAIL_SUBTITLE_AUTOSELECTED                        :{SILVER}Denne avhengigheten er valgt for nedlasting
 STR_CONTENT_DETAIL_SUBTITLE_ALREADY_HERE                        :{SILVER}Dette har du fra før
-STR_CONTENT_DETAIL_SUBTITLE_DOES_NOT_EXIST                      :{SILVER}Dette innholdet er ukjent og kan ikke lastes ned i OpenTTD
 
 STR_CONTENT_DETAIL_UPDATE                                       :{SILVER}Dette er en erstatning for e{G n i t} eksisterende {STRING}
 STR_CONTENT_DETAIL_NAME                                         :{SILVER}Navn: {WHITE}{STRING}
@@ -2742,7 +2727,6 @@ STR_CONTENT_DETAIL_FILESIZE                                     :{SILVER}Nedlast
 STR_CONTENT_DETAIL_SELECTED_BECAUSE_OF                          :{SILVER}Valgt pga.: {WHITE}{STRING}
 STR_CONTENT_DETAIL_DEPENDENCIES                                 :{SILVER}Avhengig av: {WHITE}{STRING}
 STR_CONTENT_DETAIL_TAGS                                         :{SILVER}Merker: {WHITE}{STRING}
-STR_CONTENT_NO_ZLIB                                             :OpenTTD er bygget uten støtte for «zlib»...
 STR_CONTENT_NO_ZLIB_SUB                                         :det er ikke mulig å laste ned innhold!
 
 # Order of these is important!
@@ -2771,13 +2755,10 @@ STR_CONTENT_ERROR_COULD_NOT_DOWNLOAD_FILE_NOT_WRITABLE          :kunne ikke skri
 STR_CONTENT_ERROR_COULD_NOT_EXTRACT                             :Kunne ikke pakke ut den nedlastede filen
 
 STR_MISSING_GRAPHICS_SET_CAPTION                                :{WHITE}Manglende grafikk
-STR_MISSING_GRAPHICS_SET_MESSAGE                                :{BLACK}OpenTTD krever grafikk for å fungere, men fant ingen. Tillater du OpenTTD å laste ned og installere denne grafikken?
 STR_MISSING_GRAPHICS_YES_DOWNLOAD                               :{BLACK}Ja, last ned grafikken
-STR_MISSING_GRAPHICS_NO_QUIT                                    :{BLACK}Nei, avslutt OpenTTD
 
 STR_MISSING_GRAPHICS_ERROR_TITLE                                :{WHITE}Nedlasting mislyktes
 STR_MISSING_GRAPHICS_ERROR                                      :{BLACK}Kunne ikke laste ned grafikkpakken.{}Vennligst last den ned manuelt.
-STR_MISSING_GRAPHICS_ERROR_QUIT                                 :{BLACK}Avslutt OpenTTD
 
 # Transparency settings window
 STR_TRANSPARENCY_CAPTION                                        :{WHITE}Instillinger for gjennomsiktighet
@@ -3321,9 +3302,7 @@ STR_LAI_OBJECT_DESCRIPTION_COMPANY_HEADQUARTERS                 :Selskapets hove
 STR_LAI_OBJECT_DESCRIPTION_COMPANY_OWNED_LAND                   :Selskapseid landområde
 
 # About OpenTTD window
-STR_ABOUT_OPENTTD                                               :{WHITE}Om OpenTTD
 STR_ABOUT_ORIGINAL_COPYRIGHT                                    :{BLACK}Opprinnelig opphavsbeskyttet {COPYRIGHT} 1995 Chris Sawyer, Alle rettigheter reservert
-STR_ABOUT_VERSION                                               :{BLACK}OpenTTD versjon {REV}
 STR_ABOUT_COPYRIGHT_OPENTTD                                     :{BLACK}OpenTTD {COPYRIGHT} 2002-{STRING} OpenTTD-teamet
 
 # Framerate display window
@@ -3454,7 +3433,6 @@ STR_MAPGEN_QUANTITY_OF_RIVERS                                   :{BLACK}Elver:
 STR_MAPGEN_SMOOTHNESS                                           :{BLACK}Jevnhet:
 STR_MAPGEN_VARIETY                                              :{BLACK}Variasjonsspredning:
 STR_MAPGEN_GENERATE                                             :{WHITE}Generer
-STR_MAPGEN_GENERATE_TOOLTIP                                     :{BLACK}Opprett verdenen og spill OpenTTD!
 STR_MAPGEN_NEWGRF_SETTINGS                                      :{BLACK}NewGRF-innstillinger
 STR_MAPGEN_NEWGRF_SETTINGS_TOOLTIP                              :{BLACK}Åpne NewGRF-innstillinger
 STR_MAPGEN_AI_SETTINGS                                          :{BLACK}KI-innstillinger
@@ -3509,7 +3487,6 @@ STR_MAPGEN_HEIGHTMAP_ROTATION                                   :{BLACK}Høydeka
 STR_MAPGEN_HEIGHTMAP_NAME                                       :{BLACK}Høydekartnavn:
 STR_MAPGEN_HEIGHTMAP_NAME_TOOLTIP                               :{BLACK}Navnet til høydekartfilen
 STR_MAPGEN_HEIGHTMAP_SIZE_LABEL                                 :{BLACK}Størrelse:
-STR_MAPGEN_HEIGHTMAP_SIZE_LABEL_TOOLTIP                         :{BLACK}Størrelsen på høydekartet. For beste resultat, bør hver kant stemme med en tilgjengelig lengde for kartkanter i OpenTTD, som 256, 512, 1024, osv.
 STR_MAPGEN_HEIGHTMAP_SIZE                                       :{ORANGE}{NUM} x {NUM}
 
 STR_MAPGEN_TERRAIN_TYPE_QUERY_CAPT                              :{WHITE}Valgt fjelltopphøyde
@@ -3700,7 +3677,6 @@ STR_NEWGRF_ERROR_INDPROD_CALLBACK                               :Ugyldig industr
 
 # NewGRF related 'general' warnings
 STR_NEWGRF_POPUP_CAUTION_CAPTION                                :{WHITE}Advarsel!
-STR_NEWGRF_CONFIRMATION_TEXT                                    :{YELLOW}Du er i ferd med å gjøre forandringer i et kjørende spill. Dette kan krasje OpenTTD. Ikke send inn bug-rapporter om slike feil.{}Er du helt sikker på at du vil gjøre dette?
 
 STR_NEWGRF_DUPLICATE_GRFID                                      :Kan ikke legge til fil: NewGRF ID finnes allerede
 STR_NEWGRF_COMPATIBLE_LOADED                                    :{ORANGE}Matchende fil ble ikke funnet (kompatibel NewGRF-fil lastet inn)
@@ -3709,7 +3685,6 @@ STR_NEWGRF_TOO_MANY_NEWGRFS                                     :Kan ikke legge 
 STR_NEWGRF_COMPATIBLE_LOAD_WARNING                              :Kompatible NewGRF(er) lastet for manglende filer
 STR_NEWGRF_DISABLED_WARNING                                     :Manglende NewGRF-fil(er) har blitt deaktivert
 STR_NEWGRF_UNPAUSE_WARNING_TITLE                                :{YELLOW}Mangler NewGRF-fil(er)
-STR_NEWGRF_UNPAUSE_WARNING                                      :{WHITE}Å slå av pause kan medføre at OpenTTD krasjer. Ikke rapporter feil for etterfølgende krasjer.{}Er du sikker på at du vil slå av pause?
 
 # NewGRF status
 STR_NEWGRF_LIST_NONE                                            :Ingen
@@ -5049,7 +5024,6 @@ STR_TEXTFILE_README_CAPTION                                     :{WHITE}{STRING}
 STR_TEXTFILE_CHANGELOG_CAPTION                                  :{WHITE}{STRING} endringslogg til {STRING}
 STR_TEXTFILE_LICENCE_CAPTION                                    :{WHITE}{STRING} lisens til {STRING}
 STR_TEXTFILE_SURVEY_RESULT_CAPTION                              :{WHITE}Forhåndsvis undersøkelsesresultater
-STR_TEXTFILE_GAME_MANUAL_CAPTION                                :{WHITE}OpenTTD-dokument '{STRING}'
 
 
 # Vehicle loading indicators

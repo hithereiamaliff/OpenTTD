@@ -282,7 +282,6 @@ STR_TOOLBAR_TOOLTIP_SHOW_SOUND_MUSIC_WINDOW                     :{BLACK}Montras 
 
 # Extra tooltips for the scenario editor toolbar
 STR_SCENEDIT_TOOLBAR_SAVE_SCENARIO_LOAD_SCENARIO_TOOLTIP        :{BLACK}Salvas cenaro, kargas cenaro, abandonas cenaro-redaktisto, ekiras
-STR_SCENEDIT_TOOLBAR_OPENTTD                                    :{YELLOW}OpenTTD
 STR_SCENEDIT_TOOLBAR_SCENARIO_EDITOR                            :{YELLOW}Cenaro-Redaktisto
 STR_SCENEDIT_TOOLBAR_ROAD_CONSTRUCTION_TOOLTIP                  :{BLACK}Voyo konstruktado
 STR_SCENEDIT_TOOLBAR_PLANT_TREES_TOOLTIP                        :{BLACK}Plantacas arbori
@@ -1056,7 +1055,6 @@ STR_LAI_OBJECT_DESCRIPTION_LIGHTHOUSE                           :Faro
 STR_LAI_OBJECT_DESCRIPTION_COMPANY_HEADQUARTERS                 :Stabeyo di kompanio
 
 # About OpenTTD window
-STR_ABOUT_VERSION                                               :{BLACK}OpenTTD versiono {REV}
 STR_ABOUT_COPYRIGHT_OPENTTD                                     :{BLACK}OpenTTD {COPYRIGHT}2002-{STRING} La kruo OpenTTD
 
 # Framerate display window

@@ -408,12 +408,10 @@ STR_TOOLBAR_TOOLTIP_BUILD_AIRPORTS                              :{BLACK}Construi
 STR_TOOLBAR_TOOLTIP_LANDSCAPING                                 :{BLACK}Deschideți meniul de amenajare a teritoriului, meniul arborilor sau plasați un semn
 STR_TOOLBAR_TOOLTIP_SHOW_SOUND_MUSIC_WINDOW                     :{BLACK}Afișează fereastra pentru configurarea sunetului/muzicii
 STR_TOOLBAR_TOOLTIP_SHOW_LAST_MESSAGE_NEWS                      :{BLACK}Deschide ultimul mesaj/raport de știri, istoricul mesajelor sau șterge toate mesajele
-STR_TOOLBAR_TOOLTIP_LAND_BLOCK_INFORMATION                      :{BLACK}Deschideți informații despre teren, meniu capturi de ecran, credite OpenTTD sau instrumente pentru dezvoltatori
 STR_TOOLBAR_TOOLTIP_SWITCH_TOOLBAR                              :{BLACK}Comută bara de unelte
 
 # Extra tooltips for the scenario editor toolbar
 STR_SCENEDIT_TOOLBAR_SAVE_SCENARIO_LOAD_SCENARIO_TOOLTIP        :{BLACK}Salvează/încarcă scenariu, abandonează editorul, ieșire
-STR_SCENEDIT_TOOLBAR_OPENTTD                                    :{YELLOW}OpenTTD
 STR_SCENEDIT_TOOLBAR_SCENARIO_EDITOR                            :{YELLOW}Editor de scenarii
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_BACKWARD_TOOLTIP    :{BLACK}Schimbă data de start cu un an înapoi
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_FORWARD_TOOLTIP     :{BLACK}Schimbă data de start cu un an înainte
@@ -537,7 +535,6 @@ STR_ABOUT_MENU_TOGGLE_CONSOLE                                   :Consolă pornit
 STR_ABOUT_MENU_AI_DEBUG                                         :Depanare Inteligență Artificială / Script Joc
 STR_ABOUT_MENU_SCREENSHOT                                       :Capturează ecranul
 STR_ABOUT_MENU_SHOW_FRAMERATE                                   :Arată FPS
-STR_ABOUT_MENU_ABOUT_OPENTTD                                    :Despre 'OpenTTD'
 STR_ABOUT_MENU_SPRITE_ALIGNER                                   :Aliniere imagini
 STR_ABOUT_MENU_TOGGLE_BOUNDING_BOXES                            :Afișează/ascunde casetele de încadrare
 STR_ABOUT_MENU_TOGGLE_DIRTY_BLOCKS                              :Comutator pentru colorarea secțiunilor murdare
@@ -1040,7 +1037,6 @@ STR_GAME_OPTIONS_LANGUAGE_TOOLTIP                               :Alege limba în
 STR_GAME_OPTIONS_LANGUAGE_PERCENTAGE                            :{STRING} ({NUM}% finalizat)
 
 STR_GAME_OPTIONS_FULLSCREEN                                     :Ecran întreg
-STR_GAME_OPTIONS_FULLSCREEN_TOOLTIP                             :Bifează această căsuță pentru a juca pe tot ecranul
 
 STR_GAME_OPTIONS_RESOLUTION                                     :Rezoluția ecranului
 STR_GAME_OPTIONS_RESOLUTION_TOOLTIP                             :Alege rezoluția dorită pentru joc
@@ -1048,7 +1044,6 @@ STR_GAME_OPTIONS_RESOLUTION_OTHER                               :(alta/nespecifi
 STR_GAME_OPTIONS_RESOLUTION_ITEM                                :{NUM}x{NUM}
 
 STR_GAME_OPTIONS_VIDEO_ACCELERATION                             :Accelerare hardware
-STR_GAME_OPTIONS_VIDEO_ACCELERATION_TOOLTIP                     :Bifați căsuța ca OpenTTD să încerce utilizarea accelerației hardware. Modificarea setării va avea efect după repornirea jocului
 STR_GAME_OPTIONS_VIDEO_ACCELERATION_RESTART                     :{WHITE}Setarea va avea efect doar după repornirea jocului
 
 STR_GAME_OPTIONS_VIDEO_VSYNC                                    :VSync
@@ -2219,14 +2214,11 @@ STR_INTRO_TOOLTIP_GAME_OPTIONS                                  :{BLACK}Afișeaz
 STR_INTRO_TOOLTIP_HIGHSCORE                                     :{BLACK}Afișează tabela cu scoruri maxime
 STR_INTRO_TOOLTIP_HELP                                          :{BLACK}Obțineți acces la documentație și resurse online
 STR_INTRO_TOOLTIP_ONLINE_CONTENT                                :{BLACK}Verifică dacă există resurse noi sau actualizate pentru descărcare
-STR_INTRO_TOOLTIP_QUIT                                          :{BLACK}Ieși din 'OpenTTD'
 
 STR_INTRO_BASESET                                               :{BLACK}Setul grafic actual are lipsă {NUM} {P sprite spriteuri "de spriteuri"}. Verificați actualizările pentru setul de bază.
-STR_INTRO_TRANSLATION                                           :{BLACK}Acestei traduceri îi lipse{P 0 "ște" "sc" "sc"} {NUM} {P text texte "de texte"}. Te rugăm să ajuti la îmbunătățirea OpenTTD înrolându-te ca traducător. Citește fișierul readme.txt pentru detalii.
 
 # Quit window
 STR_QUIT_CAPTION                                                :{WHITE}Ieșire din joc
-STR_QUIT_ARE_YOU_SURE_YOU_WANT_TO_EXIT_OPENTTD                  :{YELLOW}Sigur vrei să abandonezi jocul curent?
 STR_QUIT_YES                                                    :{BLACK}Da
 STR_QUIT_NO                                                     :{BLACK}Nu
 
@@ -2320,7 +2312,6 @@ STR_FACE_SIMPLE                                                 :{BLACK}Simplu
 STR_FACE_SIMPLE_TOOLTIP                                         :{BLACK}Selecție simplă a feței
 STR_FACE_LOAD                                                   :{BLACK}Încărcare
 STR_FACE_LOAD_TOOLTIP                                           :{BLACK}Încarcă o față preferată
-STR_FACE_LOAD_DONE                                              :{WHITE}Fața dvs. preferată a fost încărcată din fișierul de configurare al OpenTTD.
 STR_FACE_FACECODE                                               :{BLACK}Nr. față jucător
 STR_FACE_FACECODE_TOOLTIP                                       :{BLACK}Vizualizează și/sau setează numărul feței pentru președintele companiei
 STR_FACE_FACECODE_CAPTION                                       :{WHITE}Vizualizează și/sau setează numărul feței pentru președinte
@@ -2328,7 +2319,6 @@ STR_FACE_FACECODE_SET                                           :{WHITE}Noul cod
 STR_FACE_FACECODE_ERR                                           :{WHITE}Nu am putut seta numărul de față al președintelui - trebuie să fie un număr între 0 și 4.294.967.295!
 STR_FACE_SAVE                                                   :{BLACK}Salvează
 STR_FACE_SAVE_TOOLTIP                                           :{BLACK}Salvează fața preferată
-STR_FACE_SAVE_DONE                                              :{WHITE}Această față va fi salvată ca fața preferată în fișierul de configurare al OpenTTD.
 STR_FACE_YES                                                    :Da
 STR_FACE_NO                                                     :Nu
 STR_FACE_HAIR                                                   :Păr:
@@ -2637,8 +2627,6 @@ STR_CONTENT_UNSELECT_ALL_CAPTION                                :{BLACK}Deselect
 STR_CONTENT_UNSELECT_ALL_CAPTION_TOOLTIP                        :{BLACK}Deselectează toate resursele selectate
 STR_CONTENT_SEARCH_EXTERNAL                                     :{BLACK}Caută pe site-uri externe
 STR_CONTENT_SEARCH_EXTERNAL_TOOLTIP                             :{BLACK}Caută conținut care nu este disponibil pe serverele OpenTTD pe site-uri care nu sunt asociate cu OpenTTD
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER_CAPTION                  :{WHITE}Ești pe cale de a ieși din OpenTTD!
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER                          :{WHITE}Termenii și condițiile impuse la descărcarea de pe site-uri web externe pot varia:{}Va trebui să accesezi site-urile externe pentru informații referitoare la modul de instalare a conținutului în OpenTTD.{}Dorești să continui?
 STR_CONTENT_FILTER_TITLE                                        :{BLACK}Filtru nume/etichetă:
 STR_CONTENT_OPEN_URL                                            :{BLACK}Site-ul web
 STR_CONTENT_OPEN_URL_TOOLTIP                                    :{BLACK}Vizitează site-ul web al acestei resurse
@@ -2652,7 +2640,6 @@ STR_CONTENT_DETAIL_SUBTITLE_UNSELECTED                          :{SILVER}Aceast�
 STR_CONTENT_DETAIL_SUBTITLE_SELECTED                            :{SILVER}Această resursă a fost selectată pentru descărcare
 STR_CONTENT_DETAIL_SUBTITLE_AUTOSELECTED                        :{SILVER}Aceasă dependință a fost selectată pentru descărcare
 STR_CONTENT_DETAIL_SUBTITLE_ALREADY_HERE                        :{SILVER}Deja ai această resursă
-STR_CONTENT_DETAIL_SUBTITLE_DOES_NOT_EXIST                      :{SILVER}Acestă resursă este necunoscută și nu poate fi descărcată în OpenTTD
 
 STR_CONTENT_DETAIL_UPDATE                                       :{SILVER}Acestă resursă este un înlocuitor pentru un/o {STRING} existent/ă
 STR_CONTENT_DETAIL_NAME                                         :{SILVER}Nume: {WHITE}{STRING}
@@ -2664,7 +2651,6 @@ STR_CONTENT_DETAIL_FILESIZE                                     :{SILVER}Dimensi
 STR_CONTENT_DETAIL_SELECTED_BECAUSE_OF                          :{SILVER}Selectat datorită: {WHITE}{STRING}
 STR_CONTENT_DETAIL_DEPENDENCIES                                 :{SILVER}Dependințe: {WHITE}{STRING}
 STR_CONTENT_DETAIL_TAGS                                         :{SILVER}Etichete: {WHITE}{STRING}
-STR_CONTENT_NO_ZLIB                                             :{WHITE}OpenTTD a fost compilat fără suport "zlib"...
 STR_CONTENT_NO_ZLIB_SUB                                         :{WHITE}... descărcarea resurselor nu este posibilă!
 
 # Order of these is important!
@@ -2693,13 +2679,10 @@ STR_CONTENT_ERROR_COULD_NOT_DOWNLOAD_FILE_NOT_WRITABLE          :{WHITE}... fiș
 STR_CONTENT_ERROR_COULD_NOT_EXTRACT                             :{WHITE}Fișierul descărcat nu a putut fi decompresat
 
 STR_MISSING_GRAPHICS_SET_CAPTION                                :{WHITE}Elemente grafice lipsă
-STR_MISSING_GRAPHICS_SET_MESSAGE                                :{BLACK}OpenTTD necesită elemente grafice pentru a funcționa, dar niciun pachet grafic nu a fost găsit. Permiteți ca OpenTTD să descarce și să instaleze pachetele grafice necesare?
 STR_MISSING_GRAPHICS_YES_DOWNLOAD                               :{BLACK}Da, descarcă pachetele grafice
-STR_MISSING_GRAPHICS_NO_QUIT                                    :{BLACK}Nu, ieși din OpenTTD
 
 STR_MISSING_GRAPHICS_ERROR_TITLE                                :{WHITE}Descărcarea a eșuat
 STR_MISSING_GRAPHICS_ERROR                                      :{BLACK}Descărcarea graficii a eșuat.{}Vă rugăm descărcați manual grafica.
-STR_MISSING_GRAPHICS_ERROR_QUIT                                 :{BLACK}Ieșire din OpenTTD
 
 # Transparency settings window
 STR_TRANSPARENCY_CAPTION                                        :{WHITE}Optiuni transparență
@@ -3202,9 +3185,7 @@ STR_LAI_OBJECT_DESCRIPTION_COMPANY_HEADQUARTERS                 :Sediu companie
 STR_LAI_OBJECT_DESCRIPTION_COMPANY_OWNED_LAND                   :Teren în proprietatea unei companii
 
 # About OpenTTD window
-STR_ABOUT_OPENTTD                                               :{WHITE}Despre OpenTTD
 STR_ABOUT_ORIGINAL_COPYRIGHT                                    :{BLACK}Copyright original {COPYRIGHT} 1995 Chris Sawyer, Toate drepturile rezervate
-STR_ABOUT_VERSION                                               :{BLACK}OpenTTD versiunea {REV}
 STR_ABOUT_COPYRIGHT_OPENTTD                                     :{BLACK}OpenTTD {COPYRIGHT} 2002-{STRING} Echipa OpenTTD
 
 # Framerate display window
@@ -3329,7 +3310,6 @@ STR_MAPGEN_QUANTITY_OF_RIVERS                                   :{BLACK}Râuri:
 STR_MAPGEN_SMOOTHNESS                                           :{BLACK}Netezime:
 STR_MAPGEN_VARIETY                                              :{BLACK}Distribuția varietății:
 STR_MAPGEN_GENERATE                                             :{WHITE}Generează
-STR_MAPGEN_GENERATE_TOOLTIP                                     :{BLACK}Creează lumea și joacă OpenTTD!
 STR_MAPGEN_NEWGRF_SETTINGS                                      :{BLACK}Setări NewGRF
 STR_MAPGEN_NEWGRF_SETTINGS_TOOLTIP                              :{BLACK}Afișează setările NewGRF
 STR_MAPGEN_AI_SETTINGS                                          :{BLACK}Configurație AI
@@ -3379,7 +3359,6 @@ STR_MAPGEN_HEIGHTMAP_ROTATION                                   :{BLACK}Rotație
 STR_MAPGEN_HEIGHTMAP_NAME                                       :{BLACK}Nume hartă înălțimi:
 STR_MAPGEN_HEIGHTMAP_NAME_TOOLTIP                               :{BLACK}Numele fișierului al hărții de înălțime
 STR_MAPGEN_HEIGHTMAP_SIZE_LABEL                                 :{BLACK}Dimensiune:
-STR_MAPGEN_HEIGHTMAP_SIZE_LABEL_TOOLTIP                         :{BLACK}Dimensiunea imaginii hărții de înălțime. Pentru cele mai bune rezultate, fiecare margine ar trebui să se potrivească cu o lungime disponibilă a marginii hărții în OpenTTD, cum ar fi 256, 512, 1024 etc.
 STR_MAPGEN_HEIGHTMAP_SIZE                                       :{ORANGE}{NUM} x {NUM}
 
 STR_MAPGEN_TERRAIN_TYPE_QUERY_CAPT                              :{WHITE}Înălțimea maximă dorită
@@ -3561,7 +3540,6 @@ STR_NEWGRF_ERROR_INDPROD_CALLBACK                               :Reapelare de pr
 
 # NewGRF related 'general' warnings
 STR_NEWGRF_POPUP_CAUTION_CAPTION                                :{WHITE}Atenție!
-STR_NEWGRF_CONFIRMATION_TEXT                                    :{YELLOW}Ești pe cale să faci modificări într-un joc activ. Aceasta poate destabiliza OpenTTD. Nu raporta probleme de acest gen.{}Ești absolut sigur că vrei să faci asta?
 
 STR_NEWGRF_DUPLICATE_GRFID                                      :{WHITE}Nu pot adăuga fișierul: ID GRF duplicat
 STR_NEWGRF_COMPATIBLE_LOADED                                    :{ORANGE}Nu am găsit niciun fișier corespunzător (am încărcat un GRF compatibil)
@@ -3570,7 +3548,6 @@ STR_NEWGRF_TOO_MANY_NEWGRFS                                     :{WHITE}Nu pot a
 STR_NEWGRF_COMPATIBLE_LOAD_WARNING                              :{WHITE}GRF-uri compatibile au fost încărcate pentru fișierele lipsă
 STR_NEWGRF_DISABLED_WARNING                                     :{WHITE}Fișierele GRF lipsă au fost dezactivate
 STR_NEWGRF_UNPAUSE_WARNING_TITLE                                :{YELLOW}Fișier(e) GRF lipsă
-STR_NEWGRF_UNPAUSE_WARNING                                      :{WHITE}Reluarea jocului poate bloca OpenTTD. Nu raportați bug-uri pentru blocările ulterioare.{}Sigur dorești să reiei jocul?
 
 # NewGRF status
 STR_NEWGRF_LIST_NONE                                            :Nimic
@@ -4863,7 +4840,6 @@ STR_TEXTFILE_README_CAPTION                                     :{WHITE}{STRING}
 STR_TEXTFILE_CHANGELOG_CAPTION                                  :{WHITE}{STRING}, lista de modificări a {STRING}
 STR_TEXTFILE_LICENCE_CAPTION                                    :{WHITE}{STRING}, licența fișierului {STRING}
 STR_TEXTFILE_SURVEY_RESULT_CAPTION                              :{WHITE}Previzualizare a rezultatului sondajului
-STR_TEXTFILE_GAME_MANUAL_CAPTION                                :{WHITE}Deschide document OpenTTD '{STRING}'
 
 
 # Vehicle loading indicators

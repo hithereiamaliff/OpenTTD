@@ -412,12 +412,10 @@ STR_TOOLBAR_TOOLTIP_BUILD_AIRPORTS                              :{BLACK}Vliegvel
 STR_TOOLBAR_TOOLTIP_LANDSCAPING                                 :{BLACK}Landschapsmenu of bomenmenu openen of borden plaatsen
 STR_TOOLBAR_TOOLTIP_SHOW_SOUND_MUSIC_WINDOW                     :{BLACK}Geluid-/muziekvenster openen
 STR_TOOLBAR_TOOLTIP_SHOW_LAST_MESSAGE_NEWS                      :{BLACK}Laatste (nieuws-)bericht openen, berichtengeschiedenis of alle berichten verwijderen
-STR_TOOLBAR_TOOLTIP_LAND_BLOCK_INFORMATION                      :{BLACK}Landinformatie, schermfotomenu, OpenTTD-medewerkerlijst en ontwikkelaarshulpmiddelen openen
 STR_TOOLBAR_TOOLTIP_SWITCH_TOOLBAR                              :{BLACK}Knoppenbalken wisselen
 
 # Extra tooltips for the scenario editor toolbar
 STR_SCENEDIT_TOOLBAR_SAVE_SCENARIO_LOAD_SCENARIO_TOOLTIP        :{BLACK}Scenario opslaan of laden, scenariobewerker verlaten, afsluiten
-STR_SCENEDIT_TOOLBAR_OPENTTD                                    :{YELLOW}OpenTTD
 STR_SCENEDIT_TOOLBAR_SCENARIO_EDITOR                            :{YELLOW}Scenariobewerker
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_BACKWARD_TOOLTIP    :{BLACK}Startdatum 1 jaar terugzetten
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_FORWARD_TOOLTIP     :{BLACK}Startdatum 1 jaar vooruitzetten
@@ -541,7 +539,6 @@ STR_ABOUT_MENU_TOGGLE_CONSOLE                                   :Console in-uits
 STR_ABOUT_MENU_AI_DEBUG                                         :Probleemoplossing AI/spelscript
 STR_ABOUT_MENU_SCREENSHOT                                       :Schermfoto
 STR_ABOUT_MENU_SHOW_FRAMERATE                                   :Framesnelheid weergeven
-STR_ABOUT_MENU_ABOUT_OPENTTD                                    :Over 'OpenTTD'
 STR_ABOUT_MENU_SPRITE_ALIGNER                                   :Sprite-uitlijner
 STR_ABOUT_MENU_TOGGLE_BOUNDING_BOXES                            :Selectiekaders in-uitschakelen
 STR_ABOUT_MENU_TOGGLE_DIRTY_BLOCKS                              :Kleuren van vuile blokken in-uitschakelen
@@ -1061,7 +1058,6 @@ STR_GAME_OPTIONS_LANGUAGE_TOOLTIP                               :Taal selecteren
 STR_GAME_OPTIONS_LANGUAGE_PERCENTAGE                            :{STRING} ({NUM}% voltooid)
 
 STR_GAME_OPTIONS_FULLSCREEN                                     :Volledig scherm
-STR_GAME_OPTIONS_FULLSCREEN_TOOLTIP                             :Vink dit vakje aan om OpenTTD op volledig scherm te spelen
 
 STR_GAME_OPTIONS_RESOLUTION                                     :Schermresolutie
 STR_GAME_OPTIONS_RESOLUTION_TOOLTIP                             :Selecteer de schermresolutie
@@ -1069,7 +1065,6 @@ STR_GAME_OPTIONS_RESOLUTION_OTHER                               :Anders
 STR_GAME_OPTIONS_RESOLUTION_ITEM                                :{NUM}x{NUM}
 
 STR_GAME_OPTIONS_VIDEO_ACCELERATION                             :Hardwareversnelling
-STR_GAME_OPTIONS_VIDEO_ACCELERATION_TOOLTIP                     :Selecteer dit vakje om OpenTTD hardwareversnelling te laten gebruiken. De gewijzigde instelling wordt pas van kracht nadat het spel opnieuw is gestart.
 STR_GAME_OPTIONS_VIDEO_ACCELERATION_RESTART                     :{WHITE}De instelling wordt pas van kracht als het spel opnieuw is gestart
 
 STR_GAME_OPTIONS_VIDEO_VSYNC                                    :VSync
@@ -2224,8 +2219,6 @@ STR_VIDEO_DRIVER_ERROR_NO_HARDWARE_ACCELERATION                 :{WHITE}... geen
 STR_VIDEO_DRIVER_ERROR_HARDWARE_ACCELERATION_CRASH              :{WHITE}... Spel is vastgelopen door het GPU-stuurprogramma. Hardwareversnelling wordt uitgeschakeld
 
 # Intro window
-STR_INTRO_CAPTION                                               :{WHITE}OpenTTD
-STR_INTRO_VERSION                                               :OpenTTD {REV}
 
 STR_INTRO_NEW_GAME                                              :{BLACK}Nieuw spel
 STR_INTRO_LOAD_GAME                                             :{BLACK}Spel laden
@@ -2256,14 +2249,11 @@ STR_INTRO_TOOLTIP_GAME_OPTIONS                                  :{BLACK}Spelopti
 STR_INTRO_TOOLTIP_HIGHSCORE                                     :{BLACK}Scoretabel openen
 STR_INTRO_TOOLTIP_HELP                                          :{BLACK}Toegang tot documentatie en online-hulpbronnen
 STR_INTRO_TOOLTIP_ONLINE_CONTENT                                :{BLACK}Zoeken naar nieuwe en aangepaste inhoud om te downloaden
-STR_INTRO_TOOLTIP_QUIT                                          :{BLACK}'OpenTTD' afsluiten
 
 STR_INTRO_BASESET                                               :{BLACK}De huidige gekozen set grafische elementen mist {NUM} sprite{P "" s}. Controleer of er updates zijn voor deze basisset.
-STR_INTRO_TRANSLATION                                           :{BLACK}Deze vertaling mist {NUM} tekst{P "" en}. Help alsjeblieft mee om OpenTTD beter te maken door je als vertaler aan te melden. Zie readme.txt voor details.
 
 # Quit window
 STR_QUIT_CAPTION                                                :{WHITE}Afsluiten
-STR_QUIT_ARE_YOU_SURE_YOU_WANT_TO_EXIT_OPENTTD                  :{YELLOW}Weet je zeker dat je OpenTTD wilt verlaten?
 STR_QUIT_YES                                                    :{BLACK}Ja
 STR_QUIT_NO                                                     :{BLACK}Nee
 
@@ -2358,7 +2348,6 @@ STR_FACE_SIMPLE                                                 :{BLACK}Eenvoudi
 STR_FACE_SIMPLE_TOOLTIP                                         :{BLACK}Eenvoudige gezichtskeuze
 STR_FACE_LOAD                                                   :{BLACK}Laden
 STR_FACE_LOAD_TOOLTIP                                           :{BLACK}Favoriet gezicht laden
-STR_FACE_LOAD_DONE                                              :{WHITE}Je favoriete gezicht is geladen uit het OpenTTD-configuratiebestand
 STR_FACE_FACECODE                                               :{BLACK}Gezichtscode
 STR_FACE_FACECODE_TOOLTIP                                       :{BLACK}Gezichtscode van directeur bekijken en/of instellen
 STR_FACE_FACECODE_CAPTION                                       :{WHITE}Huidige gezichtscode bekijken en/of instellen
@@ -2366,7 +2355,6 @@ STR_FACE_FACECODE_SET                                           :{WHITE}Nieuw ge
 STR_FACE_FACECODE_ERR                                           :{WHITE}Kon gezichtscode voor directeur niet instellen - moet een geldig label en nummer zijn
 STR_FACE_SAVE                                                   :{BLACK}Opslaan
 STR_FACE_SAVE_TOOLTIP                                           :{BLACK}Favoriet gezicht opslaan
-STR_FACE_SAVE_DONE                                              :{WHITE}Dit gezicht wordt in het OpenTTD-configuratiebestand opgeslagen als jouw favoriet
 STR_FACE_SETTING_TOGGLE                                         :{STRING} {ORANGE}{STRING}
 STR_FACE_SETTING_NUMERIC                                        :{STRING} {ORANGE}{NUM} / {NUM}
 STR_FACE_YES                                                    :Ja
@@ -2679,8 +2667,6 @@ STR_CONTENT_UNSELECT_ALL_CAPTION                                :{BLACK}Niets se
 STR_CONTENT_UNSELECT_ALL_CAPTION_TOOLTIP                        :{BLACK}Alle markeringen van inhoud voor download ongedaan maken
 STR_CONTENT_SEARCH_EXTERNAL                                     :{BLACK}Externe websites zoeken
 STR_CONTENT_SEARCH_EXTERNAL_TOOLTIP                             :{BLACK}Zoek inhoud niet beschikbaar op de server van OpenTTD op websites die niet gekoppeld zijn aan OpenTTD
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER_CAPTION                  :{WHITE}Je verlaat OpenTTD!
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER                          :{WHITE}De voorwaarden voor het downloaden van inhoud van externe websites variëren.{}Ga  naar de externe website voor instructies over het installeren van de inhoud in OpenTTD.{}Wil je doorgaan?
 STR_CONTENT_FILTER_TITLE                                        :{BLACK}Tag-/naamfilter:
 STR_CONTENT_OPEN_URL                                            :{BLACK}Website
 STR_CONTENT_OPEN_URL_TOOLTIP                                    :{BLACK}Bezoek de website voor deze inhoud
@@ -2694,7 +2680,6 @@ STR_CONTENT_DETAIL_SUBTITLE_UNSELECTED                          :{SILVER}Je hebt
 STR_CONTENT_DETAIL_SUBTITLE_SELECTED                            :{SILVER}Je hebt ervoor gekozen om dit te downloaden
 STR_CONTENT_DETAIL_SUBTITLE_AUTOSELECTED                        :{SILVER}Deze afhankelijkheid is geselecteerd om te downloaden
 STR_CONTENT_DETAIL_SUBTITLE_ALREADY_HERE                        :{SILVER}Dit heb je al
-STR_CONTENT_DETAIL_SUBTITLE_DOES_NOT_EXIST                      :{SILVER}Deze inhoud is onbekend en kan niet worden gedownload in OpenTTD
 
 STR_CONTENT_DETAIL_UPDATE                                       :{SILVER}Dit is een vervanging voor een bestaande {STRING}
 STR_CONTENT_DETAIL_NAME                                         :{SILVER}Naam: {WHITE}{STRING}
@@ -2706,7 +2691,6 @@ STR_CONTENT_DETAIL_FILESIZE                                     :{SILVER}Downloa
 STR_CONTENT_DETAIL_SELECTED_BECAUSE_OF                          :{SILVER}Geselecteerd omdat: {WHITE}{STRING}
 STR_CONTENT_DETAIL_DEPENDENCIES                                 :{SILVER}Afhankelijkheden: {WHITE}{STRING}
 STR_CONTENT_DETAIL_TAGS                                         :{SILVER}Tags: {WHITE}{STRING}
-STR_CONTENT_NO_ZLIB                                             :{WHITE}OpenTTD is gemaakt zonder 'zlib'-ondersteuning...
 STR_CONTENT_NO_ZLIB_SUB                                         :{WHITE}... niet mogelijk gegevens te downloaden
 
 # Order of these is important!
@@ -2735,13 +2719,10 @@ STR_CONTENT_ERROR_COULD_NOT_DOWNLOAD_FILE_NOT_WRITABLE          :{WHITE}... best
 STR_CONTENT_ERROR_COULD_NOT_EXTRACT                             :{WHITE}Kon gedownload bestand niet uitpakken
 
 STR_MISSING_GRAPHICS_SET_CAPTION                                :{WHITE}Ontbrekende grafische elementen
-STR_MISSING_GRAPHICS_SET_MESSAGE                                :{BLACK}OpenTTD heeft grafische elementen nodig om te kunnen werken, maar deze zijn niet gevonden. Wil je dat OpenTTD deze downloadt en installeert?
 STR_MISSING_GRAPHICS_YES_DOWNLOAD                               :{BLACK}Ja, grafische elementen downloaden
-STR_MISSING_GRAPHICS_NO_QUIT                                    :{BLACK}Nee, OpenTTD afsluiten
 
 STR_MISSING_GRAPHICS_ERROR_TITLE                                :{WHITE}Downloaden mislukt
 STR_MISSING_GRAPHICS_ERROR                                      :{BLACK}Grafische elementen downloaden mislukt.{}Download de grafische elementen handmatig.
-STR_MISSING_GRAPHICS_ERROR_QUIT                                 :{BLACK}OpenTTD afsluiten
 
 # Transparency settings window
 STR_TRANSPARENCY_CAPTION                                        :{WHITE}Doorzichtigheidsopties
@@ -3259,9 +3240,7 @@ STR_LAI_OBJECT_DESCRIPTION_COMPANY_HEADQUARTERS                 :Hoofdkantoor
 STR_LAI_OBJECT_DESCRIPTION_COMPANY_OWNED_LAND                   :Terrein in bedrijfseigendom
 
 # About OpenTTD window
-STR_ABOUT_OPENTTD                                               :{WHITE}Over OpenTTD
 STR_ABOUT_ORIGINAL_COPYRIGHT                                    :{BLACK}Originele auteursrecht {COPYRIGHT} 1995 Chris Sawyer, alle rechten voorbehouden
-STR_ABOUT_VERSION                                               :{BLACK}OpenTTD-versie {REV}
 STR_ABOUT_COPYRIGHT_OPENTTD                                     :{BLACK}OpenTTD {COPYRIGHT} 2002-{STRING} Het OpenTTD-team
 
 # Framerate display window
@@ -3388,7 +3367,6 @@ STR_MAPGEN_QUANTITY_OF_RIVERS                                   :{BLACK}Rivieren
 STR_MAPGEN_SMOOTHNESS                                           :{BLACK}Gladheid:
 STR_MAPGEN_VARIETY                                              :{BLACK}Landschapsvariatie:
 STR_MAPGEN_GENERATE                                             :{WHITE}Maken
-STR_MAPGEN_GENERATE_TOOLTIP                                     :{BLACK}Creëer de wereld en speel OpenTTD!
 STR_MAPGEN_NEWGRF_SETTINGS                                      :{BLACK}NewGRF-instellingen
 STR_MAPGEN_NEWGRF_SETTINGS_TOOLTIP                              :{BLACK}NewGRF-instellingen openen
 STR_MAPGEN_AI_SETTINGS                                          :{BLACK}AI-instellingen
@@ -3443,7 +3421,6 @@ STR_MAPGEN_HEIGHTMAP_ROTATION                                   :{BLACK}Rotatie 
 STR_MAPGEN_HEIGHTMAP_NAME                                       :{BLACK}Naam van hoogtekaart:
 STR_MAPGEN_HEIGHTMAP_NAME_TOOLTIP                               :{BLACK}De naam van het hoogtekaart-bestand
 STR_MAPGEN_HEIGHTMAP_SIZE_LABEL                                 :{BLACK}Grootte:
-STR_MAPGEN_HEIGHTMAP_SIZE_LABEL_TOOLTIP                         :{BLACK}De grootte van de bron-hoogtekaart. Voor optimaal resultaat kies je de lengten van de zijden gelijk aan de beschikbare kaartmaten in OpenTTD, zoals 256, 512, 1024 enz.
 STR_MAPGEN_HEIGHTMAP_SIZE                                       :{ORANGE}{NUM} x {NUM}
 
 STR_MAPGEN_TERRAIN_TYPE_QUERY_CAPT                              :{WHITE}Gewenste hoogte van bergen
@@ -3634,7 +3611,6 @@ STR_NEWGRF_ERROR_INDPROD_CALLBACK                               :Ongeldige terug
 
 # NewGRF related 'general' warnings
 STR_NEWGRF_POPUP_CAUTION_CAPTION                                :{WHITE}Waarschuwing!
-STR_NEWGRF_CONFIRMATION_TEXT                                    :{YELLOW}Je staat op het punt om wijzigingen te maken aan een lopend spel; dit kan OpenTTD laten vastlopen. Meld geen fouten hierover.{}Weet je het heel zeker?
 
 STR_NEWGRF_DUPLICATE_GRFID                                      :{WHITE}Kan bestand niet toevoegen: identieke GRF-ID
 STR_NEWGRF_COMPATIBLE_LOADED                                    :{ORANGE}Bijbehorend bestand niet gevonden (compatibele GRF geladen)
@@ -3643,7 +3619,6 @@ STR_NEWGRF_TOO_MANY_NEWGRFS                                     :{WHITE}Kan best
 STR_NEWGRF_COMPATIBLE_LOAD_WARNING                              :{WHITE}Compatibele GRF(s) geladen voor ontbrekende bestanden
 STR_NEWGRF_DISABLED_WARNING                                     :{WHITE}Missend(e) GRF-bestand(en) zijn uitgeschakeld
 STR_NEWGRF_UNPAUSE_WARNING_TITLE                                :{YELLOW}Ontbrekend(e) GRF-bestand(en)
-STR_NEWGRF_UNPAUSE_WARNING                                      :{WHITE}Het spel vervolgen kan OpenTTD laten vastlopen. Rapporteer geen fouten als het spel nogmaals vastloopt.{}Weet je zeker dat je het spel wilt vervolgen?
 
 # NewGRF status
 STR_NEWGRF_LIST_NONE                                            :Geen
@@ -4957,7 +4932,6 @@ STR_TEXTFILE_README_CAPTION                                     :{WHITE}{STRING}
 STR_TEXTFILE_CHANGELOG_CAPTION                                  :{WHITE}{STRING} wijzigingen van {STRING}
 STR_TEXTFILE_LICENCE_CAPTION                                    :{WHITE}{STRING} licentie van {STRING}
 STR_TEXTFILE_SURVEY_RESULT_CAPTION                              :{WHITE}Voorbeeld van resultaten van onderzoek
-STR_TEXTFILE_GAME_MANUAL_CAPTION                                :{WHITE}OpenTTD-document '{STRING}'
 
 
 # Vehicle loading indicators

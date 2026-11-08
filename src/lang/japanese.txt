@@ -398,12 +398,10 @@ STR_TOOLBAR_TOOLTIP_BUILD_AIRPORTS                              :{BLACK}空港�
 STR_TOOLBAR_TOOLTIP_LANDSCAPING                                 :{BLACK}地形のツールバーを開きます。整地や植林などを行うことができます。
 STR_TOOLBAR_TOOLTIP_SHOW_SOUND_MUSIC_WINDOW                     :{BLACK}音楽/効果音のウィンドウを表示します
 STR_TOOLBAR_TOOLTIP_SHOW_LAST_MESSAGE_NEWS                      :{BLACK}最新メッセージ/ニュースとメッセージ履歴を表示、メッセージをすべて削除
-STR_TOOLBAR_TOOLTIP_LAND_BLOCK_INFORMATION                      :{BLACK}地域の情報、スクリーンショット、OpenTTDについて、開発者ツール
 STR_TOOLBAR_TOOLTIP_SWITCH_TOOLBAR                              :{BLACK}ツールバーを切り替えます
 
 # Extra tooltips for the scenario editor toolbar
 STR_SCENEDIT_TOOLBAR_SAVE_SCENARIO_LOAD_SCENARIO_TOOLTIP        :{BLACK}シナリオのセーブ、シナリオのロード、シナリオエディタの終了、OpenTTDの終了ができます
-STR_SCENEDIT_TOOLBAR_OPENTTD                                    :{YELLOW}OpenTTD
 STR_SCENEDIT_TOOLBAR_SCENARIO_EDITOR                            :{YELLOW}シナリオエディタ
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_BACKWARD_TOOLTIP    :{BLACK}開始年月日を1年戻します
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_FORWARD_TOOLTIP     :{BLACK}開始年月日を1年進めます
@@ -519,7 +517,6 @@ STR_ABOUT_MENU_TOGGLE_CONSOLE                                   :コンソール
 STR_ABOUT_MENU_AI_DEBUG                                         :AI/ゲームスクリプトのデバッグ
 STR_ABOUT_MENU_SCREENSHOT                                       :スクリーンショット
 STR_ABOUT_MENU_SHOW_FRAMERATE                                   :フレームレートを表示
-STR_ABOUT_MENU_ABOUT_OPENTTD                                    :OpenTTDについて
 STR_ABOUT_MENU_SPRITE_ALIGNER                                   :スプライトを整列
 STR_ABOUT_MENU_TOGGLE_BOUNDING_BOXES                            :バウンディングボックスの表示切替
 STR_ABOUT_MENU_TOGGLE_DIRTY_BLOCKS                              :ダーティーブロックの色付け切替
@@ -996,7 +993,6 @@ STR_GAME_OPTIONS_LANGUAGE_TOOLTIP                               :ゲームの言
 STR_GAME_OPTIONS_LANGUAGE_PERCENTAGE                            :{STRING} ({NUM}% 完了)
 
 STR_GAME_OPTIONS_FULLSCREEN                                     :フルスクリーン
-STR_GAME_OPTIONS_FULLSCREEN_TOOLTIP                             :OpenTTD をフルスクリーンでプレイするにはチェックします
 
 STR_GAME_OPTIONS_RESOLUTION                                     :画面解像度
 STR_GAME_OPTIONS_RESOLUTION_TOOLTIP                             :ゲーム画面の解像度を選択します
@@ -1004,7 +1000,6 @@ STR_GAME_OPTIONS_RESOLUTION_OTHER                               :その他
 STR_GAME_OPTIONS_RESOLUTION_ITEM                                :{NUM}x{NUM}
 
 STR_GAME_OPTIONS_VIDEO_ACCELERATION                             :ハードウェアアクセラレーション
-STR_GAME_OPTIONS_VIDEO_ACCELERATION_TOOLTIP                     :ここをチェックしてOpenTTDがハードウェアアクセラレーションを利用するようにします。設定はゲームを再起動した後に適用されます。
 STR_GAME_OPTIONS_VIDEO_ACCELERATION_RESTART                     :{WHITE} この設定は再起動後に適用されます。
 
 STR_GAME_OPTIONS_VIDEO_VSYNC                                    : 垂直同期
@@ -2070,7 +2065,6 @@ STR_VIDEO_DRIVER_ERROR_NO_HARDWARE_ACCELERATION                 :{WHITE}... 対�
 STR_VIDEO_DRIVER_ERROR_HARDWARE_ACCELERATION_CRASH              :{WHITE}... GPUドライバーがゲームをクラッシュさせました。ハードウェアアクセラレーションは無効になりました
 
 # Intro window
-STR_INTRO_CAPTION                                               :{WHITE}OpenTTD
 
 STR_INTRO_NEW_GAME                                              :{BLACK}新しいゲーム
 STR_INTRO_LOAD_GAME                                             :{BLACK}ロード
@@ -2100,14 +2094,11 @@ STR_INTRO_TOOLTIP_TOYLAND_LANDSCAPE                             :{BLACK}地域�
 STR_INTRO_TOOLTIP_GAME_OPTIONS                                  :{BLACK}ゲームの設定を表示します
 STR_INTRO_TOOLTIP_HIGHSCORE                                     :{BLACK}ハイスコアを表示します
 STR_INTRO_TOOLTIP_ONLINE_CONTENT                                :{BLACK}公式オンラインコンテンツのデータベースからデータの確認・追加・更新ができます
-STR_INTRO_TOOLTIP_QUIT                                          :{BLACK}OpenTTD を終了します
 
 STR_INTRO_BASESET                                               :現在選択されているグラフィックのベースセットは {NUM} つのスプライトが欠けています。ベースセットの更新を確認してみてください。
-STR_INTRO_TRANSLATION                                           :{BLACK}この言語セットには{NUM}個の未訳文字列があります。翻訳者としてWeb登録し、OpenTTDをより良くする為にご助力下さい。(詳細はreadme.txtをご覧下さい)
 
 # Quit window
 STR_QUIT_CAPTION                                                :{WHITE}終了
-STR_QUIT_ARE_YOU_SURE_YOU_WANT_TO_EXIT_OPENTTD                  :{YELLOW}OpenTTD を終了してもよろしいですか?
 STR_QUIT_YES                                                    :{BLACK}はい
 STR_QUIT_NO                                                     :{BLACK}いいえ
 
@@ -2192,7 +2183,6 @@ STR_FACE_SIMPLE                                                 :{BLACK}簡易
 STR_FACE_SIMPLE_TOOLTIP                                         :{BLACK}顔を簡易式で編集します
 STR_FACE_LOAD                                                   :{BLACK}開く
 STR_FACE_LOAD_TOOLTIP                                           :{BLACK}お気に入りの顔を開きます
-STR_FACE_LOAD_DONE                                              :{WHITE}お気に入りの顔をOpenTTDの設定ファイルから読み込みました
 STR_FACE_FACECODE                                               :{BLACK}顔番号
 STR_FACE_FACECODE_TOOLTIP                                       :{BLACK}この顔番号を表示/変更します
 STR_FACE_FACECODE_CAPTION                                       :{WHITE}顔番号を表示/変更
@@ -2200,7 +2190,6 @@ STR_FACE_FACECODE_SET                                           :{WHITE}顔番�
 STR_FACE_FACECODE_ERR                                           :{WHITE}顔番号を更新できませんでした。数値は0から4,294,967,295の間でなければなりません
 STR_FACE_SAVE                                                   :{BLACK}保存
 STR_FACE_SAVE_TOOLTIP                                           :{BLACK}お気に入りの顔として保存します
-STR_FACE_SAVE_DONE                                              :{WHITE}この顔をお気に入りの顔として、OpenTTDの設定ファイルに保存します
 STR_FACE_YES                                                    :あり
 STR_FACE_NO                                                     :なし
 STR_FACE_HAIR                                                   :髪型:
@@ -2497,8 +2486,6 @@ STR_CONTENT_UNSELECT_ALL_CAPTION                                :{BLACK}選択�
 STR_CONTENT_UNSELECT_ALL_CAPTION_TOOLTIP                        :{BLACK}すべてのコンテンツをダウンロードしない
 STR_CONTENT_SEARCH_EXTERNAL                                     :{BLACK}外部サイトで検索
 STR_CONTENT_SEARCH_EXTERNAL_TOOLTIP                             :{BLACK}OpenTTDコンテンツサービスに掲載されていないものを外部サイトを使用して検索できます。
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER_CAPTION                  :{WHITE}OpenTTDから離脱
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER                          :{WHITE}外部サイトではNewGRFの利用要件やファイル状況がサイトにより異なります。{}OpenTTDへのインストール方法は当該の外部サイトを参照してください。{}続けてもよろしいですか?
 STR_CONTENT_FILTER_TITLE                                        :{BLACK}タグ/名前のフィルター:
 STR_CONTENT_OPEN_URL                                            :{BLACK}サイトを見る
 STR_CONTENT_OPEN_URL_TOOLTIP                                    :{BLACK}このコンテンツのあるウェブサイトを訪れます
@@ -2512,7 +2499,6 @@ STR_CONTENT_DETAIL_SUBTITLE_UNSELECTED                          :{SILVER}ダウ�
 STR_CONTENT_DETAIL_SUBTITLE_SELECTED                            :{SILVER}ダウンロード指定されています
 STR_CONTENT_DETAIL_SUBTITLE_AUTOSELECTED                        :{SILVER}他との依存関係によりダウンロード指定されています
 STR_CONTENT_DETAIL_SUBTITLE_ALREADY_HERE                        :{SILVER}既にダウンロード済です
-STR_CONTENT_DETAIL_SUBTITLE_DOES_NOT_EXIST                      :{SILVER}ファイルが未知の形式のため、OpenTTDからはダウンロードできません
 
 STR_CONTENT_DETAIL_UPDATE                                       :{SILVER}このコンテンツは既にダウンロードされた{STRING}を置き換えます
 STR_CONTENT_DETAIL_NAME                                         :{SILVER}コンテンツ名: {WHITE}{STRING}
@@ -2524,7 +2510,6 @@ STR_CONTENT_DETAIL_FILESIZE                                     :{SILVER}ファ�
 STR_CONTENT_DETAIL_SELECTED_BECAUSE_OF                          :{SILVER}以下の依存関係によりダウンロードされます: {WHITE}{STRING}
 STR_CONTENT_DETAIL_DEPENDENCIES                                 :{SILVER}依存する他コンテンツ: {WHITE}{STRING}
 STR_CONTENT_DETAIL_TAGS                                         :{SILVER}タグ: {WHITE}{STRING}
-STR_CONTENT_NO_ZLIB                                             :{WHITE}OpenTTDは"zlib"をサポートしていません
 STR_CONTENT_NO_ZLIB_SUB                                         :{WHITE}ダウンロードできません!
 
 # Order of these is important!
@@ -2553,13 +2538,10 @@ STR_CONTENT_ERROR_COULD_NOT_DOWNLOAD_FILE_NOT_WRITABLE          :{WHITE}ダウ�
 STR_CONTENT_ERROR_COULD_NOT_EXTRACT                             :{WHITE}ダウンロードしたファイルを展開できませんでした
 
 STR_MISSING_GRAPHICS_SET_CAPTION                                :{WHITE}基本グラフィック欠落
-STR_MISSING_GRAPHICS_SET_MESSAGE                                :{BLACK}OpenTTDの動作に必要な基本グラフィックが見つかりません。ダウンロードしてインストールしますか?
 STR_MISSING_GRAPHICS_YES_DOWNLOAD                               :{BLACK}はい、グラフィックをダウンロードします
-STR_MISSING_GRAPHICS_NO_QUIT                                    :{BLACK}いいえ、OpenTTDを終了します
 
 STR_MISSING_GRAPHICS_ERROR_TITLE                                :{WHITE}ダウンロードに失敗しました
 STR_MISSING_GRAPHICS_ERROR                                      :{BLACK}グラフィックのダウンロードに失敗しました。{}手動でダウンロードしてください。
-STR_MISSING_GRAPHICS_ERROR_QUIT                                 :{BLACK}OpenTTDをやめる
 
 # Transparency settings window
 STR_TRANSPARENCY_CAPTION                                        :{WHITE}透過表示設定
@@ -3014,9 +2996,7 @@ STR_LAI_OBJECT_DESCRIPTION_COMPANY_HEADQUARTERS                 :本社ビル
 STR_LAI_OBJECT_DESCRIPTION_COMPANY_OWNED_LAND                   :社有地
 
 # About OpenTTD window
-STR_ABOUT_OPENTTD                                               :{WHITE}OpenTTDについて
 STR_ABOUT_ORIGINAL_COPYRIGHT                                    :{BLACK}オリジナル版権{COPYRIGHT} 1995 Chris Sawyer All rights reserved
-STR_ABOUT_VERSION                                               :{BLACK}OpenTTD バージョン {REV}
 STR_ABOUT_COPYRIGHT_OPENTTD                                     :{BLACK}OpenTTD {COPYRIGHT} 2002-{STRING} The OpenTTD team
 
 # Framerate display window
@@ -3358,7 +3338,6 @@ STR_NEWGRF_ERROR_INDPROD_CALLBACK                               :不正な産業
 
 # NewGRF related 'general' warnings
 STR_NEWGRF_POPUP_CAUTION_CAPTION                                :{WHITE}注意!
-STR_NEWGRF_CONFIRMATION_TEXT                                    :{YELLOW}実行中のゲームに変更を適用すると、ソフトのクラッシュ又はゲーム破損が起こる可能性があります。これらのトラブルに関するバグ報告はしないで下さい。{}続けてもよろしいですか?
 
 STR_NEWGRF_DUPLICATE_GRFID                                      :{WHITE}既にあるファイルとGRF IDが重複するため、このファイルは追加できません
 STR_NEWGRF_COMPATIBLE_LOADED                                    :{ORANGE}一致するファイルが見つかりません(代替GRFを使用中)
@@ -3367,7 +3346,6 @@ STR_NEWGRF_TOO_MANY_NEWGRFS                                     :{WHITE}NewGRF�
 STR_NEWGRF_COMPATIBLE_LOAD_WARNING                              :{WHITE}見つからないファイルの代わりに対応している代替GRFファイルを使用しています
 STR_NEWGRF_DISABLED_WARNING                                     :{WHITE}見つからないGRFファイルは無効になっています
 STR_NEWGRF_UNPAUSE_WARNING_TITLE                                :{YELLOW}GRFファイルが見つかりません
-STR_NEWGRF_UNPAUSE_WARNING                                      :{WHITE}ポーズを解除した場合、OpenTTDがクラッシュする可能性があります。解除後クラッシュが起こった場合のバグ報告はご遠慮ください。{}ポーズを解除してもよろしいですか?
 
 # NewGRF status
 STR_NEWGRF_LIST_NONE                                            :なし
@@ -4580,7 +4558,6 @@ STR_TEXTFILE_VIEW_LICENCE                                       :{BLACK}ライ�
 STR_TEXTFILE_README_CAPTION                                     :{WHITE}{STRING} {STRING}のReadme
 STR_TEXTFILE_CHANGELOG_CAPTION                                  :{WHITE}{STRING} {STRING}の変更履歴
 STR_TEXTFILE_LICENCE_CAPTION                                    :{WHITE}{STRING} {STRING}のライセンス
-STR_TEXTFILE_GAME_MANUAL_CAPTION                                :{WHITE}OpenTTD のドキュメント '{STRING}'
 
 
 # Vehicle loading indicators

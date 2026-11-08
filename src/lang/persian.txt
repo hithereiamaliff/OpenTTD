@@ -381,12 +381,10 @@ STR_TOOLBAR_TOOLTIP_BUILD_AIRPORTS                              :{BLACK}ساخت
 STR_TOOLBAR_TOOLTIP_LANDSCAPING                                 :{BLACK}باز کردن نوار ابزار محوطه سازی به منظور بالا بردن / پایین بردن زمین ، کاشت درخت، و غیره
 STR_TOOLBAR_TOOLTIP_SHOW_SOUND_MUSIC_WINDOW                     :{BLACK}صفحه ی صدا/موسیقی
 STR_TOOLBAR_TOOLTIP_SHOW_LAST_MESSAGE_NEWS                      :{BLACK}نمایش تاریخ و زمان آخرین پیام / خبر و تنظیمات پیغام خصوصی
-STR_TOOLBAR_TOOLTIP_LAND_BLOCK_INFORMATION                      :{BLACK}توضیحات درباره ی زمین، کنسول، خطایابی هوش مصنوعی، عکس گرفتن از صفحه نمایش، درباره OpenTTD
 STR_TOOLBAR_TOOLTIP_SWITCH_TOOLBAR                              :{BLACK}عوض کردن نوار ابزار
 
 # Extra tooltips for the scenario editor toolbar
 STR_SCENEDIT_TOOLBAR_SAVE_SCENARIO_LOAD_SCENARIO_TOOLTIP        :{BLACK}ذخیره سناریو، بارگزاری سناریو، خروج از ویرایشگر سناریو، خروج
-STR_SCENEDIT_TOOLBAR_OPENTTD                                    :{YELLOW}OpenTTD
 STR_SCENEDIT_TOOLBAR_SCENARIO_EDITOR                            :{YELLOW}ویرایشگر سناریو
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_BACKWARD_TOOLTIP    :{BLACK}روز شروع بازی را یک سال به عقب برگردان
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_FORWARD_TOOLTIP     :{BLACK}روز شروع بازی را یک سال جلو ببر
@@ -506,7 +504,6 @@ STR_ABOUT_MENU_TOGGLE_CONSOLE                                   :باز و بس�
 STR_ABOUT_MENU_AI_DEBUG                                         :خطایابی هوش مصنوعی
 STR_ABOUT_MENU_SCREENSHOT                                       :تصویر از بازی
 STR_ABOUT_MENU_SHOW_FRAMERATE                                   :نمایش دادن frame rate
-STR_ABOUT_MENU_ABOUT_OPENTTD                                    :'OpenTTD' درباره
 STR_ABOUT_MENU_SPRITE_ALIGNER                                   :تراز کردن تصویر گرافیکی
 STR_ABOUT_MENU_TOGGLE_BOUNDING_BOXES                            :باز/بسته کردن محدوده جعبه ها
 STR_ABOUT_MENU_TOGGLE_DIRTY_BLOCKS                              :نمایش/حذف بلوکهای کثیف
@@ -974,7 +971,6 @@ STR_GAME_OPTIONS_LANGUAGE                                       :زبان
 STR_GAME_OPTIONS_LANGUAGE_TOOLTIP                               :زبان واسط کاربری را برای استفاده انتخاب کنید
 
 STR_GAME_OPTIONS_FULLSCREEN                                     :تمام صفحه
-STR_GAME_OPTIONS_FULLSCREEN_TOOLTIP                             :برای بازی کردن OpenTTD در حالت تمام صفحه این جعبه را انتخاب کنید
 
 STR_GAME_OPTIONS_RESOLUTION                                     :وضوح تصویر
 STR_GAME_OPTIONS_RESOLUTION_TOOLTIP                             :وضوح تصویر دلخواه را انتخاب کنید
@@ -1776,7 +1772,6 @@ STR_CONFIG_ERROR_INVALID_SAVEGAME_COMPRESSION_ALGORITHM         :{WHITE}... قا
 # Video initialization errors
 
 # Intro window
-STR_INTRO_CAPTION                                               :{WHITE}OpenTTD
 
 STR_INTRO_NEW_GAME                                              :{BLACK}بازی جدید
 STR_INTRO_LOAD_GAME                                             :{BLACK}بارگذاری بازی های ذخیره شده
@@ -1804,13 +1799,10 @@ STR_INTRO_TOOLTIP_TOYLAND_LANDSCAPE                             :{BLACK}انتخ
 STR_INTRO_TOOLTIP_GAME_OPTIONS                                  :{BLACK}نشان دادن تنظیمات بازی
 STR_INTRO_TOOLTIP_HIGHSCORE                                     :{BLACK}نمایش جدول بالاترین امتیازات
 STR_INTRO_TOOLTIP_ONLINE_CONTENT                                :{BLACK}بررسی وجود مجموعه ها و به روز رسانی های جدید در اینترنت
-STR_INTRO_TOOLTIP_QUIT                                          :{BLACK} خروج از 'OpenTTD'
 
-STR_INTRO_TRANSLATION                                           :{BLACK}این ترجمه {NUM} رشته{P ی های}ترجمه نشده دارد. با ثبت نام کردن به عنوان مترجم ما را در بهتر سازی OpenTTD یاری نمایید. فایل readme.txt را برای جزییات بیشتر بخوانید.
 
 # Quit window
 STR_QUIT_CAPTION                                                :{WHITE}خروج
-STR_QUIT_ARE_YOU_SURE_YOU_WANT_TO_EXIT_OPENTTD                  :{YELLOW}آیا مطمئن هستی که میخواهی از OpenTTD خارج شوی؟
 STR_QUIT_YES                                                    :{BLACK}بله
 STR_QUIT_NO                                                     :{BLACK}خیر
 
@@ -1883,7 +1875,6 @@ STR_FACE_SIMPLE                                                 :{BLACK}ساده
 STR_FACE_SIMPLE_TOOLTIP                                         :{BLACK}انتخاب ساده صورت
 STR_FACE_LOAD                                                   :{BLACK}بارگزاری
 STR_FACE_LOAD_TOOLTIP                                           :{BLACK}بارگزاری صورت دلخواه
-STR_FACE_LOAD_DONE                                              :{WHITE}صورت دلخواه شما از فایل تنظیمات بازی بارگزاری گردید
 STR_FACE_FACECODE                                               :{BLACK}صورت کاربر،شماره‌ی.
 STR_FACE_FACECODE_TOOLTIP                                       :{BLACK}دیدن و یا تنظیم شماره صورت رییس شرکت
 STR_FACE_FACECODE_CAPTION                                       :{WHITE}دیدن و یا تنظیم شماره صورت رییس
@@ -1891,7 +1882,6 @@ STR_FACE_FACECODE_SET                                           :{WHITE}شمار
 STR_FACE_FACECODE_ERR                                           :{WHITE}صورت رییس شرکت را نمی توان به این شماره ثبت کرد - عدد باید بین 0 و 4,294,967,295 باشد!
 STR_FACE_SAVE                                                   :{BLACK}ذخیره
 STR_FACE_SAVE_TOOLTIP                                           :{BLACK}ذخیره صورت دلخواه
-STR_FACE_SAVE_DONE                                              :{WHITE}این صورت به عنوان صورت دلخواه شما در فایل تنظیمات بازی ذخیره می گردد
 STR_FACE_YES                                                    :بله
 STR_FACE_NO                                                     :خیر
 STR_FACE_HAIR                                                   :مو:
@@ -2156,7 +2146,6 @@ STR_CONTENT_DETAIL_SUBTITLE_UNSELECTED                          :{SILVER} شما
 STR_CONTENT_DETAIL_SUBTITLE_SELECTED                            :{SILVER}شما این گزینه را برای بارگیری انتخاب کرده اید
 STR_CONTENT_DETAIL_SUBTITLE_AUTOSELECTED                        :{SILVER}این پیوست برای بارگیری انتخاب شده است
 STR_CONTENT_DETAIL_SUBTITLE_ALREADY_HERE                        :{SILVER}شما این را از قبل داشته اید
-STR_CONTENT_DETAIL_SUBTITLE_DOES_NOT_EXIST                      :{SILVER}این محتوی ناشناخته است و قابلیت بارگیری در OpenTTD را ندارد
 
 STR_CONTENT_DETAIL_UPDATE                                       :{SILVER}این مورد جایگزینی برای گزینه ی موجود است {STRING}
 STR_CONTENT_DETAIL_NAME                                         :{SILVER}نام:{WHITE}{STRING}
@@ -2168,7 +2157,6 @@ STR_CONTENT_DETAIL_FILESIZE                                     :{SILVER}جحم 
 STR_CONTENT_DETAIL_SELECTED_BECAUSE_OF                          :{SILVER}دلیل انتخاب: {STRING}{WHITE}
 STR_CONTENT_DETAIL_DEPENDENCIES                                 :{SILVER}وابستگی ها: {WHITE}{STRING}
 STR_CONTENT_DETAIL_TAGS                                         :{SILVER}برچسب ها: {WHITE}{STRING}
-STR_CONTENT_NO_ZLIB                                             :{WHITE}نرم افزار OpenTTD بدون استفاده از پشتیبانی "zlib" ساخته شده است
 STR_CONTENT_NO_ZLIB_SUB                                         :{WHITE}... امکان دانلود این محتوی وجود ندارد!
 
 # Order of these is important!
@@ -2198,7 +2186,6 @@ STR_CONTENT_ERROR_COULD_NOT_EXTRACT                             :{WHITE}بازگ
 
 STR_MISSING_GRAPHICS_SET_CAPTION                                :{WHITE}گرافیک های یافت نشده
 STR_MISSING_GRAPHICS_YES_DOWNLOAD                               :{BLACK}بله, فایلهای گرافیک را بارگیری کن
-STR_MISSING_GRAPHICS_NO_QUIT                                    :{BLACK}خیر, خروج OpenTTD
 
 
 # Transparency settings window
@@ -2660,9 +2647,7 @@ STR_LAI_OBJECT_DESCRIPTION_COMPANY_HEADQUARTERS                 :ساختمان 
 STR_LAI_OBJECT_DESCRIPTION_COMPANY_OWNED_LAND                   :زمین خریداری شده
 
 # About OpenTTD window
-STR_ABOUT_OPENTTD                                               :{WHITE}OpenTTD در باره ی
 STR_ABOUT_ORIGINAL_COPYRIGHT                                    :{BLACK}Original copyright {COPYRIGHT} 1995 Chris Sawyer, All rights reserved
-STR_ABOUT_VERSION                                               :{BLACK}OpenTTD ویرایش {REV}
 STR_ABOUT_COPYRIGHT_OPENTTD                                     :{BLACK}OpenTTD {COPYRIGHT}2002-{STRING} The OpenTTD team
 
 # Framerate display window
@@ -2941,7 +2926,6 @@ STR_NEWGRF_ERROR_FORCEFULLY_DISABLED                            :{1:STRING} غی
 
 # NewGRF related 'general' warnings
 STR_NEWGRF_POPUP_CAUTION_CAPTION                                :{WHITE}اخطار!
-STR_NEWGRF_CONFIRMATION_TEXT                                    :{YELLOW}شما دارید در یک بازی درحال اجرا تغییر اعمال می کنید که ممکن است باعث برهم خوردن بازی شود.{}آیا مطمئنید؟
 
 STR_NEWGRF_DUPLICATE_GRFID                                      :{WHITE}نمی توان فایل را اضافه کرد: GRF ID تکراری
 STR_NEWGRF_COMPATIBLE_LOADED                                    :{ORANGE}فایل تطبیق یافت نشد (GRF سازگار بارگذاری گردید)
@@ -2949,7 +2933,6 @@ STR_NEWGRF_COMPATIBLE_LOADED                                    :{ORANGE}فای�
 STR_NEWGRF_COMPATIBLE_LOAD_WARNING                              :{WHITE}GRF های سازگار برای فایل هایی که موجود نیستند بارگذاری گردید
 STR_NEWGRF_DISABLED_WARNING                                     :{WHITE}GRF هایی که همه فایلهای آن موجود نیست غیر فعال گردیدند
 STR_NEWGRF_UNPAUSE_WARNING_TITLE                                :{YELLOW}فایل های GRF موجود نیست
-STR_NEWGRF_UNPAUSE_WARNING                                      :{WHITE}ادامه دادن بازی ممکن است باعث خطا و بسته شدن بازی گردد.اگر این اتفاق افتاد، این مورد را به عنوان خطا (باگ) گزارش ندهید.{}آیا می خواهید ادامه دهید؟
 
 # NewGRF status
 STR_NEWGRF_LIST_NONE                                            :هیچکدام
@@ -3835,7 +3818,6 @@ STR_TEXTFILE_VIEW_LICENCE                                       :{BLACK}گواه
 STR_TEXTFILE_README_CAPTION                                     :{WHITE}راهنمای {STRING} {STRING}
 STR_TEXTFILE_CHANGELOG_CAPTION                                  :{WHITE}{STRING} گزارش تغییرات {STRING}
 STR_TEXTFILE_LICENCE_CAPTION                                    :{WHITE}{STRING} گواهی {STRING}
-STR_TEXTFILE_GAME_MANUAL_CAPTION                                :{WHITE}سند (OpenTTD) '{STRING}'
 
 
 # Vehicle loading indicators

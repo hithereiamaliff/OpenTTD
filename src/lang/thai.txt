@@ -357,12 +357,10 @@ STR_TOOLBAR_TOOLTIP_BUILD_AIRPORTS                              :{BLACK}สร�
 STR_TOOLBAR_TOOLTIP_LANDSCAPING                                 :{BLACK}เปิดแถบเครื่องมือภูมิประเทศเพื่อปรับความสูงต่ำของพื้นดิน, ปลูกต้นไม้ ฯลฯ
 STR_TOOLBAR_TOOLTIP_SHOW_SOUND_MUSIC_WINDOW                     :{BLACK}แสดงหน้าต่างเสียงและดนตรี
 STR_TOOLBAR_TOOLTIP_SHOW_LAST_MESSAGE_NEWS                      :{BLACK}แสดงข้อความล่าสุด/รายงานข่าว, แสดงตัวเลือกข้อความ
-STR_TOOLBAR_TOOLTIP_LAND_BLOCK_INFORMATION                      :{BLACK}ข้อมูลที่ดิน, คอนโซล, ดีบัก AI, จับภาพหน้าจอ, เกี่ยวกับ OpenTTD
 STR_TOOLBAR_TOOLTIP_SWITCH_TOOLBAR                              :{BLACK}เปลี่ยนกล่องเครื่องมือ
 
 # Extra tooltips for the scenario editor toolbar
 STR_SCENEDIT_TOOLBAR_SAVE_SCENARIO_LOAD_SCENARIO_TOOLTIP        :{BLACK}บันทึกฉาก, โหลดฉาก, ยกเลิกการแก้ไขฉาก, ออก
-STR_SCENEDIT_TOOLBAR_OPENTTD                                    :{YELLOW}OpenTTD
 STR_SCENEDIT_TOOLBAR_SCENARIO_EDITOR                            :{YELLOW}โปรแกรมแก้ไขแผนที่
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_BACKWARD_TOOLTIP    :{BLACK}เลื่อนวันที่เริ่มต้นย้อนไป 1 ปี
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_FORWARD_TOOLTIP     :{BLACK}เลือนวันที่เริ่มต้นไปอีก 1 ปี
@@ -472,7 +470,6 @@ STR_ABOUT_MENU_TOGGLE_CONSOLE                                   :เปิด/�
 STR_ABOUT_MENU_AI_DEBUG                                         :ดีบัก สคริปต์ AI/Game
 STR_ABOUT_MENU_SCREENSHOT                                       :จับภาพหน้าจอ (Ctrl+S)
 STR_ABOUT_MENU_SHOW_FRAMERATE                                   :แสดงผลเฟรมเรท
-STR_ABOUT_MENU_ABOUT_OPENTTD                                    :เกี่ยวกับ 'OpenTTD'
 STR_ABOUT_MENU_SPRITE_ALIGNER                                   :ตัวจัดแนว Sprite
 STR_ABOUT_MENU_TOGGLE_BOUNDING_BOXES                            :เปิด/ปิด bounding boxes
 STR_ABOUT_MENU_TOGGLE_DIRTY_BLOCKS                              :เปิด/เปิด สีของ dirty blocks
@@ -916,7 +913,6 @@ STR_GAME_OPTIONS_LANGUAGE                                       :ภาษา
 STR_GAME_OPTIONS_LANGUAGE_TOOLTIP                               :เลือกภาษาที่จะใช้
 
 STR_GAME_OPTIONS_FULLSCREEN                                     :เต็มหน้าจอ
-STR_GAME_OPTIONS_FULLSCREEN_TOOLTIP                             :ทำเครื่องหมายที่ช่องนี้เพื่อเล่น OpenTTD fullscreen โหมด
 
 STR_GAME_OPTIONS_RESOLUTION                                     :ความละเอียดของหน้าจอ
 STR_GAME_OPTIONS_RESOLUTION_TOOLTIP                             :เลือกความละเอียดของหน้าจอที่จะใช้
@@ -1907,13 +1903,10 @@ STR_INTRO_TOOLTIP_TOYLAND_LANDSCAPE                             :{BLACK}เล�
 STR_INTRO_TOOLTIP_GAME_OPTIONS                                  :{BLACK}แสดงตัวเลือกเกม
 STR_INTRO_TOOLTIP_HIGHSCORE                                     :{BLACK}แสดงตารางคะแนนสูงสุด
 STR_INTRO_TOOLTIP_ONLINE_CONTENT                                :{BLACK}ตรวจสอบเนื้อหาใหม่และการปรับปรุงสำหรับดาวโหลด
-STR_INTRO_TOOLTIP_QUIT                                          :{BLACK}ออกจากเกม OpenTTD
 
-STR_INTRO_TRANSLATION                                           :{BLACK} การแปลภาษาส่วนนี้หายไป {NUM} string{P ""}. โปรดช่วยทำให้ OpenTTD ดีขึ้นโดยการสมัครเป็นผู้แปล. ดูใน readme.txt สำหรับรายละเอียด.
 
 # Quit window
 STR_QUIT_CAPTION                                                :{WHITE}ออกจากเกม
-STR_QUIT_ARE_YOU_SURE_YOU_WANT_TO_EXIT_OPENTTD                  :{YELLOW}คุณแน่ใจว่าจะออกจากเกม OpenTTD }?
 STR_QUIT_YES                                                    :{BLACK}ใช่
 STR_QUIT_NO                                                     :{BLACK}ไม่
 
@@ -1984,7 +1977,6 @@ STR_FACE_SIMPLE                                                 :{BLACK}อย�
 STR_FACE_SIMPLE_TOOLTIP                                         :{BLACK}เลือกใบหน้าอย่างง่าย
 STR_FACE_LOAD                                                   :{BLACK}โหลด
 STR_FACE_LOAD_TOOLTIP                                           :{BLACK}โหลดใบหน้าที่ชอบ
-STR_FACE_LOAD_DONE                                              :{WHITE}ใบหน้าที่ชอบถูกโหลดจากไฟล์กำหนดค่าของ OpenTTD แล้ว
 STR_FACE_FACECODE                                               :{BLACK}ใบหน้าผู้เล่นเบอร์
 STR_FACE_FACECODE_TOOLTIP                                       :{BLACK}ดู และ/หรือ ตั้งหมายเลขใบหน้าผู้เล่น
 STR_FACE_FACECODE_CAPTION                                       :{WHITE}ดู และ/หรือ ตั้งหมายเลขใบหน้าผู้เล่น
@@ -1992,7 +1984,6 @@ STR_FACE_FACECODE_SET                                           :{WHITE}กำ�
 STR_FACE_FACECODE_ERR                                           :{WHITE}ไม่สามารถเปลี่ยนหมายเลขใบหน้าได้ - ช่วงตัวเลขต้องอยู่ระหว่าง 0 และ 4,294,967,295!
 STR_FACE_SAVE                                                   :{BLACK}บันทึก
 STR_FACE_SAVE_TOOLTIP                                           :{BLACK}บันทึกใบหน้าโปรด
-STR_FACE_SAVE_DONE                                              :{WHITE}ใบหน้านี้จะถูกบันทึกเป็นใบหน้าโปรดในไฟล์การตั้งค่าของ OpenTTD
 STR_FACE_YES                                                    :ใช่
 STR_FACE_NO                                                     :ไม่
 STR_FACE_HAIR                                                   :ผม:
@@ -2246,8 +2237,6 @@ STR_CONTENT_UNSELECT_ALL_CAPTION                                :{BLACK}ยก�
 STR_CONTENT_UNSELECT_ALL_CAPTION_TOOLTIP                        :{BLACK}เลือกทั้งหมดให้ไม่ทำการดาวโหลด
 STR_CONTENT_SEARCH_EXTERNAL                                     :{BLACK}ค้นหาจากเว็บไซต์ภายนอก
 STR_CONTENT_SEARCH_EXTERNAL_TOOLTIP                             :{BLACK}สิ่งที่ต้องการหานั้นไม่มีในช่องทาง OpenTTD's content service
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER_CAPTION                  :{WHITE}คุณต้องการออกจากเกมหรือไม่ ?
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER                          :{WHITE}ข้อกำหนดและข้อความระวังสำหรับการดาวโหลดข้อมูลจากเว็บไซต์ภายนอก.{}คุณต้องหาข้อมูลสำหรับการติดตั้งข้อมูลส่วนนั้นเข้าสู่ OpenTTD.{}ต้องการทำต่อหรือไม่?
 STR_CONTENT_FILTER_TITLE                                        :{BLACK}Tag/name ตัวกรอง:
 STR_CONTENT_OPEN_URL                                            :{BLACK}เยี่ยมชมเว็บไซต์
 STR_CONTENT_OPEN_URL_TOOLTIP                                    :{BLACK}เยี่ยมชมเว็บไซต์ของเนื้อหานี้
@@ -2261,7 +2250,6 @@ STR_CONTENT_DETAIL_SUBTITLE_UNSELECTED                          :{SILVER}คุ�
 STR_CONTENT_DETAIL_SUBTITLE_SELECTED                            :{SILVER}คุณได้ทำการเลือกตัวนี้สำหรับดาวโหลด
 STR_CONTENT_DETAIL_SUBTITLE_AUTOSELECTED                        :{SILVER}dependency ตัวนี้ได้ทำการถูกเลือกไว้สำหรับดาวโหลด
 STR_CONTENT_DETAIL_SUBTITLE_ALREADY_HERE                        :{SILVER}คุณมีเนื้อหาตัวนี้แล้ว
-STR_CONTENT_DETAIL_SUBTITLE_DOES_NOT_EXIST                      :{SILVER}ไม่รู้จักเนื้อหานี้และไม่สามารถดาวโหลดได้ทาง OpenTTD
 
 STR_CONTENT_DETAIL_UPDATE                                       :{SILVER}เนื้อหานี้จะทำการติดตั้งทับกับเนื้อหาก่อนหน้านี้ {STRING}
 STR_CONTENT_DETAIL_NAME                                         :{SILVER}ชื่อ: {WHITE}{STRING}
@@ -2273,7 +2261,6 @@ STR_CONTENT_DETAIL_FILESIZE                                     :{SILVER}ขน�
 STR_CONTENT_DETAIL_SELECTED_BECAUSE_OF                          :{SILVER}ถูกเลือกเนื่องจาก: {WHITE}{STRING}
 STR_CONTENT_DETAIL_DEPENDENCIES                                 :{SILVER}Dependencies: {WHITE}{STRING}
 STR_CONTENT_DETAIL_TAGS                                         :{SILVER}Tags: {WHITE}{STRING}
-STR_CONTENT_NO_ZLIB                                             :{WHITE}OpenTTD สร้างขึ้นโดยไม่ได้รองรับ "zlib" ...
 STR_CONTENT_NO_ZLIB_SUB                                         :{WHITE}... ไม่สามารถดาวโหลดเนื้อหาได้
 
 # Order of these is important!
@@ -2302,9 +2289,7 @@ STR_CONTENT_ERROR_COULD_NOT_DOWNLOAD_FILE_NOT_WRITABLE          :{WHITE}... ไ�
 STR_CONTENT_ERROR_COULD_NOT_EXTRACT                             :{WHITE}ไม่สามารถทำการแตกไฟล์ที่ดาวโหลดมาแล้วได้
 
 STR_MISSING_GRAPHICS_SET_CAPTION                                :{WHITE}กราฟฟิกขาดหาย
-STR_MISSING_GRAPHICS_SET_MESSAGE                                :{BLACK}OpenTTD ไม่พบกราฟฟิกที่ใช้ในการทำงาน. คุณต้องการให้ OpenTTD ดาวน์โหลดและติดตั้งกราฟฟิกหรือไม่?
 STR_MISSING_GRAPHICS_YES_DOWNLOAD                               :{BLACK}ดาวน์โหลดกราฟฟิก
-STR_MISSING_GRAPHICS_NO_QUIT                                    :{BLACK}ออกจาก OpenTTD
 
 STR_MISSING_GRAPHICS_ERROR                                      :{BLACK}โหลดกราฟิกไม่สำเร็จ{}กรุณาดาวน์โหลดด้วยตนเอง
 
@@ -2735,9 +2720,7 @@ STR_LAI_OBJECT_DESCRIPTION_COMPANY_HEADQUARTERS                 :สำนัก
 STR_LAI_OBJECT_DESCRIPTION_COMPANY_OWNED_LAND                   :บริษัทเจ้าของพื้นที่
 
 # About OpenTTD window
-STR_ABOUT_OPENTTD                                               :{WHITE}เกี่ยวกับ OpenTTD
 STR_ABOUT_ORIGINAL_COPYRIGHT                                    :{BLACK}ลิขสิทธิ์เดิม {COPYRIGHT} ค.ศ.1995 ของ Chris Sawyer, สงวนลิขสิทธิ์
-STR_ABOUT_VERSION                                               :{BLACK}OpenTTD รุ่นที่ {REV}
 STR_ABOUT_COPYRIGHT_OPENTTD                                     :{BLACK}ลิขสิทธิ์ OpenTTD {COPYRIGHT}2002-{STRING} ของ The OpenTTD team
 
 # Framerate display window
@@ -3023,7 +3006,6 @@ STR_NEWGRF_ERROR_INVALID_SPRITE_LAYOUT                          :ไม่ถู
 
 # NewGRF related 'general' warnings
 STR_NEWGRF_POPUP_CAUTION_CAPTION                                :{WHITE}คำเตือน!
-STR_NEWGRF_CONFIRMATION_TEXT                                    :{YELLOW}คุณต้องการที่จะปรับเปลี่ยนในเกมที่กำลังทำงานอยู่. การกระทำนี้สามารถทำให้เกมเสียหาย หรือหยุดการทำงานของเกม หากพบปัญหา ไม่ต้องทำการแจ้งบั๊กเข้ามาเกี่ยวกับประเด็นนี้{} คุณยังต้องการดำเนินการต่อหรือไม่?
 
 STR_NEWGRF_DUPLICATE_GRFID                                      :{WHITE}ไม่สามารถเพิ่มเข้าไปได้: GRF ID ซ้ำกัน
 STR_NEWGRF_COMPATIBLE_LOADED                                    :{ORANGE}หาไฟล์ที่เข้ากันได้ไม่ครบ (compatible GRF loaded)
@@ -3032,7 +3014,6 @@ STR_NEWGRF_TOO_MANY_NEWGRFS                                     :{WHITE}ไม�
 STR_NEWGRF_COMPATIBLE_LOAD_WARNING                              :{WHITE}GRF(s) ที่ทำงานร่วมกันได้ ถูกโหลดมาสำหรับไฟล์ที่สูญหาย
 STR_NEWGRF_DISABLED_WARNING                                     :{WHITE}GRF file(s)ที่สูญหาย ถูกปิดการใช้งาน
 STR_NEWGRF_UNPAUSE_WARNING_TITLE                                :{YELLOW} GRF file(s) สูญหาย
-STR_NEWGRF_UNPAUSE_WARNING                                      :{WHITE}การยกเลิกการหยุดเกมอาจจะทำให้เกมเสีย. ไม่ต้องทำการแจ้งปัญหานี้มา.{}คุณยังต้องการกระทำการต่อหรือไม่?
 
 # NewGRF status
 STR_NEWGRF_LIST_NONE                                            :ไม่มี

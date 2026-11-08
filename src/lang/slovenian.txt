@@ -506,12 +506,10 @@ STR_TOOLBAR_TOOLTIP_BUILD_AIRPORTS                              :{BLACK}Zgradi l
 STR_TOOLBAR_TOOLTIP_LANDSCAPING                                 :{BLACK}Odpri orodja za oblikovanje terena, sajenje dreves, itd.
 STR_TOOLBAR_TOOLTIP_SHOW_SOUND_MUSIC_WINDOW                     :{BLACK}Prikaži okno za zvok/glasbo
 STR_TOOLBAR_TOOLTIP_SHOW_LAST_MESSAGE_NEWS                      :{BLACK}Prikaži zadnje sporočilo/novico, prikaži možnosti sporočil
-STR_TOOLBAR_TOOLTIP_LAND_BLOCK_INFORMATION                      :{BLACK}Informacije o terenu, konzola, razhroščevanje UI, zaslonske slike, o OpenTTD
 STR_TOOLBAR_TOOLTIP_SWITCH_TOOLBAR                              :{BLACK}Preklopi orodne vrstice
 
 # Extra tooltips for the scenario editor toolbar
 STR_SCENEDIT_TOOLBAR_SAVE_SCENARIO_LOAD_SCENARIO_TOOLTIP        :{BLACK}Shrani, naloži scenarij, zapusti urejevalnik scenarijev, izhod
-STR_SCENEDIT_TOOLBAR_OPENTTD                                    :{YELLOW}OpenTTD
 STR_SCENEDIT_TOOLBAR_SCENARIO_EDITOR                            :{YELLOW}Urejevalnik scenarijev
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_BACKWARD_TOOLTIP    :{BLACK}Premakni začetni datum za 1 leto nazaj
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_FORWARD_TOOLTIP     :{BLACK}Premakni začetni datum za 1 leto naprej
@@ -620,7 +618,6 @@ STR_ABOUT_MENU_LAND_BLOCK_INFO                                  :Informacije o t
 STR_ABOUT_MENU_TOGGLE_CONSOLE                                   :Vklopi/Izklopi konzolo
 STR_ABOUT_MENU_AI_DEBUG                                         :Razhročevanje UI / skript
 STR_ABOUT_MENU_SCREENSHOT                                       :Zajemi sliko
-STR_ABOUT_MENU_ABOUT_OPENTTD                                    :O 'OpenTTD'
 STR_ABOUT_MENU_SPRITE_ALIGNER                                   :Uravnavanje sličice
 STR_ABOUT_MENU_TOGGLE_BOUNDING_BOXES                            :Vklop/izklop okvirjev
 STR_ABOUT_MENU_TOGGLE_DIRTY_BLOCKS                              :Preklop barvanja umazanih blokov
@@ -1061,7 +1058,6 @@ STR_GAME_OPTIONS_LANGUAGE                                       :Jezik
 STR_GAME_OPTIONS_LANGUAGE_TOOLTIP                               :Izberi jezik vmesnika
 
 STR_GAME_OPTIONS_FULLSCREEN                                     :Cel zaslon
-STR_GAME_OPTIONS_FULLSCREEN_TOOLTIP                             :Označi to okno za igro v celozaslonskem načinu
 
 STR_GAME_OPTIONS_RESOLUTION                                     :Ločljivost
 STR_GAME_OPTIONS_RESOLUTION_TOOLTIP                             :Izberi ločljivost zaslona
@@ -2048,9 +2044,7 @@ STR_INTRO_TOOLTIP_TOYLAND_LANDSCAPE                             :{BLACK}Izberi o
 STR_INTRO_TOOLTIP_GAME_OPTIONS                                  :{BLACK}Prikaži možnosti igre
 STR_INTRO_TOOLTIP_HIGHSCORE                                     :{BLACK}Prikaži tabelo najboljših rezultatov
 STR_INTRO_TOOLTIP_ONLINE_CONTENT                                :{BLACK}Preveri posodobljene vsebine na strežniku,{} ki so na voljo za prenos
-STR_INTRO_TOOLTIP_QUIT                                          :{BLACK}Izhod iz 'OpenTTD'
 
-STR_INTRO_TRANSLATION                                           :{BLACK}Temu prevodu manjka {NUM} vnos{P "" a i ov}. Prosimo pomagaj izboljšati OpenTTD in se vpiši za prevajanje. Preveri readme.txt za podrobnosti.
 
 # Quit window
 STR_QUIT_CAPTION                                                :{WHITE}Izhod
@@ -2127,7 +2121,6 @@ STR_FACE_SIMPLE                                                 :{BLACK}Enostavn
 STR_FACE_SIMPLE_TOOLTIP                                         :{BLACK}Enostavna izbira obraza
 STR_FACE_LOAD                                                   :{BLACK}Naloži
 STR_FACE_LOAD_TOOLTIP                                           :{BLACK}Naloži piljubljen obraz
-STR_FACE_LOAD_DONE                                              :{WHITE}Tvoj priljubljen obraz je bil naložen iz OpenTTD konfiguracije
 STR_FACE_FACECODE                                               :{BLACK}Obraz igralca št.
 STR_FACE_FACECODE_TOOLTIP                                       :{BLACK}Prikaži in/ali nastavi številko direktorjevega obraza
 STR_FACE_FACECODE_CAPTION                                       :{WHITE}Prikaži in/ali nastavi številko direktorjevega obraza
@@ -2135,7 +2128,6 @@ STR_FACE_FACECODE_SET                                           :{WHITE}Nova kod
 STR_FACE_FACECODE_ERR                                           :{WHITE}Ni mogoče nastaviti številke direktorjevega obraza - izbor mogoč med 0 in 4,294,967,295!
 STR_FACE_SAVE                                                   :{BLACK}Shrani
 STR_FACE_SAVE_TOOLTIP                                           :{BLACK}Shrani priljubljen obraz
-STR_FACE_SAVE_DONE                                              :{WHITE}Ta obraz bo shranjen kot tvoj priljubljen v konfiguracijo OpenTTD
 STR_FACE_YES                                                    :Da
 STR_FACE_NO                                                     :Ne
 STR_FACE_HAIR                                                   :Lasje:
@@ -2358,8 +2350,6 @@ STR_CONTENT_UNSELECT_ALL_CAPTION                                :{BLACK}Nobena
 STR_CONTENT_UNSELECT_ALL_CAPTION_TOOLTIP                        :{BLACK}Označi vse, da ne bo prenešeno
 STR_CONTENT_SEARCH_EXTERNAL                                     :{BLACK}Poišči zunanje spletne strani
 STR_CONTENT_SEARCH_EXTERNAL_TOOLTIP                             :{BLACK}Vsebina iskanja ni na voljo v OpenTTD-jevem servisu
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER_CAPTION                  :{WHITE}Zapuščaš OpenTTD!
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER                          :{WHITE}Izjave in pogoji za prenos vsebin iz zunanjih strežnikov se spreminjajo.{}Sklicuj je na zunanje strani za navodila o instalaciji vsebin v OpenTTD.{}Želiš nadaljevati?
 STR_CONTENT_FILTER_TITLE                                        :{BLACK}Oznaka/ime filtra:
 STR_CONTENT_OPEN_URL                                            :{BLACK}Obišči spletno stran
 STR_CONTENT_OPEN_URL_TOOLTIP                                    :{BLACK}Obišči spletno mesto za to vsebino
@@ -2373,7 +2363,6 @@ STR_CONTENT_DETAIL_SUBTITLE_UNSELECTED                          :{SILVER}To ni i
 STR_CONTENT_DETAIL_SUBTITLE_SELECTED                            :{SILVER}To je izbrano za prenos
 STR_CONTENT_DETAIL_SUBTITLE_AUTOSELECTED                        :{SILVER}Ta podvsebina je bila izbrana za prenos
 STR_CONTENT_DETAIL_SUBTITLE_ALREADY_HERE                        :{SILVER}To že imaš
-STR_CONTENT_DETAIL_SUBTITLE_DOES_NOT_EXIST                      :{SILVER}Ta vsebina je nepoznana in ne more biti prenešena v OpenTTD
 
 STR_CONTENT_DETAIL_UPDATE                                       :{SILVER}To je zamenjava za obstoječo {STRING}
 STR_CONTENT_DETAIL_NAME                                         :{SILVER}Ime: {WHITE}{STRING}
@@ -2385,7 +2374,6 @@ STR_CONTENT_DETAIL_FILESIZE                                     :{SILVER}Velikos
 STR_CONTENT_DETAIL_SELECTED_BECAUSE_OF                          :{SILVER}Izbrana zaradi: {WHITE}{STRING}
 STR_CONTENT_DETAIL_DEPENDENCIES                                 :{SILVER}Pod vsebine: {WHITE}{STRING}
 STR_CONTENT_DETAIL_TAGS                                         :{SILVER}Rubrike: {WHITE}{STRING}
-STR_CONTENT_NO_ZLIB                                             :{WHITE}OpenTTD je zgrajen brez "zlib" podpore...
 STR_CONTENT_NO_ZLIB_SUB                                         :{WHITE}... prenos vsebin ni mogoč!
 
 # Order of these is important!
@@ -2414,12 +2402,9 @@ STR_CONTENT_ERROR_COULD_NOT_DOWNLOAD_FILE_NOT_WRITABLE          :{WHITE}... dato
 STR_CONTENT_ERROR_COULD_NOT_EXTRACT                             :{WHITE}No mogoče razpakiranje prenešene datoteke
 
 STR_MISSING_GRAPHICS_SET_CAPTION                                :{WHITE}Manjkajoče grafike
-STR_MISSING_GRAPHICS_SET_MESSAGE                                :{BLACK}OpenTTD potrebuje grafike za delovanje, a ni nobenih najdenih. Dovoliš OpenTTD-ju da prenese in namesti te grafike?
 STR_MISSING_GRAPHICS_YES_DOWNLOAD                               :{BLACK}Da, prenesi grafike
-STR_MISSING_GRAPHICS_NO_QUIT                                    :{BLACK}Ne, zapusti OpenTTD
 
 STR_MISSING_GRAPHICS_ERROR_TITLE                                :{WHITE}Prenos ni uspel
-STR_MISSING_GRAPHICS_ERROR_QUIT                                 :{BLACK}Zapuusti OpenTTD
 
 # Transparency settings window
 STR_TRANSPARENCY_CAPTION                                        :{WHITE}Nastavitve prozornega pogleda
@@ -2843,9 +2828,7 @@ STR_LAI_OBJECT_DESCRIPTION_COMPANY_HEADQUARTERS                 :Sedež podjetja
 STR_LAI_OBJECT_DESCRIPTION_COMPANY_OWNED_LAND                   :Ozemlje v lasti podjetja
 
 # About OpenTTD window
-STR_ABOUT_OPENTTD                                               :{WHITE}O OpenTTD
 STR_ABOUT_ORIGINAL_COPYRIGHT                                    :{BLACK}Prvotne avtorske pravice {COPYRIGHT} 1995 Chris Sawyer, vse pravice pridržane
-STR_ABOUT_VERSION                                               :{BLACK}OpenTTD različica {REV}
 STR_ABOUT_COPYRIGHT_OPENTTD                                     :{BLACK}OpenTTD {COPYRIGHT}2002-{STRING} ekipa OpenTTD
 
 # Framerate display window
@@ -3099,7 +3082,6 @@ STR_NEWGRF_ERROR_LIST_PROPERTY_TOO_LONG                         :Preveč element
 
 # NewGRF related 'general' warnings
 STR_NEWGRF_POPUP_CAUTION_CAPTION                                :{WHITE}Pozor!
-STR_NEWGRF_CONFIRMATION_TEXT                                    :{YELLOW}Pripravljaš se narediti spremembe na zagnani igri. To lahko sesuje OpenTTD ali okvari trenutno igro. Ne prijavljajte hroščev v zvezi s temi napakami.{}Si zagotovo želiš tega?
 
 STR_NEWGRF_DUPLICATE_GRFID                                      :{WHITE}Ne morem dodati datoteke: podvojen GRF ID
 STR_NEWGRF_COMPATIBLE_LOADED                                    :{ORANGE}Ustrezna datoteka ni najdena (naložen je kompatibilni GRF)
@@ -3108,7 +3090,6 @@ STR_NEWGRF_TOO_MANY_NEWGRFS                                     :{WHITE}Nemogoč
 STR_NEWGRF_COMPATIBLE_LOAD_WARNING                              :{WHITE}Kompatibilni GRF-ji so naloženi namesto manjkajočih datotek
 STR_NEWGRF_DISABLED_WARNING                                     :{WHITE}Manjkajoče GRF datoteke so bile onemogočene
 STR_NEWGRF_UNPAUSE_WARNING_TITLE                                :{YELLOW}Manjkajoče GRF datoteke
-STR_NEWGRF_UNPAUSE_WARNING                                      :{WHITE}Izklop pavze lahko sesuje OpenTTD. Ne poročaj o napaki zaradi takih problemov.{}Zagotovo želiš izklopiti pavzo?
 
 # NewGRF status
 STR_NEWGRF_LIST_NONE                                            :Brez

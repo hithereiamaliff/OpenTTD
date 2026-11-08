@@ -469,12 +469,10 @@ STR_TOOLBAR_TOOLTIP_BUILD_AIRPORTS                              :{BLACK}Ehita le
 STR_TOOLBAR_TOOLTIP_LANDSCAPING                                 :{BLACK}Ava maastikukujunduse menüü, puude menüü või paigalda silt
 STR_TOOLBAR_TOOLTIP_SHOW_SOUND_MUSIC_WINDOW                     :{BLACK}Ava heli/muusika aken
 STR_TOOLBAR_TOOLTIP_SHOW_LAST_MESSAGE_NEWS                      :{BLACK}Ava viimane sõnum/uudis, sõnumite ajalugu või kustuta kõik sõnumid
-STR_TOOLBAR_TOOLTIP_LAND_BLOCK_INFORMATION                      :{BLACK}Avatud maa andmed, ekraanipiltide menüü, OpenTTD tänud, või arendustööriistad
 STR_TOOLBAR_TOOLTIP_SWITCH_TOOLBAR                              :{BLACK}Vaheta tarvikuribad
 
 # Extra tooltips for the scenario editor toolbar
 STR_SCENEDIT_TOOLBAR_SAVE_SCENARIO_LOAD_SCENARIO_TOOLTIP        :{BLACK}Kaardi salvestamine, kaardi laadimine, kaarditegemisest lahkumine, mängust väljumine
-STR_SCENEDIT_TOOLBAR_OPENTTD                                    :{YELLOW}OpenTTD
 STR_SCENEDIT_TOOLBAR_SCENARIO_EDITOR                            :{YELLOW}Stsenaariumiredaktor
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_BACKWARD_TOOLTIP    :{BLACK}Alguse liigutamine 1 aasta võrra tagasi
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_FORWARD_TOOLTIP     :{BLACK}Alguse liigutamine 1 aasta võrra edasi
@@ -599,7 +597,6 @@ STR_ABOUT_MENU_TOGGLE_CONSOLE                                   :Vahelda konsool
 STR_ABOUT_MENU_AI_DEBUG                                         :AI/GameScripti debugimine
 STR_ABOUT_MENU_SCREENSHOT                                       :Ekraanipilt
 STR_ABOUT_MENU_SHOW_FRAMERATE                                   :Näita kaadrisagedust
-STR_ABOUT_MENU_ABOUT_OPENTTD                                    :'OpenTTD' kohta
 STR_ABOUT_MENU_SPRITE_ALIGNER                                   :Sprite aligner
 STR_ABOUT_MENU_TOGGLE_BOUNDING_BOXES                            :Vahelda piirangkaste
 STR_ABOUT_MENU_TOGGLE_DIRTY_BLOCKS                              :Vahelda määrdunud plokkide värvimist
@@ -1127,7 +1124,6 @@ STR_GAME_OPTIONS_LANGUAGE_TOOLTIP                               :Valib kasutajal
 STR_GAME_OPTIONS_LANGUAGE_PERCENTAGE                            :{STRING} ({NUM}% valmis)
 
 STR_GAME_OPTIONS_FULLSCREEN                                     :Täisekraan
-STR_GAME_OPTIONS_FULLSCREEN_TOOLTIP                             :Lülita sisse, et OpenTTD täisekraanirežiimis mängida
 
 STR_GAME_OPTIONS_RESOLUTION                                     :Ekraanilahutus
 STR_GAME_OPTIONS_RESOLUTION_TOOLTIP                             :Ekraanilahutuse valimine
@@ -1135,7 +1131,6 @@ STR_GAME_OPTIONS_RESOLUTION_OTHER                               :muu
 STR_GAME_OPTIONS_RESOLUTION_ITEM                                :{NUM}x{NUM}
 
 STR_GAME_OPTIONS_VIDEO_ACCELERATION                             :Riistvarakiirendus
-STR_GAME_OPTIONS_VIDEO_ACCELERATION_TOOLTIP                     :Märkides selle ruudu, lubad OpenTTD-l üritada kasutada riistvarakiirendust. Muudetud seade omab mõju pärast mängu taaskäivitust
 STR_GAME_OPTIONS_VIDEO_ACCELERATION_RESTART                     :{WHITE}Seade omab mõju alles pärast mängu taaskäivitust
 
 STR_GAME_OPTIONS_VIDEO_VSYNC                                    :VSync
@@ -2312,8 +2307,6 @@ STR_VIDEO_DRIVER_ERROR_NO_HARDWARE_ACCELERATION                 :{WHITE}... ei l
 STR_VIDEO_DRIVER_ERROR_HARDWARE_ACCELERATION_CRASH              :Mäng seiskus graafikadraiveri pärast. Riistvarakiirendus lülitati välja
 
 # Intro window
-STR_INTRO_CAPTION                                               :{WHITE}OpenTTD
-STR_INTRO_VERSION                                               :OpenTTD {REV}
 
 STR_INTRO_NEW_GAME                                              :{BLACK}Uus mäng
 STR_INTRO_LOAD_GAME                                             :{BLACK}Mängu jätk
@@ -2344,14 +2337,11 @@ STR_INTRO_TOOLTIP_GAME_OPTIONS                                  :{BLACK}Ava liid
 STR_INTRO_TOOLTIP_HIGHSCORE                                     :{BLACK}Ava edetabel
 STR_INTRO_TOOLTIP_HELP                                          :{BLACK}Saa ligipääs dokumentatsioonile ja veebiressursidele
 STR_INTRO_TOOLTIP_ONLINE_CONTENT                                :{BLACK}Otsi allalaadimiseks uusi ja uuendatud aineseid
-STR_INTRO_TOOLTIP_QUIT                                          :{BLACK}Välju 'OpenTTD'st
 
 STR_INTRO_BASESET                                               :{BLACK}Hetkel valitud põhigraafika komplektist puudub {NUM} sprite{P "" 'i}. Kontrolli, kas põhikomplektile on uuendusi.
-STR_INTRO_TRANSLATION                                           :{BLACK}Puudub {NUM} tõlge{P "" t}. Aita teha OpenTTD paremaks, panusta tõlkimisega. Rohkem teavet leiad «readme.txt» failist.
 
 # Quit window
 STR_QUIT_CAPTION                                                :{WHITE}Mängust väljumine
-STR_QUIT_ARE_YOU_SURE_YOU_WANT_TO_EXIT_OPENTTD                  :{YELLOW}Kas olete kindel, et soovite OpenTTD-st väljuda?
 STR_QUIT_YES                                                    :{BLACK}Jah
 STR_QUIT_NO                                                     :{BLACK}Ei
 
@@ -2446,7 +2436,6 @@ STR_FACE_SIMPLE                                                 :{BLACK}Lihtne
 STR_FACE_SIMPLE_TOOLTIP                                         :{BLACK}Lihtne näo valik
 STR_FACE_LOAD                                                   :{BLACK}Lae
 STR_FACE_LOAD_TOOLTIP                                           :{BLACK}Lae lemmik nägu
-STR_FACE_LOAD_DONE                                              :OpenTTD seadistusfailist laeti sinu lemmiknägu
 STR_FACE_FACECODE                                               :{BLACK}Mängija näo kood
 STR_FACE_FACECODE_TOOLTIP                                       :{BLACK}Vaata ja/või säti ettevõtte presidendi näo koodi
 STR_FACE_FACECODE_CAPTION                                       :{WHITE}Vaata ja/või muuda presidendi näo koodi
@@ -2454,7 +2443,6 @@ STR_FACE_FACECODE_SET                                           :Uus presidendi 
 STR_FACE_FACECODE_ERR                                           :{WHITE}Ei saanud näo koodi sättida - peab olema number päris silt ja number
 STR_FACE_SAVE                                                   :{BLACK}Salvesta
 STR_FACE_SAVE_TOOLTIP                                           :{BLACK}Salvesta lemmiknägu
-STR_FACE_SAVE_DONE                                              :See nägu salvestatakse sinu lemmikuna OpenTTD seadete faili.
 STR_FACE_SETTING_TOGGLE                                         :{STRING} {ORANGE}{STRING}
 STR_FACE_SETTING_NUMERIC                                        :{STRING} {ORANGE}{NUM} / {NUM}
 STR_FACE_YES                                                    :Jah
@@ -2770,8 +2758,6 @@ STR_CONTENT_UNSELECT_ALL_CAPTION                                :{BLACK}Eemalda 
 STR_CONTENT_UNSELECT_ALL_CAPTION_TOOLTIP                        :{BLACK}Eemaldatakse allalaadimise märgistus
 STR_CONTENT_SEARCH_EXTERNAL                                     :{BLACK}Otsi välistest veebilehtedest
 STR_CONTENT_SEARCH_EXTERNAL_TOOLTIP                             :{BLACK}Otsi OpenTTD-st sõltumatutest lehtedest aineseid, mida OpenTTD aineste keskserverist ei saa
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER_CAPTION                  :{WHITE}Sa oled lahkumas OpenTTD-st!
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER                          :{WHITE}Välistest veebilehtedest aineste allalaadimisel võivad kasutustingimused vahelduda.{}Paigaldusjuhiseid otsida samadest välistest veebilehtedest.{}Kas jätkata?
 STR_CONTENT_FILTER_TITLE                                        :{BLACK}Tähiste/nimede märksõna:
 STR_CONTENT_OPEN_URL                                            :{BLACK}Külasta lehekülge
 STR_CONTENT_OPEN_URL_TOOLTIP                                    :{BLACK}Külasta lehekülge selle sisu jaoks.
@@ -2785,7 +2771,6 @@ STR_CONTENT_DETAIL_SUBTITLE_UNSELECTED                          :{SILVER}Sa pole
 STR_CONTENT_DETAIL_SUBTITLE_SELECTED                            :{SILVER}Te olete valinud selle allalaadimiseks
 STR_CONTENT_DETAIL_SUBTITLE_AUTOSELECTED                        :{SILVER}See sõltuvus on valitud allalaadimiseks
 STR_CONTENT_DETAIL_SUBTITLE_ALREADY_HERE                        :{SILVER}Sul on juba see
-STR_CONTENT_DETAIL_SUBTITLE_DOES_NOT_EXIST                      :{SILVER}See ei ole ainesena tuvastatav, seega OpenTTD ei saa seda alla laadida
 
 STR_CONTENT_DETAIL_UPDATE                                       :{SILVER}See on asendus olemasolevale {STRING}
 STR_CONTENT_DETAIL_NAME                                         :{SILVER}Nimi: {WHITE}{STRING}
@@ -2797,7 +2782,6 @@ STR_CONTENT_DETAIL_FILESIZE                                     :{SILVER}Allalaa
 STR_CONTENT_DETAIL_SELECTED_BECAUSE_OF                          :{SILVER}Valitud kuna: {WHITE}{STRING}
 STR_CONTENT_DETAIL_DEPENDENCIES                                 :{SILVER}Sõltuvused: {WHITE}{STRING}
 STR_CONTENT_DETAIL_TAGS                                         :{SILVER}Tähised: {WHITE}{STRING}
-STR_CONTENT_NO_ZLIB                                             :OpenTTD on kompileeritud ilma «zlib» toeta...
 STR_CONTENT_NO_ZLIB_SUB                                         :aineste allalaadimine pole võimalik!
 
 # Order of these is important!
@@ -2826,13 +2810,10 @@ STR_CONTENT_ERROR_COULD_NOT_DOWNLOAD_FILE_NOT_WRITABLE          :fail pole kirju
 STR_CONTENT_ERROR_COULD_NOT_EXTRACT                             :{WHITE}Alla laaditud faili ei saa lahti pakkida
 
 STR_MISSING_GRAPHICS_SET_CAPTION                                :{WHITE}Graafikafailid on puudu
-STR_MISSING_GRAPHICS_SET_MESSAGE                                :{BLACK}OpenTTD töötamiseks on vaja eraldi graafikafaile, mida ei leitud. Kas OpenTTD võib need graafikafailid alla laadida ja need paigaldada?
 STR_MISSING_GRAPHICS_YES_DOWNLOAD                               :{BLACK}Jah, laadi graafika alla
-STR_MISSING_GRAPHICS_NO_QUIT                                    :{BLACK}Ei, välju OpenTTD-st
 
 STR_MISSING_GRAPHICS_ERROR_TITLE                                :{WHITE}Allalaadimine ebaõnnestus
 STR_MISSING_GRAPHICS_ERROR                                      :{BLACK}Graafika allalaadimine ebaõnnestus.{}Palun laadida graafika alla käsitsi.
-STR_MISSING_GRAPHICS_ERROR_QUIT                                 :{BLACK}Välju OpenTTD-st
 
 # Transparency settings window
 STR_TRANSPARENCY_CAPTION                                        :{WHITE}Läbipaistvuse seadistus
@@ -3370,9 +3351,7 @@ STR_LAI_OBJECT_DESCRIPTION_COMPANY_HEADQUARTERS                 :Ettevõtte peak
 STR_LAI_OBJECT_DESCRIPTION_COMPANY_OWNED_LAND                   :Ettevõtte maa
 
 # About OpenTTD window
-STR_ABOUT_OPENTTD                                               :{WHITE}OpenTTD lisainfo
 STR_ABOUT_ORIGINAL_COPYRIGHT                                    :{BLACK}Algne autorikaitse {COPYRIGHT} 1995 Chris Sawyer, kõik õigused kaitstud
-STR_ABOUT_VERSION                                               :{BLACK}OpenTTD versioon {REV}
 STR_ABOUT_COPYRIGHT_OPENTTD                                     :{BLACK}OpenTTD {COPYRIGHT}2002-{STRING} OpenTTD meeskond
 
 # Framerate display window
@@ -3500,7 +3479,6 @@ STR_MAPGEN_QUANTITY_OF_RIVERS                                   :{BLACK}Jõgesid
 STR_MAPGEN_SMOOTHNESS                                           :{BLACK}Laugus:
 STR_MAPGEN_VARIETY                                              :{BLACK}Iseärasuste jaotus:
 STR_MAPGEN_GENERATE                                             :{WHITE}Tekita
-STR_MAPGEN_GENERATE_TOOLTIP                                     :{BLACK}Loo maailm ja mängu OpenTTD-d!
 STR_MAPGEN_NEWGRF_SETTINGS                                      :{BLACK}NewGRF-i seadistus
 STR_MAPGEN_NEWGRF_SETTINGS_TOOLTIP                              :Näita NewGRF-i seadeid
 STR_MAPGEN_AI_SETTINGS                                          :{BLACK}TI Seaded
@@ -3555,7 +3533,6 @@ STR_MAPGEN_HEIGHTMAP_ROTATION                                   :{BLACK}Kõrgusk
 STR_MAPGEN_HEIGHTMAP_NAME                                       :{BLACK}Kõrguskaardi nimi:
 STR_MAPGEN_HEIGHTMAP_NAME_TOOLTIP                               :{BLACK}Kõrguskaardi pildifaili nimi
 STR_MAPGEN_HEIGHTMAP_SIZE_LABEL                                 :{BLACK}Suurus:
-STR_MAPGEN_HEIGHTMAP_SIZE_LABEL_TOOLTIP                         :{BLACK}Kõrguskaardi lähtepildi suurus. Parima tulemuse saab, kui iga külg kattub mõne OpenTTD-s oleva kaardikülje pikkusega, nagu 256, 512, 1024, jne.
 STR_MAPGEN_HEIGHTMAP_SIZE                                       :{ORANGE}{NUM} x {NUM}
 
 STR_MAPGEN_TERRAIN_TYPE_QUERY_CAPT                              :{WHITE}Soovitud kõrgpunkt
@@ -3746,7 +3723,6 @@ STR_NEWGRF_ERROR_INDPROD_CALLBACK                               :Vigane tööstu
 
 # NewGRF related 'general' warnings
 STR_NEWGRF_POPUP_CAUTION_CAPTION                                :{WHITE}Ettevaatust!
-STR_NEWGRF_CONFIRMATION_TEXT                                    :{YELLOW}Sa soovid muuta jooksvat mängu. See võib OpenTTD kokku jooksutada ja rikkuda pooleli oleva mängu. Ära nende vigade kohta vearaportit edasta.{}Kas sa oled jätkamises täiesti kindel?
 
 STR_NEWGRF_DUPLICATE_GRFID                                      :{WHITE}Ei saa faili lisada: korduv GRF ID
 STR_NEWGRF_COMPATIBLE_LOADED                                    :{ORANGE}Sobivat faili ei leitud (ühilduv NewGRF fail on laaditud)
@@ -3755,7 +3731,6 @@ STR_NEWGRF_TOO_MANY_NEWGRFS                                     :{WHITE}Ei saa f
 STR_NEWGRF_COMPATIBLE_LOAD_WARNING                              :Puuduvatele failidele on laaditud ühilduvad NewGRF failid
 STR_NEWGRF_DISABLED_WARNING                                     :{WHITE}Puuduvad GRF failid on välja lülitatud
 STR_NEWGRF_UNPAUSE_WARNING_TITLE                                :{YELLOW}Puuduolevad NewGRF failid
-STR_NEWGRF_UNPAUSE_WARNING                                      :{WHITE}Seisatuse lõpetamine võib põhjustada OpenTTD krahhi. Ära teavita järgnevatest krahhidest.{}Oled sa tõepoolest veendunud, et sa soovid seisatuse lõpetada?
 
 # NewGRF status
 STR_NEWGRF_LIST_NONE                                            :Ei
@@ -5091,7 +5066,6 @@ STR_TEXTFILE_README_CAPTION                                     :{WHITE}{STRING}
 STR_TEXTFILE_CHANGELOG_CAPTION                                  :{WHITE}{STRING} muudatuste logi {STRING}
 STR_TEXTFILE_LICENCE_CAPTION                                    :{WHITE}{STRING} litsents {STRING}
 STR_TEXTFILE_SURVEY_RESULT_CAPTION                              :{WHITE}Uuringutulemuse eelvaade
-STR_TEXTFILE_GAME_MANUAL_CAPTION                                :{WHITE}OpenTTD dokument '{STRING}'
 
 
 # Vehicle loading indicators

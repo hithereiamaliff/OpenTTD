@@ -412,12 +412,10 @@ STR_TOOLBAR_TOOLTIP_BUILD_AIRPORTS                              :{BLACK}Membangu
 STR_TOOLBAR_TOOLTIP_LANDSCAPING                                 :{BLACK}Buka menu lanskap, menu pohon, atau letakkan tanda pengenal
 STR_TOOLBAR_TOOLTIP_SHOW_SOUND_MUSIC_WINDOW                     :{BLACK}Buka jendela suara/musik
 STR_TOOLBAR_TOOLTIP_SHOW_LAST_MESSAGE_NEWS                      :{BLACK}Buka pesan/berita terakhir, riwayat pesan atau hapus semua pesan
-STR_TOOLBAR_TOOLTIP_LAND_BLOCK_INFORMATION                      :{BLACK}Buka informasi daratan, menu tangkapan layar, kredit OpenTTD, atau alat pengembangan
 STR_TOOLBAR_TOOLTIP_SWITCH_TOOLBAR                              :{BLACK}Berpindah toolbar
 
 # Extra tooltips for the scenario editor toolbar
 STR_SCENEDIT_TOOLBAR_SAVE_SCENARIO_LOAD_SCENARIO_TOOLTIP        :{BLACK}Simpan skenario, buka skenario, batalkan skenario editor, keluar
-STR_SCENEDIT_TOOLBAR_OPENTTD                                    :{YELLOW}OpenTTD
 STR_SCENEDIT_TOOLBAR_SCENARIO_EDITOR                            :{YELLOW}Editor Skenario
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_BACKWARD_TOOLTIP    :{BLACK}Mundurkan tanggal mulai sejauh 1 tahun
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_FORWARD_TOOLTIP     :{BLACK}Majukan tanggal mulai sejauh 1 tahun
@@ -543,7 +541,6 @@ STR_ABOUT_MENU_TOGGLE_CONSOLE                                   :Tampilkan atau 
 STR_ABOUT_MENU_AI_DEBUG                                         :Debug skrip AI/Permainan
 STR_ABOUT_MENU_SCREENSHOT                                       :Tangkapan Layar
 STR_ABOUT_MENU_SHOW_FRAMERATE                                   :Tampilkan laju bingkai
-STR_ABOUT_MENU_ABOUT_OPENTTD                                    :Tentang 'OpenTTD'
 STR_ABOUT_MENU_SPRITE_ALIGNER                                   :Penyelaras sprite
 STR_ABOUT_MENU_TOGGLE_BOUNDING_BOXES                            :Tampilkan atau sembunyikan kotak pembatas
 STR_ABOUT_MENU_TOGGLE_DIRTY_BLOCKS                              :Tampilkan atau sembunyikan pewarnaan area kotor
@@ -1071,7 +1068,6 @@ STR_GAME_OPTIONS_LANGUAGE_TOOLTIP                               :Pilih antar muk
 STR_GAME_OPTIONS_LANGUAGE_PERCENTAGE                            :{STRING} ({NUM}% selesai)
 
 STR_GAME_OPTIONS_FULLSCREEN                                     :Layar Penuh
-STR_GAME_OPTIONS_FULLSCREEN_TOOLTIP                             :Nyalakan untuk memainkan OpenTTD dalam layar penuh
 
 STR_GAME_OPTIONS_RESOLUTION                                     :Resolusi Layar
 STR_GAME_OPTIONS_RESOLUTION_TOOLTIP                             :Pilih resolusi layar yang diinginkan
@@ -1079,7 +1075,6 @@ STR_GAME_OPTIONS_RESOLUTION_OTHER                               :lainnya
 STR_GAME_OPTIONS_RESOLUTION_ITEM                                :{NUM}x{NUM}
 
 STR_GAME_OPTIONS_VIDEO_ACCELERATION                             :Akselerasi perangkat keras
-STR_GAME_OPTIONS_VIDEO_ACCELERATION_TOOLTIP                     :Nyalakan untuk mengizinkan OpenTTD untuk mencoba menggunakan akselerasi perangkat keras. Pengaturan yang diubah hanya akan diterapkan saat permainan dimulai ulang
 STR_GAME_OPTIONS_VIDEO_ACCELERATION_RESTART                     :{WHITE}Pengaturan hanya akan berlaku setelah game dimulai ulang
 
 STR_GAME_OPTIONS_VIDEO_VSYNC                                    :VSync
@@ -2256,8 +2251,6 @@ STR_VIDEO_DRIVER_ERROR_NO_HARDWARE_ACCELERATION                 :tidak ditemukan
 STR_VIDEO_DRIVER_ERROR_HARDWARE_ACCELERATION_CRASH              :Driver GPU telah mengakibatkan permainan mogok. Akselerasi perangkat keras telah dinonaktifkan
 
 # Intro window
-STR_INTRO_CAPTION                                               :{WHITE}OpenTTD
-STR_INTRO_VERSION                                               :OpenTTD {REV}
 
 STR_INTRO_NEW_GAME                                              :{BLACK}Permainan Baru
 STR_INTRO_LOAD_GAME                                             :{BLACK}Buka Permainan
@@ -2288,14 +2281,11 @@ STR_INTRO_TOOLTIP_GAME_OPTIONS                                  :{BLACK}Buka pen
 STR_INTRO_TOOLTIP_HIGHSCORE                                     :{BLACK}Buka tabel nilai tertinggi
 STR_INTRO_TOOLTIP_HELP                                          :{BLACK}Dapatkan izin dokumentasi dan sumber daya online
 STR_INTRO_TOOLTIP_ONLINE_CONTENT                                :{BLACK}Cari konten baru dan pembaruan untuk diunduh
-STR_INTRO_TOOLTIP_QUIT                                          :{BLACK}Keluar OpenTTD
 
 STR_INTRO_BASESET                                               :{BLACK}Kumpulan grafik dasar yang dipilih saat ini hilang {NUM} sprite {P ..}. Silakan periksa pembaruan untuk baseset.
-STR_INTRO_TRANSLATION                                           :{BLACK}Terjemahan ini kurang {NUM} kalimat. Bantu Openttd dengan menjadi Penterjemah. lihat readme.txt lebih lanjut.
 
 # Quit window
 STR_QUIT_CAPTION                                                :{WHITE}Keluar
-STR_QUIT_ARE_YOU_SURE_YOU_WANT_TO_EXIT_OPENTTD                  :{YELLOW}Anda yakin ingin keluar dari OpenTTD?
 STR_QUIT_YES                                                    :{BLACK}Ya
 STR_QUIT_NO                                                     :{BLACK}Tidak
 
@@ -2390,7 +2380,6 @@ STR_FACE_SIMPLE                                                 :{BLACK}Sederhan
 STR_FACE_SIMPLE_TOOLTIP                                         :{BLACK}Memilih wajah secara sederhana
 STR_FACE_LOAD                                                   :{BLACK}Ambil simpanan
 STR_FACE_LOAD_TOOLTIP                                           :{BLACK}Baca simpanan wajah terpilih
-STR_FACE_LOAD_DONE                                              :Wajah favorit Anda telah dimuat dari berkas konfigurasi OpenTTD
 STR_FACE_FACECODE                                               :{BLACK}Kode wajah pemain
 STR_FACE_FACECODE_TOOLTIP                                       :{BLACK}Lihat dan/atau ubah kode wajah kepala perusahaan
 STR_FACE_FACECODE_CAPTION                                       :{WHITE}Lihat dan/atau ubah kode wajah kepala perusahaan
@@ -2398,7 +2387,6 @@ STR_FACE_FACECODE_SET                                           :Wajah kepala pe
 STR_FACE_FACECODE_ERR                                           :Tidak dapat mengubah kode wajah kepala perusahaan - harus berupa label dan nomor yang sah
 STR_FACE_SAVE                                                   :{BLACK}Simpan
 STR_FACE_SAVE_TOOLTIP                                           :{BLACK}Simpan wajah kesukaanmu
-STR_FACE_SAVE_DONE                                              :Wajah ini akan disimpan sebagai favorit Anda dalam berkas konfigurasi OpenTTD
 STR_FACE_SETTING_TOGGLE                                         :{STRING} {ORANGE}{STRING}
 STR_FACE_SETTING_NUMERIC                                        :{STRING} {ORANGE}{NUM} / {NUM}
 STR_FACE_YES                                                    :Ya
@@ -2713,8 +2701,6 @@ STR_CONTENT_UNSELECT_ALL_CAPTION                                :{BLACK}Hps semu
 STR_CONTENT_UNSELECT_ALL_CAPTION_TOOLTIP                        :{BLACK}Tandai semua untuk tidak diunduh
 STR_CONTENT_SEARCH_EXTERNAL                                     :{BLACK}Cari di website luar
 STR_CONTENT_SEARCH_EXTERNAL_TOOLTIP                             :{BLACK}Cari konten yang tidak tersedia dalam server konten OpenTTD di website yang tidak berhubungan dengan OpenTTD
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER_CAPTION                  :{WHITE}Anda keluar dari OpenTTD!
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER                          :{WHITE}Syarat dan ketentuan untuk menguduh konten dari situs web luar berbeda-beda.{}Anda harus merujuk ke situs web luar tersebut untuk petunjuk pemasangan kontennya ke OpenTTD.{} Apakah anda ingin melanjutkan?
 STR_CONTENT_FILTER_TITLE                                        :{BLACK}Tanda/nama filter:
 STR_CONTENT_OPEN_URL                                            :{BLACK}Laman Web
 STR_CONTENT_OPEN_URL_TOOLTIP                                    :{BLACK}Kunjungi laman untuk konten ini
@@ -2728,7 +2714,6 @@ STR_CONTENT_DETAIL_SUBTITLE_UNSELECTED                          :{SILVER}Anda ti
 STR_CONTENT_DETAIL_SUBTITLE_SELECTED                            :{SILVER}Anda memilih ini untuk diunduh
 STR_CONTENT_DETAIL_SUBTITLE_AUTOSELECTED                        :{SILVER}Keterkaitan ini terpilih untuk diunduh
 STR_CONTENT_DETAIL_SUBTITLE_ALREADY_HERE                        :{SILVER}Sudah dimiliki
-STR_CONTENT_DETAIL_SUBTITLE_DOES_NOT_EXIST                      :{SILVER}Konten ini tidak diketahui dan tidak dapat diunduh di OpenTTD
 
 STR_CONTENT_DETAIL_UPDATE                                       :{SILVER}Ini adalah pengganti {STRING}
 STR_CONTENT_DETAIL_NAME                                         :{SILVER}Nama: {WHITE}{STRING}
@@ -2740,7 +2725,6 @@ STR_CONTENT_DETAIL_FILESIZE                                     :{SILVER}Ukuran:
 STR_CONTENT_DETAIL_SELECTED_BECAUSE_OF                          :{SILVER}Terpilih karena: {WHITE}{STRING}
 STR_CONTENT_DETAIL_DEPENDENCIES                                 :{SILVER}Memerlukan : {WHITE}{STRING}
 STR_CONTENT_DETAIL_TAGS                                         :{SILVER}Kata kunci: {WHITE}{STRING}
-STR_CONTENT_NO_ZLIB                                             :OpenTTD dibuat tanpa dukungan "zlib"...
 STR_CONTENT_NO_ZLIB_SUB                                         :pengunduhan konten tidak memungkinkan!
 
 # Order of these is important!
@@ -2769,13 +2753,10 @@ STR_CONTENT_ERROR_COULD_NOT_DOWNLOAD_FILE_NOT_WRITABLE          :berkas tidak da
 STR_CONTENT_ERROR_COULD_NOT_EXTRACT                             :Tidak dapat mengembangkan berkas terunduh
 
 STR_MISSING_GRAPHICS_SET_CAPTION                                :{WHITE}Gambar tidak ada
-STR_MISSING_GRAPHICS_SET_MESSAGE                                :{BLACK}OpenTTD tidak menemukan file gambar yang dibutuhkan berjalan. Ijinkan OpenTTD untuk mendownload file-file gambar?
 STR_MISSING_GRAPHICS_YES_DOWNLOAD                               :{BLACK}Ya, download file gambar
-STR_MISSING_GRAPHICS_NO_QUIT                                    :{BLACK}Tidak, tutup OpenTTD
 
 STR_MISSING_GRAPHICS_ERROR_TITLE                                :{WHITE}Gagal Mendownload
 STR_MISSING_GRAPHICS_ERROR                                      :{BLACK}Gagal mengunduh grafik.{}Silakan unduh grafik secara manual.
-STR_MISSING_GRAPHICS_ERROR_QUIT                                 :{BLACK}Keluar OpenTTD
 
 # Transparency settings window
 STR_TRANSPARENCY_CAPTION                                        :{WHITE}Pengaturan Transparasi
@@ -3319,9 +3300,7 @@ STR_LAI_OBJECT_DESCRIPTION_COMPANY_HEADQUARTERS                 :Kantor Utama Pe
 STR_LAI_OBJECT_DESCRIPTION_COMPANY_OWNED_LAND                   :Tanah milik Perusahaan
 
 # About OpenTTD window
-STR_ABOUT_OPENTTD                                               :{WHITE}Tentang OpenTTD
 STR_ABOUT_ORIGINAL_COPYRIGHT                                    :{BLACK}Hak Cipta asli {COPYRIGHT} 1995 Chris Sawyer, Hak Cipta dilindungi
-STR_ABOUT_VERSION                                               :{BLACK}OpenTTD versi {REV}
 STR_ABOUT_COPYRIGHT_OPENTTD                                     :{BLACK}OpenTTD {COPYRIGHT} 2002-{STRING} Tim OpenTTD
 
 # Framerate display window
@@ -3452,7 +3431,6 @@ STR_MAPGEN_QUANTITY_OF_RIVERS                                   :{BLACK}Sungai:
 STR_MAPGEN_SMOOTHNESS                                           :{BLACK}Kehalusan:
 STR_MAPGEN_VARIETY                                              :{BLACK}Macam penyebaran:
 STR_MAPGEN_GENERATE                                             :{WHITE}Buat Peta
-STR_MAPGEN_GENERATE_TOOLTIP                                     :{BLACK}Buat dunia dan mainkan OpenTTD!
 STR_MAPGEN_NEWGRF_SETTINGS                                      :{BLACK}Pengaturan NewGRF
 STR_MAPGEN_NEWGRF_SETTINGS_TOOLTIP                              :{BLACK}Buka pengaturan NewGRF
 STR_MAPGEN_AI_SETTINGS                                          :{BLACK}Pengaturan AI
@@ -3507,7 +3485,6 @@ STR_MAPGEN_HEIGHTMAP_ROTATION                                   :{BLACK}Rotasi H
 STR_MAPGEN_HEIGHTMAP_NAME                                       :{BLACK}Nama Peta Heightmap:
 STR_MAPGEN_HEIGHTMAP_NAME_TOOLTIP                               :{BLACK}Nama berkas gambar heightmap
 STR_MAPGEN_HEIGHTMAP_SIZE_LABEL                                 :{BLACK}Luas:
-STR_MAPGEN_HEIGHTMAP_SIZE_LABEL_TOOLTIP                         :{BLACK}Ukuran sumber gambar heightmap. Untuk hasil terbaik, setiap tepi harus sesuai dengan panjang tepi peta yang tersedia di OpenTTD, seperti 256, 512, 1024, dll.
 STR_MAPGEN_HEIGHTMAP_SIZE                                       :{ORANGE}{NUM} x {NUM}
 
 STR_MAPGEN_TERRAIN_TYPE_QUERY_CAPT                              :{WHITE}Target ketinggian puncak
@@ -3698,7 +3675,6 @@ STR_NEWGRF_ERROR_INDPROD_CALLBACK                               :Pemanggilan pro
 
 # NewGRF related 'general' warnings
 STR_NEWGRF_POPUP_CAUTION_CAPTION                                :{WHITE}Peringatan!
-STR_NEWGRF_CONFIRMATION_TEXT                                    :{YELLOW}Anda akan mengubah game yg sudah berjalan. Ini dapat menghentikan OpenTTD. Jangan melaporkan kesalahan tentang hal ini.{}Apakah anda yakin?
 
 STR_NEWGRF_DUPLICATE_GRFID                                      :Tidak dapat menambahkan berkas: NewGRF ID duplikat
 STR_NEWGRF_COMPATIBLE_LOADED                                    :{ORANGE}Berkas yang cocok tidak ditemukan (NewGRF yang kompatibel telah dimuat)
@@ -3707,7 +3683,6 @@ STR_NEWGRF_TOO_MANY_NEWGRFS                                     :Tidak dapat men
 STR_NEWGRF_COMPATIBLE_LOAD_WARNING                              :NewGRF yang kompatibel telah dimuat untuk berkas yang hilang
 STR_NEWGRF_DISABLED_WARNING                                     :Berkas NewGRF yang hilang telah dinonaktifkan
 STR_NEWGRF_UNPAUSE_WARNING_TITLE                                :{YELLOW}Berkas NewGRF hilang
-STR_NEWGRF_UNPAUSE_WARNING                                      :{WHITE}Tidak menghentikan sementara dapat membuat OpenTTD menjadi crash. Jangan mengirimkan laporan bug dari crash tersebut.{}Apakah Anda sungguh tidak ingin menghentikan?
 
 # NewGRF status
 STR_NEWGRF_LIST_NONE                                            :Tidak Ada
@@ -5047,7 +5022,6 @@ STR_TEXTFILE_README_CAPTION                                     :{WHITE}keterang
 STR_TEXTFILE_CHANGELOG_CAPTION                                  :{WHITE}Catatan perubahan {STRING} dari {STRING}
 STR_TEXTFILE_LICENCE_CAPTION                                    :{WHITE}Lisensi {STRING} dari {STRING}
 STR_TEXTFILE_SURVEY_RESULT_CAPTION                              :{WHITE}Tanpilan hasil survei
-STR_TEXTFILE_GAME_MANUAL_CAPTION                                :{WHITE} dokumen OpenTTD '{STRING}'
 
 
 # Vehicle loading indicators

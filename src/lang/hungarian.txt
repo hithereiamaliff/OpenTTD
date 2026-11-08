@@ -475,12 +475,10 @@ STR_TOOLBAR_TOOLTIP_BUILD_AIRPORTS                              :{BLACK}Repülő
 STR_TOOLBAR_TOOLTIP_LANDSCAPING                                 :{BLACK}Tájszerkesztő, faültető vagy feliratlétrehozó menü megnyitása
 STR_TOOLBAR_TOOLTIP_SHOW_SOUND_MUSIC_WINDOW                     :{BLACK}Hang/zene ablak megnyitása
 STR_TOOLBAR_TOOLTIP_SHOW_LAST_MESSAGE_NEWS                      :{BLACK}Legutóbbi üzenet/újsághír megnyitása, üzenetelőzmények vagy minden üzenet törlése
-STR_TOOLBAR_TOOLTIP_LAND_BLOCK_INFORMATION                      :{BLACK}Terület-információ, képernyőmentések, OpenTTD névjegy vagy fejlesztői eszközök megnyitása
 STR_TOOLBAR_TOOLTIP_SWITCH_TOOLBAR                              :{BLACK}Eszköztár váltás
 
 # Extra tooltips for the scenario editor toolbar
 STR_SCENEDIT_TOOLBAR_SAVE_SCENARIO_LOAD_SCENARIO_TOOLTIP        :{BLACK}Pálya betöltése, mentése, pályaszerkesztő elhagyása, kilépés
-STR_SCENEDIT_TOOLBAR_OPENTTD                                    :{YELLOW}OpenTTD
 STR_SCENEDIT_TOOLBAR_SCENARIO_EDITOR                            :{YELLOW}Pályaszerkesztő
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_BACKWARD_TOOLTIP    :{BLACK}A kezdődátum hátrébb állítása egy évvel
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_FORWARD_TOOLTIP     :{BLACK}A kezdődátum előrébb állítása egy évvel
@@ -606,7 +604,6 @@ STR_ABOUT_MENU_TOGGLE_CONSOLE                                   :Konzol be/ki
 STR_ABOUT_MENU_AI_DEBUG                                         :MI/játékszkript nyomkövetése
 STR_ABOUT_MENU_SCREENSHOT                                       :Képmentés
 STR_ABOUT_MENU_SHOW_FRAMERATE                                   :FPS ablak
-STR_ABOUT_MENU_ABOUT_OPENTTD                                    :Az „OpenTTD” névjegye
 STR_ABOUT_MENU_SPRITE_ALIGNER                                   :Sprite elhelyező
 STR_ABOUT_MENU_TOGGLE_BOUNDING_BOXES                            :Befoglaló doboz be/ki
 STR_ABOUT_MENU_TOGGLE_DIRTY_BLOCKS                              :Koszos blokkok színezése be/ki
@@ -1135,7 +1132,6 @@ STR_GAME_OPTIONS_LANGUAGE_TOOLTIP                               :Válaszd ki a f
 STR_GAME_OPTIONS_LANGUAGE_PERCENTAGE                            :{STRING} ({NUM}% lefordítva)
 
 STR_GAME_OPTIONS_FULLSCREEN                                     :Teljes képernyő
-STR_GAME_OPTIONS_FULLSCREEN_TOOLTIP                             :Kapcsold be, hogy teljes képernyős módban játssz az OpenTTD-vel
 
 STR_GAME_OPTIONS_RESOLUTION                                     :Képernyőfelbontás
 STR_GAME_OPTIONS_RESOLUTION_TOOLTIP                             :Használandó képernyőfelbontás kiválasztása
@@ -1143,7 +1139,6 @@ STR_GAME_OPTIONS_RESOLUTION_OTHER                               :egyéb
 STR_GAME_OPTIONS_RESOLUTION_ITEM                                :{NUM}x{NUM}
 
 STR_GAME_OPTIONS_VIDEO_ACCELERATION                             :Hardveres gyorsítás
-STR_GAME_OPTIONS_VIDEO_ACCELERATION_TOOLTIP                     :Kapcsold be, hogy az OpenTTD próbáljon meg hardveres gyorsítást használni. A beállítás csak a játék újraindítása után lép érvénybe.
 STR_GAME_OPTIONS_VIDEO_ACCELERATION_RESTART                     :{WHITE}Ez a beállítás csak a játék újraindítása után lép érvénybe
 
 STR_GAME_OPTIONS_VIDEO_VSYNC                                    :Függőleges szinkronizáció (VSync)
@@ -2320,8 +2315,6 @@ STR_VIDEO_DRIVER_ERROR_NO_HARDWARE_ACCELERATION                 :nem található
 STR_VIDEO_DRIVER_ERROR_HARDWARE_ACCELERATION_CRASH              :A videókártya illesztőprogram hibát okozott. Hardveres gyorsítás kikapcsolva
 
 # Intro window
-STR_INTRO_CAPTION                                               :{WHITE}OpenTTD
-STR_INTRO_VERSION                                               :OpenTTD {REV}
 
 STR_INTRO_NEW_GAME                                              :{BLACK}Új játék
 STR_INTRO_LOAD_GAME                                             :{BLACK}Játék betöltése
@@ -2352,14 +2345,11 @@ STR_INTRO_TOOLTIP_GAME_OPTIONS                                  :{BLACK}A játé
 STR_INTRO_TOOLTIP_HIGHSCORE                                     :{BLACK}Rekordtábla megnyitása
 STR_INTRO_TOOLTIP_HELP                                          :{BLACK}Férj hozzá a dokumentációhoz és az online tartalmakhoz
 STR_INTRO_TOOLTIP_ONLINE_CONTENT                                :{BLACK}Új és frissített tartalmak megtekintése és letöltése
-STR_INTRO_TOOLTIP_QUIT                                          :{BLACK}Kilépés az OpenTTD-ből
 
 STR_INTRO_BASESET                                               :{BLACK}A jelenleg kiválasztott grafikus alapcsomagból {NUM} sprite hiányzik. Frissítsd a grafikus alapcsomagot!
-STR_INTRO_TRANSLATION                                           :{BLACK}Ebből a fordításból {NUM} sor hiányzik. Segíts Te is jobbá tenni az OpenTTD-t és jelentkezz fordítónak! További részletekért lásd a readme.txt-t.
 
 # Quit window
 STR_QUIT_CAPTION                                                :{WHITE}Kilépés
-STR_QUIT_ARE_YOU_SURE_YOU_WANT_TO_EXIT_OPENTTD                  :{YELLOW}Biztosan bezárod az OpenTTD-t?
 STR_QUIT_YES                                                    :{BLACK}Igen
 STR_QUIT_NO                                                     :{BLACK}Nem
 
@@ -2454,7 +2444,6 @@ STR_FACE_SIMPLE                                                 :{BLACK}Egyszer�
 STR_FACE_SIMPLE_TOOLTIP                                         :{BLACK}Egyszerű arcválasztó
 STR_FACE_LOAD                                                   :{BLACK}Betölt
 STR_FACE_LOAD_TOOLTIP                                           :{BLACK}Kedvenc arcod betöltése
-STR_FACE_LOAD_DONE                                              :A kedvenc arcod az OpenTTD konfig-fájlból be lett töltve
 STR_FACE_FACECODE                                               :{BLACK}Játékos portré kód
 STR_FACE_FACECODE_TOOLTIP                                       :{BLACK}Az elnöki portré kódjának megtekintése, módosítása
 STR_FACE_FACECODE_CAPTION                                       :{WHITE}Elnöki portré kód megtekintése, módosítása
@@ -2462,7 +2451,6 @@ STR_FACE_FACECODE_SET                                           :Az új elnöki 
 STR_FACE_FACECODE_ERR                                           :Elnöki portré kód beállítás sikertelen - érvényes címkének és számnak kell lennie
 STR_FACE_SAVE                                                   :{BLACK}Mentés
 STR_FACE_SAVE_TOOLTIP                                           :{BLACK}Kedvenc arc elmentése
-STR_FACE_SAVE_DONE                                              :Ez az arc mint a kedvenc arcod kerül az OpenTTD konfig-fájlba mentésre
 STR_FACE_SETTING_TOGGLE                                         :{STRING} {ORANGE}{STRING}
 STR_FACE_SETTING_NUMERIC                                        :{STRING} {ORANGE}{NUM} / {NUM}
 STR_FACE_YES                                                    :Igen
@@ -2777,8 +2765,6 @@ STR_CONTENT_UNSELECT_ALL_CAPTION                                :{BLACK}Nincs ki
 STR_CONTENT_UNSELECT_ALL_CAPTION_TOOLTIP                        :{BLACK}Megszünteti az összes kijelölést
 STR_CONTENT_SEARCH_EXTERNAL                                     :{BLACK}Keresés külső weblapokon
 STR_CONTENT_SEARCH_EXTERNAL_TOOLTIP                             :{BLACK}Keresett tartalom nem érhető el az OpenTTD tartalomszolgáltatásának olyan weblapokon, melyek nincsenek az OpenTTD-hez társítva
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER_CAPTION                  :{WHITE}Elhagyod az OpenTTD-t!
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER                          :{WHITE}Külső oldalakról letölthető tartalmak szabályai és feltételei változóak.{}A tartalom OpenTTD-be való telepítéséhez segítségért fordulj a külső weboldalhoz.{}Akarod folytatni?
 STR_CONTENT_FILTER_TITLE                                        :{BLACK}Címke/név szűrő:
 STR_CONTENT_OPEN_URL                                            :{BLACK}Webhely
 STR_CONTENT_OPEN_URL_TOOLTIP                                    :{BLACK}A tartalom webhelyének meglátogatása
@@ -2792,7 +2778,6 @@ STR_CONTENT_DETAIL_SUBTITLE_UNSELECTED                          :{SILVER}Nem jel
 STR_CONTENT_DETAIL_SUBTITLE_SELECTED                            :{SILVER}Kijelölted letöltésre
 STR_CONTENT_DETAIL_SUBTITLE_AUTOSELECTED                        :{SILVER}Ez a függőség ki lett jelölve letöltésre
 STR_CONTENT_DETAIL_SUBTITLE_ALREADY_HERE                        :{SILVER}Már rendelkezel ezzel a tartalommal
-STR_CONTENT_DETAIL_SUBTITLE_DOES_NOT_EXIST                      :{SILVER}Ismeretlen tartalom, nem tölthető le az OpenTTD-hez
 
 STR_CONTENT_DETAIL_UPDATE                                       :{SILVER}Ez a tartalom egy meglévő {STRING} helyettesítése
 STR_CONTENT_DETAIL_NAME                                         :{SILVER}Név: {WHITE}{STRING}
@@ -2804,7 +2789,6 @@ STR_CONTENT_DETAIL_FILESIZE                                     :{SILVER}Letölt
 STR_CONTENT_DETAIL_SELECTED_BECAUSE_OF                          :{SILVER}Kijelölés oka: {WHITE}{STRING}
 STR_CONTENT_DETAIL_DEPENDENCIES                                 :{SILVER}Függőségek: {WHITE}{STRING}
 STR_CONTENT_DETAIL_TAGS                                         :{SILVER}Címkék: {WHITE}{STRING}
-STR_CONTENT_NO_ZLIB                                             :Az OpenTTD "zlib" támogatás nélkül lett fordítva...
 STR_CONTENT_NO_ZLIB_SUB                                         :nem lehet letölteni a tartalmat!
 
 # Order of these is important!
@@ -2833,13 +2817,10 @@ STR_CONTENT_ERROR_COULD_NOT_DOWNLOAD_FILE_NOT_WRITABLE          :a fájl nem ír
 STR_CONTENT_ERROR_COULD_NOT_EXTRACT                             :Nem sikerült kicsomagolni a letöltött fájlt
 
 STR_MISSING_GRAPHICS_SET_CAPTION                                :{WHITE}Hiányzó grafikus alapcsomag
-STR_MISSING_GRAPHICS_SET_MESSAGE                                :{BLACK}Az OpenTTD-nek egy grafikus alapcsomagra van szüksége a működéshez, de nem található grafikus alapcsomag. Engedélyezed az OpenTTD-nek, hogy letöltse és telepítse a grafikus alapcsomagot?
 STR_MISSING_GRAPHICS_YES_DOWNLOAD                               :{BLACK}Igen, a grafikai alapcsomag letöltése
-STR_MISSING_GRAPHICS_NO_QUIT                                    :{BLACK}Nem, kilépés az OpenTTD-ből
 
 STR_MISSING_GRAPHICS_ERROR_TITLE                                :{WHITE}Letöltés sikertelen
 STR_MISSING_GRAPHICS_ERROR                                      :{BLACK}A grafikus alapcsomag letöltése sikertelen.{}Tölts le manuálisan egy grafikus alapcsomagot!
-STR_MISSING_GRAPHICS_ERROR_QUIT                                 :{BLACK}Kilépés az OpenTTD-ből
 
 # Transparency settings window
 STR_TRANSPARENCY_CAPTION                                        :{WHITE}Átlátszósági beállítások
@@ -3383,9 +3364,7 @@ STR_LAI_OBJECT_DESCRIPTION_COMPANY_HEADQUARTERS                 :Vállalat szék
 STR_LAI_OBJECT_DESCRIPTION_COMPANY_OWNED_LAND                   :Vállalat által birtokolt föld
 
 # About OpenTTD window
-STR_ABOUT_OPENTTD                                               :{WHITE}Az OpenTTD névjegye
 STR_ABOUT_ORIGINAL_COPYRIGHT                                    :{BLACK}Eredeti copyright {COPYRIGHT} 1995 Chris Sawyer, Minden jog fenntartva
-STR_ABOUT_VERSION                                               :{BLACK}OpenTTD {REV} verzió
 STR_ABOUT_COPYRIGHT_OPENTTD                                     :{BLACK}OpenTTD {COPYRIGHT}2002-{STRING} Az OpenTTD csapat
 
 # Framerate display window
@@ -3516,7 +3495,6 @@ STR_MAPGEN_QUANTITY_OF_RIVERS                                   :{BLACK}Folyók:
 STR_MAPGEN_SMOOTHNESS                                           :{BLACK}Simaság:
 STR_MAPGEN_VARIETY                                              :{BLACK}Változatosság eloszlása:
 STR_MAPGEN_GENERATE                                             :{WHITE}Generál
-STR_MAPGEN_GENERATE_TOOLTIP                                     :{BLACK}Készíts egy világot és játssz OpenTTD-t!
 STR_MAPGEN_NEWGRF_SETTINGS                                      :{BLACK}NewGRF-beállítások
 STR_MAPGEN_NEWGRF_SETTINGS_TOOLTIP                              :{BLACK}NewGRF-beállítások megnyitása
 STR_MAPGEN_AI_SETTINGS                                          :{BLACK}MI-beállítások
@@ -3571,7 +3549,6 @@ STR_MAPGEN_HEIGHTMAP_ROTATION                                   :{BLACK}Magassá
 STR_MAPGEN_HEIGHTMAP_NAME                                       :{BLACK}Magasságtérkép neve:
 STR_MAPGEN_HEIGHTMAP_NAME_TOOLTIP                               :{BLACK}A magasságtérkép képfájl neve
 STR_MAPGEN_HEIGHTMAP_SIZE_LABEL                                 :{BLACK}Méret:
-STR_MAPGEN_HEIGHTMAP_SIZE_LABEL_TOOLTIP                         :{BLACK}A forrás magasságtérkép mérete. A legjobb eredmény érdekében minden egyes élnek meg kell egyeznie az OpenTTD-ben rendelkezésre álló térkép éleinek hosszával, például 256, 512, 1024 stb.
 STR_MAPGEN_HEIGHTMAP_SIZE                                       :{ORANGE}{NUM} x {NUM}
 
 STR_MAPGEN_TERRAIN_TYPE_QUERY_CAPT                              :{WHITE}A legmagasabb pont tengerszint feletti magassága
@@ -3762,7 +3739,6 @@ STR_NEWGRF_ERROR_INDPROD_CALLBACK                               :Érvénytelen t
 
 # NewGRF related 'general' warnings
 STR_NEWGRF_POPUP_CAUTION_CAPTION                                :{WHITE}Figyelem!
-STR_NEWGRF_CONFIRMATION_TEXT                                    :{YELLOW}Te éppen egy jelenleg futó játékon akarsz változtatni; ettől elszállhat az OpenTTD. Ezekről ne tegyél hibajelentést.{}Teljesen biztos vagy ebben?
 
 STR_NEWGRF_DUPLICATE_GRFID                                      :Nem lehetséges a fájl hozzáadása: duplikált NewGRF azonosító
 STR_NEWGRF_COMPATIBLE_LOADED                                    :{ORANGE} Egyező fájlt nem található (kompatibilis NewGRF-fel helyettesítve)
@@ -3771,7 +3747,6 @@ STR_NEWGRF_TOO_MANY_NEWGRFS                                     :Nem adhatod hoz
 STR_NEWGRF_COMPATIBLE_LOAD_WARNING                              :Kompatibilis NewGRF(-ek) betöltve a hiányzó fájlok helyett
 STR_NEWGRF_DISABLED_WARNING                                     :Hiányzó NewGRF fájlok kikapcsolva
 STR_NEWGRF_UNPAUSE_WARNING_TITLE                                :{YELLOW}Hiányzó NewGRF fájl(ok)
-STR_NEWGRF_UNPAUSE_WARNING                                      :{WHITE}A játék folytatásától az OpenTTD lefagyhat.{}Ne jelentsd be az ismétlődő lefagyásokat egyesével.{}Biztosan folytatni akarod?
 
 # NewGRF status
 STR_NEWGRF_LIST_NONE                                            :Nincs
@@ -5111,7 +5086,6 @@ STR_TEXTFILE_README_CAPTION                                     :{WHITE}{STRING}
 STR_TEXTFILE_CHANGELOG_CAPTION                                  :{WHITE}A(z) {STRING} {STRING} változásainak listája
 STR_TEXTFILE_LICENCE_CAPTION                                    :{WHITE}A(z) {STRING} {STRING} licence
 STR_TEXTFILE_SURVEY_RESULT_CAPTION                              :{WHITE}Felmérés eredményének előnézete
-STR_TEXTFILE_GAME_MANUAL_CAPTION                                :{WHITE}OpenTTD dokumentum '{STRING}'
 
 
 # Vehicle loading indicators

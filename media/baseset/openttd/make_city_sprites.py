@@ -2185,6 +2185,59 @@ icon(340, 934, [
 ], {'K': rgb_index((40, 40, 40)), 'R': rgb_index((200, 60, 50)), 'G': rgb_index((60, 160, 70)), 'Y': rgb_index((250, 220, 60)), 'B': rgb_index((60, 110, 200))}, "icon states map")
 
 assert len(sprites) == 300, len(sprites)
+
+# The Wira Bandar wordmark for the main menu, in the style of OpenTTD's title letters: orange letters, lit on top,
+# a dark outline and a brown shadow. Letters on a 5 by 7 grid, each cell 3 by 3 pixels.
+LOGO_GLYPHS = {
+    'W': ["X...X", "X...X", "X...X", "X.X.X", "X.X.X", "XX.XX", "X...X"],
+    'I': ["XXX", ".X.", ".X.", ".X.", ".X.", ".X.", "XXX"],
+    'R': ["XXXX.", "X...X", "X...X", "XXXX.", "X.X..", "X..X.", "X...X"],
+    'A': [".XXX.", "X...X", "X...X", "XXXXX", "X...X", "X...X", "X...X"],
+    'B': ["XXXX.", "X...X", "X...X", "XXXX.", "X...X", "X...X", "XXXX."],
+    'N': ["X...X", "XX..X", "X.X.X", "X..XX", "X...X", "X...X", "X...X"],
+    'D': ["XXXX.", "X...X", "X...X", "X...X", "X...X", "X...X", "XXXX."],
+}
+
+
+def wordmark(text, cell=3, letter_gap=2, word_gap=9):
+    """Rows for put(): F face, H lit top edge, K outline, S shadow."""
+    face = set()
+    x = 1
+    for ch in text:
+        if ch == ' ':
+            x += word_gap
+            continue
+        glyph = LOGO_GLYPHS[ch]
+        for gy, row in enumerate(glyph):
+            for gx, c in enumerate(row):
+                if c != 'X':
+                    continue
+                for dy in range(cell):
+                    for dx in range(cell):
+                        face.add((x + gx * cell + dx, 1 + gy * cell + dy))
+        x += len(glyph[0]) * cell + letter_gap
+    width = x - letter_gap + 3
+    height = 7 * cell + 4
+    grid = [['.'] * width for _ in range(height)]
+    for (fx, fy) in face:
+        for dy in (-1, 0, 1):
+            for dx in (-1, 0, 1):
+                if 0 <= fx + dx < width and 0 <= fy + dy < height and (fx + dx, fy + dy) not in face:
+                    grid[fy + dy][fx + dx] = 'K'
+    for (fx, fy) in face:
+        sx, sy = fx + 2, fy + 2
+        if sx < width and sy < height and grid[sy][sx] == '.':
+            grid[sy][sx] = 'S'
+    for (fx, fy) in face:
+        grid[fy][fx] = 'H' if (fx, fy - 1) not in face else 'F'
+    return [''.join(r) for r in grid]
+
+
+logo_rows = wordmark("WIRA BANDAR")
+icon(4, 2240, logo_rows, {'F': rgb_index((252, 176, 48)), 'H': rgb_index((252, 216, 152)), 'K': rgb_index((32, 4, 0)),
+                          'S': rgb_index((112, 72, 24))}, "logo wira bandar")
+
+assert len(sprites) == 301, len(sprites)
 sheet.save(f"{SRC}/city.png", optimize=True)
 
 header = """// This file is part of OpenTTD.
@@ -2228,6 +2281,7 @@ header = """// This file is part of OpenTTD.
 //   290-298: shops: supermarket, shopping complex (along X: two parts, along Y: two parts),
 //            hypermarket (four parts: (0,0), (0,1), (1,0), (1,1))
 //   299:   icon: map of states
+//   300:   the Wira Bandar wordmark of the main menu
 //
    -1 * 0\t 0C "City fork graphics"
    -1 * 5\t 05 1C FF %02X %02X

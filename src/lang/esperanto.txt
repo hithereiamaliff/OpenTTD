@@ -500,12 +500,10 @@ STR_TOOLBAR_TOOLTIP_BUILD_AIRPORTS                              :{BLACK}Konstrui
 STR_TOOLBAR_TOOLTIP_LANDSCAPING                                 :{BLACK}Malfermi la landaspektan menuon, arban menuon, aŭ meti ŝildon
 STR_TOOLBAR_TOOLTIP_SHOW_SOUND_MUSIC_WINDOW                     :{BLACK}Malfermi fenestron de sono/muziko
 STR_TOOLBAR_TOOLTIP_SHOW_LAST_MESSAGE_NEWS                      :{BLACK}Malfermi lastan mesaĝon/novaĵon, historion de mesaĝoj aŭ forigi ĉiujn mesaĝojn
-STR_TOOLBAR_TOOLTIP_LAND_BLOCK_INFORMATION                      :{BLACK}Malfermi regionan informon, ekrankopian menuon, aŭtorliston de OpenTTD aŭ ilaron por disvolvantoj
 STR_TOOLBAR_TOOLTIP_SWITCH_TOOLBAR                              :{BLACK}Ŝalti ilobretojn
 
 # Extra tooltips for the scenario editor toolbar
 STR_SCENEDIT_TOOLBAR_SAVE_SCENARIO_LOAD_SCENARIO_TOOLTIP        :{BLACK}Konservi scenaron, ŝarĝi scenaron, foriri el la kreilo, eliri
-STR_SCENEDIT_TOOLBAR_OPENTTD                                    :{YELLOW}OpenTTD
 STR_SCENEDIT_TOOLBAR_SCENARIO_EDITOR                            :{YELLOW}Scenarkreilon
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_BACKWARD_TOOLTIP    :{BLACK}Movu la komencdaton 1 jaron posten
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_FORWARD_TOOLTIP     :{BLACK}Movu la komencdaton 1 jaron antaŭen
@@ -631,7 +629,6 @@ STR_ABOUT_MENU_TOGGLE_CONSOLE                                   :Baskuligi konzo
 STR_ABOUT_MENU_AI_DEBUG                                         :AI/Ludoskripta sencimigo
 STR_ABOUT_MENU_SCREENSHOT                                       :Ekranfoto
 STR_ABOUT_MENU_SHOW_FRAMERATE                                   :Montri bildrapidon
-STR_ABOUT_MENU_ABOUT_OPENTTD                                    :Pri 'OpenTTD'
 STR_ABOUT_MENU_SPRITE_ALIGNER                                   :Bildeto-liniigilo
 STR_ABOUT_MENU_TOGGLE_BOUNDING_BOXES                            :Montri/ne montri limigujo
 STR_ABOUT_MENU_TOGGLE_DIRTY_BLOCKS                              :(Mal)ŝalti la kolorigon de malpuraj blokoj
@@ -1159,7 +1156,6 @@ STR_GAME_OPTIONS_LANGUAGE_TOOLTIP                               :Elektu uzotan i
 STR_GAME_OPTIONS_LANGUAGE_PERCENTAGE                            :{STRING} ({NUM}% kompleta)
 
 STR_GAME_OPTIONS_FULLSCREEN                                     :Plena ekrano
-STR_GAME_OPTIONS_FULLSCREEN_TOOLTIP                             :Ŝaltu por plenekrane ludi OpenTTD
 
 STR_GAME_OPTIONS_RESOLUTION                                     :Ekrana montrogrando
 STR_GAME_OPTIONS_RESOLUTION_TOOLTIP                             :Elektu uzotan ekranan montrograndon
@@ -1167,7 +1163,6 @@ STR_GAME_OPTIONS_RESOLUTION_OTHER                               :alia
 STR_GAME_OPTIONS_RESOLUTION_ITEM                                :{NUM}x{NUM}
 
 STR_GAME_OPTIONS_VIDEO_ACCELERATION                             :Aparatara plirapidigo
-STR_GAME_OPTIONS_VIDEO_ACCELERATION_TOOLTIP                     :Ŝaltu, por ke OpenTTD klopodu uzi aparataran akceladon. Se vi ŝanĝas tiun ĉi agordon, la nova agordo validos nur ekde restartigo de la ludo
 STR_GAME_OPTIONS_VIDEO_ACCELERATION_RESTART                     :{WHITE}Tiu ĉi agordo ekefikos nur post restartigo de la ludo
 
 STR_GAME_OPTIONS_VIDEO_VSYNC                                    :Vertikala sinkronigo
@@ -2349,8 +2344,6 @@ STR_VIDEO_DRIVER_ERROR_NO_HARDWARE_ACCELERATION                 :ne troveblis ko
 STR_VIDEO_DRIVER_ERROR_HARDWARE_ACCELERATION_CRASH              :pelilo de grafikkarto kraŝis la ludon. Aparata plirapidigo malŝaltita
 
 # Intro window
-STR_INTRO_CAPTION                                               :{WHITE}OpenTTD
-STR_INTRO_VERSION                                               :OpenTTD {REV}
 
 STR_INTRO_NEW_GAME                                              :{BLACK}Nova ludo
 STR_INTRO_LOAD_GAME                                             :{BLACK}Ŝarĝi ludon
@@ -2381,14 +2374,11 @@ STR_INTRO_TOOLTIP_GAME_OPTIONS                                  :{BLACK}Montri l
 STR_INTRO_TOOLTIP_HIGHSCORE                                     :{BLACK}Malfermi altpoentaran tabelon
 STR_INTRO_TOOLTIP_HELP                                          :{BLACK}Atingu dokumentadon kaj ĉeretajn rimedojn
 STR_INTRO_TOOLTIP_ONLINE_CONTENT                                :{BLACK}Serĉi pri nova kaj ĝisdatigita enhavo por elŝuti
-STR_INTRO_TOOLTIP_QUIT                                          :{BLACK}Fermi 'OpenTTD'
 
 STR_INTRO_BASESET                                               :{BLACK}En la elektita baza grafikaro mankas {NUM} bildeto{P "" j}. Bonvolu kontrolu ĉu estas ĝisdatigoj por la bazaj datumoj.
-STR_INTRO_TRANSLATION                                           :{BLACK}En ĉi tiu traduko mankas {NUM} tekstero{P "" j}. Bonvolu helpu plibonigi OpenTTD kaj aliĝu kiel tradukanto. Legu pliajn detalojn en readme.txt.
 
 # Quit window
 STR_QUIT_CAPTION                                                :{WHITE}Forlasi
-STR_QUIT_ARE_YOU_SURE_YOU_WANT_TO_EXIT_OPENTTD                  :{YELLOW}Ĉu vi vere volas eliri je OpenTTD?
 STR_QUIT_YES                                                    :{BLACK}Jes
 STR_QUIT_NO                                                     :{BLACK}Ne
 
@@ -2483,7 +2473,6 @@ STR_FACE_SIMPLE                                                 :{BLACK}Simpla
 STR_FACE_SIMPLE_TOOLTIP                                         :{BLACK}Simpla elekto de vizaĝo
 STR_FACE_LOAD                                                   :{BLACK}Ŝargi
 STR_FACE_LOAD_TOOLTIP                                           :{BLACK}Ŝargi favoratan vizaĝon.
-STR_FACE_LOAD_DONE                                              :Via favorata vizaĝo estis ŝargita de la agord-dosiero de OpenTTD
 STR_FACE_FACECODE                                               :{BLACK}Ludanta vizaĝkodo
 STR_FACE_FACECODE_TOOLTIP                                       :{BLACK}Rigardi kaj/aŭ elekti vizaĝkodon de kompania prezidanto
 STR_FACE_FACECODE_CAPTION                                       :{WHITE}Rigardi kaj/aŭ elekti prezidantan vizaĝkodon
@@ -2491,7 +2480,6 @@ STR_FACE_FACECODE_SET                                           :Nova vizaĝo de
 STR_FACE_FACECODE_ERR                                           :Ne povas aktivigi vizaĝkodon de prezidanto - devas esti taŭga etikedo kaj nombro
 STR_FACE_SAVE                                                   :{BLACK}Konservi
 STR_FACE_SAVE_TOOLTIP                                           :{BLACK}Konservi favoratan vizaĝon
-STR_FACE_SAVE_DONE                                              :Tiu ĉi vizaĝo estos konservita kiel via favorata en la agord-dosiero de OpenTTD
 STR_FACE_SETTING_TOGGLE                                         :{STRING} {ORANGE}{STRING}
 STR_FACE_SETTING_NUMERIC                                        :{STRING} {ORANGE}{NUM} / {NUM}
 STR_FACE_YES                                                    :Jes
@@ -2806,8 +2794,6 @@ STR_CONTENT_UNSELECT_ALL_CAPTION                                :{BLACK}Malelekt
 STR_CONTENT_UNSELECT_ALL_CAPTION_TOOLTIP                        :{BLACK}Marki ĉiujn enhavojn neelŝutotan
 STR_CONTENT_SEARCH_EXTERNAL                                     :{BLACK}Serĉo eksteraj retejoj
 STR_CONTENT_SEARCH_EXTERNAL_TOOLTIP                             :{BLACK} Serĉu enhavo ne estas disponebla en OpenTTD enhavon servon en retejoj ne asocias al OpenTTD
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER_CAPTION                  :{WHITE}Vi forlasas OpenTTD!
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER                          :{WHITE}La uzokondiĉoj por elŝuti enhavon de eksteraj retejoj estas variaj.{}Vi devas kontroli ĉe la eksteraj retejoj por trovi informojn pri kiel instali la enhavon al OpenTTD.{}Ĉu vi volas daŭrigi?
 STR_CONTENT_FILTER_TITLE                                        :{BLACK}Etikeda/noma filtro:
 STR_CONTENT_OPEN_URL                                            :{BLACK}Retejo
 STR_CONTENT_OPEN_URL_TOOLTIP                                    :{BLACK}Vizitu la retejon de tiu ĉi enhavo
@@ -2821,7 +2807,6 @@ STR_CONTENT_DETAIL_SUBTITLE_UNSELECTED                          :{SILVER}Vi ne e
 STR_CONTENT_DETAIL_SUBTITLE_SELECTED                            :{SILVER}Vi elektis ĉi tiun por elŝuti.
 STR_CONTENT_DETAIL_SUBTITLE_AUTOSELECTED                        :{SILVER}Ĉi tiu dependata enhavo estis elektita por elŝutado
 STR_CONTENT_DETAIL_SUBTITLE_ALREADY_HERE                        :{SILVER}Vi jam havas tion
-STR_CONTENT_DETAIL_SUBTITLE_DOES_NOT_EXIST                      :{SILVER}Tiu enhavo estas nekonata kaj ne povas esti elŝutita en OpenTTD.
 
 STR_CONTENT_DETAIL_UPDATE                                       :{SILVER}Tiu estas anstataŭo por ekzistanta {STRING}
 STR_CONTENT_DETAIL_NAME                                         :{SILVER}Nomo: {WHITE}{STRING}
@@ -2833,7 +2818,6 @@ STR_CONTENT_DETAIL_FILESIZE                                     :{SILVER}Elŝuta
 STR_CONTENT_DETAIL_SELECTED_BECAUSE_OF                          :{SILVER}Elektita ĉar: {WHITE}{STRING}
 STR_CONTENT_DETAIL_DEPENDENCIES                                 :{SILVER}Dependaĵoj: {WHITE}{STRING}
 STR_CONTENT_DETAIL_TAGS                                         :{SILVER}Etikedoj: {WHITE}{STRING}
-STR_CONTENT_NO_ZLIB                                             :OpenTTD estas kompilita sen subteno de biblioteko "zlib"...
 STR_CONTENT_NO_ZLIB_SUB                                         :elŝutado de enhavo neeblas!
 
 # Order of these is important!
@@ -2862,13 +2846,10 @@ STR_CONTENT_ERROR_COULD_NOT_DOWNLOAD_FILE_NOT_WRITABLE          :dosiero ne skri
 STR_CONTENT_ERROR_COULD_NOT_EXTRACT                             :Ne povis malkompaktigi la elŝutitan dosieron
 
 STR_MISSING_GRAPHICS_SET_CAPTION                                :{WHITE}Mankaj grafikoj
-STR_MISSING_GRAPHICS_SET_MESSAGE                                :{BLACK}OpenTTD bezonas grafikojn por funkcii sed neniu estas trovata. Ĉu vi permesas OpenTDD-n al elŝulti kaj instali ĉi tiujn grafikojn?
 STR_MISSING_GRAPHICS_YES_DOWNLOAD                               :{BLACK}Jes, elŝuti la grafikojn
-STR_MISSING_GRAPHICS_NO_QUIT                                    :{BLACK}Ne, fermi OpenTTD
 
 STR_MISSING_GRAPHICS_ERROR_TITLE                                :{WHITE}Elŝutado malsukcesis
 STR_MISSING_GRAPHICS_ERROR                                      :{BLACK}Malsukcesis elŝutado de grafiko.{}Bonvolu elŝuti grafikon permane.
-STR_MISSING_GRAPHICS_ERROR_QUIT                                 :{BLACK}Fermi OpenTTD
 
 # Transparency settings window
 STR_TRANSPARENCY_CAPTION                                        :{WHITE}Agordoj de travidebleco
@@ -3413,9 +3394,7 @@ STR_LAI_OBJECT_DESCRIPTION_COMPANY_HEADQUARTERS                 :Kompania ĉefof
 STR_LAI_OBJECT_DESCRIPTION_COMPANY_OWNED_LAND                   :Kompanie posedata lando
 
 # About OpenTTD window
-STR_ABOUT_OPENTTD                                               :{WHITE}Pri OpenTTD
 STR_ABOUT_ORIGINAL_COPYRIGHT                                    :{BLACK}Origina kopirajto {COPYRIGHT} 1995 Chris Sawyer, Ĉiuj rajtoj rezervitaj
-STR_ABOUT_VERSION                                               :{BLACK}OpenTTD-versio {REV}
 STR_ABOUT_COPYRIGHT_OPENTTD                                     :{BLACK}OpenTTD {COPYRIGHT}2002-{STRING} La teamo de OpenTTD
 
 # Framerate display window
@@ -3546,7 +3525,6 @@ STR_MAPGEN_QUANTITY_OF_RIVERS                                   :{BLACK}Riveroj:
 STR_MAPGEN_SMOOTHNESS                                           :{BLACK}Glateco:
 STR_MAPGEN_VARIETY                                              :{BLACK}Diverseca distribuo:
 STR_MAPGEN_GENERATE                                             :{WHITE}Generi
-STR_MAPGEN_GENERATE_TOOLTIP                                     :{BLACK}Kreu la mondon kaj ludu OpenTTD!
 STR_MAPGEN_NEWGRF_SETTINGS                                      :{BLACK}Agordoj de NewGRF
 STR_MAPGEN_NEWGRF_SETTINGS_TOOLTIP                              :{BLACK}Malfermi NewGRF-agordojn
 STR_MAPGEN_AI_SETTINGS                                          :{BLACK}AI-agordoj
@@ -3601,7 +3579,6 @@ STR_MAPGEN_HEIGHTMAP_ROTATION                                   :{BLACK}Mapa tur
 STR_MAPGEN_HEIGHTMAP_NAME                                       :{BLACK}Mapa nomo:
 STR_MAPGEN_HEIGHTMAP_NAME_TOOLTIP                               :{BLACK}Nomo de bilddosiero de altecmapo
 STR_MAPGEN_HEIGHTMAP_SIZE_LABEL                                 :{BLACK}Grandeco:
-STR_MAPGEN_HEIGHTMAP_SIZE_LABEL_TOOLTIP                         :{BLACK}La grandeco de altecmapa bildo. Por la plej bonaj rezultoj, ĉiu bordo devus kongrui kun disponebla longeco de mapa bordo en OpenTTD, kiel 256, 512, 1024, ktp.
 STR_MAPGEN_HEIGHTMAP_SIZE                                       :{ORANGE}{NUM} x {NUM}
 
 STR_MAPGEN_TERRAIN_TYPE_QUERY_CAPT                              :{WHITE}Cela alteco de pinto
@@ -3792,7 +3769,6 @@ STR_NEWGRF_ERROR_INDPROD_CALLBACK                               :Nevalida entrep
 
 # NewGRF related 'general' warnings
 STR_NEWGRF_POPUP_CAUTION_CAPTION                                :{WHITE}Atentu!
-STR_NEWGRF_CONFIRMATION_TEXT                                    :{YELLOW}Vi ŝanĝos kurantan ludon. Tio povas paneigi OpenTTD aŭ rompi la ludstaton. Ne sendu cim-raportojn pri tiaj problemoj.{}Ĉu vi tute certas, ke vi volas fari tion?
 
 STR_NEWGRF_DUPLICATE_GRFID                                      :Dosiero ne aldoneblas: duobla NewGRF ID
 STR_NEWGRF_COMPATIBLE_LOADED                                    :{ORANGE}Ne troviĝis apartena dosiero (taŭga NewGRF ŝarĝita)
@@ -3801,7 +3777,6 @@ STR_NEWGRF_TOO_MANY_NEWGRFS                                     :Ne eblas aldoni
 STR_NEWGRF_COMPATIBLE_LOAD_WARNING                              :Taŭga(j) NewGRF(oj) ŝarĝiĝis por mankaj dosieroj
 STR_NEWGRF_DISABLED_WARNING                                     :Manka(j) NewGRF-dosiero(j) malŝaltiĝis
 STR_NEWGRF_UNPAUSE_WARNING_TITLE                                :{YELLOW}Manka(j) NewGRF-dosiero(j)
-STR_NEWGRF_UNPAUSE_WARNING                                      :{WHITE}Malpaŭzigo povas paneigi OpenTTD. Ne sendu erarraporton se sekve okazos paneo.{}Ĉu vi vere volas malpaŭzigi?
 
 # NewGRF status
 STR_NEWGRF_LIST_NONE                                            :Neniu
@@ -5152,7 +5127,6 @@ STR_TEXTFILE_README_CAPTION                                     :{WHITE}{STRING}
 STR_TEXTFILE_CHANGELOG_CAPTION                                  :{WHITE}{STRING}-a ŝanĝarĥivo de {STRING}
 STR_TEXTFILE_LICENCE_CAPTION                                    :{WHITE}{STRING}-a licenco de {STRING}
 STR_TEXTFILE_SURVEY_RESULT_CAPTION                              :{WHITE}Antaŭmontro de sondaĵrezulto
-STR_TEXTFILE_GAME_MANUAL_CAPTION                                :{WHITE}OpenTTD-dokumento '{STRING}'
 
 
 # Vehicle loading indicators

@@ -224,7 +224,6 @@ STR_TOOLBAR_TOOLTIP_OPTIONS                                     :{BLACK}Майл
 STR_TOOLBAR_TOOLTIP_BUILD_AIRPORTS                              :{BLACK}Аэропорт ларт
 
 # Extra tooltips for the scenario editor toolbar
-STR_SCENEDIT_TOOLBAR_OPENTTD                                    :{YELLOW}OpenTTD
 STR_SCENEDIT_TOOLBAR_PLACE_OBJECT_TOOLTIP                       :{BLACK}Объект вырӑнӗ
 
 # Scenario editor file menu
@@ -271,7 +270,6 @@ STR_TOOLBAR_SOUND_MUSIC                                         :Сасӑ/Юрӑ
 
 # About menu
 STR_ABOUT_MENU_SCREENSHOT                                       :Экран сӑнӗ
-STR_ABOUT_MENU_ABOUT_OPENTTD                                    :'OpenTTD' çинчен
 
 ###length 31
 STR_DAY_NUMBER_1ST                                              :1мӗш
@@ -881,7 +879,6 @@ STR_INTRO_QUIT                                                  :{BLACK}Вӗҫл
 
 
 
-STR_INTRO_TOOLTIP_QUIT                                          :{BLACK}'OpenTTD' вӗҫле
 
 
 # Quit window
@@ -1193,7 +1190,6 @@ STR_LAI_OBJECT_DESCRIPTION_TRANSMITTER                          :Передат�
 STR_LAI_OBJECT_DESCRIPTION_LIGHTHOUSE                           :Маяк
 
 # About OpenTTD window
-STR_ABOUT_VERSION                                               :{BLACK}OpenTTD верси {REV}
 
 # Framerate display window
 

@@ -542,12 +542,10 @@ STR_TOOLBAR_TOOLTIP_BUILD_AIRPORTS                              :{BLACK}Struere 
 STR_TOOLBAR_TOOLTIP_LANDSCAPING                                 :{BLACK}Monstrare terrae arcam instrumentorum qua potes terram augere/minuere, arbores serere, etc.
 STR_TOOLBAR_TOOLTIP_SHOW_SOUND_MUSIC_WINDOW                     :{BLACK}Monstrare fenestram soni musicaeque
 STR_TOOLBAR_TOOLTIP_SHOW_LAST_MESSAGE_NEWS                      :{BLACK}Monstrare nuntium novissimum sive optiones nuntii
-STR_TOOLBAR_TOOLTIP_LAND_BLOCK_INFORMATION                      :{BLACK}Indicia terrae regionis, consola, emendatio scripti, imagines conspectus, de OpenTTD
 STR_TOOLBAR_TOOLTIP_SWITCH_TOOLBAR                              :{BLACK}Mutare inter arcas instrumentorum
 
 # Extra tooltips for the scenario editor toolbar
 STR_SCENEDIT_TOOLBAR_SAVE_SCENARIO_LOAD_SCENARIO_TOOLTIP        :{BLACK}Servare scaenarium, legere scaenarium, relinquere scriptorium scaenarii, exire
-STR_SCENEDIT_TOOLBAR_OPENTTD                                    :{YELLOW}OpenTTD
 STR_SCENEDIT_TOOLBAR_SCENARIO_EDITOR                            :{YELLOW}Scriptorium Scaenarii
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_BACKWARD_TOOLTIP    :{BLACK}Facit ut dies initii uno anno procedatur
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_FORWARD_TOOLTIP     :{BLACK}Facit ut dies initii uno anno recedatur
@@ -657,7 +655,6 @@ STR_ABOUT_MENU_LAND_BLOCK_INFO                                  :Terrae regionis
 STR_ABOUT_MENU_TOGGLE_CONSOLE                                   :Monstrare celareve consolam
 STR_ABOUT_MENU_AI_DEBUG                                         :Emendatio IA/Ludi scriptorum
 STR_ABOUT_MENU_SCREENSHOT                                       :Imago conspectus
-STR_ABOUT_MENU_ABOUT_OPENTTD                                    :De 'OpenTTD'
 STR_ABOUT_MENU_SPRITE_ALIGNER                                   :Norma spiritus
 STR_ABOUT_MENU_TOGGLE_BOUNDING_BOXES                            :Monstrare celareve arcas finitionum
 STR_ABOUT_MENU_TOGGLE_DIRTY_BLOCKS                              :Incipere desinereve pictura sordidorum laterculorum
@@ -1101,7 +1098,6 @@ STR_GAME_OPTIONS_LANGUAGE                                       :Lingua
 STR_GAME_OPTIONS_LANGUAGE_TOOLTIP                               :Eligere linguam interfaciei
 
 STR_GAME_OPTIONS_FULLSCREEN                                     :Cunctum scrinium
-STR_GAME_OPTIONS_FULLSCREEN_TOOLTIP                             :Optione electa, OpenTTD cuncto scrinio ostenditur
 
 STR_GAME_OPTIONS_RESOLUTION                                     :Resolutio scrinii
 STR_GAME_OPTIONS_RESOLUTION_TOOLTIP                             :Eligere resolutio scrinii adhibenda
@@ -2096,10 +2092,8 @@ STR_INTRO_TOOLTIP_TOYLAND_LANDSCAPE                             :{BLACK}Eligere 
 STR_INTRO_TOOLTIP_GAME_OPTIONS                                  :{BLACK}Monstrare ludi optiones
 STR_INTRO_TOOLTIP_HIGHSCORE                                     :{BLACK}Monstrare album punctorum supremorum
 STR_INTRO_TOOLTIP_ONLINE_CONTENT                                :{BLACK}Inspicere inventarium Interretiale in quo res sicut NewGRF, scaenaria, musica, etc. sunt
-STR_INTRO_TOOLTIP_QUIT                                          :{BLACK}Exire OpenTTD
 
 STR_INTRO_BASESET                                               :{BLACK}Hoc fundamento graphico desunt spiritus {NUM}. Quaere novam editionem huius fundamenti.
-STR_INTRO_TRANSLATION                                           :{BLACK}In hac interpretatione, {NUM} series desunt. Quaesimus, iuva OpenTTD meliorari et dic te velle interpretem esse. Vide readme.txt in quo plura sunt.
 
 # Quit window
 STR_QUIT_CAPTION                                                :{WHITE}Exire
@@ -2176,7 +2170,6 @@ STR_FACE_SIMPLE                                                 :{BLACK}Simplici
 STR_FACE_SIMPLE_TOOLTIP                                         :{BLACK}Eligere faciem simpliciter
 STR_FACE_LOAD                                                   :{BLACK}Legere
 STR_FACE_LOAD_TOOLTIP                                           :{BLACK}Legere faciem dilectam
-STR_FACE_LOAD_DONE                                              :{WHITE}Facies dilecta lecta est ex fasciculo OpenTTD configurationis
 STR_FACE_FACECODE                                               :{BLACK}Numerus faciei lusoris
 STR_FACE_FACECODE_TOOLTIP                                       :{BLACK}Spicere vel eligere numerum praesidis societatis faciei
 STR_FACE_FACECODE_CAPTION                                       :{WHITE}Spicere vel eligere numerum praesidis societatis faciei
@@ -2184,7 +2177,6 @@ STR_FACE_FACECODE_SET                                           :{WHITE}Novus nu
 STR_FACE_FACECODE_ERR                                           :{WHITE}Numerus faciei confirmatus non est - oportet esse numerus inter 0 et 4,294,967,295!
 STR_FACE_SAVE                                                   :{BLACK}Servare
 STR_FACE_SAVE_TOOLTIP                                           :{BLACK}Servare faciem dilectam
-STR_FACE_SAVE_DONE                                              :{WHITE}Haec facies servabit ad dilectam tuam in fasciculo OpenTTD configurationis
 STR_FACE_YES                                                    :Ita
 STR_FACE_NO                                                     :Non
 STR_FACE_HAIR                                                   :Capilli:
@@ -2403,8 +2395,6 @@ STR_CONTENT_UNSELECT_ALL_CAPTION                                :{BLACK}Nullas e
 STR_CONTENT_UNSELECT_ALL_CAPTION_TOOLTIP                        :{BLACK}Signare nullam rem arcessendam esse
 STR_CONTENT_SEARCH_EXTERNAL                                     :{BLACK}Quaerere situs externos
 STR_CONTENT_SEARCH_EXTERNAL_TOOLTIP                             :{BLACK}Quaerere res in aliis sitibus interretialibus non in inventario OpenTTD parabiles
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER_CAPTION                  :{WHITE}OpenTTD exiens es!
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER                          :{WHITE}Condiciones res arcessendi ex sitibus externis sunt variae.{}Necesse est tibi inspicere eos situs et quaerere institutionem quomodo res imponatur intra OpenTTD.{}Visne pergere?
 STR_CONTENT_FILTER_TITLE                                        :{BLACK}Colum nominis:
 STR_CONTENT_OPEN_URL                                            :{BLACK}Ire ad situm interretialem
 STR_CONTENT_OPEN_URL_TOOLTIP                                    :{BLACK}Ire ad situm huius rei
@@ -2418,7 +2408,6 @@ STR_CONTENT_DETAIL_SUBTITLE_UNSELECTED                          :{SILVER}Non opt
 STR_CONTENT_DETAIL_SUBTITLE_SELECTED                            :{SILVER}Optavisti hanc rem arcessendam esse
 STR_CONTENT_DETAIL_SUBTITLE_AUTOSELECTED                        :{SILVER}Hic ambactus optatus est arcessendus
 STR_CONTENT_DETAIL_SUBTITLE_ALREADY_HERE                        :{SILVER}Iam hanc rem habes
-STR_CONTENT_DETAIL_SUBTITLE_DOES_NOT_EXIST                      :{SILVER}Haec res ignota est ac non potest arcessi in OpenTTD
 
 STR_CONTENT_DETAIL_UPDATE                                       :{SILVER}H{G ic aec oc i ae aec} est nova editio veteris {STRING.gen}
 STR_CONTENT_DETAIL_NAME                                         :{SILVER}Nomen: {WHITE}{STRING}
@@ -2430,7 +2419,6 @@ STR_CONTENT_DETAIL_FILESIZE                                     :{SILVER}Magnitu
 STR_CONTENT_DETAIL_SELECTED_BECAUSE_OF                          :{SILVER}Electa propter: {WHITE}{STRING}
 STR_CONTENT_DETAIL_DEPENDENCIES                                 :{SILVER}Ambacti: {WHITE}{STRING}
 STR_CONTENT_DETAIL_TAGS                                         :{SILVER}Notae: {WHITE}{STRING}
-STR_CONTENT_NO_ZLIB                                             :{WHITE}OpenTTD compilata est sine "zlib"...
 STR_CONTENT_NO_ZLIB_SUB                                         :{WHITE}... itaque non potest ullam rem e rete arcessere!
 
 # Order of these is important!
@@ -2469,9 +2457,7 @@ STR_CONTENT_ERROR_COULD_NOT_DOWNLOAD_FILE_NOT_WRITABLE          :{WHITE}... fasc
 STR_CONTENT_ERROR_COULD_NOT_EXTRACT                             :{WHITE}Non poterat fasciculum arcessitum decomprimere
 
 STR_MISSING_GRAPHICS_SET_CAPTION                                :{WHITE}Graphica absenta
-STR_MISSING_GRAPHICS_SET_MESSAGE                                :{BLACK}OpenTTD graphica requirit sed nulla inventa sunt. Permittisne OpenTTD arcessere et imponere haec graphica?
 STR_MISSING_GRAPHICS_YES_DOWNLOAD                               :{BLACK}Ita, arcessere graphica
-STR_MISSING_GRAPHICS_NO_QUIT                                    :{BLACK}Non, OpenTTD exire
 
 
 # Transparency settings window
@@ -2900,9 +2886,7 @@ STR_LAI_OBJECT_DESCRIPTION_COMPANY_HEADQUARTERS                 :Sedes primaria 
 STR_LAI_OBJECT_DESCRIPTION_COMPANY_OWNED_LAND                   :Terra societatis
 
 # About OpenTTD window
-STR_ABOUT_OPENTTD                                               :{WHITE}De OpenTTD
 STR_ABOUT_ORIGINAL_COPYRIGHT                                    :{BLACK}Privilegium impressorium originale {COPYRIGHT} MCMXCV Chris Sawyer, Omnia proprietatis iura reservantur
-STR_ABOUT_VERSION                                               :{BLACK}OpenTTD editio {REV}
 
 # Framerate display window
 STR_FRAMERATE_CAPTION_SMALL                                     :{STRING}{WHITE} ({DECIMAL}x)
@@ -3170,7 +3154,6 @@ STR_NEWGRF_ERROR_INDPROD_CALLBACK                               :Revocatio produ
 
 # NewGRF related 'general' warnings
 STR_NEWGRF_POPUP_CAUTION_CAPTION                                :{WHITE}Maxime Cavendum Est!
-STR_NEWGRF_CONFIRMATION_TEXT                                    :{YELLOW}Ludum euntem mutaturus es. Igitur, ludum corruatur sive OpenTTD frangatur. Noli queri de mendis harum rerum.{}Esne valde certus te pergere velle?
 
 STR_NEWGRF_DUPLICATE_GRFID                                      :{WHITE}Addere fasciculum non licet nam adest agnoscamentum GRF duplicatum
 STR_NEWGRF_COMPATIBLE_LOADED                                    :{ORANGE}Fasciculus congruus lectus (nam fasciculus idem non inventum fuit)
@@ -3179,7 +3162,6 @@ STR_NEWGRF_TOO_MANY_NEWGRFS                                     :{WHITE}Addere f
 STR_NEWGRF_COMPATIBLE_LOAD_WARNING                              :{WHITE}Fasciculi congrui lecti in loco fasciculorum absentorum
 STR_NEWGRF_DISABLED_WARNING                                     :{WHITE}Fasciculi absentes remoti sunt
 STR_NEWGRF_UNPAUSE_WARNING_TITLE                                :{YELLOW}Fasciculi GRF absunt
-STR_NEWGRF_UNPAUSE_WARNING                                      :{WHITE}OpenTTD forsitan corruatur resumendo. Noli queri de ruinis sequentibus.{}Esne valde certus te ludum resumere velle?
 
 # NewGRF status
 STR_NEWGRF_LIST_NONE                                            :Nulli

@@ -400,12 +400,10 @@ STR_TOOLBAR_TOOLTIP_BUILD_AIRPORTS                              :{BLACK}בניי
 STR_TOOLBAR_TOOLTIP_LANDSCAPING                                 :{BLACK}'הצג את סרגל פני השטח לעיצוב פני הקרקע, נטיעת עצים וכו
 STR_TOOLBAR_TOOLTIP_SHOW_SOUND_MUSIC_WINDOW                     :{BLACK}הצג את חלון הצלילים/מנגינת רקע
 STR_TOOLBAR_TOOLTIP_SHOW_LAST_MESSAGE_NEWS                      :{BLACK}הצג הודעה אחרונה/מבזק חדשות אחרון, הצג הגדרות הודעה
-STR_TOOLBAR_TOOLTIP_LAND_BLOCK_INFORMATION                      :{BLACK}מידע על איזור קרקע, קונסולה, דיבאג של סקריפטים, צילומי מסך, אודות OpenTTD
 STR_TOOLBAR_TOOLTIP_SWITCH_TOOLBAR                              :{BLACK}החלף סרגל כלים
 
 # Extra tooltips for the scenario editor toolbar
 STR_SCENEDIT_TOOLBAR_SAVE_SCENARIO_LOAD_SCENARIO_TOOLTIP        :{BLACK}שמור תרחיש, טען תרחיש, עזוב את עורך התרחישים, צא
-STR_SCENEDIT_TOOLBAR_OPENTTD                                    :{YELLOW}OpenTTD
 STR_SCENEDIT_TOOLBAR_SCENARIO_EDITOR                            :{YELLOW}עורך התרחישים
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_BACKWARD_TOOLTIP    :{BLACK}שנה את שנת ההתחלה לשנה 1 פחות
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_FORWARD_TOOLTIP     :{BLACK}שנה את שנת ההתחלה לשנה 1 יותר
@@ -519,7 +517,6 @@ STR_ABOUT_MENU_TOGGLE_CONSOLE                                   :פתח/סגור
 STR_ABOUT_MENU_AI_DEBUG                                         :דיבאג של סקריפטים של בינה מלאכותית או של המשחק
 STR_ABOUT_MENU_SCREENSHOT                                       :צילום מסך
 STR_ABOUT_MENU_SHOW_FRAMERATE                                   :הצג קצב פריימים
-STR_ABOUT_MENU_ABOUT_OPENTTD                                    :אודות 'OpenTTD'
 STR_ABOUT_MENU_SPRITE_ALIGNER                                   :מיישר ספרייטים
 STR_ABOUT_MENU_TOGGLE_BOUNDING_BOXES                            :הדלק/כבה הצגת תיבות גבול של ספרייטים
 STR_ABOUT_MENU_TOGGLE_DIRTY_BLOCKS                              :הפעל/כבה צביעת בלוקים לא מעודכנים
@@ -985,7 +982,6 @@ STR_GAME_OPTIONS_LANGUAGE_TOOLTIP                               :בחר את ש�
 STR_GAME_OPTIONS_LANGUAGE_PERCENTAGE                            :{STRING} ({NUM}% הסתיים)
 
 STR_GAME_OPTIONS_FULLSCREEN                                     :מסך מלא
-STR_GAME_OPTIONS_FULLSCREEN_TOOLTIP                             :סמן תיבה זו כדי לשחק OpenTTD על כל המסך
 
 STR_GAME_OPTIONS_RESOLUTION                                     :רזלוציית המסך
 STR_GAME_OPTIONS_RESOLUTION_TOOLTIP                             :בחר את רזולוציית המסך
@@ -993,7 +989,6 @@ STR_GAME_OPTIONS_RESOLUTION_OTHER                               :אחר
 STR_GAME_OPTIONS_RESOLUTION_ITEM                                :{NUM}x{NUM}
 
 STR_GAME_OPTIONS_VIDEO_ACCELERATION                             :האצת חומרה
-STR_GAME_OPTIONS_VIDEO_ACCELERATION_TOOLTIP                     :סמן תיבה זו כדי לאפשר ל-OpenTTD לנסות לבצע האצת חומרה. ההגדרה תיכנס לתוקף לאחר הפעלת המשחק מחדש
 STR_GAME_OPTIONS_VIDEO_ACCELERATION_RESTART                     :{WHITE}ההגדרה תיכנס לתוקף לאחר הפעלת המשחק מחדש
 
 STR_GAME_OPTIONS_VIDEO_VSYNC                                    :VSync
@@ -2040,7 +2035,6 @@ STR_CONFIG_ERROR_INVALID_BASE_MUSIC_NOT_FOUND                   :{WHITE}... מת
 STR_VIDEO_DRIVER_ERROR_NO_HARDWARE_ACCELERATION                 :{WHITE}... לא נמצא כרטיס מסך תואם, האצת חומרה מושבתת
 
 # Intro window
-STR_INTRO_CAPTION                                               :{WHITE}OpenTTD
 
 STR_INTRO_NEW_GAME                                              :{BLACK}משחק חדש
 STR_INTRO_LOAD_GAME                                             :{BLACK}טען משחק
@@ -2071,14 +2065,11 @@ STR_INTRO_TOOLTIP_GAME_OPTIONS                                  :{BLACK}הצג �
 STR_INTRO_TOOLTIP_HIGHSCORE                                     :{BLACK}הצג טבלת ניקוד מירבי
 STR_INTRO_TOOLTIP_HELP                                          :{BLACK}קבל גישה לתיעוד ולמשאבים מקוונים
 STR_INTRO_TOOLTIP_ONLINE_CONTENT                                :{BLACK} חפש תוכן חדש/מעודכן להורדה
-STR_INTRO_TOOLTIP_QUIT                                          :{BLACK}צא מ-'OpenTTD'
 
 STR_INTRO_BASESET                                               :{BLACK}חסרים {NUM} ספרייט עבור גרפיקות הבסיס שנבחרו. אנא בדוק עדכונים לערכה זו.
-STR_INTRO_TRANSLATION                                           :{BLACK}בתרגום זה חסרים {P 0 "מחרוזת " ""}{NUM}{P "" " מחרוזות"}. אנא עזור לשפר את OpenTTD ע"י הצטרפות כמתרגם. קרא בקובץ readme.txt לפרטים.
 
 # Quit window
 STR_QUIT_CAPTION                                                :{WHITE}צא
-STR_QUIT_ARE_YOU_SURE_YOU_WANT_TO_EXIT_OPENTTD                  :{YELLOW}אתה בטוח שברצונך לצאת מ-OpenTTD?
 STR_QUIT_YES                                                    :{BLACK}כן
 STR_QUIT_NO                                                     :{BLACK}לא
 
@@ -2154,7 +2145,6 @@ STR_FACE_SIMPLE                                                 :{BLACK}פשוט
 STR_FACE_SIMPLE_TOOLTIP                                         :{BLACK}בחירה פושטה של תוי פנים
 STR_FACE_LOAD                                                   :{BLACK}טען
 STR_FACE_LOAD_TOOLTIP                                           :{BLACK}טען פנים מקובץ
-STR_FACE_LOAD_DONE                                              :{WHITE}הפנים החביבות עליך הוטענו מהקובץ
 STR_FACE_FACECODE                                               :{BLACK}תוי פנים מספר
 STR_FACE_FACECODE_TOOLTIP                                       :{BLACK}צפה/שנה מספר סידורי של תוי הפנים
 STR_FACE_FACECODE_CAPTION                                       ::{WHITE}צפה/שנה מספר סידורי של תוי הפנים
@@ -2162,7 +2152,6 @@ STR_FACE_FACECODE_SET                                           :{WHITE}המספ
 STR_FACE_FACECODE_ERR                                           :{WHITE}לא ניתן לקבוע מספר פנים של השחקן - חייב להיות מספר בין 0 ל-4,294,967,295!
 STR_FACE_SAVE                                                   :{BLACK}שמור
 STR_FACE_SAVE_TOOLTIP                                           :{BLACK}שמור את הפנים לקובץ
-STR_FACE_SAVE_DONE                                              :{WHITE}פנים אלה ישמרו כהעדפה אישית שלך בקובץ ההגדרות של המשחק
 STR_FACE_YES                                                    :כן
 STR_FACE_NO                                                     :לא
 STR_FACE_HAIR                                                   ::שיער
@@ -2444,8 +2433,6 @@ STR_CONTENT_UNSELECT_ALL_CAPTION                                :{BLACK} בטל 
 STR_CONTENT_UNSELECT_ALL_CAPTION_TOOLTIP                        :{BLACK} בטל את כל הבחירות להורדה
 STR_CONTENT_SEARCH_EXTERNAL                                     :{BLACK}חפש באתרים חיצוניים
 STR_CONTENT_SEARCH_EXTERNAL_TOOLTIP                             :{BLACK}חיפוש תוכן שלא זמין בשירות התוכן של OpenTTD באתרים שלא משוייכים לפרויקט OpenTTD
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER_CAPTION                  :{WHITE}אתה עומד לצאת מ-OpenTTD!
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER                          :{WHITE} התנאים להורדת תוכן מאתר חיצוני השתנו.{}עלייך לפנות לאתרים חיצוניים להנחיות כיצד להתקין את התוכן לתוך OpenTTD.{}האם ברצונך להמשיך?
 STR_CONTENT_FILTER_TITLE                                        :{BLACK}סינון תוית\שם:
 STR_CONTENT_OPEN_URL                                            :{BLACK}בקר באתר האינטרנט
 STR_CONTENT_OPEN_URL_TOOLTIP                                    :{BLACK}בקר באתר האינטרנט עבור התוכן הזה
@@ -2459,7 +2446,6 @@ STR_CONTENT_DETAIL_SUBTITLE_UNSELECTED                          :{SILVER}לא ב
 STR_CONTENT_DETAIL_SUBTITLE_SELECTED                            :{SILVER}בחרת בפריט זה להורדה
 STR_CONTENT_DETAIL_SUBTITLE_AUTOSELECTED                        :{SILVER} פריט תלוי זה נבחר להורדה
 STR_CONTENT_DETAIL_SUBTITLE_ALREADY_HERE                        :{SILVER} כבר יש לך את זה
-STR_CONTENT_DETAIL_SUBTITLE_DOES_NOT_EXIST                      :{SILVER} תוכן זה לא מוכר ואינו ניתן להורדה ב-OpenTTD
 
 STR_CONTENT_DETAIL_UPDATE                                       :{SILVER}זוהי חלופה ל{STRING} קיים
 STR_CONTENT_DETAIL_NAME                                         :{WHITE}{STRING}{SILVER} :שם
@@ -2471,7 +2457,6 @@ STR_CONTENT_DETAIL_FILESIZE                                     :{WHITE}{BYTES}{
 STR_CONTENT_DETAIL_SELECTED_BECAUSE_OF                          :{WHITE}{STRING}{SILVER} :נבחר בגלל
 STR_CONTENT_DETAIL_DEPENDENCIES                                 :{WHITE}{STRING}{SILVER} :תלויות
 STR_CONTENT_DETAIL_TAGS                                         :{WHITE}{STRING}{SILVER} :תגים
-STR_CONTENT_NO_ZLIB                                             :{WHITE}OpenTTD נבנה ללא תמיכה ב-"zlib"...
 STR_CONTENT_NO_ZLIB_SUB                                         :{WHITE}... הורדת תוכן אינה אפשרית
 
 # Order of these is important!
@@ -2500,9 +2485,7 @@ STR_CONTENT_ERROR_COULD_NOT_DOWNLOAD_FILE_NOT_WRITABLE          :{WHITE}... הק
 STR_CONTENT_ERROR_COULD_NOT_EXTRACT                             :{WHITE}נכשלה פתיחה של קובץ מכווץ
 
 STR_MISSING_GRAPHICS_SET_CAPTION                                :{WHITE}גרפיקה חסרה
-STR_MISSING_GRAPHICS_SET_MESSAGE                                :{BLACK}OpenTTD דורש גרפיקה כדי לפעול אבל כזו לא נמצאה. האם לאפשר ל-OpenTTD להוריד ולהתקין את הגרפיקה הזו?
 STR_MISSING_GRAPHICS_YES_DOWNLOAD                               :{BLACK}כן, הורד את הגרפיקה
-STR_MISSING_GRAPHICS_NO_QUIT                                    :{BLACK}לא, צא מ-OpenTTD
 
 STR_MISSING_GRAPHICS_ERROR                                      :{BLACK}הורדת הגרפיקה נכשלה.{}אנא הורד את הגרפיקה ידנית.
 
@@ -2975,9 +2958,7 @@ STR_LAI_OBJECT_DESCRIPTION_COMPANY_HEADQUARTERS                 :מטה החבר
 STR_LAI_OBJECT_DESCRIPTION_COMPANY_OWNED_LAND                   :שטח בבעלות חברה
 
 # About OpenTTD window
-STR_ABOUT_OPENTTD                                               :{WHITE}אודות OpenTTD
 STR_ABOUT_ORIGINAL_COPYRIGHT                                    :{BLACK}כל הזכויות שמורות , {COPYRIGHT}1995 כריס סויר - זכויות יוצרים מקוריות
-STR_ABOUT_VERSION                                               :{BLACK}{REV} גירסה , OpenTTD
 STR_ABOUT_COPYRIGHT_OPENTTD                                     :{BLACK}OpenTTD {COPYRIGHT}2002-{STRING} The OpenTTD team
 
 # Framerate display window
@@ -3311,7 +3292,6 @@ STR_NEWGRF_ERROR_INVALID_SPRITE_LAYOUT                          :מבנה פור
 
 # NewGRF related 'general' warnings
 STR_NEWGRF_POPUP_CAUTION_CAPTION                                :{WHITE}!אזהרה
-STR_NEWGRF_CONFIRMATION_TEXT                                    :{YELLOW}הנך עומד לבצע שינויים במהלך ריצת המשחק. פעולה זו עלולה לגרום לקריסה. נא לא לדווח על בעיות אלה.{} האם אתה בטוח לחלוטין שברצונך להמשיך?
 
 STR_NEWGRF_DUPLICATE_GRFID                                      :{WHITE}Can't add file: duplicate GRF ID
 STR_NEWGRF_COMPATIBLE_LOADED                                    :{ORANGE}הקובץ לא נמצא, הוטען קובץ תואם
@@ -3320,7 +3300,6 @@ STR_NEWGRF_TOO_MANY_NEWGRFS                                     :{WHITE}לא נ�
 STR_NEWGRF_COMPATIBLE_LOAD_WARNING                              :{WHITE}קבצים תואמים נטענו במקום קבצים חסרים
 STR_NEWGRF_DISABLED_WARNING                                     :{WHITE}שדרוגים גראפים אחדים לא נמצאו ולפיכך נוטרלו
 STR_NEWGRF_UNPAUSE_WARNING_TITLE                                :{YELLOW}קבצים חסרים
-STR_NEWGRF_UNPAUSE_WARNING                                      :{WHITE}?הפשרת המשחק עלולה להביא לקריסה. להמשיך
 
 # NewGRF status
 STR_NEWGRF_LIST_NONE                                            :ללא
@@ -4519,7 +4498,6 @@ STR_TEXTFILE_README_CAPTION                                     :{WHITE}{STRING}
 STR_TEXTFILE_CHANGELOG_CAPTION                                  :{WHITE}{STRING} רשימת שינויים של {STRING}
 STR_TEXTFILE_LICENCE_CAPTION                                    :{WHITE}{STRING} רשיון של {STRING}
 STR_TEXTFILE_SURVEY_RESULT_CAPTION                              :{WHITE}צפייה מקדימה בתוצאות הסקר
-STR_TEXTFILE_GAME_MANUAL_CAPTION                                :מסמך OpenTTD '{STRING}' {WHITE}
 
 
 # Vehicle loading indicators

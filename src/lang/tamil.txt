@@ -406,12 +406,10 @@ STR_TOOLBAR_TOOLTIP_BUILD_AIRPORTS                              :{BLACK}வி�
 STR_TOOLBAR_TOOLTIP_LANDSCAPING                                 :{BLACK}நிலப்பரப்பு கருவிப்பட்டையினைத் திறந்து, நிலத்தை உயர்த்த/தாழ்த்த, மரங்களை நட, மற்றவை etc.
 STR_TOOLBAR_TOOLTIP_SHOW_SOUND_MUSIC_WINDOW                     :{BLACK}இசை மையம் காண்பி
 STR_TOOLBAR_TOOLTIP_SHOW_LAST_MESSAGE_NEWS                      :{BLACK}கடைசி செய்தி அறிக்கை/தகவல்களை காட்டு, தகவல் விருப்பங்களை காட்டு
-STR_TOOLBAR_TOOLTIP_LAND_BLOCK_INFORMATION                      :{BLACK}நிலப்பகுதி விவரங்கள், console, வரிவடிவம் சர்பார்த்தல், திரைபிடிப்புகள்,OpenTTD பற்றி
 STR_TOOLBAR_TOOLTIP_SWITCH_TOOLBAR                              :{BLACK}கருவிப் பட்டை மாற்று
 
 # Extra tooltips for the scenario editor toolbar
 STR_SCENEDIT_TOOLBAR_SAVE_SCENARIO_LOAD_SCENARIO_TOOLTIP        :{BLACK}சித்திரக்காட்சியினை பதிவுசெய், பதிவேற்றவும், திருத்தியைவிட்டு வெளியேறவும், வெளியேறவும்
-STR_SCENEDIT_TOOLBAR_OPENTTD                                    :{YELLOW}OpenTTD
 STR_SCENEDIT_TOOLBAR_SCENARIO_EDITOR                            :{YELLOW}சித்திரக்காட்சி திருத்தி
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_BACKWARD_TOOLTIP    :{BLACK}ஆட்டத்தின் ஆரம்ப தேதியினை ஒரு வருடம் பின் நகர்த்து
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_FORWARD_TOOLTIP     :{BLACK}ஆட்டத்தின் ஆரம்ப தேதியினை ஒரு வருடம் முன் நகர்த்து
@@ -527,7 +525,6 @@ STR_ABOUT_MENU_TOGGLE_CONSOLE                                   :முனைய
 STR_ABOUT_MENU_AI_DEBUG                                         :AI/வரிவடிவம் சரிபார்
 STR_ABOUT_MENU_SCREENSHOT                                       :திரைபிடிப்பு
 STR_ABOUT_MENU_SHOW_FRAMERATE                                   :பிரேம் வீதத்தைக் காட்டு
-STR_ABOUT_MENU_ABOUT_OPENTTD                                    :'OpenTTD' பற்றி
 STR_ABOUT_MENU_SPRITE_ALIGNER                                   :ஸ்ரைட்டு அலைனர்
 STR_ABOUT_MENU_TOGGLE_BOUNDING_BOXES                            :எல்லைக் கட்டங்களை மாற்றவும்
 STR_ABOUT_MENU_TOGGLE_DIRTY_BLOCKS                              :அழுக்கான கட்டங்களின் நிறத்தை மாற்று
@@ -998,7 +995,6 @@ STR_GAME_OPTIONS_LANGUAGE_TOOLTIP                               :பயன்ப
 STR_GAME_OPTIONS_LANGUAGE_PERCENTAGE                            :{STRING} ({NUM}% நிறைவுற்றது)
 
 STR_GAME_OPTIONS_FULLSCREEN                                     :முழு படம்
-STR_GAME_OPTIONS_FULLSCREEN_TOOLTIP                             :OpenTTD-ஐ முழுத்திரையில் விளையாட இந்த கட்டத்தினை சொடுக்கவும்
 
 STR_GAME_OPTIONS_RESOLUTION                                     :திரையின் அளவு
 STR_GAME_OPTIONS_RESOLUTION_TOOLTIP                             :திரை அளவினைத் தேர்ந்தெடுக்கவும்
@@ -2003,14 +1999,11 @@ STR_INTRO_TOOLTIP_GAME_OPTIONS                                  :{BLACK}ஆட�
 STR_INTRO_TOOLTIP_HIGHSCORE                                     :{BLACK}புள்ளிகள் பட்டியலினைத் திற
 STR_INTRO_TOOLTIP_HELP                                          :{BLACK}ஆவணங்கள் மற்றும் இணைய ஆதாரங்களுக்கான அணுகலைப் பெறுங்கள்
 STR_INTRO_TOOLTIP_ONLINE_CONTENT                                :{BLACK}பதிவிறக்கம் செய்ய புதிய மற்றும் புதுப்பிக்கப்பட்ட உள்ளடக்கத்தை பார்க்கவும்
-STR_INTRO_TOOLTIP_QUIT                                          :{BLACK} 'OpenTTD'ஐ விட்டு வெளியேறு
 
 STR_INTRO_BASESET                                               :{BLACK}தேர்ந்தெடுக்கப்பட்ட அடிப்படை வரைகலை தொகுப்பில் {NUM}{P படம் படங்கள்} காணவில்லை. தயவுசெய்து அடிப்படை வரைகலை தொகுப்பிற்கான மேம்படுத்தல்களுக்கு தேடவும்.
-STR_INTRO_TRANSLATION                                           :{BLACK}இந்த மொழிபெயர்ப்பில் {NUM} இல்லை {P "" s}.மொழிபெயர்பாளராக பதிவு செய்து OpenTTDவிற்கு உதவவும். மேலும் விவரங்கள் அறிய readme.txt ஐ பார்க்கவும்..
 
 # Quit window
 STR_QUIT_CAPTION                                                :{WHITE}வெளியேறு
-STR_QUIT_ARE_YOU_SURE_YOU_WANT_TO_EXIT_OPENTTD                  :{YELLOW}நீங்கள் நிச்சயமாக OpenTTD இலிருந்து வெளியேற விரும்புகிறீர்களா?
 STR_QUIT_YES                                                    :{BLACK}ஆமாம்
 STR_QUIT_NO                                                     :{BLACK}இல்லை
 
@@ -2101,7 +2094,6 @@ STR_FACE_SIMPLE                                                 :{BLACK}எள�
 STR_FACE_SIMPLE_TOOLTIP                                         :{BLACK}எளிதான முகம் தேர்ந்தெடுத்தல்
 STR_FACE_LOAD                                                   :{BLACK}ஏற்று
 STR_FACE_LOAD_TOOLTIP                                           :{BLACK}பிடித்த முகத்தினை பதிவேற்று
-STR_FACE_LOAD_DONE                                              :{WHITE}உங்களுடைய பிடித்த முகம் OpenTTD உள்ளமைவு கோப்பிலிருந்து ஏற்றப்பட்டுள்ளது
 STR_FACE_FACECODE                                               :{BLACK}விளையாடுபவர் முக எண்
 STR_FACE_FACECODE_TOOLTIP                                       :{BLACK}நிறுவனரின் முக எண்னை பார் மற்றும்/அல்லது அமை
 STR_FACE_FACECODE_CAPTION                                       :{WHITE}நிறுவனரின் முக எண்னை பார் அல்லது அமை
@@ -2109,7 +2101,6 @@ STR_FACE_FACECODE_SET                                           :{WHITE}பு�
 STR_FACE_FACECODE_ERR                                           :{WHITE}நிறுவனரின் முக எண்னை அமைக்க இயலவில்லை - முக எண் 0 இலிருந்து 4,294,967,295 இற்குள் இருக்க வேண்டும்!
 STR_FACE_SAVE                                                   :{BLACK}சேமி
 STR_FACE_SAVE_TOOLTIP                                           :{BLACK}பிடித்த முகத்தினைப் பதிவுசெய்
-STR_FACE_SAVE_DONE                                              :{WHITE}OpenTTD உள்ளமைவு கோப்பில் இந்த முகம் தங்களுடைய பிடித்த முகமாக பதியப்பட்டது
 STR_FACE_YES                                                    :ஆம்
 STR_FACE_NO                                                     :இல்லை
 STR_FACE_HAIR                                                   :முடி:
@@ -2392,8 +2383,6 @@ STR_CONTENT_UNSELECT_ALL_CAPTION                                :{BLACK}தே�
 STR_CONTENT_UNSELECT_ALL_CAPTION_TOOLTIP                        :{BLACK}அனைத்தையும் பதிவிறக்க வேண்டாம் என்று குறிக்கவும்
 STR_CONTENT_SEARCH_EXTERNAL                                     :{BLACK}வெளி இணையதளங்களில் தேடு
 STR_CONTENT_SEARCH_EXTERNAL_TOOLTIP                             :{BLACK}OpenTTDஇன் கோப்பு சேவையில் கிடைக்காத கோப்புகளுக்கு OpenTTDஉடன் தொடர்பில்லாத இணையதளங்களில் தேடவும்
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER_CAPTION                  :{WHITE}நீங்கள் OpenTTD ஐ விட்டு வெளியேறுகிறீர்கள்!
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER                          :{WHITE}வெளி இணையதளங்களிரிந்து கோப்புகளை பதிவிறக்குவதற்கான விதிமுறைகள் மற்றும் நிபந்தனைகள் மாறுபடலாம்.{}நீங்கள் கோப்புகளை நிறுவுவதற்கான வழிமுறைகளுக்கு அந்த வெளி இணையதளங்களை பார்க்க வேண்டும்.{}தொடர விருப்பமா?
 STR_CONTENT_FILTER_TITLE                                        :{BLACK}குறியீடு/பெயர் வடிகட்டி:
 STR_CONTENT_OPEN_URL                                            :{BLACK}இணையதளத்தினை பார்வையிடு
 STR_CONTENT_OPEN_URL_TOOLTIP                                    :{BLACK}இந்த கோப்பின் விவரங்களினை அதன் இணையதளத்தில் பார்க்க
@@ -2418,7 +2407,6 @@ STR_CONTENT_DETAIL_FILESIZE                                     :{SILVER}பத�
 STR_CONTENT_DETAIL_SELECTED_BECAUSE_OF                          :{SILVER}தேர்ந்தெடுக்கப்பட்டது இதனால்: {WHITE}{STRING}
 STR_CONTENT_DETAIL_DEPENDENCIES                                 :{SILVER}சார்ந்தவை: {WHITE}{STRING}
 STR_CONTENT_DETAIL_TAGS                                         :{SILVER}சுட்டிகள்: {WHITE}{STRING}
-STR_CONTENT_NO_ZLIB                                             :{WHITE}OpenTTD "zlib" தேவை இல்லாமலேயே கட்டப்பட்டது...
 STR_CONTENT_NO_ZLIB_SUB                                         :{WHITE}... கோப்புகளை பதிவிறக்கம் செய்ய முடியாது!
 
 # Order of these is important!
@@ -2447,13 +2435,10 @@ STR_CONTENT_ERROR_COULD_NOT_DOWNLOAD_FILE_NOT_WRITABLE          :{WHITE}... க�
 STR_CONTENT_ERROR_COULD_NOT_EXTRACT                             :{WHITE}பதிவிறக்கம் செய்யப்பட்ட கோப்பினை விரிவாக்க முடியவில்லை
 
 STR_MISSING_GRAPHICS_SET_CAPTION                                :{WHITE}அசைவூட்டங்கள் இல்லை
-STR_MISSING_GRAPHICS_SET_MESSAGE                                :{BLACK}OpenTTD க்கு கிராபிக்ஸ் செயல்பட வேண்டும், ஆனால் எதுவும் கண்டுபிடிக்கப்படவில்லை. இந்த கிராபிக்ஸ் பதிவிறக்கம் செய்து நிறுவ OpenTTD ஐ அனுமதிக்கிறீர்களா?
 STR_MISSING_GRAPHICS_YES_DOWNLOAD                               :{BLACK}ஆம், அசையூட்டங்களை பதிவிறக்கம் செய்
-STR_MISSING_GRAPHICS_NO_QUIT                                    :{BLACK}இல்லை, OpenTTD-ஐ விட்டு வெளியேறு
 
 STR_MISSING_GRAPHICS_ERROR_TITLE                                :{WHITE}பதிவிறக்கம் தோல்வியடைந்தது
 STR_MISSING_GRAPHICS_ERROR                                      :{BLACK}அசையூட்டம் பதிவிறக்கம் தோல்வியடைந்தது.{}அசையூட்டங்களை கைமுறையாகப் பதிவிறக்கவும்.
-STR_MISSING_GRAPHICS_ERROR_QUIT                                 :{BLACK}OpenTTD-ஐ விட்டு வெளியேறு
 
 # Transparency settings window
 STR_TRANSPARENCY_CAPTION                                        :{WHITE}ஒளி அமைப்புகள்
@@ -2870,9 +2855,7 @@ STR_LAI_OBJECT_DESCRIPTION_COMPANY_HEADQUARTERS                 :நிறுவ
 STR_LAI_OBJECT_DESCRIPTION_COMPANY_OWNED_LAND                   :நிறுவனத்திற்குச் சொந்தமான நிலம்
 
 # About OpenTTD window
-STR_ABOUT_OPENTTD                                               :{WHITE}OpenTTD-ஐ பற்றி
 STR_ABOUT_ORIGINAL_COPYRIGHT                                    :{BLACK}அசல் உரிமைகள் {COPYRIGHT} 1995 கிறிஸ் சாயர், எல்லா உரிமைகளும் பதிவுசெய்யப்பட்டது
-STR_ABOUT_VERSION                                               :{BLACK}OpenTTD பதிப்பு {REV}
 STR_ABOUT_COPYRIGHT_OPENTTD                                     :{BLACK}OpenTTD {COPYRIGHT} 2002-{STRING} OpenTTD குழுமம்
 
 # Framerate display window
@@ -4386,7 +4369,6 @@ STR_TEXTFILE_README_CAPTION                                     :{WHITE}{STRING}
 STR_TEXTFILE_CHANGELOG_CAPTION                                  :{WHITE}{STRING} {STRING} இன் மாற்றங்கள் பதிவேடு
 STR_TEXTFILE_LICENCE_CAPTION                                    :{WHITE}{STRING} {STRING} இன் அனுமதி
 STR_TEXTFILE_SURVEY_RESULT_CAPTION                              :{WHITE}கருத்துக்கணிப்பு முடிவின் முன்னோட்டம்
-STR_TEXTFILE_GAME_MANUAL_CAPTION                                :{WHITE}OpenTTD ஆவணம் '{STRING}'
 
 
 # Vehicle loading indicators

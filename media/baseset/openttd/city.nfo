@@ -39,9 +39,10 @@
 //   290-298: shops: supermarket, shopping complex (along X: two parts, along Y: two parts),
 //            hypermarket (four parts: (0,0), (0,1), (1,0), (1,1))
 //   299:   icon: map of states
+//   300:   the Wira Bandar wordmark of the main menu
 //
    -1 * 0	 0C "City fork graphics"
-   -1 * 5	 05 1C FF 2C 01
+   -1 * 5	 05 1C FF 2D 01
    -1 sprites/city.png 8bpp    4    4   4  17   -1  -16 normal
    -1 sprites/city.png 8bpp   12    4   4  17   -1  -16 normal
    -1 sprites/city.png 8bpp   20    4   4  17   -1  -16 normal
@@ -342,3 +343,4 @@
    -1 sprites/city.png 8bpp  417 1950  63  32  -30    0 normal
    -1 sprites/city.png 8bpp    4 2190  62  39  -30   -7 normal
    -1 sprites/city.png 8bpp  340  934  16  14    0    0 normal
+   -1 sprites/city.png 8bpp    4 2240 175  25    0    0 normal

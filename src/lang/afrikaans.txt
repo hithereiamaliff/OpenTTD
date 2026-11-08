@@ -358,12 +358,10 @@ STR_TOOLBAR_TOOLTIP_BUILD_AIRPORTS                              :{BLACK}Bou lugh
 STR_TOOLBAR_TOOLTIP_LANDSCAPING                                 :{BLACK}Maak die landargitektuur nutsbalk oop om, land te verhoog/verlaag, boome beplant, ens.
 STR_TOOLBAR_TOOLTIP_SHOW_SOUND_MUSIC_WINDOW                     :{BLACK}Vertoon klank/musiek venster
 STR_TOOLBAR_TOOLTIP_SHOW_LAST_MESSAGE_NEWS                      :{BLACK}Vertoon laaste boodskap/nuus verslag, vertoon boodskap opsies
-STR_TOOLBAR_TOOLTIP_LAND_BLOCK_INFORMATION                      :{BLACK}Land gebied informasie, konsole, skrip ontfouting, skermkiekie, omtrent OpenTTD
 STR_TOOLBAR_TOOLTIP_SWITCH_TOOLBAR                              :{BLACK}Skakel nutsbalke
 
 # Extra tooltips for the scenario editor toolbar
 STR_SCENEDIT_TOOLBAR_SAVE_SCENARIO_LOAD_SCENARIO_TOOLTIP        :{BLACK}Stoor scenario, laai scenario, verlaat scenario redigeerder, verlaat
-STR_SCENEDIT_TOOLBAR_OPENTTD                                    :{YELLOW}OpenTTD
 STR_SCENEDIT_TOOLBAR_SCENARIO_EDITOR                            :{YELLOW}Scenario Redigeerder
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_BACKWARD_TOOLTIP    :{BLACK}Beweeg die begin datum 1 jaar terug
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_FORWARD_TOOLTIP     :{BLACK}Beweeg die begin datum 1 jaar voorentoe
@@ -475,7 +473,6 @@ STR_ABOUT_MENU_TOGGLE_CONSOLE                                   :Skakel terminaa
 STR_ABOUT_MENU_AI_DEBUG                                         :AI/Spel skript ontfout
 STR_ABOUT_MENU_SCREENSHOT                                       :Skermskoot
 STR_ABOUT_MENU_SHOW_FRAMERATE                                   :Wys raamkoers
-STR_ABOUT_MENU_ABOUT_OPENTTD                                    :Oor 'OpenTTD'
 STR_ABOUT_MENU_SPRITE_ALIGNER                                   :"Sprite" rigter
 STR_ABOUT_MENU_TOGGLE_BOUNDING_BOXES                            :skakel beperkte bokse
 STR_ABOUT_MENU_TOGGLE_DIRTY_BLOCKS                              :Skakel inkleur van vuil blokke
@@ -924,7 +921,6 @@ STR_GAME_OPTIONS_LANGUAGE                                       :Taal
 STR_GAME_OPTIONS_LANGUAGE_TOOLTIP                               :Kies die koppelvlak taal om te gebruik
 
 STR_GAME_OPTIONS_FULLSCREEN                                     :Volskerm
-STR_GAME_OPTIONS_FULLSCREEN_TOOLTIP                             :Kies die blokkie om OpenTTD in volleskerm te speel
 
 STR_GAME_OPTIONS_RESOLUTION                                     :Skerm resolusie
 STR_GAME_OPTIONS_RESOLUTION_TOOLTIP                             :Kies die skerm resolusie om te gebruik
@@ -1924,9 +1920,7 @@ STR_INTRO_TOOLTIP_TOYLAND_LANDSCAPE                             :{BLACK}Kies 'sp
 STR_INTRO_TOOLTIP_GAME_OPTIONS                                  :{BLACK}Vertoon speletjie opsies
 STR_INTRO_TOOLTIP_HIGHSCORE                                     :{BLACK}Vertoon hoogste tellings tafel
 STR_INTRO_TOOLTIP_ONLINE_CONTENT                                :{BLACK}Kyk vir nuwe of bygewerkde inhoud om af te laai
-STR_INTRO_TOOLTIP_QUIT                                          :{BLACK}Verlaat 'OpenTTD'
 
-STR_INTRO_TRANSLATION                                           :{BLACK}Die vertaling kort {NUM} string{P "" s}. Help aseblief om OpenTTD beter te maak, deur aan te sluit as 'n vertaaler. Sien die readme.txt vir meer inligting.
 
 # Quit window
 STR_QUIT_CAPTION                                                :{WHITE}Verlaat
@@ -2003,7 +1997,6 @@ STR_FACE_SIMPLE                                                 :{BLACK}Eenvoudi
 STR_FACE_SIMPLE_TOOLTIP                                         :{BLACK}Eenvoudige gesig stellings
 STR_FACE_LOAD                                                   :{BLACK}Laai
 STR_FACE_LOAD_TOOLTIP                                           :{BLACK}Laai gunsteling gesig
-STR_FACE_LOAD_DONE                                              :{WHITE}Jou gunsteling gesig is van die OpenTTD stellings lêer gelaai.
 STR_FACE_FACECODE                                               :{BLACK}Speler gesig no.
 STR_FACE_FACECODE_TOOLTIP                                       :{BLACK}Vertoon en/of stel speler gesig nommer
 STR_FACE_FACECODE_CAPTION                                       :{WHITE}Bekyk en/of stel speler gesig nommer
@@ -2011,7 +2004,6 @@ STR_FACE_FACECODE_SET                                           :{WHITE}Nuwe ges
 STR_FACE_FACECODE_ERR                                           :{WHITE}Kon nie speler gesig nommer stel nie - moet 'n nommer tussen 0 en 4,294,967,295 wees!
 STR_FACE_SAVE                                                   :{BLACK}Spaar
 STR_FACE_SAVE_TOOLTIP                                           :{BLACK}Spaar gunsteling gesig
-STR_FACE_SAVE_DONE                                              :{WHITE}Die gesig sal as u gunsteling gesig in die OpenTTD stellings lêer gespaar word.
 STR_FACE_YES                                                    :Ja
 STR_FACE_NO                                                     :Nee
 STR_FACE_HAIR                                                   :Hare:
@@ -2232,8 +2224,6 @@ STR_CONTENT_UNSELECT_ALL_CAPTION                                :{BLACK}Onselekt
 STR_CONTENT_UNSELECT_ALL_CAPTION_TOOLTIP                        :{BLACK}Merk alle inhoud wat nie afgelaai moet word nie
 STR_CONTENT_SEARCH_EXTERNAL                                     :{BLACK}Soek deur eksterne webwerwe
 STR_CONTENT_SEARCH_EXTERNAL_TOOLTIP                             :{BLACK}Soek vir inhoud wat nie op OpenTTD's se inhoudsdiens beskikbaar is nie op bedieners wat geen verbintenis aan OpenTTD het nie
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER_CAPTION                  :{WHITE}Jy gaan OpenTDD verlaat!
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER                          :{WHITE}Die voorwaardes om inhoud van ander bedieners af te laai wissel.{}Verwys na die eksterne webwerf vir instruksies om die inhoud in OpenTTD in te laai.{}Wil jy voortgaan?
 STR_CONTENT_FILTER_TITLE                                        :{BLACK}Merker/naam filter:
 STR_CONTENT_OPEN_URL                                            :{BLACK}Besoek webblad
 STR_CONTENT_OPEN_URL_TOOLTIP                                    :{BLACK}Besoek die webwerf vir hierdie inhoud
@@ -2247,7 +2237,6 @@ STR_CONTENT_DETAIL_SUBTITLE_UNSELECTED                          :{SILVER}Jy het 
 STR_CONTENT_DETAIL_SUBTITLE_SELECTED                            :{SILVER}Jy het dit geselekeer om af te laai
 STR_CONTENT_DETAIL_SUBTITLE_AUTOSELECTED                        :{SILVER}Heirde afhanklikheid was gekies om afgelaai te wees
 STR_CONTENT_DETAIL_SUBTITLE_ALREADY_HERE                        :{SILVER}Jy het hierdie reeds
-STR_CONTENT_DETAIL_SUBTITLE_DOES_NOT_EXIST                      :{SILVER}Heirde inhoud is onbekend en kan afgelaai word in OpenTTD
 
 STR_CONTENT_DETAIL_UPDATE                                       :{SILVER}Hierdie is 'n vervanging van 'n bestaande {STRING}
 STR_CONTENT_DETAIL_NAME                                         :{SILVER}Naam: {WHITE}{STRING}
@@ -2259,7 +2248,6 @@ STR_CONTENT_DETAIL_FILESIZE                                     :{SILVER}Aflaai 
 STR_CONTENT_DETAIL_SELECTED_BECAUSE_OF                          :{SILVER}Geselekteer weens: {WHITE}{STRING}
 STR_CONTENT_DETAIL_DEPENDENCIES                                 :{SILVER}Afhanklikes: {WHITE}{STRING}
 STR_CONTENT_DETAIL_TAGS                                         :{SILVER}Merkers: {WHITE}{STRING}
-STR_CONTENT_NO_ZLIB                                             :{WHITE}OpenTTD word gebou sonder "zlib" ondersteuning...
 STR_CONTENT_NO_ZLIB_SUB                                         :{WHITE}... aflaai van inhoud is nie moentlik nie!
 
 # Order of these is important!
@@ -2288,9 +2276,7 @@ STR_CONTENT_ERROR_COULD_NOT_DOWNLOAD_FILE_NOT_WRITABLE          :{WHITE}... lêe
 STR_CONTENT_ERROR_COULD_NOT_EXTRACT                             :{WHITE}Kon nie die afgelaaide lêer dekompakteer
 
 STR_MISSING_GRAPHICS_SET_CAPTION                                :{WHITE}Vermis grafika
-STR_MISSING_GRAPHICS_SET_MESSAGE                                :{BLACK}OpenTTD het grafike nodig om the funksioneer maar kon niks vind nie. Wil jy hê dat OpenTTD grafike aflaai en instaleer?
 STR_MISSING_GRAPHICS_YES_DOWNLOAD                               :{BLACK}Ja, laai die grafika af
-STR_MISSING_GRAPHICS_NO_QUIT                                    :{BLACK}Nee, verlaat OpenTTD
 
 
 # Transparency settings window
@@ -2722,9 +2708,7 @@ STR_LAI_OBJECT_DESCRIPTION_COMPANY_HEADQUARTERS                 :Maatskappy Hoof
 STR_LAI_OBJECT_DESCRIPTION_COMPANY_OWNED_LAND                   :Maatskappy-besitte land
 
 # About OpenTTD window
-STR_ABOUT_OPENTTD                                               :{WHITE}Oor OpenTTD
 STR_ABOUT_ORIGINAL_COPYRIGHT                                    :{BLACK}Oorspronklike kopiereg {COPYRIGHT} 1995 Chris Sawyer, Alle regte voorbehou
-STR_ABOUT_VERSION                                               :{BLACK}OpenTTD uitgawe {REV}
 STR_ABOUT_COPYRIGHT_OPENTTD                                     :{BLACK}OpenTTD {COPYRIGHT} 2002-{STRING} Die OpenTTD span
 
 # Framerate display window
@@ -3014,7 +2998,6 @@ STR_NEWGRF_ERROR_INVALID_SPRITE_LAYOUT                          :Ongeldige/onbek
 
 # NewGRF related 'general' warnings
 STR_NEWGRF_POPUP_CAUTION_CAPTION                                :{WHITE}Versigtig!
-STR_NEWGRF_CONFIRMATION_TEXT                                    :{YELLOW}Jy wil veranderinge aan 'n lopende spel bring. Dit kan moontlik OpenTTD of die spel toestand laat verongeluk.{}Is jy seker?
 
 STR_NEWGRF_DUPLICATE_GRFID                                      :{WHITE}Kan nie lêer byvoeg nie: gedupliseerde GRF ID
 STR_NEWGRF_COMPATIBLE_LOADED                                    :{ORANGE}Gelyke lêer nie gevind nie (versoenbaar GRF gelaai)
@@ -3023,7 +3006,6 @@ STR_NEWGRF_TOO_MANY_NEWGRFS                                     :{WHITE}Kan nie 
 STR_NEWGRF_COMPATIBLE_LOAD_WARNING                              :{WHITE}Versoenbare GRF(s) gelaai vir vermiste lêers
 STR_NEWGRF_DISABLED_WARNING                                     :{WHITE}Vermiste GRF lêers is gedeaktiveer
 STR_NEWGRF_UNPAUSE_WARNING_TITLE                                :{YELLOW}GRF leêr(s) ontbreek
-STR_NEWGRF_UNPAUSE_WARNING                                      :{WHITE}Hervatting kan veroorsaak dat OpenTTD bots. Moet nie daaropeenvolgende botsings verslae rapporteer nie.{}Will jy rêrig unpause?
 
 # NewGRF status
 STR_NEWGRF_LIST_NONE                                            :Geen

@@ -338,12 +338,10 @@ STR_TOOLBAR_TOOLTIP_BUILD_AIRPORTS                              :{BLACK}ہوای
 STR_TOOLBAR_TOOLTIP_LANDSCAPING                                 :{BLACK}منظر کشی ٹول بآر کھولیئے اور زمین اوپر نیچےکریں، درخت لگایئے، وغیره
 STR_TOOLBAR_TOOLTIP_SHOW_SOUND_MUSIC_WINDOW                     :{BLACK} آواز/موسیقی ونڈو دکھایئے
 STR_TOOLBAR_TOOLTIP_SHOW_LAST_MESSAGE_NEWS                      :{BLACK} آخری پیغام/ خبر دکھایئے، پیغام کے اختیارات کھولیئے
-STR_TOOLBAR_TOOLTIP_LAND_BLOCK_INFORMATION                      :{BLACK}زمینی رقبہ کی معلومات، کانسول،AI debug ،اسکرین شاٹس، Open TTD کے بارے میں
 STR_TOOLBAR_TOOLTIP_SWITCH_TOOLBAR                              :{BLACK} ٹول بآر منتقل کیجیئے
 
 # Extra tooltips for the scenario editor toolbar
 STR_SCENEDIT_TOOLBAR_SAVE_SCENARIO_LOAD_SCENARIO_TOOLTIP        :{BLACK} منظر محفوظ کیجئے، منظر کھولیں، منظر دست بردار کیجیئے، منظر چھوڑیئے
-STR_SCENEDIT_TOOLBAR_OPENTTD                                    :{YELLOW}OpenTTD
 STR_SCENEDIT_TOOLBAR_SCENARIO_EDITOR                            :{YELLOW} منظر نامھ
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_BACKWARD_TOOLTIP    :{BLACK}شروع کرنے کی تاریخ کو ایک سال پیچھے کرو
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_FORWARD_TOOLTIP     :{BLACK}شروع کرنے کی تاریخ کو ایک سال آگے کرو
@@ -449,7 +447,6 @@ STR_ABOUT_MENU_LAND_BLOCK_INFO                                  :زمینی رق
 STR_ABOUT_MENU_TOGGLE_CONSOLE                                   :حائطھ تدویم
 STR_ABOUT_MENU_AI_DEBUG                                         :AI debug
 STR_ABOUT_MENU_SCREENSHOT                                       :اسکرین کی تصویر
-STR_ABOUT_MENU_ABOUT_OPENTTD                                    :Open TTD کے بارے میں
 STR_ABOUT_MENU_SPRITE_ALIGNER                                   :sprite صف بندھ
 STR_ABOUT_MENU_TOGGLE_BOUNDING_BOXES                            :احاطہ کرنے والے ڈبوں کی تدویم کیجئیے
 STR_ABOUT_MENU_TOGGLE_DIRTY_BLOCKS                              :گندے بلاکوں کا رنگ تبدیل کرو
@@ -873,7 +870,6 @@ STR_GAME_OPTIONS_LANGUAGE                                       :زبان
 STR_GAME_OPTIONS_LANGUAGE_TOOLTIP                               :استعمال کرنے کےلئے زبان اختیار کئیجیے
 
 STR_GAME_OPTIONS_FULLSCREEN                                     :مُکمل سکرین
-STR_GAME_OPTIONS_FULLSCREEN_TOOLTIP                             :مُکمل اسکرین پر کھیلنے کے لئے اِس ڈبے کو نشان لگائیں
 
 STR_GAME_OPTIONS_RESOLUTION                                     :اسکرین کی resolution
 STR_GAME_OPTIONS_RESOLUTION_TOOLTIP                             :اسکرین کی resolution اختیار کریں
@@ -1544,9 +1540,7 @@ STR_INTRO_TOOLTIP_TOYLAND_LANDSCAPE                             :{BLACK}منظر
 
 STR_INTRO_TOOLTIP_GAME_OPTIONS                                  :{BLACK}کھیل کے اختیارات دکھائیں
 STR_INTRO_TOOLTIP_ONLINE_CONTENT                                :{BLACK}نئے اور ترمیم شدہ مواد کو ڈاون لوڈ کرنے کے لئے چیک کریں
-STR_INTRO_TOOLTIP_QUIT                                          :{BLACK}'OpenTTD' سے باہر نکلو
 
-STR_INTRO_TRANSLATION                                           :{BLACK}اس ترجمے میں {NUM} لائنین{P "" یں} غیر ترجمہ سدہ ہیں۔ براہ مہربانی ترجمہ کُنندہ بن کر OpenTTD کی مدد کریں۔ تفصیلات کے لئے readme.txt دیکھیں
 
 # Quit window
 STR_QUIT_CAPTION                                                :{WHITE}باہر نکلو
@@ -1619,7 +1613,6 @@ STR_FACE_SIMPLE                                                 :{BLACK}سادہ
 STR_FACE_SIMPLE_TOOLTIP                                         :{BLACK}سادہ چہرہ چنئے
 STR_FACE_LOAD                                                   :{BLACK}لوڈ
 STR_FACE_LOAD_TOOLTIP                                           :{BLACK}پسندیدہ چہرہ لوڈ کریں
-STR_FACE_LOAD_DONE                                              :{WHITE}آپ کا پسندیدہ چہرہ OpenTTD configuration file سے لوڈ ہو گیا ہے
 STR_FACE_FACECODE                                               :{BLACK}کھلاڑی کا چہرہ نمبر
 STR_FACE_FACECODE_TOOLTIP                                       :{BLACK}کمپنی کے مالک کے چہرے کو نمبر لگائیں/دیکھیں
 STR_FACE_FACECODE_CAPTION                                       :{WHITE}مالک کے چہرے کو نمبر لگائیں/دیکھیں
@@ -1627,7 +1620,6 @@ STR_FACE_FACECODE_SET                                           :{WHITE}نیا �
 STR_FACE_FACECODE_ERR                                           :{WHITE}نمبر نہیں لگایا جا سکا۔ نمبر 0 سے 4,294,967,295 کے درمیان ہونا چاہئیے
 STR_FACE_SAVE                                                   :{BLACK}بچائیں
 STR_FACE_SAVE_TOOLTIP                                           :{BLACK}پسندیدہ چہرہ بچائیں
-STR_FACE_SAVE_DONE                                              :{WHITE}یہ چہرہ آپ کے پسندیدہ چہرے کے طور پر OpenTTD configuration file میں محفوظ کر لیا جائے گا
 STR_FACE_YES                                                    :ہاں
 STR_FACE_NO                                                     :نہیں
 STR_FACE_HAIR                                                   :بال:
@@ -1858,7 +1850,6 @@ STR_CONTENT_DETAIL_SUBTITLE_UNSELECTED                          :{SILVER}آپ ن
 STR_CONTENT_DETAIL_SUBTITLE_SELECTED                            :{SILVER}آپ نے اس کو ڈاون لوڈ کے لئے منتخب کیا
 STR_CONTENT_DETAIL_SUBTITLE_AUTOSELECTED                        :{SILVER}یہ انحصارات ڈاون لوڈ کے لئے منتخب کئے گے ہیں
 STR_CONTENT_DETAIL_SUBTITLE_ALREADY_HERE                        :{SILVER}آپ کے پاس یہ پہلے سے ہے
-STR_CONTENT_DETAIL_SUBTITLE_DOES_NOT_EXIST                      :{SILVER}یہ مواد نامعلوم ہے اور OpenTTD میں ڈاون لوڈ نہیں کیا جا سکتا
 
 STR_CONTENT_DETAIL_UPDATE                                       :{SILVER}یہ پہلے سے موجود {STRING} کا متبادل ہے
 STR_CONTENT_DETAIL_NAME                                         :{SILVER}نام: {WHITE}{STRING}
@@ -1870,7 +1861,6 @@ STR_CONTENT_DETAIL_FILESIZE                                     :{SILVER}ڈاو�
 STR_CONTENT_DETAIL_SELECTED_BECAUSE_OF                          :{WHITE}{STRING}{SILVER} کی وجہ سے منتخب کیا گیا
 STR_CONTENT_DETAIL_DEPENDENCIES                                 :{SILVER}انحصارات: {WHITE}{STRING}
 STR_CONTENT_DETAIL_TAGS                                         :{SILVER}ٹیگز: {WHITE}{STRING}
-STR_CONTENT_NO_ZLIB                                             :{WHITE}OpenTTD "zlib" کی مدد کے بغیر بنائی گئی ہے ۔ ۔ ۔
 STR_CONTENT_NO_ZLIB_SUB                                         :{WHITE}۔ ۔ ۔ مواد ڈاون لوڈ کرنا ممکن نہیں!
 
 # Order of these is important!
@@ -1899,9 +1889,7 @@ STR_CONTENT_ERROR_COULD_NOT_DOWNLOAD_FILE_NOT_WRITABLE          :{WHITE} ۔ ۔ �
 STR_CONTENT_ERROR_COULD_NOT_EXTRACT                             :{WHITE}ڈاون لوڈ شدہ فائل decompress نہیں ہوسکی
 
 STR_MISSING_GRAPHICS_SET_CAPTION                                :{WHITE}گرافکس غایب ہیں
-STR_MISSING_GRAPHICS_SET_MESSAGE                                :{BLACK}OpenTTD کو چلنے کے لئے ضروری گرافکس نہیں ملے۔ کیا آپ ڈاون لوڈ کر کے انسٹال کرنا چاہتے ہیں؟
 STR_MISSING_GRAPHICS_YES_DOWNLOAD                               :{BLACK}ہاں، گرافکس ڈاون لوڈ کریں
-STR_MISSING_GRAPHICS_NO_QUIT                                    :{BLACK}نہیں، OpenTTD سے باہر نکلو
 
 
 # Transparency settings window
@@ -2178,7 +2166,6 @@ STR_INDUSTRY_CARGOES_CARGO_CAPTION                              :{WHITE}کارگ
 
 
 # About OpenTTD window
-STR_ABOUT_OPENTTD                                               :{WHITE}اوپن ٹی ٹی ڈی کے متعلق
 
 # Framerate display window
 

@@ -414,12 +414,10 @@ STR_TOOLBAR_TOOLTIP_BUILD_AIRPORTS                              :{BLACK}Būvēt 
 STR_TOOLBAR_TOOLTIP_LANDSCAPING                                 :{BLACK}Atveriet ainavu izvēlni, koku izvēlni vai novietojiet zīmi
 STR_TOOLBAR_TOOLTIP_SHOW_SOUND_MUSIC_WINDOW                     :{BLACK}Atvērt skaņas/mūzikas logu
 STR_TOOLBAR_TOOLTIP_SHOW_LAST_MESSAGE_NEWS                      :{BLACK}Atvērt pēdējo ziņojumu/ziņu pārskatu, ziņojumu vēsturi vai dzēst visus ziņojumus
-STR_TOOLBAR_TOOLTIP_LAND_BLOCK_INFORMATION                      :{BLACK}Atvērt zemes informāciju, ekrānuzņēmumu izvēlni, OpenTTD kredītus vai izstrādātāju rīkus
 STR_TOOLBAR_TOOLTIP_SWITCH_TOOLBAR                              :{BLACK}Pārslēgt rīkjoslas
 
 # Extra tooltips for the scenario editor toolbar
 STR_SCENEDIT_TOOLBAR_SAVE_SCENARIO_LOAD_SCENARIO_TOOLTIP        :{BLACK}Saglabāt scenāriju, ielādēt scenāriju, pamest scenāriju redaktoru, iziet
-STR_SCENEDIT_TOOLBAR_OPENTTD                                    :{YELLOW}OpenTTD
 STR_SCENEDIT_TOOLBAR_SCENARIO_EDITOR                            :{YELLOW}scenāriju redaktors
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_BACKWARD_TOOLTIP    :{BLACK}Pārvietot sākuma datumu 1 gadu atpakaļ
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_FORWARD_TOOLTIP     :{BLACK}Pārvietot sākuma datumu 1 gadu uz priekšu
@@ -545,7 +543,6 @@ STR_ABOUT_MENU_TOGGLE_CONSOLE                                   :Atvērt/aizvēr
 STR_ABOUT_MENU_AI_DEBUG                                         :MI/spēles skriptu atkļūdošana
 STR_ABOUT_MENU_SCREENSHOT                                       :Ekrānuzņēmums
 STR_ABOUT_MENU_SHOW_FRAMERATE                                   :Rādīt kadru ātrumu
-STR_ABOUT_MENU_ABOUT_OPENTTD                                    :Par 'OpenTTD'
 STR_ABOUT_MENU_SPRITE_ALIGNER                                   :Gariņu līdzinātājs
 STR_ABOUT_MENU_TOGGLE_BOUNDING_BOXES                            :Pārslēgt saistītās kastes
 STR_ABOUT_MENU_TOGGLE_DIRTY_BLOCKS                              :Pārslēgt netīru bloku krāsojumu
@@ -1073,7 +1070,6 @@ STR_GAME_OPTIONS_LANGUAGE_TOOLTIP                               :Saskarnes valod
 STR_GAME_OPTIONS_LANGUAGE_PERCENTAGE                            :{STRING} ({NUM}% pabeigts)
 
 STR_GAME_OPTIONS_FULLSCREEN                                     :Pilnekrāna spēle
-STR_GAME_OPTIONS_FULLSCREEN_TOOLTIP                             :Ieslēdziet, lai attēlotu OpenTTD pilnekrāna režīmā
 
 STR_GAME_OPTIONS_RESOLUTION                                     :Ekrāna izšķirtspēja
 STR_GAME_OPTIONS_RESOLUTION_TOOLTIP                             :Ekrāna izšķirtspējas izvēle
@@ -1081,7 +1077,6 @@ STR_GAME_OPTIONS_RESOLUTION_OTHER                               :Cita
 STR_GAME_OPTIONS_RESOLUTION_ITEM                                :{NUM}x{NUM}
 
 STR_GAME_OPTIONS_VIDEO_ACCELERATION                             :Aparatūras pāatrinājums
-STR_GAME_OPTIONS_VIDEO_ACCELERATION_TOOLTIP                     :Ieslēdziet, lai OpenTTD mēģinātu izmantot aparatūras paātrinājumu. Mainītais iestatījums tiks lietots tikai pēc spēles restartēšanas.
 STR_GAME_OPTIONS_VIDEO_ACCELERATION_RESTART                     :{WHITE}Šis iestatījums stāsies spēkā tikai pēc spēles restartēšanas
 
 STR_GAME_OPTIONS_VIDEO_VSYNC                                    :VSync
@@ -2253,8 +2248,6 @@ STR_VIDEO_DRIVER_ERROR_NO_HARDWARE_ACCELERATION                 :{WHITE}... nav 
 STR_VIDEO_DRIVER_ERROR_HARDWARE_ACCELERATION_CRASH              :{WHITE}... GPU dzinulis apturēja spēli. Aparatūras paātrinājums ir izslēgts
 
 # Intro window
-STR_INTRO_CAPTION                                               :{WHITE}OpenTTD
-STR_INTRO_VERSION                                               :OpenTTD {REV}
 
 STR_INTRO_NEW_GAME                                              :{BLACK}Jauna spēle
 STR_INTRO_LOAD_GAME                                             :{BLACK}Ielādēt spēli
@@ -2285,14 +2278,11 @@ STR_INTRO_TOOLTIP_GAME_OPTIONS                                  :{BLACK}Atvērt 
 STR_INTRO_TOOLTIP_HIGHSCORE                                     :{BLACK}Atvērt sasniegumu tabulu
 STR_INTRO_TOOLTIP_HELP                                          :{BLACK}Piekļūstiet dokumentācijai un tiešsaistes resursiem
 STR_INTRO_TOOLTIP_ONLINE_CONTENT                                :{BLACK}Pārbaudīt vai lejupielādei nav pieejams jauns un atjaunināts saturs
-STR_INTRO_TOOLTIP_QUIT                                          :{BLACK}Iziet no 'OpenTTD'
 
 STR_INTRO_BASESET                                               :{BLACK}Pašlaik izvēlētajai bāzes grafikas kopai trūkst  {NUM} sprait{P s i u}. Lūdzu, pārbaudiet, vai bāzes kopai ir atjauninājumi.
-STR_INTRO_TRANSLATION                                           :{BLACK}Šim tulkojumam trūkst {NUM} virk{P ne nes ņu}. Lūdzu palīdziet OpenTTD veidot labāku piesakoties par tulkotāju. Informācijai skatīt readme.txt.
 
 # Quit window
 STR_QUIT_CAPTION                                                :{WHITE}Iziet
-STR_QUIT_ARE_YOU_SURE_YOU_WANT_TO_EXIT_OPENTTD                  :{YELLOW}Vai esat pārliecināts ka vēlaties iziet no OpenTTD?
 STR_QUIT_YES                                                    :{BLACK}Jā
 STR_QUIT_NO                                                     :{BLACK}Nē
 
@@ -2387,7 +2377,6 @@ STR_FACE_SIMPLE                                                 :{BLACK}Vienkār
 STR_FACE_SIMPLE_TOOLTIP                                         :{BLACK}Vienkārša seju izvēle
 STR_FACE_LOAD                                                   :{BLACK}Ielādēt
 STR_FACE_LOAD_TOOLTIP                                           :{BLACK}Ielādēt iecienīto seju
-STR_FACE_LOAD_DONE                                              :{WHITE}Jūsu iecienītā seja tika ielādēta no OpenTDD konfigurācijas faila
 STR_FACE_FACECODE                                               :{BLACK}Spēlētāja sejas kods
 STR_FACE_FACECODE_TOOLTIP                                       :{BLACK}Skatīt un/vai pielikt uzņēmuma prezidenta sejas kodu
 STR_FACE_FACECODE_CAPTION                                       :{WHITE}Skatīt un/vai pielikt prezidenta sejas kodu
@@ -2395,7 +2384,6 @@ STR_FACE_FACECODE_SET                                           :{WHITE}Jauns pr
 STR_FACE_FACECODE_ERR                                           :{WHITE}Nevar pielikt kodu spēlētāja sejai - tam ir jābūt derīgai etiķetei un numuram
 STR_FACE_SAVE                                                   :{BLACK}Saglabāt
 STR_FACE_SAVE_TOOLTIP                                           :{BLACK}Saglabāt iecienīto seju
-STR_FACE_SAVE_DONE                                              :{WHITE}Šī seja tiks saglabāta OpenTDD konfigurācijas failā kā iecienītā seja
 STR_FACE_SETTING_TOGGLE                                         :{STRING} {ORANGE}{STRING}
 STR_FACE_SETTING_NUMERIC                                        :{STRING} {ORANGE}{NUM} / {NUM}
 STR_FACE_YES                                                    :Ir
@@ -2710,8 +2698,6 @@ STR_CONTENT_UNSELECT_ALL_CAPTION                                :{BLACK}Atcelt v
 STR_CONTENT_UNSELECT_ALL_CAPTION_TOOLTIP                        :{BLACK}Noņemt visas satura lejupielādes atzīmes
 STR_CONTENT_SEARCH_EXTERNAL                                     :{BLACK}Meklēt ārējās vietnēs
 STR_CONTENT_SEARCH_EXTERNAL_TOOLTIP                             :{BLACK}Meklēt OpenTTD pakalpojumos nepieejamu saturu ar OpenTTD nesaistītās vietnēs
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER_CAPTION                  :{WHITE}Jūs aizejat no OpenTTD!
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER                          :{WHITE}Lietošanas noteikumi no ārpuses lejupielādētam saturam var būt dažāi.{}Jums būs jāskatās ārējās saites ārējā satura instalēšanai uz OpenTTD.{}Vai vēlaties turpināt?
 STR_CONTENT_FILTER_TITLE                                        :{BLACK}Atzīmju/nosaukumu filtrs:
 STR_CONTENT_OPEN_URL                                            :{BLACK}Vietne
 STR_CONTENT_OPEN_URL_TOOLTIP                                    :{BLACK}Apmeklēt tīmekļa vietni, lai tiktu pie šī satura
@@ -2725,7 +2711,6 @@ STR_CONTENT_DETAIL_SUBTITLE_UNSELECTED                          :{SILVER}Šo jū
 STR_CONTENT_DETAIL_SUBTITLE_SELECTED                            :{SILVER}Šo jūs esat atlasījis lejupielādei
 STR_CONTENT_DETAIL_SUBTITLE_AUTOSELECTED                        :{SILVER}Šis atkarīgais materiāls ir iezīmēts lejupielādei.
 STR_CONTENT_DETAIL_SUBTITLE_ALREADY_HERE                        :{SILVER}Šis jums jau ir
-STR_CONTENT_DETAIL_SUBTITLE_DOES_NOT_EXIST                      :{SILVER}Šī materiāla saturs ir nezināms, tādēļ to nav iespejams lejupielādēt OpenTTD
 
 STR_CONTENT_DETAIL_UPDATE                                       :{SILVER}Šis ir jau esoša {STRING} aizstāšanai
 STR_CONTENT_DETAIL_NAME                                         :{SILVER}Nosaukums: {WHITE}{STRING}
@@ -2737,7 +2722,6 @@ STR_CONTENT_DETAIL_FILESIZE                                     :{SILVER}Lejupie
 STR_CONTENT_DETAIL_SELECTED_BECAUSE_OF                          :{SILVER}Atlasīts, jo: {WHITE}{STRING}
 STR_CONTENT_DETAIL_DEPENDENCIES                                 :{SILVER}Atkarības: {WHITE}{STRING}
 STR_CONTENT_DETAIL_TAGS                                         :{SILVER}Atzīmes: {WHITE}{STRING}
-STR_CONTENT_NO_ZLIB                                             :{WHITE}OpenTTD ir būvēta bez ''zlib'' atbalsta...
 STR_CONTENT_NO_ZLIB_SUB                                         :{WHITE}... lejuplādēt saturu nav iespējams!
 
 # Order of these is important!
@@ -2766,13 +2750,10 @@ STR_CONTENT_ERROR_COULD_NOT_DOWNLOAD_FILE_NOT_WRITABLE          :{WHITE}... fail
 STR_CONTENT_ERROR_COULD_NOT_EXTRACT                             :{WHITE}Neizdevās atspiest lejupielādēto failu
 
 STR_MISSING_GRAPHICS_SET_CAPTION                                :{WHITE}Trūkst grafikas
-STR_MISSING_GRAPHICS_SET_MESSAGE                                :{BLACK}OpenTTD darbībai nepieciešama grafika, bet tāda nav atrodama. Vai ļaut OpenTTD lejupielādēt un instalēt šo grafiku?
 STR_MISSING_GRAPHICS_YES_DOWNLOAD                               :{BLACK}Jā, lejupielādēt grafiku
-STR_MISSING_GRAPHICS_NO_QUIT                                    :{BLACK}Nē, iziet no OpenTTD
 
 STR_MISSING_GRAPHICS_ERROR_TITLE                                :{WHITE}Lejupielādes kļūda
 STR_MISSING_GRAPHICS_ERROR                                      :{BLACK}Grafikas lejupielāde neizdevās.{}Lūzu lejupielādējiet grafiku manuāli.
-STR_MISSING_GRAPHICS_ERROR_QUIT                                 :{BLACK}Iziet no OpenTTD
 
 # Transparency settings window
 STR_TRANSPARENCY_CAPTION                                        :{WHITE}Caurspīdības opcijas
@@ -3309,9 +3290,7 @@ STR_LAI_OBJECT_DESCRIPTION_COMPANY_HEADQUARTERS                 :Uzņēmuma biro
 STR_LAI_OBJECT_DESCRIPTION_COMPANY_OWNED_LAND                   :Uzņēmumam piederoša zeme
 
 # About OpenTTD window
-STR_ABOUT_OPENTTD                                               :{WHITE}Par OpenTTD
 STR_ABOUT_ORIGINAL_COPYRIGHT                                    :{BLACK}Oriģināla autortiesības {COPYRIGHT} 1995 Kriss Sojers. Visas tiesības paturētas
-STR_ABOUT_VERSION                                               :{BLACK}OpenTTD versija {REV}
 STR_ABOUT_COPYRIGHT_OPENTTD                                     :{BLACK}OpenTTD {COPYRIGHT} 2002-{STRING} OpenTTD darba grupa
 
 # Framerate display window
@@ -3439,7 +3418,6 @@ STR_MAPGEN_QUANTITY_OF_RIVERS                                   :{BLACK}Upes:
 STR_MAPGEN_SMOOTHNESS                                           :{BLACK}Gludums:
 STR_MAPGEN_VARIETY                                              :{BLACK}Dažādības sadalījums:
 STR_MAPGEN_GENERATE                                             :{WHITE}Radīt
-STR_MAPGEN_GENERATE_TOOLTIP                                     :{BLACK}Izveidojiet pasauli un spēlējiet OpenTTD!
 STR_MAPGEN_NEWGRF_SETTINGS                                      :{BLACK}NewGRF Iestatījumi
 STR_MAPGEN_NEWGRF_SETTINGS_TOOLTIP                              :{BLACK}Atvērt NewGRF iestatījumus
 STR_MAPGEN_AI_SETTINGS                                          :{BLACK}MI iestatījumi
@@ -3494,7 +3472,6 @@ STR_MAPGEN_HEIGHTMAP_ROTATION                                   :{BLACK}Augstumu
 STR_MAPGEN_HEIGHTMAP_NAME                                       :{BLACK}Augstumu kartes nosaukums:
 STR_MAPGEN_HEIGHTMAP_NAME_TOOLTIP                               :{BLACK}Augstuma kartes attēla faila nosaukums
 STR_MAPGEN_HEIGHTMAP_SIZE_LABEL                                 :{BLACK}Lielums:
-STR_MAPGEN_HEIGHTMAP_SIZE_LABEL_TOOLTIP                         :{BLACK}Avota augstuma kartes attēla izmērs. Lai iegūtu labākos rezultātus, katrai malai ir jāatbilst OpenTTD pieejamajam kartes malas garumam, piemēram, 256, 512, 1024 utt.
 STR_MAPGEN_HEIGHTMAP_SIZE                                       :{ORANGE}{NUM} x {NUM}
 
 STR_MAPGEN_TERRAIN_TYPE_QUERY_CAPT                              :{WHITE}Vēlamā augtākā virsotne
@@ -3687,7 +3664,6 @@ STR_NEWGRF_ERROR_INDPROD_CALLBACK                               :Nederīgs indus
 
 # NewGRF related 'general' warnings
 STR_NEWGRF_POPUP_CAUTION_CAPTION                                :{WHITE}Uzmanību!
-STR_NEWGRF_CONFIRMATION_TEXT                                    :{YELLOW}Jūs grasāties veikt izmaiņas palaistai spēlei. Tas var izraisīt OpenTTD avāriju vai salauzt spēles stāvokli. Par šīm problēmām kļūdu ziņojumus nesūtiet.{}Vai jūs esat par to pilnībā pārliecināts?
 
 STR_NEWGRF_DUPLICATE_GRFID                                      :{WHITE}Nevar pievienot failu: vienādi NewGRF ID
 STR_NEWGRF_COMPATIBLE_LOADED                                    :{ORANGE}Atbilstošs fails nav atrasts (ielādēts saderīgs GRF)
@@ -3696,7 +3672,6 @@ STR_NEWGRF_TOO_MANY_NEWGRFS                                     :{WHITE}Nevar pi
 STR_NEWGRF_COMPATIBLE_LOAD_WARNING                              :{WHITE}Saderīgs GRF(s) ielādēts pazudušajiem failiem
 STR_NEWGRF_DISABLED_WARNING                                     :{WHITE}Trūkstošie GRF faili tikuši atspējoti
 STR_NEWGRF_UNPAUSE_WARNING_TITLE                                :{YELLOW}Trūkst GRF fails(i)
-STR_NEWGRF_UNPAUSE_WARNING                                      :{WHITE}Atpauzēšana var izraisīt OpenTTD avāriju. Neziņot izstrādātājiem par šo kļudu.{}Vai patiešām vēlies atpauzēt?
 
 # NewGRF status
 STR_NEWGRF_LIST_NONE                                            :Nekas
@@ -5032,7 +5007,6 @@ STR_TEXTFILE_README_CAPTION                                     :{WHITE}{STRING}
 STR_TEXTFILE_CHANGELOG_CAPTION                                  :{WHITE}{STRING} kopas {STRING} izmaiņu žurnāls
 STR_TEXTFILE_LICENCE_CAPTION                                    :{WHITE}{STRING} kopas {STRING} licence
 STR_TEXTFILE_SURVEY_RESULT_CAPTION                              :{WHITE}Priekšskatīt aptaujas rezultātus
-STR_TEXTFILE_GAME_MANUAL_CAPTION                                :{WHITE}OpenTTD dokuments'{STRING}'
 
 
 # Vehicle loading indicators

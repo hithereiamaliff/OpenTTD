@@ -474,12 +474,10 @@ STR_TOOLBAR_TOOLTIP_BUILD_AIRPORTS                              :{BLACK}Κατα
 STR_TOOLBAR_TOOLTIP_LANDSCAPING                                 :{BLACK}Ανοίξτε την μπάρα εργαλείων μορφοποίησης εδάφους, δενδροφύτευσης ή τοποθέτησης σήματος
 STR_TOOLBAR_TOOLTIP_SHOW_SOUND_MUSIC_WINDOW                     :{BLACK}Εμφάνιση παραθύρου ήχου/μουσικής
 STR_TOOLBAR_TOOLTIP_SHOW_LAST_MESSAGE_NEWS                      :{BLACK}Εμφάνιση τελευταίου μηνύματος/αναφοράς ειδήσεων, ιστορικό μηνυμάτων ή διαγραφή όλων των μηνυμάτων
-STR_TOOLBAR_TOOLTIP_LAND_BLOCK_INFORMATION                      :{BLACK}Πληροφορίες περιοχής, μενού φωτογραφίιών οθόνης, περί του OpenTTD ή εργαλεία προγραμματιστή
 STR_TOOLBAR_TOOLTIP_SWITCH_TOOLBAR                              :{BLACK}Εναλλάγη μπαρών εργασίας
 
 # Extra tooltips for the scenario editor toolbar
 STR_SCENEDIT_TOOLBAR_SAVE_SCENARIO_LOAD_SCENARIO_TOOLTIP        :{BLACK}Αποθήκευση σεναρίου, φόρτωση, εγκατάλειψη προγράμματος επεξεργασίας σεναρίων, έξοδος
-STR_SCENEDIT_TOOLBAR_OPENTTD                                    :{YELLOW}OpenTTD
 STR_SCENEDIT_TOOLBAR_SCENARIO_EDITOR                            :{YELLOW}Πρόγραμμα Επεξεργασίας Σεναρίου
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_BACKWARD_TOOLTIP    :{BLACK}Μετακίνηση ημ/νίας εκκίνησης 1 χρόνο πίσω
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_FORWARD_TOOLTIP     :{BLACK}Μετακινήστε την ημερομηνία εκκίνησης 1 χρόνο μπροστά
@@ -605,7 +603,6 @@ STR_ABOUT_MENU_TOGGLE_CONSOLE                                   :Εναλλαγ�
 STR_ABOUT_MENU_AI_DEBUG                                         :Αποσφαλμάτωση AI και δέσμης ενεργειών παιχνιδιού
 STR_ABOUT_MENU_SCREENSHOT                                       :Στιγμιότυπο οθόνης
 STR_ABOUT_MENU_SHOW_FRAMERATE                                   :Ρυθμός εμφάνισης καρέ
-STR_ABOUT_MENU_ABOUT_OPENTTD                                    :Σχετικά με το «OpenTTD»
 STR_ABOUT_MENU_SPRITE_ALIGNER                                   :Ευθυγραμμιστής sprites
 STR_ABOUT_MENU_TOGGLE_BOUNDING_BOXES                            :Εναλλαγή πλαισίου οριοθέτησης
 STR_ABOUT_MENU_TOGGLE_DIRTY_BLOCKS                              :Εναλλαγή χρωματισμού βρώμικων τετραγωνίδιων
@@ -1164,7 +1161,6 @@ STR_GAME_OPTIONS_LANGUAGE_TOOLTIP                               :Επιλογή 
 STR_GAME_OPTIONS_LANGUAGE_PERCENTAGE                            :{STRING} ({NUM}% ολοκλήρωση)
 
 STR_GAME_OPTIONS_FULLSCREEN                                     :Πλήρης οθόνη
-STR_GAME_OPTIONS_FULLSCREEN_TOOLTIP                             :Τσεκάρετέ το ωστε να παίξετε το OpenTTD σε όλη την οθόνη
 
 STR_GAME_OPTIONS_RESOLUTION                                     :Ανάλυση οθόνης
 STR_GAME_OPTIONS_RESOLUTION_TOOLTIP                             :Διαλέξτε την ανάλυση της οθόνης
@@ -1172,7 +1168,6 @@ STR_GAME_OPTIONS_RESOLUTION_OTHER                               :άλλη
 STR_GAME_OPTIONS_RESOLUTION_ITEM                                :{NUM}x{NUM}
 
 STR_GAME_OPTIONS_VIDEO_ACCELERATION                             :Επιτάχυνση υλικού
-STR_GAME_OPTIONS_VIDEO_ACCELERATION_TOOLTIP                     :Τσεκάρετέ το για να επιτρέψετε στο OpenTTD να δοκιμάσει να χρησιμοποιήσει την επιτάχυνση υλικού. Η αλλαγή αυτή θα εφαρμοστεί μόνο μετά από επανεκκίνηση του παιχνιδιού
 STR_GAME_OPTIONS_VIDEO_ACCELERATION_RESTART                     :{WHITE}Η ρύθμιση θα εφαρμοστεί μόνο μετά από επανεκκίνηση του παιχνιδιού
 
 STR_GAME_OPTIONS_VIDEO_VSYNC                                    :VSync
@@ -2349,8 +2344,6 @@ STR_VIDEO_DRIVER_ERROR_NO_HARDWARE_ACCELERATION                 :δεν βρέθ
 STR_VIDEO_DRIVER_ERROR_HARDWARE_ACCELERATION_CRASH              :Το πρόγραμμα οδήγησης της κάρτας γραφικών προκάλεσε πρόβλημα στο παιχνίδι. Η επιτάχυνση υλικού απενεργοποιήθηκε
 
 # Intro window
-STR_INTRO_CAPTION                                               :{WHITE}OpenTTD
-STR_INTRO_VERSION                                               :OpenTTD {REV}
 
 STR_INTRO_NEW_GAME                                              :{BLACK}Νέο Παιχνίδι
 STR_INTRO_LOAD_GAME                                             :{BLACK}Φόρτωση Παιχνιδιού
@@ -2381,14 +2374,11 @@ STR_INTRO_TOOLTIP_GAME_OPTIONS                                  :{BLACK}Εμφά
 STR_INTRO_TOOLTIP_HIGHSCORE                                     :{BLACK}Εμφάνιση του πίνακα βαθμολογιών
 STR_INTRO_TOOLTIP_HELP                                          :{BLACK}Πρόσβαση στην τεκμηρίωση και σε διαδικτυακούς πόρους
 STR_INTRO_TOOLTIP_ONLINE_CONTENT                                :{BLACK}Έλεγχος για νέο και ανανεωμένο περιεχόμενο για λήψη
-STR_INTRO_TOOLTIP_QUIT                                          :{BLACK}Έξοδος από το «OpenTTD»
 
 STR_INTRO_BASESET                                               :{BLACK}Λείπουν {NUM} sprite{P "" s} από το επιλεγμένο βασικό σετ γραφικών. Παρακαλούμε ελέγξτε για ενημερώσεις του βασικού σετ.
-STR_INTRO_TRANSLATION                                           :{BLACK}Λείπουν {NUM} παράμετροι από τη μετάφραση. Παρακαλούμε βοηθήστε να κάνουμε το OpenTTD καλύτερο εγγραφόμενοι ως μεταφραστές. Δείτε το αρχείο readme.txt για λεπτομέρειες.
 
 # Quit window
 STR_QUIT_CAPTION                                                :{WHITE}Έξοδος
-STR_QUIT_ARE_YOU_SURE_YOU_WANT_TO_EXIT_OPENTTD                  :{YELLOW}Είστε σίγουροι ότι θέλετε να εγκαταλείψετε το OpenTTD;
 STR_QUIT_YES                                                    :{BLACK}Ναι
 STR_QUIT_NO                                                     :{BLACK}Όχι
 
@@ -2483,7 +2473,6 @@ STR_FACE_SIMPLE                                                 :{BLACK}Απλή
 STR_FACE_SIMPLE_TOOLTIP                                         :{BLACK}Απλή επιλογή προσώπου
 STR_FACE_LOAD                                                   :{BLACK}Φόρτωση
 STR_FACE_LOAD_TOOLTIP                                           :{BLACK}Φόρτωση αγαπημένου προσώπου
-STR_FACE_LOAD_DONE                                              :Το αγαπημένο σας πρόσωπο έχει φορτωθεί από το αρχείο ρυθμίσεων του OpenTTD
 STR_FACE_FACECODE                                               :{BLACK}Κωδ. προσώπου παίκτη
 STR_FACE_FACECODE_TOOLTIP                                       :{BLACK}Εμφάνιση και/ή επιλογή του κωδικού προσώπου του παίκτη
 STR_FACE_FACECODE_CAPTION                                       :{WHITE}Προβολή και/ή ορισμός του κωδικού προσώπου του παίκτη
@@ -2491,7 +2480,6 @@ STR_FACE_FACECODE_SET                                           :Το νέο π�
 STR_FACE_FACECODE_ERR                                           :Δεν ήταν δυνατός ο ορισμός του κωδικού προσώπου του προέδρου - πρέπει να είναι μια έγκυρη ετικέτα και αριθμός
 STR_FACE_SAVE                                                   :{BLACK}Αποθήκευση
 STR_FACE_SAVE_TOOLTIP                                           :{BLACK}Αποθήκευση αγαπημένου προσώπου
-STR_FACE_SAVE_DONE                                              :Αυτό το πρόσωπο θα αποθηκευτεί ως αγαπημένο στο αρχείο ρυθμίσεων του OpenTTD
 STR_FACE_SETTING_TOGGLE                                         :{STRING} {ORANGE}{STRING}
 STR_FACE_SETTING_NUMERIC                                        :{STRING} {ORANGE}{NUM} / {NUM}
 STR_FACE_YES                                                    :Ναι
@@ -2806,8 +2794,6 @@ STR_CONTENT_UNSELECT_ALL_CAPTION                                :{BLACK}Αποε
 STR_CONTENT_UNSELECT_ALL_CAPTION_TOOLTIP                        :{BLACK}Σημείωση όλων των περιεχομένων να μην κατέβουν
 STR_CONTENT_SEARCH_EXTERNAL                                     :{BLACK}Αναζήτηση εξωτερικών ιστοσελίδων
 STR_CONTENT_SEARCH_EXTERNAL_TOOLTIP                             :{BLACK}Αναζήτηση για περιεχόμενο που δεν είναι διαθέσιμο μέσω της υπηρεσίας λήψης περιεχομένου του OpenTTD σε ιστοσελίδες που δεν σχετίζονται με το OpenTTD
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER_CAPTION                  :{WHITE}Φεύγετε από το OpenTTD!
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER                          :{WHITE}Οι όροι και προϋποθέσεις για τη λήψη περιεχομένου από εξωτερικές ιστοσελίδες διαφέρουν.{}Θα πρέπει να ανατρέξετε σε αυτές για οδηγίες σχετικά με την εγκατάσταση του περιεχομένου στο OpenTTD.{}Θέλετε να συνεχίσετε;
 STR_CONTENT_FILTER_TITLE                                        :{BLACK}Ετικέτα/όνομα φίλτρου:
 STR_CONTENT_OPEN_URL                                            :{BLACK}Ιστοσελίδα
 STR_CONTENT_OPEN_URL_TOOLTIP                                    :{BLACK}Επισκεφθείτε την ιστοσελίδα αυτού του περιεχομένου
@@ -2821,7 +2807,6 @@ STR_CONTENT_DETAIL_SUBTITLE_UNSELECTED                          :{SILVER}Δεν 
 STR_CONTENT_DETAIL_SUBTITLE_SELECTED                            :{SILVER}Έχετε επιλέξει αυτό για λήψη
 STR_CONTENT_DETAIL_SUBTITLE_AUTOSELECTED                        :{SILVER}Αυτή η εξάρτηση έχει επιλεχτεί για λήψη
 STR_CONTENT_DETAIL_SUBTITLE_ALREADY_HERE                        :{SILVER}Το έχετε ήδη αυτό
-STR_CONTENT_DETAIL_SUBTITLE_DOES_NOT_EXIST                      :{SILVER}Αυτό το περιεχόμενο είναι άγνωστο και δεν μπορεί να γίνει λήψη από το OpenTTD
 
 STR_CONTENT_DETAIL_UPDATE                                       :{SILVER}Αυτό αντικαθιστά ένα υπάρχον {STRING}
 STR_CONTENT_DETAIL_NAME                                         :{SILVER}Όνομα: {WHITE}{STRING}
@@ -2833,7 +2818,6 @@ STR_CONTENT_DETAIL_FILESIZE                                     :{SILVER}Μέγ�
 STR_CONTENT_DETAIL_SELECTED_BECAUSE_OF                          :{SILVER}Επιλεγμένο επειδή: {WHITE}{STRING}
 STR_CONTENT_DETAIL_DEPENDENCIES                                 :{SILVER}Εξαρτήσεις: {WHITE}{STRING}
 STR_CONTENT_DETAIL_TAGS                                         :{SILVER}Ετικέτες: {WHITE}{STRING}
-STR_CONTENT_NO_ZLIB                                             :Το OpenTTD είναι κατασκευασμένο χωρίς υποστήριξη «zlib»...
 STR_CONTENT_NO_ZLIB_SUB                                         :η λήψη περιεχομένου δεν είναι δυνατή!
 
 # Order of these is important!
@@ -2862,13 +2846,10 @@ STR_CONTENT_ERROR_COULD_NOT_DOWNLOAD_FILE_NOT_WRITABLE          :αρχείο μ
 STR_CONTENT_ERROR_COULD_NOT_EXTRACT                             :{WHITE}Δεν ήταν δυνατή η αποσυμπίεση του κατεβασμένου αρχείου
 
 STR_MISSING_GRAPHICS_SET_CAPTION                                :{WHITE}Λείπουν γραφικά
-STR_MISSING_GRAPHICS_SET_MESSAGE                                :{BLACK}Το OpenTTD απαιτεί γραφικά για να λειτουργήσει αλλά κανένα πακέτο δεν είναι διαθέσιμο. Θέλετε να επιτρέψετε στο OpenTTD να κατεβάσει και να εγκαταστήσει γραφικά;
 STR_MISSING_GRAPHICS_YES_DOWNLOAD                               :{BLACK}Ναι, κατέβασε τα γραφικά
-STR_MISSING_GRAPHICS_NO_QUIT                                    :{BLACK}Όχι, έξοδος από το OpenTTD
 
 STR_MISSING_GRAPHICS_ERROR_TITLE                                :{WHITE}Η λήψη απέτυχε
 STR_MISSING_GRAPHICS_ERROR                                      :{BLACK}Η λήψη των γραφικών απέτυχε.{}Παρακαλώ κατεβάστε τα γραφικά μόνοι σας.
-STR_MISSING_GRAPHICS_ERROR_QUIT                                 :{BLACK}Έξοδος από το OpenTTD
 
 # Transparency settings window
 STR_TRANSPARENCY_CAPTION                                        :{WHITE}Ρυθμίσεις Διαφάνειας
@@ -3412,9 +3393,7 @@ STR_LAI_OBJECT_DESCRIPTION_COMPANY_HEADQUARTERS                 :Έδρα ετα
 STR_LAI_OBJECT_DESCRIPTION_COMPANY_OWNED_LAND                   :Ιδιοκτησία γης από εταιρεία
 
 # About OpenTTD window
-STR_ABOUT_OPENTTD                                               :{WHITE}Σχετικά με το OpenTTD
 STR_ABOUT_ORIGINAL_COPYRIGHT                                    :{BLACK}Αρχικά Πνευματικά Δικαιώματα {COPYRIGHT} 1995 Chris Sawyer, Όλα τα δικαιώματα διατηρούνται
-STR_ABOUT_VERSION                                               :{BLACK}OpenTTD έκδοση {REV}
 STR_ABOUT_COPYRIGHT_OPENTTD                                     :{BLACK}OpenTTD {COPYRIGHT} 2002-{STRING} Η ομάδα του OpenTTD
 
 # Framerate display window
@@ -3545,7 +3524,6 @@ STR_MAPGEN_QUANTITY_OF_RIVERS                                   :{BLACK}Ποτά
 STR_MAPGEN_SMOOTHNESS                                           :{BLACK}Ομαλότητα:
 STR_MAPGEN_VARIETY                                              :{BLACK}Διανομή ποικιλομορφίας:
 STR_MAPGEN_GENERATE                                             :{WHITE}Δημιουργία
-STR_MAPGEN_GENERATE_TOOLTIP                                     :{BLACK}Δημιουργήστε τον κόσμο και παίξτε OpenTTD!
 STR_MAPGEN_NEWGRF_SETTINGS                                      :{BLACK}Ρυθμίσεις NewGRF
 STR_MAPGEN_NEWGRF_SETTINGS_TOOLTIP                              :{BLACK}Εμφάνιση ρυθμίσεων NewGRF
 STR_MAPGEN_AI_SETTINGS                                          :{BLACK}Ρυθμίσεις AI
@@ -3600,7 +3578,6 @@ STR_MAPGEN_HEIGHTMAP_ROTATION                                   :{BLACK}Περι
 STR_MAPGEN_HEIGHTMAP_NAME                                       :{BLACK}Όνομα χάρτη υψομετρίας:
 STR_MAPGEN_HEIGHTMAP_NAME_TOOLTIP                               :{BLACK}Το όνομα του αρχείου χάρτη υψομετρίας
 STR_MAPGEN_HEIGHTMAP_SIZE_LABEL                                 :{BLACK}Μέγεθος:
-STR_MAPGEN_HEIGHTMAP_SIZE_LABEL_TOOLTIP                         :{BLACK}Το μέγεθος της εικόνας χάρτη υψομετρίας. Για καλύτερα αποτελέσματα, κάθε διάσταση πρέπει να ταιριάζει με μια διαθέσιμη διάσταση χάρτη του OpenTTD, όπως 256, 512, 1024 κλπ.
 STR_MAPGEN_HEIGHTMAP_SIZE                                       :{ORANGE}{NUM} × {NUM}
 
 STR_MAPGEN_TERRAIN_TYPE_QUERY_CAPT                              :{WHITE}Αναμενόμενο ύψος κορυφής
@@ -3791,7 +3768,6 @@ STR_NEWGRF_ERROR_INDPROD_CALLBACK                               :Άγνωστη/
 
 # NewGRF related 'general' warnings
 STR_NEWGRF_POPUP_CAUTION_CAPTION                                :{WHITE}Προσοχή!
-STR_NEWGRF_CONFIRMATION_TEXT                                    :{YELLOW}Πρόκειται να κάνετε αλλαγές σε παιχνίδι που είναι ήδη σε εξέλιξη. Αυτό μπορεί να κλείσει απρόοπτα το OpenTTD ή να διαλύσει την κατάσταση του παιχνιδιού. Μην καταχωρείτε αναφορές σφάλματος για τέτοια προβλήματα.{}Είστε απόλυτα σίγουροι για αυτή την ενέργεια;
 
 STR_NEWGRF_DUPLICATE_GRFID                                      :Δεν μπορεί να προστεθεί το αρχείο: διπλότυπο ID NewGRF
 STR_NEWGRF_COMPATIBLE_LOADED                                    :{ORANGE}Δεν βρέθηκε ταυτοποιημένο αρχείο (φορτώθηκε συμβατό NewGRF)
@@ -3800,7 +3776,6 @@ STR_NEWGRF_TOO_MANY_NEWGRFS                                     :Δεν μπορ
 STR_NEWGRF_COMPATIBLE_LOAD_WARNING                              :Φόρτωση συμβατού/ών NewGRF για αρχεία που λείπουν
 STR_NEWGRF_DISABLED_WARNING                                     :Τα αρχεία NewGRF που λείπουν έχουν απενεργοποιηθεί
 STR_NEWGRF_UNPAUSE_WARNING_TITLE                                :{YELLOW}Το αρχείο/α NewGRF δεν βρέθηκε
-STR_NEWGRF_UNPAUSE_WARNING                                      :{WHITE}Η συνέχιση μπορεί να κλείσει απρόοπτα το OpenTTD. Μη δώσετε αναφορές σφαλμάτων για κλεισίματα.{}Θέλετε πραγματικά να συνεχίσετε την λειτουργία;
 
 # NewGRF status
 STR_NEWGRF_LIST_NONE                                            :Κανένα
@@ -5148,7 +5123,6 @@ STR_TEXTFILE_README_CAPTION                                     :{WHITE}{STRING}
 STR_TEXTFILE_CHANGELOG_CAPTION                                  :{G=m}{WHITE}{STRING} ιστορικό αλλαγών του {STRING}
 STR_TEXTFILE_LICENCE_CAPTION                                    :{WHITE}{STRING} άδεια του {STRING}
 STR_TEXTFILE_SURVEY_RESULT_CAPTION                              :{WHITE}Προεπισκόπηση του αποτελέσματος της έρευνας
-STR_TEXTFILE_GAME_MANUAL_CAPTION                                :{WHITE}Έγγραφο OpenTTD «{STRING}»
 
 
 # Vehicle loading indicators

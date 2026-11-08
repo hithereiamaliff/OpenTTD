@@ -358,12 +358,10 @@ STR_TOOLBAR_TOOLTIP_BUILD_AIRPORTS                              :{BLACK}Bygg fly
 STR_TOOLBAR_TOOLTIP_LANDSCAPING                                 :{BLACK}Åpne verktøylinja for å heve/senke land, plante tre, osb.
 STR_TOOLBAR_TOOLTIP_SHOW_SOUND_MUSIC_WINDOW                     :{BLACK}Syne lyd-/musikkinnstillingar
 STR_TOOLBAR_TOOLTIP_SHOW_LAST_MESSAGE_NEWS                      :{BLACK}Syne siste melding/nyheit, syne meldingsinstillingar
-STR_TOOLBAR_TOOLTIP_LAND_BLOCK_INFORMATION                      :{BLACK}Informasjon om landområde, konsoll, AI-feilsøking, skjermbilete, om OpenTTD
 STR_TOOLBAR_TOOLTIP_SWITCH_TOOLBAR                              :{BLACK}Byt verkty
 
 # Extra tooltips for the scenario editor toolbar
 STR_SCENEDIT_TOOLBAR_SAVE_SCENARIO_LOAD_SCENARIO_TOOLTIP        :{BLACK}Lagre scenario, last inn scenario, forlat redigeringsprogrammet, avslutt
-STR_SCENEDIT_TOOLBAR_OPENTTD                                    :{YELLOW}OpenTTD
 STR_SCENEDIT_TOOLBAR_SCENARIO_EDITOR                            :{YELLOW}Scenario-redigerar
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_BACKWARD_TOOLTIP    :{BLACK}Flytt startdatoen attende eit år
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_FORWARD_TOOLTIP     :{BLACK}Flytt startdatoen fram eit år
@@ -474,7 +472,6 @@ STR_ABOUT_MENU_TOGGLE_CONSOLE                                   :Syne/gøym kons
 STR_ABOUT_MENU_AI_DEBUG                                         :AI- / Spelscriptfeilsøking
 STR_ABOUT_MENU_SCREENSHOT                                       :Skjermdump
 STR_ABOUT_MENU_SHOW_FRAMERATE                                   :Vis biletfrekvens
-STR_ABOUT_MENU_ABOUT_OPENTTD                                    :Om 'OpenTTD'
 STR_ABOUT_MENU_SPRITE_ALIGNER                                   :Spriteforskyver
 STR_ABOUT_MENU_TOGGLE_BOUNDING_BOXES                            :Syne/gøym markeringsramme
 STR_ABOUT_MENU_TOGGLE_DIRTY_BLOCKS                              :Slå av/på farging av skitne blokkar
@@ -912,7 +909,6 @@ STR_GAME_OPTIONS_LANGUAGE                                       :Språk
 STR_GAME_OPTIONS_LANGUAGE_TOOLTIP                               :Vel språk som skal nyttast
 
 STR_GAME_OPTIONS_FULLSCREEN                                     :Fullskjerm
-STR_GAME_OPTIONS_FULLSCREEN_TOOLTIP                             :Kryss av i denne boksen for å spele OpenTTD i fullskjermmodus
 
 STR_GAME_OPTIONS_RESOLUTION                                     :Skjermoppløysing
 STR_GAME_OPTIONS_RESOLUTION_TOOLTIP                             :Vel skjermoppløysinga som skal nyttast
@@ -1829,9 +1825,7 @@ STR_INTRO_TOOLTIP_TOYLAND_LANDSCAPE                             :{BLACK}Vel leik
 STR_INTRO_TOOLTIP_GAME_OPTIONS                                  :{BLACK}Syne spelinstillingar
 STR_INTRO_TOOLTIP_HIGHSCORE                                     :{BLACK}Syn poengtavla
 STR_INTRO_TOOLTIP_ONLINE_CONTENT                                :{BLACK}Sjå etter nytt og oppdatert innhald som kan lastas ned
-STR_INTRO_TOOLTIP_QUIT                                          :{BLACK}Avslutt 'OpenTTD'
 
-STR_INTRO_TRANSLATION                                           :{BLACK}Denne nynorsk-omsettinga manglar {NUM} tekst{P "" ar}. Du må gjerne verte med i omsettingsgruppa for å hjelpe til å gjere OpenTTD betre. Sjå readme.txt for detaljar.
 
 # Quit window
 STR_QUIT_CAPTION                                                :{WHITE}Avslutt
@@ -1907,7 +1901,6 @@ STR_FACE_SIMPLE                                                 :{BLACK}Enkel
 STR_FACE_SIMPLE_TOOLTIP                                         :{BLACK}Enkelt val av andlet
 STR_FACE_LOAD                                                   :{BLACK}Last inn
 STR_FACE_LOAD_TOOLTIP                                           :{BLACK}Last inn favoritandlet
-STR_FACE_LOAD_DONE                                              :{WHITE}Favorittandletet ditt har blitt lasta inn frå OpenTTDs konfigurasjonsfil
 STR_FACE_FACECODE                                               :{BLACK}Spelarandlet nummer.
 STR_FACE_FACECODE_TOOLTIP                                       :{BLACK}Syne og/eller angje andletsnummer for firmapresidenten
 STR_FACE_FACECODE_CAPTION                                       :{WHITE}Syne og/eller angje andletsnummer på presidenten
@@ -1915,7 +1908,6 @@ STR_FACE_FACECODE_SET                                           :{WHITE}Ny kode 
 STR_FACE_FACECODE_ERR                                           :{WHITE}Kunne ikkje angje andletenummer på presidenten - må vera mellom 0 og 4,294,967,295!
 STR_FACE_SAVE                                                   :{BLACK}Lagre
 STR_FACE_SAVE_TOOLTIP                                           :{BLACK}Lagre favoritandlete
-STR_FACE_SAVE_DONE                                              :{WHITE}Dette andletet vil verte lagra som favoriten din i OpenTTDs konfigurasjonfil
 STR_FACE_YES                                                    :Ja
 STR_FACE_NO                                                     :Nei
 STR_FACE_HAIR                                                   :Hår:
@@ -2134,8 +2126,6 @@ STR_CONTENT_UNSELECT_ALL_CAPTION                                :{BLACK}Vel bort
 STR_CONTENT_UNSELECT_ALL_CAPTION_TOOLTIP                        :{BLACK}Merk alt innhald som ikkje skal lastast ned
 STR_CONTENT_SEARCH_EXTERNAL                                     :{BLACK}Søk på eksterne nettstader
 STR_CONTENT_SEARCH_EXTERNAL_TOOLTIP                             :{BLACK}Søkeinnhald ikkje tilgjengeleg på OpenTTDs innhaldservice på nettstader ikkje assosiert med OpenTTD
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER_CAPTION                  :{WHITE}Du forlet OpenTTD.
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER                          :{WHITE}Vilkåra for nedlasting av innhald frå eksterne nettsider varierar.{}Du må oppsøke dei eksterne nettsidane for å finne instruksjonar om korleis du innstalerar innhaldet i OpenTTD.{}Vil du fortsette?
 STR_CONTENT_FILTER_TITLE                                        :{BLACK}Merke/Namnefilter:
 STR_CONTENT_OPEN_URL                                            :{BLACK}Vitje nettsida
 STR_CONTENT_OPEN_URL_TOOLTIP                                    :{BLACK}Vitje nettsida for dette innhaldet
@@ -2149,7 +2139,6 @@ STR_CONTENT_DETAIL_SUBTITLE_UNSELECTED                          :{SILVER}Du har 
 STR_CONTENT_DETAIL_SUBTITLE_SELECTED                            :{SILVER}Du har valt dette for nedlasting
 STR_CONTENT_DETAIL_SUBTITLE_AUTOSELECTED                        :{SILVER}Følgjande avhengnad har blitt merka for nedlasting
 STR_CONTENT_DETAIL_SUBTITLE_ALREADY_HERE                        :{SILVER}Du har allereie dette
-STR_CONTENT_DETAIL_SUBTITLE_DOES_NOT_EXIST                      :{SILVER}Dette innhaldet er ukjent og kan ikkje lastas ned i OpenTTD
 
 STR_CONTENT_DETAIL_UPDATE                                       :{SILVER}Dette erstattar ei eksisterande {STRING}
 STR_CONTENT_DETAIL_NAME                                         :{SILVER}Namn: {WHITE}{STRING}
@@ -2161,7 +2150,6 @@ STR_CONTENT_DETAIL_FILESIZE                                     :{SILVER}Nedlast
 STR_CONTENT_DETAIL_SELECTED_BECAUSE_OF                          :{SILVER}Vald pga.: {WHITE}{STRING}
 STR_CONTENT_DETAIL_DEPENDENCIES                                 :{SILVER}Avheng av: {WHITE}{STRING}
 STR_CONTENT_DETAIL_TAGS                                         :{SILVER}Merker: {WHITE}{STRING}
-STR_CONTENT_NO_ZLIB                                             :{WHITE}OpenTTD er bygd utan støtte for "zlib"...
 STR_CONTENT_NO_ZLIB_SUB                                         :{WHITE}... det er ikkje mogeleg å laste ned innhald!
 
 # Order of these is important!
@@ -2190,9 +2178,7 @@ STR_CONTENT_ERROR_COULD_NOT_DOWNLOAD_FILE_NOT_WRITABLE          :{WHITE}... fila
 STR_CONTENT_ERROR_COULD_NOT_EXTRACT                             :{WHITE}Kunne ikkje pakka ut den nedlasta fila
 
 STR_MISSING_GRAPHICS_SET_CAPTION                                :{WHITE}Manglande grafikk
-STR_MISSING_GRAPHICS_SET_MESSAGE                                :{BLACK}OpenTTD krever grafikk for å fungere, men finn han ikkje. Tillet du OpenTTD å laste ned og installere denne grafikken?
 STR_MISSING_GRAPHICS_YES_DOWNLOAD                               :{BLACK}Ja, last ned grafikken.
-STR_MISSING_GRAPHICS_NO_QUIT                                    :{BLACK}Nei, avslutt OpenTTD
 
 
 # Transparency settings window
@@ -2619,9 +2605,7 @@ STR_LAI_OBJECT_DESCRIPTION_COMPANY_HEADQUARTERS                 :Hovudkontor til
 STR_LAI_OBJECT_DESCRIPTION_COMPANY_OWNED_LAND                   :Feltet eigast av eit firma
 
 # About OpenTTD window
-STR_ABOUT_OPENTTD                                               :{WHITE}Om OpenTTD
 STR_ABOUT_ORIGINAL_COPYRIGHT                                    :{BLACK}Opphaveleg opphavsbeskytta av {COPYRIGHT} 1995 Chris Sawyer, Alle rettigheiter reservert
-STR_ABOUT_VERSION                                               :{BLACK}OpenTTD versjon {REV}. Oversett til nynorsk av Thor Morten Skogrand med fleire.
 STR_ABOUT_COPYRIGHT_OPENTTD                                     :{BLACK}OpenTTD {COPYRIGHT} 2002-{STRING} OpenTTD-teamet
 
 # Framerate display window
@@ -2869,7 +2853,6 @@ STR_NEWGRF_ERROR_INVALID_SPRITE_LAYOUT                          :Ugyldig/ukjend 
 
 # NewGRF related 'general' warnings
 STR_NEWGRF_POPUP_CAUTION_CAPTION                                :{WHITE}Åtvaring!
-STR_NEWGRF_CONFIRMATION_TEXT                                    :{YELLOW}Du er i ferd med å gjere forandringar i eit køyrande spel. Det kan få OpenTTD til å krasje eller øydelegge speldata. Var vennleg og ikkje rapporter feil på dette.{}Er du heilt sikker på at du vil gjere dette?
 
 STR_NEWGRF_DUPLICATE_GRFID                                      :{WHITE}Kan ikkje leggje til fil: GRF ID finns allereie
 STR_NEWGRF_COMPATIBLE_LOADED                                    :{ORANGE}Matchande fil blei ikkje funne (kompatibel GRF-fil lasta inn)
@@ -2878,7 +2861,6 @@ STR_NEWGRF_TOO_MANY_NEWGRFS                                     :{WHITE}Kan ikkj
 STR_NEWGRF_COMPATIBLE_LOAD_WARNING                              :{WHITE}Kompatibel GRF-fil(ar) lasta inn i plassen for manglande filar
 STR_NEWGRF_DISABLED_WARNING                                     :{WHITE}Manglande GRF-fil(ar) har vorte deaktiverte
 STR_NEWGRF_UNPAUSE_WARNING_TITLE                                :{YELLOW}Manglar GRF fil(er)
-STR_NEWGRF_UNPAUSE_WARNING                                      :{WHITE}Å slå av pause kan medføre at OpenTTD krasjar. Ikkje rapporter feil for etterfølgjande krasjar.{}Vil du verkelig slå av pause?
 
 # NewGRF status
 STR_NEWGRF_LIST_NONE                                            :Ingen

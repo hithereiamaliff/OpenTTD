@@ -411,12 +411,10 @@ STR_TOOLBAR_TOOLTIP_BUILD_AIRPORTS                              :{BLACK}Construi
 STR_TOOLBAR_TOOLTIP_LANDSCAPING                                 :{BLACK}Abrir menú de alteración de terreno, menú de plantar árboles, o poner letrero
 STR_TOOLBAR_TOOLTIP_SHOW_SOUND_MUSIC_WINDOW                     :{BLACK}Abrir ventana de sonido y música
 STR_TOOLBAR_TOOLTIP_SHOW_LAST_MESSAGE_NEWS                      :{BLACK}Abrir último mensaje o noticia, historial de mensajes o borrar todo
-STR_TOOLBAR_TOOLTIP_LAND_BLOCK_INFORMATION                      :{BLACK}Abrir información de terreno, menú de capturas de pantalla, créditos de OpenTTD o herramientas de desarrollador
 STR_TOOLBAR_TOOLTIP_SWITCH_TOOLBAR                              :{BLACK}Cambiar barras de herramientas
 
 # Extra tooltips for the scenario editor toolbar
 STR_SCENEDIT_TOOLBAR_SAVE_SCENARIO_LOAD_SCENARIO_TOOLTIP        :{BLACK}Guardar mapa personalizado, cargar mapa personalizado, salir del editor, salir
-STR_SCENEDIT_TOOLBAR_OPENTTD                                    :{YELLOW}OpenTTD
 STR_SCENEDIT_TOOLBAR_SCENARIO_EDITOR                            :{YELLOW}Editor de mapas
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_BACKWARD_TOOLTIP    :{BLACK}Retroceder un año la fecha de inicio
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_FORWARD_TOOLTIP     :{BLACK}Avanzar un año la fecha de inicio
@@ -540,7 +538,6 @@ STR_ABOUT_MENU_TOGGLE_CONSOLE                                   :Activar consola
 STR_ABOUT_MENU_AI_DEBUG                                         :Depuración de scripts de IA o juego
 STR_ABOUT_MENU_SCREENSHOT                                       :Captura de pantalla
 STR_ABOUT_MENU_SHOW_FRAMERATE                                   :Mostrar FPS
-STR_ABOUT_MENU_ABOUT_OPENTTD                                    :Acerca de OpenTTD
 STR_ABOUT_MENU_SPRITE_ALIGNER                                   :Alineador de sprites
 STR_ABOUT_MENU_TOGGLE_BOUNDING_BOXES                            :Mostrar cajas delimitadoras
 STR_ABOUT_MENU_TOGGLE_DIRTY_BLOCKS                              :Mostrar coloreado de bloques de redibujado
@@ -1057,7 +1054,6 @@ STR_GAME_OPTIONS_LANGUAGE_TOOLTIP                               :Elegir el idiom
 STR_GAME_OPTIONS_LANGUAGE_PERCENTAGE                            :{STRING} ({NUM}% completado)
 
 STR_GAME_OPTIONS_FULLSCREEN                                     :Pantalla completa
-STR_GAME_OPTIONS_FULLSCREEN_TOOLTIP                             :Jugar OpenTTD en pantalla completa
 
 STR_GAME_OPTIONS_RESOLUTION                                     :Resolución de pantalla
 STR_GAME_OPTIONS_RESOLUTION_TOOLTIP                             :Elegir la resolución de pantalla
@@ -1065,7 +1061,6 @@ STR_GAME_OPTIONS_RESOLUTION_OTHER                               :Otra
 STR_GAME_OPTIONS_RESOLUTION_ITEM                                :{NUM}×{NUM}
 
 STR_GAME_OPTIONS_VIDEO_ACCELERATION                             :Aceleración por hardware
-STR_GAME_OPTIONS_VIDEO_ACCELERATION_TOOLTIP                     :Intentar usar la aceleración por hardware. Se debe reiniciar el juego para que el cambio surta efecto
 STR_GAME_OPTIONS_VIDEO_ACCELERATION_RESTART                     :{WHITE}Esta configuración solo tendrá efecto después de reiniciar el juego
 
 STR_GAME_OPTIONS_VIDEO_VSYNC                                    :Sincronización vertical
@@ -2216,8 +2211,6 @@ STR_VIDEO_DRIVER_ERROR_NO_HARDWARE_ACCELERATION                 :{WHITE}... no s
 STR_VIDEO_DRIVER_ERROR_HARDWARE_ACCELERATION_CRASH              :{WHITE}... el controlador de GPU provocó una falla total en el juego. Se desactivó la aceleración por hardware
 
 # Intro window
-STR_INTRO_CAPTION                                               :{WHITE}OpenTTD
-STR_INTRO_VERSION                                               :OpenTTD {REV}
 
 STR_INTRO_NEW_GAME                                              :{BLACK}Nueva partida
 STR_INTRO_LOAD_GAME                                             :{BLACK}Cargar partida
@@ -2248,14 +2241,11 @@ STR_INTRO_TOOLTIP_GAME_OPTIONS                                  :{BLACK}Abrir la
 STR_INTRO_TOOLTIP_HIGHSCORE                                     :{BLACK}Abrir tabla de puntuaciones
 STR_INTRO_TOOLTIP_HELP                                          :{BLACK}Acceder a documentación y recursos en línea
 STR_INTRO_TOOLTIP_ONLINE_CONTENT                                :{BLACK}Revisar si hay nuevos contenidos actualizados para descargar
-STR_INTRO_TOOLTIP_QUIT                                          :{BLACK}Salir de 'OpenTTD'
 
 STR_INTRO_BASESET                                               :{BLACK}Los gráficos base elegidos necesitan {NUM} spirte{P "" s}. Revisa si hay actualizaciones para el paquete base.
-STR_INTRO_TRANSLATION                                           :{BLACK}Este idioma tiene {NUM} cadena{P "" s} de texto sin traducir. Ayuda a mejorar OpenTTD siendo traductor. Ve el archivo readme.txt para más detalles.
 
 # Quit window
 STR_QUIT_CAPTION                                                :{WHITE}Salir
-STR_QUIT_ARE_YOU_SURE_YOU_WANT_TO_EXIT_OPENTTD                  :{YELLOW}¿Estás seguro de salir de OpenTTD?
 STR_QUIT_YES                                                    :{BLACK}Sí
 STR_QUIT_NO                                                     :{BLACK}No
 
@@ -2350,7 +2340,6 @@ STR_FACE_SIMPLE                                                 :{BLACK}Simple
 STR_FACE_SIMPLE_TOOLTIP                                         :{BLACK}Selección simple de caras
 STR_FACE_LOAD                                                   :{BLACK}Cargar
 STR_FACE_LOAD_TOOLTIP                                           :{BLACK}Cargar cara favorita
-STR_FACE_LOAD_DONE                                              :{WHITE}Cara favorita cargada desde el archivo de configuración
 STR_FACE_FACECODE                                               :{BLACK}Código de cara
 STR_FACE_FACECODE_TOOLTIP                                       :{BLACK}Establecer un código de cara para el presidente
 STR_FACE_FACECODE_CAPTION                                       :{WHITE}Establecer un código para la cara del presidente
@@ -2358,7 +2347,6 @@ STR_FACE_FACECODE_SET                                           :{WHITE}La nueva
 STR_FACE_FACECODE_ERR                                           :{WHITE}No se puede asignar código de cara, debe ser una etiqueta y número válidos
 STR_FACE_SAVE                                                   :{BLACK}Guardar
 STR_FACE_SAVE_TOOLTIP                                           :{BLACK}Guardar cara favorita
-STR_FACE_SAVE_DONE                                              :{WHITE}Cara guardada como favorita en el archivo de configuración
 STR_FACE_SETTING_TOGGLE                                         :{STRING} {ORANGE}{STRING}
 STR_FACE_SETTING_NUMERIC                                        :{STRING} {ORANGE}{NUM} / {NUM}
 STR_FACE_YES                                                    :Sí
@@ -2671,8 +2659,6 @@ STR_CONTENT_UNSELECT_ALL_CAPTION                                :{BLACK}Desmarca
 STR_CONTENT_UNSELECT_ALL_CAPTION_TOOLTIP                        :{BLACK}Desmarcar todo el contenido para no ser descargado
 STR_CONTENT_SEARCH_EXTERNAL                                     :{BLACK}Buscar en sitios web externos
 STR_CONTENT_SEARCH_EXTERNAL_TOOLTIP                             :{BLACK}Buscar contenido no disponible en el servicio de contenido del juego en sitios web externos no asociados con OpenTTD
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER_CAPTION                  :{WHITE}¡Estás saliendo de OpenTTD!
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER                          :{WHITE}Los términos y condiciones para descargar contenido de sitios web externos varían.{}Será necesario referirse a tales sitios para saber cómo instalar el contenido en OpenTTD.{}¿Continuar?
 STR_CONTENT_FILTER_TITLE                                        :{BLACK}Etiqueta o nombre:
 STR_CONTENT_OPEN_URL                                            :{BLACK}Sitio web
 STR_CONTENT_OPEN_URL_TOOLTIP                                    :{BLACK}Visitar el sitio web de este contenido
@@ -2686,7 +2672,6 @@ STR_CONTENT_DETAIL_SUBTITLE_UNSELECTED                          :{SILVER}Conteni
 STR_CONTENT_DETAIL_SUBTITLE_SELECTED                            :{SILVER}Contenido elegido para descargar
 STR_CONTENT_DETAIL_SUBTITLE_AUTOSELECTED                        :{SILVER}Dependencia elegida para descargar
 STR_CONTENT_DETAIL_SUBTITLE_ALREADY_HERE                        :{SILVER}Este contenido ya fue descargado
-STR_CONTENT_DETAIL_SUBTITLE_DOES_NOT_EXIST                      :{SILVER}Este contenido es desconocido y no puede ser descargado en OpenTTD
 
 STR_CONTENT_DETAIL_UPDATE                                       :{SILVER}Este es un sustituto de un{G "" a "" a} {STRING} existente
 STR_CONTENT_DETAIL_NAME                                         :{SILVER}Nombre: {WHITE}{STRING}
@@ -2698,7 +2683,6 @@ STR_CONTENT_DETAIL_FILESIZE                                     :{SILVER}Tamaño
 STR_CONTENT_DETAIL_SELECTED_BECAUSE_OF                          :{SILVER}Razón de selección: {WHITE}{STRING}
 STR_CONTENT_DETAIL_DEPENDENCIES                                 :{SILVER}Dependencias: {WHITE}{STRING}
 STR_CONTENT_DETAIL_TAGS                                         :{SILVER}Etiquetas: {WHITE}{STRING}
-STR_CONTENT_NO_ZLIB                                             :{WHITE}OpenTTD fue compilado sin compatibilidad con "zlib"...
 STR_CONTENT_NO_ZLIB_SUB                                         :{WHITE}... ¡No es posible descargar contenido!
 
 # Order of these is important!
@@ -2727,13 +2711,10 @@ STR_CONTENT_ERROR_COULD_NOT_DOWNLOAD_FILE_NOT_WRITABLE          :{WHITE}... no s
 STR_CONTENT_ERROR_COULD_NOT_EXTRACT                             :{WHITE}No ha sido posible descomprimir el archivo descargado
 
 STR_MISSING_GRAPHICS_SET_CAPTION                                :{WHITE}Gráficos no encontrados
-STR_MISSING_GRAPHICS_SET_MESSAGE                                :{BLACK}OpenTTD requiere gráficos para funcionar pero no se encontró ninguno. ¿Permitir que se descarguen e instalen automáticamente?
 STR_MISSING_GRAPHICS_YES_DOWNLOAD                               :{BLACK}Sí, descargar los gráficos
-STR_MISSING_GRAPHICS_NO_QUIT                                    :{BLACK}No, salir de OpenTTD
 
 STR_MISSING_GRAPHICS_ERROR_TITLE                                :{WHITE}La descarga falló
 STR_MISSING_GRAPHICS_ERROR                                      :{BLACK}La descarga de gráficos falló.{}Se deben descargar manualmente.
-STR_MISSING_GRAPHICS_ERROR_QUIT                                 :{BLACK}Salir de OpenTTD
 
 # Transparency settings window
 STR_TRANSPARENCY_CAPTION                                        :{WHITE}Opciones de transparencia
@@ -3258,9 +3239,7 @@ STR_LAI_OBJECT_DESCRIPTION_COMPANY_HEADQUARTERS                 :Sede de la empr
 STR_LAI_OBJECT_DESCRIPTION_COMPANY_OWNED_LAND                   :Terreno propiedad de una empresa
 
 # About OpenTTD window
-STR_ABOUT_OPENTTD                                               :{WHITE}Acerca de OpenTTD
 STR_ABOUT_ORIGINAL_COPYRIGHT                                    :{BLACK}Copyright original {COPYRIGHT} 1995 Chris Sawyer, Todos los derechos reservados
-STR_ABOUT_VERSION                                               :{BLACK}OpenTTD versión {REV}
 STR_ABOUT_COPYRIGHT_OPENTTD                                     :{BLACK}OpenTTD {COPYRIGHT} 2002-{STRING}, el equipo de OpenTTD
 
 # Framerate display window
@@ -3385,7 +3364,6 @@ STR_MAPGEN_QUANTITY_OF_RIVERS                                   :{BLACK}Ríos:
 STR_MAPGEN_SMOOTHNESS                                           :{BLACK}Suavidad:
 STR_MAPGEN_VARIETY                                              :{BLACK}Variedad:
 STR_MAPGEN_GENERATE                                             :{WHITE}Generar
-STR_MAPGEN_GENERATE_TOOLTIP                                     :{BLACK}¡Crear mundo y jugar OpenTTD!
 STR_MAPGEN_NEWGRF_SETTINGS                                      :{BLACK}Configuración de NewGRF
 STR_MAPGEN_NEWGRF_SETTINGS_TOOLTIP                              :{BLACK}Abrir configuración de NewGRF
 STR_MAPGEN_AI_SETTINGS                                          :{BLACK}Configuración de IA
@@ -3435,7 +3413,6 @@ STR_MAPGEN_HEIGHTMAP_ROTATION                                   :{BLACK}Rotació
 STR_MAPGEN_HEIGHTMAP_NAME                                       :{BLACK}Nombre del mapa de alturas:
 STR_MAPGEN_HEIGHTMAP_NAME_TOOLTIP                               :{BLACK}Nombre del archivo de la imagen de mapa de alturas
 STR_MAPGEN_HEIGHTMAP_SIZE_LABEL                                 :{BLACK}Tamaño:
-STR_MAPGEN_HEIGHTMAP_SIZE_LABEL_TOOLTIP                         :{BLACK}Tamaño de la imagen del mapa de alturas. Para mejores resultados, las longitudes deben coincidir con alguna de las disponibles en OpenTTD, como 256, 512, 1024, etc.
 STR_MAPGEN_HEIGHTMAP_SIZE                                       :{ORANGE}{NUM}×{NUM}
 
 STR_MAPGEN_TERRAIN_TYPE_QUERY_CAPT                              :{WHITE}Altura de cima
@@ -3624,7 +3601,6 @@ STR_NEWGRF_ERROR_INDPROD_CALLBACK                               :Llamada de prod
 
 # NewGRF related 'general' warnings
 STR_NEWGRF_POPUP_CAUTION_CAPTION                                :{WHITE}¡Precaución!
-STR_NEWGRF_CONFIRMATION_TEXT                                    :{YELLOW}Se va a modificar una partida ya comenzada. Esto puede provocar un error fatal en OpenTTD o corromper la partida. No se deben informar problemas causados por esta acción.{}¿Continuar de todos modos?
 
 STR_NEWGRF_DUPLICATE_GRFID                                      :{WHITE}El archivo no puede añadirse: GRF ID duplicado
 STR_NEWGRF_COMPATIBLE_LOADED                                    :{ORANGE}Archivo no encontrado (GRF compatible cargado)
@@ -3633,7 +3609,6 @@ STR_NEWGRF_TOO_MANY_NEWGRFS                                     :{WHITE}No se pu
 STR_NEWGRF_COMPATIBLE_LOAD_WARNING                              :{WHITE}GRF(s) compatible cargado para archivos que faltan
 STR_NEWGRF_DISABLED_WARNING                                     :{WHITE}El o los archivos GRF no encontrados han sido desactivados
 STR_NEWGRF_UNPAUSE_WARNING_TITLE                                :{YELLOW}Archivo(s) GRF no encontrados
-STR_NEWGRF_UNPAUSE_WARNING                                      :{WHITE}Reanudar la partida puede provocar un error fatal en OpenTTD. No se deben crear reportes para errores fatales posteriores.{}¿Proceder de todos modos?
 
 # NewGRF status
 STR_NEWGRF_LIST_NONE                                            :Ninguno
@@ -4945,7 +4920,6 @@ STR_TEXTFILE_README_CAPTION                                     :{WHITE}Archivo 
 STR_TEXTFILE_CHANGELOG_CAPTION                                  :{WHITE}Registro de cambios del {STRING} {STRING}
 STR_TEXTFILE_LICENCE_CAPTION                                    :{WHITE}Licencia del {STRING} {STRING}
 STR_TEXTFILE_SURVEY_RESULT_CAPTION                              :{WHITE}Vista previa de datos recopilados
-STR_TEXTFILE_GAME_MANUAL_CAPTION                                :{WHITE}Documento de OpenTTD '{STRING}'
 
 
 # Vehicle loading indicators

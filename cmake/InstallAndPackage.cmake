@@ -131,13 +131,13 @@ endif()
 
 set(CPACK_SYSTEM_NAME "${ARCHITECTURE}")
 
-set(CPACK_PACKAGE_NAME "openttd")
-set(CPACK_PACKAGE_VENDOR "OpenTTD")
-set(CPACK_PACKAGE_DESCRIPTION "OpenTTD")
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "OpenTTD")
-set(CPACK_PACKAGE_HOMEPAGE_URL "https://www.openttd.org/")
-set(CPACK_PACKAGE_CONTACT "OpenTTD <info@openttd.org>")
-set(CPACK_PACKAGE_INSTALL_DIRECTORY "OpenTTD")
+set(CPACK_PACKAGE_NAME "${BINARY_NAME}")
+set(CPACK_PACKAGE_VENDOR "Wira Bandar")
+set(CPACK_PACKAGE_DESCRIPTION "Wira Bandar PC, a fork of OpenTTD")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Wira Bandar PC, a fork of OpenTTD")
+set(CPACK_PACKAGE_HOMEPAGE_URL "https://github.com/hithereiamaliff/wirabandar")
+set(CPACK_PACKAGE_CONTACT "Wira Bandar <https://github.com/hithereiamaliff/wirabandar>")
+set(CPACK_PACKAGE_INSTALL_DIRECTORY "Wira Bandar")
 set(CPACK_PACKAGE_CHECKSUM "SHA256")
 
 if((APPLE OR WIN32) AND EXISTS ${PANDOC_EXECUTABLE})
@@ -171,7 +171,7 @@ elseif(WIN32)
         include(PackageNSIS)
     endif()
 
-    set(CPACK_PACKAGE_FILE_NAME "openttd-#CPACK_PACKAGE_VERSION#-windows-${CPACK_SYSTEM_NAME}")
+    set(CPACK_PACKAGE_FILE_NAME "${BINARY_NAME}-#CPACK_PACKAGE_VERSION#-windows-${CPACK_SYSTEM_NAME}")
 
     if(DEFINED ENV{AZURE_CODESIGN_PROFILE_NAME})
       add_custom_command(TARGET openttd

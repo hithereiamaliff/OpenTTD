@@ -596,12 +596,10 @@ STR_TOOLBAR_TOOLTIP_BUILD_AIRPORTS                              :{BLACK}Statyti 
 STR_TOOLBAR_TOOLTIP_LANDSCAPING                                 :{BLACK}Formuoti kraštovaizdį, sodinti medžius arba statyti ženklus
 STR_TOOLBAR_TOOLTIP_SHOW_SOUND_MUSIC_WINDOW                     :{BLACK}Rodyti garsų bei muzikos parinktis
 STR_TOOLBAR_TOOLTIP_SHOW_LAST_MESSAGE_NEWS                      :{BLACK}Rodyti paskutinę žinutę ar naujieną bei jų rodymo nuostatas
-STR_TOOLBAR_TOOLTIP_LAND_BLOCK_INFORMATION                      :{BLACK}Rodyti langelio informaciją, pultą, derinimo langą, daryti momentinę ekrano kopiją
 STR_TOOLBAR_TOOLTIP_SWITCH_TOOLBAR                              :{BLACK}Perjungti įrankių juostas
 
 # Extra tooltips for the scenario editor toolbar
 STR_SCENEDIT_TOOLBAR_SAVE_SCENARIO_LOAD_SCENARIO_TOOLTIP        :{BLACK}Išsaugoti scenarijų, įkelti scenarijų, išjungti scenarijų redaktorių, išeiti
-STR_SCENEDIT_TOOLBAR_OPENTTD                                    :{YELLOW}OpenTTD
 STR_SCENEDIT_TOOLBAR_SCENARIO_EDITOR                            :{YELLOW}Scenarijaus redaktorius
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_BACKWARD_TOOLTIP    :{BLACK}Žaidimo pradžios datą sumažinti 1 metais
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_FORWARD_TOOLTIP     :{BLACK}Žaidimo pradžios datą padidinti 1 metais
@@ -716,7 +714,6 @@ STR_ABOUT_MENU_TOGGLE_CONSOLE                                   :Perjungti konso
 STR_ABOUT_MENU_AI_DEBUG                                         :DI / „GameScript“ derinimas
 STR_ABOUT_MENU_SCREENSHOT                                       :Ekrano nuotrauka
 STR_ABOUT_MENU_SHOW_FRAMERATE                                   :Kadrų dažniai
-STR_ABOUT_MENU_ABOUT_OPENTTD                                    :Apie „OpenTTD“
 STR_ABOUT_MENU_SPRITE_ALIGNER                                   :Spruklių lygiuoklė
 STR_ABOUT_MENU_TOGGLE_BOUNDING_BOXES                            :Rodyti/slėpti apvadus
 STR_ABOUT_MENU_TOGGLE_DIRTY_BLOCKS                              :Perjungti paveiktų blokų spalvinimą
@@ -1215,7 +1212,6 @@ STR_GAME_OPTIONS_LANGUAGE_TOOLTIP                               :Pasirinkite apl
 STR_GAME_OPTIONS_LANGUAGE_PERCENTAGE                            :{STRING} ({NUM}% baigtumas)
 
 STR_GAME_OPTIONS_FULLSCREEN                                     :Per visą ekraną
-STR_GAME_OPTIONS_FULLSCREEN_TOOLTIP                             :Pažymėkite šį langelį, jeigu norite OpenTTD žaisti visame ekrane
 
 STR_GAME_OPTIONS_RESOLUTION                                     :Ekrano raiška
 STR_GAME_OPTIONS_RESOLUTION_TOOLTIP                             :Pasirinkite ekrano raišką
@@ -1223,7 +1219,6 @@ STR_GAME_OPTIONS_RESOLUTION_OTHER                               :Kita
 STR_GAME_OPTIONS_RESOLUTION_ITEM                                :{NUM}x{NUM}
 
 STR_GAME_OPTIONS_VIDEO_ACCELERATION                             :Aparatinis spartinimas
-STR_GAME_OPTIONS_VIDEO_ACCELERATION_TOOLTIP                     :Pažymėkite šį langelį, jei norite, kad OpenTTD taikytų aparatinį spartinimą. Kad nuostata įsigaliotų, reiks perkrauti OpenTTD
 STR_GAME_OPTIONS_VIDEO_ACCELERATION_RESTART                     :{WHITE}Kad pakeitimai įsigaliotų, reikia paleisti OpenTTD iš naujo
 
 STR_GAME_OPTIONS_VIDEO_VSYNC                                    :Vertikalioji sinchronizacija (VSync)
@@ -2365,14 +2360,11 @@ STR_INTRO_TOOLTIP_TOYLAND_LANDSCAPE                             :{BLACK}Žaislin
 STR_INTRO_TOOLTIP_GAME_OPTIONS                                  :{BLACK}Atidaryti pagrindines žaidimo nuostatas
 STR_INTRO_TOOLTIP_HIGHSCORE                                     :{BLACK}Atverti nugalėtojų lentelę
 STR_INTRO_TOOLTIP_ONLINE_CONTENT                                :{BLACK}Tikrinti, ar nėra naujų plėtinių arba atnaujinimų jau atsisiųstiems plėtiniams
-STR_INTRO_TOOLTIP_QUIT                                          :{BLACK}Išeiti iš „OpenTTD“ žaidimo
 
 STR_INTRO_BASESET                                               :{BLACK}Šiuo metu pasirinktame grafikos rinkinyje trūksta {NUM} sprukl{P io ių ių}. Patikrinkite, ar nėra naujinių.
-STR_INTRO_TRANSLATION                                           :{BLACK}Šiam vertimui trūksta {NUM} eilu{P tės čių čių}. Padėkite išversti OpenTTD užsiregistruodami vertėju. Daugiau informacijos rasite faile readme.txt
 
 # Quit window
 STR_QUIT_CAPTION                                                :{WHITE}Baigti
-STR_QUIT_ARE_YOU_SURE_YOU_WANT_TO_EXIT_OPENTTD                  :{YELLOW}Ar jūs tikrai norite baigti žaidimą ir užverti programą?
 STR_QUIT_YES                                                    :{BLACK}Taip
 STR_QUIT_NO                                                     :{BLACK}Ne
 
@@ -2465,7 +2457,6 @@ STR_FACE_SIMPLE                                                 :{BLACK}Paprasta
 STR_FACE_SIMPLE_TOOLTIP                                         :{BLACK}Paprastas veido parinkimas
 STR_FACE_LOAD                                                   :{BLACK}Atverti
 STR_FACE_LOAD_TOOLTIP                                           :{BLACK}Atverti mėgstamą veidą
-STR_FACE_LOAD_DONE                                              :{WHITE}Tavo mėgstamas veidas sėkmingai įkeltas iš OpenTTD nustatymų failo.
 STR_FACE_FACECODE                                               :{BLACK}Žaidėjo veido nr.
 STR_FACE_FACECODE_TOOLTIP                                       :{BLACK}Tikrinti ir/arba nustatyti žaidėjo veido numerį
 STR_FACE_FACECODE_CAPTION                                       :{WHITE}Tikrinti ir/arba nustatyti žaidėjo veido numerį
@@ -2473,7 +2464,6 @@ STR_FACE_FACECODE_SET                                           :{WHITE}Nustatyt
 STR_FACE_FACECODE_ERR                                           :{WHITE}Prezidento veido numeris nepriskirtas - turi būti skaičius tarp 0 ir 4,294,967,295!
 STR_FACE_SAVE                                                   :{BLACK}Išsaugoti
 STR_FACE_SAVE_TOOLTIP                                           :{BLACK}Išsaugoti mėgstamą veidą
-STR_FACE_SAVE_DONE                                              :{WHITE}Šis veidas bus išsaugotas kaip tavo mėgstamas OpenTTD nustatymų faile.
 STR_FACE_YES                                                    :Taip
 STR_FACE_NO                                                     :Ne
 STR_FACE_HAIR                                                   :Plaukai:
@@ -2773,8 +2763,6 @@ STR_CONTENT_UNSELECT_ALL_CAPTION                                :{BLACK}Nieko ne
 STR_CONTENT_UNSELECT_ALL_CAPTION_TOOLTIP                        :{BLACK}Pažymėti visą turinį kaip neatsisiųstą
 STR_CONTENT_SEARCH_EXTERNAL                                     :{BLACK}Ieškoti išorinėse svetainėse
 STR_CONTENT_SEARCH_EXTERNAL_TOOLTIP                             :{BLACK}Ieškoti turinio neoficialiose OpenTTd svetainėse
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER_CAPTION                  :{WHITE}Paliekate OpenTTD programą!
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER                          :{WHITE}Turinio parsisiuntimo sąlygos įvairiose išorinėse svetainėse skiriasi.{}Norėdami įdiegti turinį, turėsite sekti nurodymus, pateikiamus tose svetainėse.{}Ar tęsti?
 STR_CONTENT_FILTER_TITLE                                        :{BLACK}Žymės/pavadinimo filtravimas:
 STR_CONTENT_OPEN_URL                                            :{BLACK}Svetainė
 STR_CONTENT_OPEN_URL_TOOLTIP                                    :{BLACK}Aplankyti šio turinio svetainę
@@ -2788,7 +2776,6 @@ STR_CONTENT_DETAIL_SUBTITLE_UNSELECTED                          :{SILVER}Jūs ne
 STR_CONTENT_DETAIL_SUBTITLE_SELECTED                            :{SILVER}Jūs pasirinkote atsisiųsti
 STR_CONTENT_DETAIL_SUBTITLE_AUTOSELECTED                        :{SILVER}Ši priklausomybė buvo pasirinkta atsisiuntimui
 STR_CONTENT_DETAIL_SUBTITLE_ALREADY_HERE                        :{SILVER}Tu jau tai turi
-STR_CONTENT_DETAIL_SUBTITLE_DOES_NOT_EXIST                      :{SILVER}Šis turinys yra nežinomas ir negali būti parsiųstas su OpenTTD
 
 STR_CONTENT_DETAIL_UPDATE                                       :{SILVER}Tai yra pakeitimas egzistuojančiam {STRING}
 STR_CONTENT_DETAIL_NAME                                         :{SILVER}Vardas: {WHITE}{STRING}
@@ -2800,7 +2787,6 @@ STR_CONTENT_DETAIL_FILESIZE                                     :{SILVER}Siuntin
 STR_CONTENT_DETAIL_SELECTED_BECAUSE_OF                          :{SILVER}Pasirinktas nes: {WHITE}{STRING}
 STR_CONTENT_DETAIL_DEPENDENCIES                                 :{SILVER}Priklausomybės: {WHITE}{STRING}
 STR_CONTENT_DETAIL_TAGS                                         :{SILVER}Žymės: {WHITE}{STRING}
-STR_CONTENT_NO_ZLIB                                             :{WHITE}OpenTTD pagaminta be „zlib“ pagalbos...
 STR_CONTENT_NO_ZLIB_SUB                                         :{WHITE}... atsiųsti turinio neįmanoma!
 
 # Order of these is important!
@@ -2829,13 +2815,10 @@ STR_CONTENT_ERROR_COULD_NOT_DOWNLOAD_FILE_NOT_WRITABLE          :{WHITE}... fail
 STR_CONTENT_ERROR_COULD_NOT_EXTRACT                             :{WHITE}Nepavyko išpakuoti parsiųsta failą
 
 STR_MISSING_GRAPHICS_SET_CAPTION                                :{WHITE}Trūksta grafikos rinkinio
-STR_MISSING_GRAPHICS_SET_MESSAGE                                :{BLACK}OpenTTD nerado jokio tinkamo grafikos rinkinio. Parsisiųsti ir įdiegti?
 STR_MISSING_GRAPHICS_YES_DOWNLOAD                               :{BLACK}Taip, parsisiųsti grafikos rinkinį
-STR_MISSING_GRAPHICS_NO_QUIT                                    :{BLACK}Ne, išeiti iš OpenTTD
 
 STR_MISSING_GRAPHICS_ERROR_TITLE                                :{WHITE}Parsisiųsti nepavyko
 STR_MISSING_GRAPHICS_ERROR                                      :{BLACK}Grafikos rinkinio parsisiųsti nepavyko.{}Bandykite parsisiųsti savarankiškai.
-STR_MISSING_GRAPHICS_ERROR_QUIT                                 :{BLACK}Išeiti iš „OpenTTD“ žaidimo
 
 # Transparency settings window
 STR_TRANSPARENCY_CAPTION                                        :{WHITE}Skaidrumo nuostatos
@@ -3295,9 +3278,7 @@ STR_LAI_OBJECT_DESCRIPTION_COMPANY_HEADQUARTERS                 :Kompanijos būs
 STR_LAI_OBJECT_DESCRIPTION_COMPANY_OWNED_LAND                   :Kompanijos žemė
 
 # About OpenTTD window
-STR_ABOUT_OPENTTD                                               :{WHITE}Apie OpenTTD
 STR_ABOUT_ORIGINAL_COPYRIGHT                                    :{BLACK}Pradinės versijos teisės priklauso {COPYRIGHT} 1995 Chris Sawyer, Visos teisės saugomos
-STR_ABOUT_VERSION                                               :{BLACK}OpenTTD versija {REV}
 STR_ABOUT_COPYRIGHT_OPENTTD                                     :{BLACK}„OpenTTD“ {COPYRIGHT}2002-{STRING} „OpenTTD“ komanda
 
 # Framerate display window
@@ -3419,7 +3400,6 @@ STR_MAPGEN_QUANTITY_OF_RIVERS                                   :{BLACK}Upių ki
 STR_MAPGEN_SMOOTHNESS                                           :{BLACK}Jautrumas:
 STR_MAPGEN_VARIETY                                              :{BLACK}Įvairovės paskirstymas:
 STR_MAPGEN_GENERATE                                             :{WHITE}Sukurti
-STR_MAPGEN_GENERATE_TOOLTIP                                     :{BLACK}Sukurti pasaulį ir žaisti OpenTTD!
 STR_MAPGEN_NEWGRF_SETTINGS                                      :{BLACK}NewGRF Nustatymai
 STR_MAPGEN_NEWGRF_SETTINGS_TOOLTIP                              :{BLACK}Atidaryti NewGRF nustatymus
 STR_MAPGEN_AI_SETTINGS                                          :{BLACK}DI nustatymai
@@ -3649,7 +3629,6 @@ STR_NEWGRF_ERROR_INDPROD_CALLBACK                               :Klaidinga pramo
 
 # NewGRF related 'general' warnings
 STR_NEWGRF_POPUP_CAUTION_CAPTION                                :{WHITE}Įspėjimas!
-STR_NEWGRF_CONFIRMATION_TEXT                                    :{YELLOW}Jūs norite atlikti pakeitimus veikiančiam žaidimui. OpenTTD gali pakibti arba sugadinti esamą žaidimo būseną. Nepildykite klaidų pranešimų dėl šių problemų.{}Ar jūs tikrai norite tai atlikti?
 
 STR_NEWGRF_DUPLICATE_GRFID                                      :{WHITE}Negalima pridėti failo: pasikartojantis GRF ID
 STR_NEWGRF_COMPATIBLE_LOADED                                    :{ORANGE}Atitinkamas failas nerastas (panaudotas suderinamas grafikos failas)
@@ -3658,7 +3637,6 @@ STR_NEWGRF_TOO_MANY_NEWGRFS                                     :{WHITE}Neįmano
 STR_NEWGRF_COMPATIBLE_LOAD_WARNING                              :{WHITE}Suderinami grafikos failai panaudoti vietoj trūkstamų
 STR_NEWGRF_DISABLED_WARNING                                     :{WHITE}Trūkstami grafikos failai nenaudojami
 STR_NEWGRF_UNPAUSE_WARNING_TITLE                                :{YELLOW}Trūksta GRF failų
-STR_NEWGRF_UNPAUSE_WARNING                                      :{WHITE}Paleidimas gali išderinti ar užstrigdinti OpenTTD. Nepildykite klaidų pranešimų dėl šių problemų.{}Ar norite paleisti žaidimą?
 
 # NewGRF status
 STR_NEWGRF_LIST_NONE                                            :Nėra
@@ -4956,7 +4934,6 @@ STR_TEXTFILE_README_CAPTION                                     :{WHITE}{STRING}
 STR_TEXTFILE_CHANGELOG_CAPTION                                  :{WHITE}{STRING} pasikeitimai {STRING}
 STR_TEXTFILE_LICENCE_CAPTION                                    :{WHITE}{STRING} licencija {STRING}
 STR_TEXTFILE_SURVEY_RESULT_CAPTION                              :{WHITE}Peržiūrėti apklausos rezultatą
-STR_TEXTFILE_GAME_MANUAL_CAPTION                                :{WHITE}OpenTTD dokumentas '{STRING}'
 
 
 # Vehicle loading indicators

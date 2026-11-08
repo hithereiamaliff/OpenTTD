@@ -412,12 +412,10 @@ STR_TOOLBAR_TOOLTIP_BUILD_AIRPORTS                              :{BLACK}Adeiladu
 STR_TOOLBAR_TOOLTIP_LANDSCAPING                                 :{BLACK}Agor y dewislen tirweddu, dewislen coed, neu osod arwydd
 STR_TOOLBAR_TOOLTIP_SHOW_SOUND_MUSIC_WINDOW                     :{BLACK}Agor y ffenestr sain/cerddoriaeth
 STR_TOOLBAR_TOOLTIP_SHOW_LAST_MESSAGE_NEWS                      :{BLACK}Agor y neges/adroddiad newyddion ddiwethaf, hanes negeseuon neu ddileu pob neges
-STR_TOOLBAR_TOOLTIP_LAND_BLOCK_INFORMATION                      :{BLACK}Agor gwybodaeth ardal tir, dewislen ciplun, credydau OpenTTD, neu offer datblygu
 STR_TOOLBAR_TOOLTIP_SWITCH_TOOLBAR                              :{BLACK}Amnewid bariau offer
 
 # Extra tooltips for the scenario editor toolbar
 STR_SCENEDIT_TOOLBAR_SAVE_SCENARIO_LOAD_SCENARIO_TOOLTIP        :{BLACK}Cadw Senario, llwytho senario, gwaredu a'r golygydd senario, gadael
-STR_SCENEDIT_TOOLBAR_OPENTTD                                    :{YELLOW}OpenTTD
 STR_SCENEDIT_TOOLBAR_SCENARIO_EDITOR                            :{YELLOW}Golygydd Senario
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_BACKWARD_TOOLTIP    :{BLACK}Symud y dyddiad cychwyn yn ôl 1 blwyddyn
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_FORWARD_TOOLTIP     :{BLACK}Symud y dyddiad cychwyn ymlaen 2 flynedd
@@ -541,7 +539,6 @@ STR_ABOUT_MENU_TOGGLE_CONSOLE                                   :Toglu Consol
 STR_ABOUT_MENU_AI_DEBUG                                         :Dadnamu AI / Sgript Gêm
 STR_ABOUT_MENU_SCREENSHOT                                       :Ciplun
 STR_ABOUT_MENU_SHOW_FRAMERATE                                   :Dangos cyfradd fframiau
-STR_ABOUT_MENU_ABOUT_OPENTTD                                    :Gwybodaeth am 'OpenTTD'
 STR_ABOUT_MENU_SPRITE_ALIGNER                                   :Aliniwr corluniau
 STR_ABOUT_MENU_TOGGLE_BOUNDING_BOXES                            :Toglo bocsys ffinio
 STR_ABOUT_MENU_TOGGLE_DIRTY_BLOCKS                              :Toglo lliwio blociau budr
@@ -1062,7 +1059,6 @@ STR_GAME_OPTIONS_LANGUAGE_TOOLTIP                               :Dewiswch yr iai
 STR_GAME_OPTIONS_LANGUAGE_PERCENTAGE                            :{STRING} ({NUM}% wedi'i gwblhau)
 
 STR_GAME_OPTIONS_FULLSCREEN                                     :Sgrin Llawn
-STR_GAME_OPTIONS_FULLSCREEN_TOOLTIP                             :Marciwch y blwch hwn i chwarae Open TTD gyda Sgrin Llawn
 
 STR_GAME_OPTIONS_RESOLUTION                                     :Cydraniad Sgrin
 STR_GAME_OPTIONS_RESOLUTION_TOOLTIP                             :Dewiswch y cydraniad sgrin i'w defnyddio
@@ -1070,7 +1066,6 @@ STR_GAME_OPTIONS_RESOLUTION_OTHER                               :arall
 STR_GAME_OPTIONS_RESOLUTION_ITEM                                :{NUM}x{NUM}
 
 STR_GAME_OPTIONS_VIDEO_ACCELERATION                             :Cyflymu caledwedd
-STR_GAME_OPTIONS_VIDEO_ACCELERATION_TOOLTIP                     :Bydd ticio'r blwch yma yn caniatáu i OpenTTD geisio defnyddio cyflymiad caledwedd. Bydd newid i'r gosodiad ond yn digwydd wedi ailddechrau'r gêm
 STR_GAME_OPTIONS_VIDEO_ACCELERATION_RESTART                     :{WHITE}Bydd y gosodiad ond yn cymryd effaith ar ôl ailddechrau'r gêm
 
 STR_GAME_OPTIONS_VIDEO_VSYNC                                    :VSync
@@ -2238,8 +2233,6 @@ STR_VIDEO_DRIVER_ERROR_NO_HARDWARE_ACCELERATION                 :{WHITE}... dim 
 STR_VIDEO_DRIVER_ERROR_HARDWARE_ACCELERATION_CRASH              :gyriant caledwedd graffig wedi chwalu'r gêm. Cyflymu caledwedd wedi'i analluogi
 
 # Intro window
-STR_INTRO_CAPTION                                               :{WHITE}OpenTTD
-STR_INTRO_VERSION                                               :OpenTTD {REV}
 
 STR_INTRO_NEW_GAME                                              :{BLACK}Gêm Newydd
 STR_INTRO_LOAD_GAME                                             :{BLACK}Llwytho Gêm
@@ -2270,14 +2263,11 @@ STR_INTRO_TOOLTIP_GAME_OPTIONS                                  :{BLACK}Agor dew
 STR_INTRO_TOOLTIP_HIGHSCORE                                     :{BLACK}Agor y tabl sgôr uchaf
 STR_INTRO_TOOLTIP_HELP                                          :{BLACK}Cael mynediad at ddogfenyddiaeth ac adnoddau ar-lein
 STR_INTRO_TOOLTIP_ONLINE_CONTENT                                :{BLACK}Gwirio am gynnwys newydd neu wedi'i ddiweddaru i'w lwytho i lawr
-STR_INTRO_TOOLTIP_QUIT                                          :{BLACK}Gadael 'OpenTTD'
 
 STR_INTRO_BASESET                                               :{BLACK}Mae {NUM} corlun ar goll o'r set raffeg sylfaenol a ddewiswyd. Gwiriwch am ddiweddariadau i'r set raffeg.
-STR_INTRO_TRANSLATION                                           :{BLACK}Mae'r cyfieithiad yma'n brin o {NUM} llinyn. Helpwch wella OpenTTD drwy ymaelodi fel cyfieithydd. Gweler readme.txt am fanylion.
 
 # Quit window
 STR_QUIT_CAPTION                                                :{WHITE}Gadael
-STR_QUIT_ARE_YOU_SURE_YOU_WANT_TO_EXIT_OPENTTD                  :{YELLOW}Ydych chi'n siŵr eich bod eisiau gadael OpenTTD?
 STR_QUIT_YES                                                    :{BLACK}Iawn
 STR_QUIT_NO                                                     :{BLACK}Na
 
@@ -2372,7 +2362,6 @@ STR_FACE_SIMPLE                                                 :{BLACK}Syml
 STR_FACE_SIMPLE_TOOLTIP                                         :{BLACK}Dewis wyneb syml
 STR_FACE_LOAD                                                   :{BLACK}Llwytho
 STR_FACE_LOAD_TOOLTIP                                           :{BLACK}Llwytho hoff wyneb
-STR_FACE_LOAD_DONE                                              :Llwythwyd eich hoff wyneb o'r ffeil ffurfweddu OpenTTD
 STR_FACE_FACECODE                                               :{BLACK}Cod gwyneb chwaraewr
 STR_FACE_FACECODE_TOOLTIP                                       :{BLACK}Gweld ac/neu osod cod gwyneb llywydd y cwmni
 STR_FACE_FACECODE_CAPTION                                       :{WHITE}Gweld ac/neu osod cod gwyneb llywydd
@@ -2380,7 +2369,6 @@ STR_FACE_FACECODE_SET                                           :Cafodd cod gwyn
 STR_FACE_FACECODE_ERR                                           :Methu gosod cod wyneb llywydd - rhaid iddo fod yn label a rhif dilys
 STR_FACE_SAVE                                                   :{BLACK}Cadw
 STR_FACE_SAVE_TOOLTIP                                           :{BLACK}Cadw hoff wyneb
-STR_FACE_SAVE_DONE                                              :Bydd yr wyneb hwn yn cael ei gadw fel eich ffefryn yn y ffeil ffurfweddu OpenTTD
 STR_FACE_SETTING_TOGGLE                                         :{STRING} {ORANGE}{STRING}
 STR_FACE_SETTING_NUMERIC                                        :{STRING} {ORANGE}{NUM} / {NUM}
 STR_FACE_YES                                                    :Ie
@@ -2695,8 +2683,6 @@ STR_CONTENT_UNSELECT_ALL_CAPTION                                :{BLACK}Dad-ddew
 STR_CONTENT_UNSELECT_ALL_CAPTION_TOOLTIP                        :{BLACK}Marcio'r holl gynnwys nad yw i'w lwytho i lawr
 STR_CONTENT_SEARCH_EXTERNAL                                     :{BLACK}Chwilio gwefannau allanol
 STR_CONTENT_SEARCH_EXTERNAL_TOOLTIP                             :{BLACK}Nid yw cynnwys chwilio ar gael ar wasannaeth cynnwys OpenTTD ar gyfer gwefannau nad ydynt yn gysylltiedig ag OpenTTD
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER_CAPTION                  :{WHITE}Rydych yn gadael OpenTTD!
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER                          :{WHITE}Mae'r termau ac amodau ar gyfer llawrlwytho cynnwys o wefannau allanolyn amrywio.{}Bydd yn rhaid i chi gyfeirio at y gwefannau allanol ar gyfer cyfarwyddiadau a sut i lwytho'r cynnwys yn OpenTTD.{}A ydych am barhau?
 STR_CONTENT_FILTER_TITLE                                        :{BLACK}Hidlydd enw/tag:
 STR_CONTENT_OPEN_URL                                            :{BLACK}Mynd i'r wefan
 STR_CONTENT_OPEN_URL_TOOLTIP                                    :{BLACK}Llwytho'r gwefan ar gyfer y cynnwys yma
@@ -2710,7 +2696,6 @@ STR_CONTENT_DETAIL_SUBTITLE_UNSELECTED                          :{SILVER}Ni ddew
 STR_CONTENT_DETAIL_SUBTITLE_SELECTED                            :{SILVER}Dewisoch chi hwn i'w lwytho i lawr
 STR_CONTENT_DETAIL_SUBTITLE_AUTOSELECTED                        :{SILVER}Cafodd y dibyniaeth hwn ei ddewis i'w lwytho i lawr
 STR_CONTENT_DETAIL_SUBTITLE_ALREADY_HERE                        :{SILVER}Mae hwn eisoes gennych
-STR_CONTENT_DETAIL_SUBTITLE_DOES_NOT_EXIST                      :{SILVER}Mae'r cynnwys yma'n anhysbys ac nid oes modd ei lawrlwytho yn OpenTTD
 
 STR_CONTENT_DETAIL_UPDATE                                       :{SILVER}Mae hwn yn disodli {STRING}
 STR_CONTENT_DETAIL_NAME                                         :{SILVER}Enw: {WHITE}{STRING}
@@ -2722,7 +2707,6 @@ STR_CONTENT_DETAIL_FILESIZE                                     :{SILVER}Maint L
 STR_CONTENT_DETAIL_SELECTED_BECAUSE_OF                          :{SILVER}Dewiswyd oherwydd: {WHITE}{STRING}
 STR_CONTENT_DETAIL_DEPENDENCIES                                 :{SILVER}Dibyniaethau: {WHITE}{STRING}
 STR_CONTENT_DETAIL_TAGS                                         :{SILVER}Tagiau: {WHITE}{STRING}
-STR_CONTENT_NO_ZLIB                                             :Adeiladwyd OpenTTD heb gefnogaeth "zlib"...
 STR_CONTENT_NO_ZLIB_SUB                                         :nid yw llwytho cynnwys i lawr yn bosibl!
 
 # Order of these is important!
@@ -2751,13 +2735,10 @@ STR_CONTENT_ERROR_COULD_NOT_DOWNLOAD_FILE_NOT_WRITABLE          :... dim modd ys
 STR_CONTENT_ERROR_COULD_NOT_EXTRACT                             :{WHITE}Doedd dim modd datgywasgu'r ffeil
 
 STR_MISSING_GRAPHICS_SET_CAPTION                                :{WHITE}Graffigau coll
-STR_MISSING_GRAPHICS_SET_MESSAGE                                :{BLACK}Mae OpenTTD angen graffigau i weithio ond ni ganfuwyd rhai. Ydych eisiau i OpenTTD lawrlwytho a gosod y graffigau yma?
 STR_MISSING_GRAPHICS_YES_DOWNLOAD                               :{BLACK}Ia, llawrlwytho'r graffigau
-STR_MISSING_GRAPHICS_NO_QUIT                                    :{BLACK}Na, gadael OpenTTD
 
 STR_MISSING_GRAPHICS_ERROR_TITLE                                :{WHITE}Methwyd lawrlwytho
 STR_MISSING_GRAPHICS_ERROR                                      :{BLACK}Methwyd lawrlwytho graffigau.{}Llawrlwythwch graffigau â llaw.
-STR_MISSING_GRAPHICS_ERROR_QUIT                                 :{BLACK}Gadael OpenTTD
 
 # Transparency settings window
 STR_TRANSPARENCY_CAPTION                                        :{WHITE}Dewisiadau Tryloywder
@@ -3293,9 +3274,7 @@ STR_LAI_OBJECT_DESCRIPTION_COMPANY_HEADQUARTERS                 :Pencadlys Cwmni
 STR_LAI_OBJECT_DESCRIPTION_COMPANY_OWNED_LAND                   :Tir cwmni
 
 # About OpenTTD window
-STR_ABOUT_OPENTTD                                               :{WHITE}Gwybodaeth am OpenTTD
 STR_ABOUT_ORIGINAL_COPYRIGHT                                    :{BLACK}Hawlfraint Wreiddiol {COPYRIGHT} 1995 Chris Sawyer, Holl cedwir pob hawl
-STR_ABOUT_VERSION                                               :{BLACK}fersiwn OpenTTD {REV}
 STR_ABOUT_COPYRIGHT_OPENTTD                                     :{BLACK}OpenTTD {COPYRIGHT}2002-{STRING} Y tîm OpenTTD
 
 # Framerate display window
@@ -3423,7 +3402,6 @@ STR_MAPGEN_QUANTITY_OF_RIVERS                                   :{BLACK}Afonydd:
 STR_MAPGEN_SMOOTHNESS                                           :{BLACK}Llyfnder:
 STR_MAPGEN_VARIETY                                              :{BLACK}Dosbarthiad amrywiaeth:
 STR_MAPGEN_GENERATE                                             :{WHITE}Cynhyrchu
-STR_MAPGEN_GENERATE_TOOLTIP                                     :{BLACK}Creu'r byd a dechrau OpenTTD!
 STR_MAPGEN_NEWGRF_SETTINGS                                      :{BLACK}Gosodiadau NewGRF
 STR_MAPGEN_NEWGRF_SETTINGS_TOOLTIP                              :{BLACK}Agor gosodiadau NewGRF
 STR_MAPGEN_AI_SETTINGS                                          :{BLACK}Gosodiadau AI
@@ -3478,7 +3456,6 @@ STR_MAPGEN_HEIGHTMAP_ROTATION                                   :{BLACK}Cylchdro
 STR_MAPGEN_HEIGHTMAP_NAME                                       :{BLACK}Enw'r Map Uchder
 STR_MAPGEN_HEIGHTMAP_NAME_TOOLTIP                               :{BLACK}Enw'r ffeil llun map uchder
 STR_MAPGEN_HEIGHTMAP_SIZE_LABEL                                 :{BLACK}Maint:
-STR_MAPGEN_HEIGHTMAP_SIZE_LABEL_TOOLTIP                         :{BLACK}Maint y llun ffynhonnell map uchder. Ar gyfer y canlyniadau gorau, dylai pob ymyl gyd-fynd â hyd ymyl map sydd ar gael yn OpenTTD, fel 256, 512, 1024 ayyb.
 STR_MAPGEN_HEIGHTMAP_SIZE                                       :{ORANGE}{NUM} x {NUM}
 
 STR_MAPGEN_TERRAIN_TYPE_QUERY_CAPT                              :{WHITE}Uchder brig a ddymunir
@@ -3669,7 +3646,6 @@ STR_NEWGRF_ERROR_INDPROD_CALLBACK                               :Wedi dychwelyd 
 
 # NewGRF related 'general' warnings
 STR_NEWGRF_POPUP_CAUTION_CAPTION                                :{WHITE}Rhybudd!
-STR_NEWGRF_CONFIRMATION_TEXT                                    :{YELLOW}Rydych ar fin gwneud newidiadau i gêm sy'n rhedeg. Gall hyn beri i OpenTTD chwalu, neu dorri stâd y gêm. Peidiwch a gyrru adroddiadau am y namau yma.{}Ydych chi'n hollol siŵr am hyn?
 
 STR_NEWGRF_DUPLICATE_GRFID                                      :{WHITE}Methu ychwanegu'r ffeil: ID GRF dyblyg
 STR_NEWGRF_COMPATIBLE_LOADED                                    :{ORANGE}Ni ddarganfuwyd ffeil sy'n cydweddu (GRF cydnaws wedi'i lwytho)
@@ -3678,7 +3654,6 @@ STR_NEWGRF_TOO_MANY_NEWGRFS                                     :{WHITE}Methu yc
 STR_NEWGRF_COMPATIBLE_LOAD_WARNING                              :{WHITE}Llwythwyd GRF(au) cydnaws yn lle'r rhai coll
 STR_NEWGRF_DISABLED_WARNING                                     :{WHITE}Analluogwyd y ffeiliau GRF coll
 STR_NEWGRF_UNPAUSE_WARNING_TITLE                                :{YELLOW}Ffeil(iau) NewGRF coll
-STR_NEWGRF_UNPAUSE_WARNING                                      :{WHITE}Gall dadseibio beri i OpenTTD grasio. Peidiwch ag anfon adroddiadau am fygiau ar gyfer crasiau pellach.{}Ydych chi wir eisiau dadseibio?
 
 # NewGRF status
 STR_NEWGRF_LIST_NONE                                            :Dim
@@ -5013,7 +4988,6 @@ STR_TEXTFILE_README_CAPTION                                     :{WHITE}Dogfenyd
 STR_TEXTFILE_CHANGELOG_CAPTION                                  :{WHITE}Log newidiadau {STRING} {STRING}
 STR_TEXTFILE_LICENCE_CAPTION                                    :{WHITE}Trwydded {STRING} {STRING}
 STR_TEXTFILE_SURVEY_RESULT_CAPTION                              :{WHITE}Rhagolwg o ganlyniad yr arolwg
-STR_TEXTFILE_GAME_MANUAL_CAPTION                                :{WHITE}Dogfen OpenTTD '{STRING}'
 
 
 # Vehicle loading indicators

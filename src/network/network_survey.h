@@ -36,12 +36,13 @@ public:
 	std::string CreatePayload(Reason reason, bool for_preview = false);
 
 	/**
-	 * Check whether a survey is possible.
-	 * @return \c true.
+	 * Check whether a survey is possible. Wira Bandar sends none: OpenTTD's survey is for OpenTTD's own
+	 * builds, and goes to OpenTTD's servers.
+	 * @return \c false.
 	 */
 	static constexpr bool IsSurveyPossible()
 	{
-		return true;
+		return false;
 	}
 
 private:

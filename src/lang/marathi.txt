@@ -335,7 +335,6 @@ STR_TOOLBAR_TOOLTIP_SHOW_LAST_MESSAGE_NEWS                      :{BLACK}शे�
 STR_TOOLBAR_TOOLTIP_SWITCH_TOOLBAR                              :{BLACK}साधनपट्टी बदला
 
 # Extra tooltips for the scenario editor toolbar
-STR_SCENEDIT_TOOLBAR_OPENTTD                                    :{YELLOW}ओपेन टीटीडी
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_BACKWARD_TOOLTIP    :{BLACK}सुरुवातीची तारीख एक वर्ष मागे न्या
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_FORWARD_TOOLTIP     :{BLACK}सुरुवातीची तारीख एक वर्ष पुढे न्या
 STR_SCENEDIT_TOOLBAR_SET_DATE_TOOLTIP                           :{BLACK}सुरुवातीचं वर्ष पुरवण्यासाठी क्लिक करा
@@ -433,7 +432,6 @@ STR_NEWS_MENU_MESSAGE_HISTORY_MENU                              :निरोप
 # About menu
 STR_ABOUT_MENU_LAND_BLOCK_INFO                                  :जागाची माहिती
 STR_ABOUT_MENU_SCREENSHOT                                       :द्श्य
-STR_ABOUT_MENU_ABOUT_OPENTTD                                    :ओपेन टीटीडी बद्दल
 
 ###length 31
 STR_DAY_NUMBER_1ST                                              :१
@@ -1295,7 +1293,6 @@ STR_LAI_WATER_DESCRIPTION_RIVER                                 :नदी
 
 
 # About OpenTTD window
-STR_ABOUT_OPENTTD                                               :{WHITE}ओपेन टीटीडी बद्दल
 
 # Framerate display window
 

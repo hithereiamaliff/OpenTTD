@@ -1,8 +1,8 @@
-name: Windows build (city)
+name: Windows build (Wira Bandar)
 
-# Builds a 64-bit Windows zip of this fork on every push to the 'city' branch,
-# keeps it as a workflow artifact, and publishes it as the rolling
-# "city-latest" pre-release so there is always one download link.
+# Builds a 64-bit Windows zip of Wira Bandar PC on every push to the 'city' branch,
+# keeps it as a workflow artifact, and publishes it as the rolling "latest"
+# pre-release so there is always one download link.
 #
 # Libraries come from vcpkg; the compiled packages are kept in the Actions
 # cache (no packages are published anywhere). The build is not code-signed,
@@ -98,31 +98,34 @@ jobs:
         cd build
         cpack
         rm -f bundles/*.sha256
-        mv bundles/openttd-*-windows-*.zip bundles/openttd-city-windows-x64.zip
+        mv bundles/wirabandar-*-windows-*.zip bundles/wirabandar-windows-x64.zip
         ls -la bundles
 
     - name: Store zip
       uses: actions/upload-artifact@v7
       with:
-        name: openttd-city-windows-x64
-        path: build/bundles/openttd-city-windows-x64.zip
+        name: wirabandar-windows-x64
+        path: build/bundles/wirabandar-windows-x64.zip
         retention-days: 30
 
-    - name: Publish as the city-latest pre-release
+    - name: Publish as the latest pre-release
       if: github.ref == 'refs/heads/city'
       shell: bash
       env:
         GH_TOKEN: ${{ github.token }}
       run: |
         gh release delete city-latest --cleanup-tag --yes || true
-        gh release create city-latest build/bundles/openttd-city-windows-x64.zip \
+        gh release delete latest --cleanup-tag --yes || true
+        gh release create latest build/bundles/wirabandar-windows-x64.zip \
           --prerelease \
           --target "${GITHUB_SHA}" \
-          --title "Latest Windows build (city branch)" \
-          --notes "Built from ${GITHUB_SHA} on the city branch.
+          --title "Wira Bandar PC: latest Windows build" \
+          --notes "Built from ${GITHUB_SHA}.
 
         How to play:
-        1. Unzip anywhere (for example your Desktop) and run openttd.exe.
+        1. Unzip anywhere (for example your Desktop) and run wirabandar.exe.
            The build isn't code-signed, so Windows may say it protected your PC: choose More info, then Run anyway.
-        2. It uses the same Documents\\OpenTTD folder as your normal OpenTTD, so it finds your saves, graphics and NewGRFs.
-        3. It loads your .sav files and saves as .csav. Your .sav files are never overwritten, and normal OpenTTD can't open .csav files."
+        2. It keeps its settings and saves in Documents\\Wira Bandar. The first time it starts it copies them from Documents\\OpenTTD (nothing there is moved or deleted), and it still finds the graphics, NewGRFs and AIs installed there.
+        3. It loads .sav files and saves as .csav. Your .sav files are never overwritten, and normal OpenTTD can't open .csav files.
+
+        Wira Bandar PC is a fork of OpenTTD (OpenTTD's code with changes, not a game made from scratch) and, like OpenTTD, free software under the GNU GPL version 2; the source code is this repository."

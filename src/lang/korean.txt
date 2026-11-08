@@ -413,12 +413,10 @@ STR_TOOLBAR_TOOLTIP_BUILD_AIRPORTS                              :{BLACK}항공 �
 STR_TOOLBAR_TOOLTIP_LANDSCAPING                                 :{BLACK}지형 편집 메뉴, 나무 메뉴 또는 팻말 놓기 창을 엽니다
 STR_TOOLBAR_TOOLTIP_SHOW_SOUND_MUSIC_WINDOW                     :{BLACK}효과음/배경 음악 창을 엽니다
 STR_TOOLBAR_TOOLTIP_SHOW_LAST_MESSAGE_NEWS                      :{BLACK}최근 메시지/뉴스 기록을 열거나, 모든 메시지를 삭제합니다
-STR_TOOLBAR_TOOLTIP_LAND_BLOCK_INFORMATION                      :{BLACK}지역 정보, 스크린샷 메뉴, OpenTTD에 대한 정보, 개발자 도구 등을 엽니다
 STR_TOOLBAR_TOOLTIP_SWITCH_TOOLBAR                              :{BLACK}툴바를 변경합니다.
 
 # Extra tooltips for the scenario editor toolbar
 STR_SCENEDIT_TOOLBAR_SAVE_SCENARIO_LOAD_SCENARIO_TOOLTIP        :{BLACK}시나리오를 저장하거나, 불러오거나, 시나리오 에디터를 종료하거나, 게임을 종료합니다
-STR_SCENEDIT_TOOLBAR_OPENTTD                                    :{YELLOW}OpenTTD
 STR_SCENEDIT_TOOLBAR_SCENARIO_EDITOR                            :{YELLOW}시나리오 에디터
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_BACKWARD_TOOLTIP    :{BLACK}시작 일시를 1년 앞당깁니다.
 STR_SCENEDIT_TOOLBAR_MOVE_THE_STARTING_DATE_FORWARD_TOOLTIP     :{BLACK}시작 일시를 1년 늦춥니다.
@@ -544,7 +542,6 @@ STR_ABOUT_MENU_TOGGLE_CONSOLE                                   :콘솔 켜기/�
 STR_ABOUT_MENU_AI_DEBUG                                         :인공지능/게임 스크립트 디버그
 STR_ABOUT_MENU_SCREENSHOT                                       :스크린샷 찍기
 STR_ABOUT_MENU_SHOW_FRAMERATE                                   :프레임레이트 보기
-STR_ABOUT_MENU_ABOUT_OPENTTD                                    :'OpenTTD'에 대해서
 STR_ABOUT_MENU_SPRITE_ALIGNER                                   :스프라이트 정렬 도구
 STR_ABOUT_MENU_TOGGLE_BOUNDING_BOXES                            :박스 경계선 보기 전환
 STR_ABOUT_MENU_TOGGLE_DIRTY_BLOCKS                              :시각적 업데이트 블록 표시 전환
@@ -1072,7 +1069,6 @@ STR_GAME_OPTIONS_LANGUAGE_TOOLTIP                               :사용할 언�
 STR_GAME_OPTIONS_LANGUAGE_PERCENTAGE                            :{STRING} ({NUM}% 번역됨)
 
 STR_GAME_OPTIONS_FULLSCREEN                                     :전체화면
-STR_GAME_OPTIONS_FULLSCREEN_TOOLTIP                             :OpenTTD를 전체화면으로 플레이하려면 이 설정을 켜세요
 
 STR_GAME_OPTIONS_RESOLUTION                                     :화면 해상도
 STR_GAME_OPTIONS_RESOLUTION_TOOLTIP                             :사용할 화면 해상도를 선택하세요
@@ -1080,7 +1076,6 @@ STR_GAME_OPTIONS_RESOLUTION_OTHER                               :기타
 STR_GAME_OPTIONS_RESOLUTION_ITEM                                :{NUM}x{NUM}
 
 STR_GAME_OPTIONS_VIDEO_ACCELERATION                             :하드웨어 가속
-STR_GAME_OPTIONS_VIDEO_ACCELERATION_TOOLTIP                     :OpenTTD가 하드웨어 가속을 사용하게 하려면 이 설정을 켜세요. 변경한 설정은 게임을 재시작한 뒤에 적용됩니다
 STR_GAME_OPTIONS_VIDEO_ACCELERATION_RESTART                     :{WHITE}이 설정은 게임을 재시작한 뒤에 적용될 것입니다
 
 STR_GAME_OPTIONS_VIDEO_VSYNC                                    :수직 동기화
@@ -2257,8 +2252,6 @@ STR_VIDEO_DRIVER_ERROR_NO_HARDWARE_ACCELERATION                 :호환되는 GP
 STR_VIDEO_DRIVER_ERROR_HARDWARE_ACCELERATION_CRASH              :GPU 드라이버가 게임을 종료시켰습니다. 하드웨어 가속이 비활성화됩니다
 
 # Intro window
-STR_INTRO_CAPTION                                               :{WHITE}OpenTTD
-STR_INTRO_VERSION                                               :OpenTTD {REV}
 
 STR_INTRO_NEW_GAME                                              :{BLACK}새 게임
 STR_INTRO_LOAD_GAME                                             :{BLACK}불러오기
@@ -2289,14 +2282,11 @@ STR_INTRO_TOOLTIP_GAME_OPTIONS                                  :{BLACK}게임 �
 STR_INTRO_TOOLTIP_HIGHSCORE                                     :{BLACK}고득점 순위표를 엽니다
 STR_INTRO_TOOLTIP_HELP                                          :{BLACK}각종 문서와 온라인 링크를 확인합니다
 STR_INTRO_TOOLTIP_ONLINE_CONTENT                                :{BLACK}새로 나왔거나 업데이트된 콘텐츠를 체크하여 다운로드합니다
-STR_INTRO_TOOLTIP_QUIT                                          :{BLACK}'OpenTTD'를 종료합니다.
 
 STR_INTRO_BASESET                                               :{BLACK}현재 선택된 기본 그래픽 세트에는 {NUM}개의 스프라이트가 빠져있습니다. 기본 세트를 업데이트하세요.
-STR_INTRO_TRANSLATION                                           :{BLACK}이 버전의 OpenTTD는 {NUM}개의 문장이 한국어로 번역되지 않았습니다. OpenTTD가 더욱 발전할 수 있도록 번역에 참여하세요. 자세한 사항은 readme.txt를 참고하세요.
 
 # Quit window
 STR_QUIT_CAPTION                                                :{WHITE}종료
-STR_QUIT_ARE_YOU_SURE_YOU_WANT_TO_EXIT_OPENTTD                  :{YELLOW}정말 게임을 종료하시겠습니까?
 STR_QUIT_YES                                                    :{BLACK}예
 STR_QUIT_NO                                                     :{BLACK}아니요
 
@@ -2391,7 +2381,6 @@ STR_FACE_SIMPLE                                                 :{BLACK}간단
 STR_FACE_SIMPLE_TOOLTIP                                         :{BLACK}간편 얼굴 선택 모드로 전환
 STR_FACE_LOAD                                                   :{BLACK}불러오기
 STR_FACE_LOAD_TOOLTIP                                           :{BLACK}즐겨찾는 얼굴 불러오기
-STR_FACE_LOAD_DONE                                              :즐겨찾는 얼굴을 OpenTTD 설정 파일로부터 불러왔습니다
 STR_FACE_FACECODE                                               :{BLACK}플레이어 얼굴 코드
 STR_FACE_FACECODE_TOOLTIP                                       :{BLACK}플레이어 얼굴 코드 보기/설정
 STR_FACE_FACECODE_CAPTION                                       :{WHITE}플레이어 얼굴 코드 보기/설정
@@ -2399,7 +2388,6 @@ STR_FACE_FACECODE_SET                                           :새 회사 소�
 STR_FACE_FACECODE_ERR                                           :플레이어 얼굴 코드를 설정할 수 없습니다 - 올바른 값을 입력해야 합니다
 STR_FACE_SAVE                                                   :{BLACK}저장
 STR_FACE_SAVE_TOOLTIP                                           :{BLACK}즐겨찾는 얼굴로 저장
-STR_FACE_SAVE_DONE                                              :이 얼굴이 OpenTTD 설정 파일에 즐겨찾는 얼굴로 저장됩니다
 STR_FACE_SETTING_TOGGLE                                         :{STRING} {ORANGE}{STRING}
 STR_FACE_SETTING_NUMERIC                                        :{STRING} {ORANGE}{NUM} / {NUM}
 STR_FACE_YES                                                    :예
@@ -2714,8 +2702,6 @@ STR_CONTENT_UNSELECT_ALL_CAPTION                                :{BLACK}모두 �
 STR_CONTENT_UNSELECT_ALL_CAPTION_TOOLTIP                        :{BLACK}모든 콘텐츠의 선택을 해제합니다.
 STR_CONTENT_SEARCH_EXTERNAL                                     :{BLACK}외부 사이트에서 검색
 STR_CONTENT_SEARCH_EXTERNAL_TOOLTIP                             :{BLACK}OpenTTD의 온라인 콘텐츠 서비스에서 다운로드할 수 없는 콘텐츠를 OpenTTD와 관련이 없는 외부 사이트에서 검색합니다
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER_CAPTION                  :{WHITE}OpenTTD를 종료하는 중입니다!
-STR_CONTENT_SEARCH_EXTERNAL_DISCLAIMER                          :{WHITE}외부 웹사이트에서 콘텐츠를 다운로드할 때에는 그에 대한 약관과 조건이 다양합니다.{}이 콘텐츠를 OpenTTD에 설치하는 방법은 외부 사이트에서 찾아보아야 합니다.{}계속하시겠습니까?
 STR_CONTENT_FILTER_TITLE                                        :{BLACK}태그/이름 검색:
 STR_CONTENT_OPEN_URL                                            :{BLACK}웹 사이트
 STR_CONTENT_OPEN_URL_TOOLTIP                                    :{BLACK}이 컨텐츠의 웹 사이트를 방문합니다
@@ -2729,7 +2715,6 @@ STR_CONTENT_DETAIL_SUBTITLE_UNSELECTED                          :{SILVER}이 콘
 STR_CONTENT_DETAIL_SUBTITLE_SELECTED                            :{SILVER}이 콘텐츠를 다운로드하기 위해 선택하였습니다
 STR_CONTENT_DETAIL_SUBTITLE_AUTOSELECTED                        :{SILVER}이 콘텐츠는 다른 콘텐츠에서 필요하므로 자동 선택되었습니다
 STR_CONTENT_DETAIL_SUBTITLE_ALREADY_HERE                        :{SILVER}이미 가지고 있는 콘텐츠입니다
-STR_CONTENT_DETAIL_SUBTITLE_DOES_NOT_EXIST                      :{SILVER}이 콘텐츠는 알려지지 않은 콘텐츠이고 OpenTTD 게임 상에서 받을 수 없는 것입니다
 
 STR_CONTENT_DETAIL_UPDATE                                       :{SILVER}이 콘텐츠는 기존에 존재하던 {STRING}{G 0 "을" "를"} 업데이트합니다
 STR_CONTENT_DETAIL_NAME                                         :{SILVER}이름: {WHITE}{STRING}
@@ -2741,7 +2726,6 @@ STR_CONTENT_DETAIL_FILESIZE                                     :{SILVER}파일 
 STR_CONTENT_DETAIL_SELECTED_BECAUSE_OF                          :{WHITE}{STRING}{SILVER} 때문에 선택됨
 STR_CONTENT_DETAIL_DEPENDENCIES                                 :{SILVER}필요한 요소: {WHITE}{STRING}
 STR_CONTENT_DETAIL_TAGS                                         :{SILVER}태그: {WHITE}{STRING}
-STR_CONTENT_NO_ZLIB                                             :OpenTTD가 "zlib" 지원 기능이 없는 상태에서 빌드되었습니다...
 STR_CONTENT_NO_ZLIB_SUB                                         :콘텐츠를 다운로드할 수 없습니다!
 
 # Order of these is important!
@@ -2770,13 +2754,10 @@ STR_CONTENT_ERROR_COULD_NOT_DOWNLOAD_FILE_NOT_WRITABLE          :파일 쓰기�
 STR_CONTENT_ERROR_COULD_NOT_EXTRACT                             :다운로드한 파일의 압축을 풀 수 없습니다
 
 STR_MISSING_GRAPHICS_SET_CAPTION                                :{WHITE}그래픽이 없습니다
-STR_MISSING_GRAPHICS_SET_MESSAGE                                :{BLACK}OpenTTD를 실행시키기 위해서는 그래픽 파일이 필요하지만 컴퓨터에서 그래픽 파일을 찾을 수 없습니다. OpenTTD를 실행시키기 위해 그래픽을 다운로드 받아서 설치하시겠습니까?
 STR_MISSING_GRAPHICS_YES_DOWNLOAD                               :{BLACK}예, 그래픽을 다운로드 받습니다
-STR_MISSING_GRAPHICS_NO_QUIT                                    :{BLACK}아니요, OpenTTD를 종료합니다
 
 STR_MISSING_GRAPHICS_ERROR_TITLE                                :{WHITE}다운로드 실패
 STR_MISSING_GRAPHICS_ERROR                                      :{BLACK}그래픽을 다운로드하는 데 실패했습니다.{}수동으로 그래픽을 다운로드하세요.
-STR_MISSING_GRAPHICS_ERROR_QUIT                                 :{BLACK}OpenTTD 종료
 
 # Transparency settings window
 STR_TRANSPARENCY_CAPTION                                        :{WHITE}투명 설정
@@ -3320,9 +3301,7 @@ STR_LAI_OBJECT_DESCRIPTION_COMPANY_HEADQUARTERS                 :회사 본사
 STR_LAI_OBJECT_DESCRIPTION_COMPANY_OWNED_LAND                   :회사 소유지
 
 # About OpenTTD window
-STR_ABOUT_OPENTTD                                               :{WHITE}OpenTTD에 대해서
 STR_ABOUT_ORIGINAL_COPYRIGHT                                    :{BLACK}Original copyright {COPYRIGHT} 1995 Chris Sawyer, All rights reserved
-STR_ABOUT_VERSION                                               :{BLACK}OpenTTD {REV} 버전
 STR_ABOUT_COPYRIGHT_OPENTTD                                     :{BLACK}OpenTTD {COPYRIGHT} 2002-{STRING} OpenTTD 개발팀
 
 # Framerate display window
@@ -3453,7 +3432,6 @@ STR_MAPGEN_QUANTITY_OF_RIVERS                                   :{BLACK}강:
 STR_MAPGEN_SMOOTHNESS                                           :{BLACK}지표면을 깎는 방식:
 STR_MAPGEN_VARIETY                                              :{BLACK}산세 험준도:
 STR_MAPGEN_GENERATE                                             :{WHITE}만들기
-STR_MAPGEN_GENERATE_TOOLTIP                                     :{BLACK}세계를 만들고 OpenTTD를 플레이해보세요!
 STR_MAPGEN_NEWGRF_SETTINGS                                      :{BLACK}NewGRF 설정
 STR_MAPGEN_NEWGRF_SETTINGS_TOOLTIP                              :{BLACK}NewGRF 설정 창을 엽니다
 STR_MAPGEN_AI_SETTINGS                                          :{BLACK}인공지능 설정
@@ -3508,7 +3486,6 @@ STR_MAPGEN_HEIGHTMAP_ROTATION                                   :{BLACK}높이�
 STR_MAPGEN_HEIGHTMAP_NAME                                       :{BLACK}높이맵 이름:
 STR_MAPGEN_HEIGHTMAP_NAME_TOOLTIP                               :{BLACK}높이맵 이미지 파일의 이름입니다
 STR_MAPGEN_HEIGHTMAP_SIZE_LABEL                                 :{BLACK}크기:
-STR_MAPGEN_HEIGHTMAP_SIZE_LABEL_TOOLTIP                         :{BLACK}원본 높이맵 이미지의 크기입니다. 최상의 조건을 위해서는, 이미지의 가로/세로 크기를 OpenTTD의 지도 크기와 같은 256, 512, 1024 등으로 맞추는 것이 좋습니다.
 STR_MAPGEN_HEIGHTMAP_SIZE                                       :{ORANGE}{NUM} x {NUM}
 
 STR_MAPGEN_TERRAIN_TYPE_QUERY_CAPT                              :{WHITE}목표 정상 높이
@@ -3699,7 +3676,6 @@ STR_NEWGRF_ERROR_INDPROD_CALLBACK                               :유효하지 �
 
 # NewGRF related 'general' warnings
 STR_NEWGRF_POPUP_CAUTION_CAPTION                                :{WHITE}경고!
-STR_NEWGRF_CONFIRMATION_TEXT                                    :{YELLOW}게임 진행중에 설정을 변경하면 게임이 충돌할 수도 있습니다.{}정말로 설정을 변경하시겠습니까?
 
 STR_NEWGRF_DUPLICATE_GRFID                                      :파일을 추가할 수 없습니다 - 중복된 NewGRF 아이디
 STR_NEWGRF_COMPATIBLE_LOADED                                    :{ORANGE}해당 파일을 찾을 수 없습니다. (대체 NewGRF를 불러옵니다)
@@ -3708,7 +3684,6 @@ STR_NEWGRF_TOO_MANY_NEWGRFS                                     :파일을 추�
 STR_NEWGRF_COMPATIBLE_LOAD_WARNING                              :대체할 수 있는 NewGRF를 불러왔습니다
 STR_NEWGRF_DISABLED_WARNING                                     :없는 NewGRF 파일은 비활성화됩니다
 STR_NEWGRF_UNPAUSE_WARNING_TITLE                                :{YELLOW}NewGRF 파일 없음
-STR_NEWGRF_UNPAUSE_WARNING                                      :{WHITE}일시 정지 해제 시 오류가 발생하거나 게임이 종료될 수 있으며, 이와 관련된 버그 리포트는 접수받지 않습니다.{}정말로 일시 정지를 해제하시겠습니까?
 
 # NewGRF status
 STR_NEWGRF_LIST_NONE                                            :없음
@@ -5048,7 +5023,6 @@ STR_TEXTFILE_README_CAPTION                                     :{WHITE}{STRING}
 STR_TEXTFILE_CHANGELOG_CAPTION                                  :{WHITE}{STRING} {STRING}의 변경기록
 STR_TEXTFILE_LICENCE_CAPTION                                    :{WHITE}{STRING} {STRING}의 저작권
 STR_TEXTFILE_SURVEY_RESULT_CAPTION                              :{WHITE}설문조사 결과 미리보기
-STR_TEXTFILE_GAME_MANUAL_CAPTION                                :{WHITE}OpenTTD '{STRING}' 문서
 
 
 # Vehicle loading indicators
