@@ -126,6 +126,7 @@ enum class Searchpath : uint8_t {
 	AutodownloadPersonalDirXdg, ///< Search within the autodownload directory located in the personal directory (XDG variant).
 	OpenTTDDir, ///< City fork: OpenTTD's own personal directory (Documents\OpenTTD), searched last for graphics, NewGRFs, AIs and scenarios.
 	OpenTTDAutodownloadDir, ///< City fork: the autodownload directory in OpenTTD's own personal directory.
+	OpenTTDInstallDir, ///< City fork: OpenTTD's install folder (C:\Program Files\OpenTTD), where players put NewGRFs too; searched last.
 	End, ///< End marker.
 };
 

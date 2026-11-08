@@ -2446,7 +2446,11 @@ made from scratch.
   `save` folder; it moves and deletes nothing, and keeps what is already
   there. OpenTTD's folder and its `content_download` stay search paths
   (searched last), so the graphics, NewGRFs, AIs, game scripts and scenarios
-  installed for OpenTTD are still found. Unit test `CopyOpenTTDFolder`.
+  installed for OpenTTD are still found; so does OpenTTD's install folder
+  (`C:\Program Files\OpenTTD`), where players put NewGRFs too: on the owner's
+  first start, 30 of their NewGRFs were there and showed as missing until this
+  was added. Unit test `CopyOpenTTDFolder`; the new search places were checked
+  on Linux by pointing them at a test folder (a NewGRF and a packed one found).
 - OpenTTD's opt-in survey is off: it went to OpenTTD's servers, and is for
   OpenTTD's own builds.
 - Internals keep their names (source files, `openttd.cfg`, the `.csav`

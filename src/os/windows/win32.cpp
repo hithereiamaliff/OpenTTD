@@ -280,6 +280,16 @@ void DetermineBasePaths(std::string_view exe)
 		_searchpaths[Searchpath::PersonalDir].clear();
 	}
 
+	/* OpenTTD's install folder (C:\Program Files\OpenTTD): players put NewGRFs in its newgrf folder too. Wira Bandar's
+	 * own folders are searched first, so its own graphics and language files win. */
+	if (std::string_view{PERSONAL_DIR} != "OpenTTD" && SUCCEEDED(SHGetFolderPath(nullptr, CSIDL_PROGRAM_FILES, nullptr, SHGFP_TYPE_CURRENT, path))) {
+		std::string openttd(FS2OTTD(path));
+		AppendPathSeparator(openttd);
+		openttd += "OpenTTD";
+		AppendPathSeparator(openttd);
+		_searchpaths[Searchpath::OpenTTDInstallDir] = openttd;
+	}
+
 	if (SUCCEEDED(SHGetFolderPath(nullptr, CSIDL_COMMON_DOCUMENTS, nullptr, SHGFP_TYPE_CURRENT, path))) {
 		std::string tmp(FS2OTTD(path));
 		AppendPathSeparator(tmp);

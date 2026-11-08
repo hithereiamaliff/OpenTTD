@@ -12,7 +12,8 @@ in [docs/city-builder-plan.md](docs/city-builder-plan.md).
   https://github.com/hithereiamaliff/wirabandar/releases/download/latest/wirabandar-windows-x64.zip
 - It keeps its settings and saves in `Documents\Wira Bandar`. The first time it starts, it copies the
   settings and saves from `Documents\OpenTTD` (copies; nothing there is moved or deleted), and it still
-  finds the graphics, NewGRFs and AIs installed for OpenTTD.
+  finds the graphics, NewGRFs and AIs installed for OpenTTD, in `Documents\OpenTTD` and in OpenTTD's own
+  folder (`C:\Program Files\OpenTTD`).
 - It loads OpenTTD's `.sav` files and saves its own games as `.csav`, which OpenTTD can't open.
 
 Like OpenTTD, Wira Bandar is free software under the GNU General Public License version 2 (see

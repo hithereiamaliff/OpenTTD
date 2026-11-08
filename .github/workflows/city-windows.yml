@@ -125,7 +125,7 @@ jobs:
         How to play:
         1. Unzip anywhere (for example your Desktop) and run wirabandar.exe.
            The build isn't code-signed, so Windows may say it protected your PC: choose More info, then Run anyway.
-        2. It keeps its settings and saves in Documents\\Wira Bandar. The first time it starts it copies them from Documents\\OpenTTD (nothing there is moved or deleted), and it still finds the graphics, NewGRFs and AIs installed there.
+        2. It keeps its settings and saves in Documents\\Wira Bandar. The first time it starts it copies them from Documents\\OpenTTD (nothing there is moved or deleted), and it still finds the graphics, NewGRFs and AIs installed for OpenTTD, there and in C:\\Program Files\\OpenTTD.
         3. It loads .sav files and saves as .csav. Your .sav files are never overwritten, and normal OpenTTD can't open .csav files.
 
         Wira Bandar PC is a fork of OpenTTD (OpenTTD's code with changes, not a game made from scratch) and, like OpenTTD, free software under the GNU GPL version 2; the source code is this repository."
