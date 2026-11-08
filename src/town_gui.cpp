@@ -441,7 +441,11 @@ public:
 			Dimension d = GetSpriteSize(icon);
 			DrawSprite(icon, PAL_NONE, x, tr.top + (row_height - static_cast<int>(d.height)) / 2);
 			x += d.width + WidgetDimensions::scaled.hsep_normal;
-			x = DrawString(x, tr.right, text_top, GetString(STR_TOWN_VIEW_SERVICE_PERCENT, this->town->service_coverage.percent[s])) + WidgetDimensions::scaled.hsep_wide;
+			/* Measure the text rather than use what DrawString returns: that is 0 when the text lies outside the part of the
+			 * window being redrawn, which would start the next icon over the first ones. */
+			const std::string text = GetString(STR_TOWN_VIEW_SERVICE_PERCENT, this->town->service_coverage.percent[s]);
+			DrawString(x, tr.right, text_top, text);
+			x += GetStringBoundingBox(text).width + WidgetDimensions::scaled.hsep_wide;
 		}
 		tr.top += row_height;
 

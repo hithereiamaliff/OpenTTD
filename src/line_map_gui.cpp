@@ -335,7 +335,12 @@ struct LineMapWindow : Window {
 			}
 
 			/* The name, then the lines to change to. */
-			int name_end = DrawString(text.left, text.right, name_top, GetString(STR_LINE_MAP_STOP, stop.station), TextColour::Black);
+			/* Measure the name rather than use what DrawString returns: that is 0 when the name lies outside the part of the
+			 * window being redrawn. */
+			const std::string name = GetString(STR_LINE_MAP_STOP, stop.station);
+			DrawString(text.left, text.right, name_top, name, TextColour::Black);
+			const int name_width = std::min<int>(GetStringBoundingBox(name).width, text.Width());
+			int name_end = rtl ? text.right - name_width + 1 : text.left + name_width - 1;
 			int x = rtl ? name_end - WidgetDimensions::scaled.hsep_wide : name_end + WidgetDimensions::scaled.hsep_wide;
 			uint shown = 0;
 			for (const OrderList *other : stop.transfers) {

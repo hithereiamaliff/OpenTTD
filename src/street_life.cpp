@@ -273,6 +273,23 @@ static StreetPoint GetEdgePoint(DiagDirection side, int32_t across)
 }
 
 /**
+ * Is a corner a step of a road built diagonally: does the road ahead (or behind) turn back the other way?
+ * @param tile The corner.
+ * @param in The direction the vehicle comes in moving.
+ * @param out The direction it leaves moving.
+ * @return True if the road runs on diagonally.
+ */
+static bool IsDiagonalStreet(TileIndex tile, DiagDirection in, DiagDirection out)
+{
+	const RoadBits step = DiagDirToRoadBits(in) | DiagDirToRoadBits(ReverseDiagDir(out));
+	for (TileIndex neighbour : {TileAddByDiagDir(tile, out), TileAddByDiagDir(tile, ReverseDiagDir(in))}) {
+		if (!IsValidTile(neighbour) || !IsTileType(neighbour, TileType::Road) || !IsNormalRoad(neighbour)) continue;
+		if (GetRoadBits(neighbour, RoadTramType::Road) == step) return true;
+	}
+	return false;
+}
+
+/**
  * Lay out the way of a vehicle through its tile, from the side it came in by to the side it leaves by.
  * @param v The vehicle.
  */
@@ -299,6 +316,10 @@ static void BuildStreetPath(StreetVehicle &v)
 		}
 		v.path = {start, a, b, end};
 		v.points = 4;
+	} else if (IsDiagonalStreet(v.tile, in, v.to)) {
+		/* A road built diagonally, as steps of corners: drive straight along the diagonal, as road sets draw it. */
+		v.path = {start, end, end, end};
+		v.points = 2;
 	} else {
 		/* Turn the corner, cutting it a little. */
 		StreetPoint corner = (DiagDirToAxis(in) == Axis::X) ? StreetPoint{end.x, start.y} : StreetPoint{start.x, end.y};
