@@ -2222,6 +2222,185 @@ co-fund the biggest town's next service at a set month; land value on):
   window with the council line; its council's Budget window, with Malay and
   with English names.
 
+## Done: M4 part 3, step 3: states, elections, federal territories and regions
+
+The owner asked for towns grouped like Malaysia's states (negeri), each with
+its own government in charge of the councils and with elections; one or two
+cities as federal territories (wilayah persekutuan); and a land across the
+sea, or behind a land border, run like Sabah and Sarawak: its own land laws
+and immigration, and no land reclamation (tambak tanah) toward its shores.
+The owner's calls: states made automatically, named after their capital,
+renamable; elections judged only on the service voters get, with made-up
+platforms.
+
+Background for the regions: under the Malaysia Agreement 1963, Sabah and
+Sarawak keep their own land laws (the Sabah Land Ordinance and the Sarawak
+Land Code, not the National Land Code of the peninsula), which recognise
+native customary rights over land natives have long used, and their own
+immigration control under the Immigration Act 1959/63: other Malaysians may
+visit, but need a pass to work there. Land reclamation is the kind of thing
+neighbours argue over (Malaysia and Singapore took theirs in the Johor Strait
+to the tribunal of the Law of the Sea in 2003).
+
+### States, federal territories and regions
+
+- Setting **States and elections** (Environment, Towns; on by default; needs
+  town councils). The states form in the first month, in new games and in
+  older saves alike.
+- Lands: the map is read in cells of 4 by 4 tiles. Land joined by land is one
+  land; the sea splits lands, and so does a neck of land at most 8 tiles wide
+  (16 on maps over 256 tiles, 24 over 1,024), where a land border runs. The
+  main land is the one with the most people.
+- The biggest city on the main land becomes a federal territory, Wilayah
+  Persekutuan Funnford (Federal Territory of Funnford), run by Dewan
+  Bandaraya Funnford (Funnford City Hall) with a city council's powers and a
+  federal grant of a tenth of its taxes into its services fund. Maps of 512
+  by 512 or more with 20 towns on the main land get a second one: the biggest
+  city a quarter of the map away from the first.
+- State capitals are the biggest towns, spread apart: about one for every six
+  towns, at most 13 on the main land and 3 in a region. Every other town joins
+  the nearest capital on its land; towns on small islands the nearest one
+  across the sea. A state is called Negeri Funnford (Funnford State) after its
+  capital; players can rename it (only the server in network games).
+- Another land with two towns or more, at least 1,024 tiles and a sixteenth of
+  the main land, is a region run like Sabah and Sarawak, with states of its
+  own.
+- The map of states covers all land: each cell goes to the state of the
+  nearest town along its land; a federal territory covers only its city and
+  the state around it the land beyond; land without towns goes to the nearest
+  state. Worked out when the states form, each January and when a town is
+  founded; saved, so every player in a network game has the same.
+
+### Governments and elections
+
+- Each state elects its assembly (Dewan Undangan Negeri) every five years: a
+  seat a town and one more for each 10,000 people; the platform with the most
+  seats governs. General elections in May elect parliament (every town's
+  seats) and the assemblies of the states on the main land; the federal
+  government, which also runs the federal territories, is the platform with
+  the most seats in parliament. Regions vote on their own, in September. The
+  first general election is in May of the year after the states form, the
+  regions' a year later; until then caretakers spend nothing on a platform.
+- Voters judge only what they get in their town: traffic jams (the share of
+  its roads that crawl), transit use (the share of commutes by transit),
+  passenger satisfaction, dirty air, city services lacking, run-down estates,
+  taxes, and in small towns how much they want to grow. Three made-up
+  platforms (no real parties):
+  - Transit First appeals to people who ride and like it, to drivers stuck in
+    traffic and to people breathing dirty air;
+  - Roads and Growth to people who drive, to drivers stuck in traffic, to
+    small towns and to people with high taxes;
+  - Homes and Services to people short of city services or living in run-down
+    estates, and to people with high taxes.
+- Each seat goes to the platform that appeals most, give or take a little
+  chance. A government whose voters rate their service better than at its
+  election gains up to 10 points in every seat; one that made it worse loses
+  them. Companies can't campaign or pay: only their service moves votes.
+- What a government does with its money (a tenth of its towns' taxes a year,
+  up to double with money beyond six months' grant in its treasury):
+  - Transit First: its towns' transit budgets get 10% of their taxes on top
+    (up to 20%), for more contracts, free lines and passes; towns are readier
+    to bring in a transit fund, a car-free centre, transit-oriented
+    development, parking limits and low-emission zones.
+  - Roads and Growth: towns grow 15% faster (up to 30%), land premiums are
+    halved, and each quarter new buildings are funded for three months in one
+    town in turn; towns are slower to limit cars.
+  - Homes and Services: the councils' services and estates funds get 10% of
+    their towns' taxes (up to 20%); estates are kept up to 95% instead of 85%;
+    towns build estates of flats half again as readily.
+
+### Money
+
+- States hold the land: a company pays a land premium for each tile of land
+  (grass, rough land, fields, trees, a house) it clears, builds on or
+  reshapes: 40% of the price of a piece of railway track on land worth 50, in
+  proportion to what the land is worth (a fifth of that on cheap land, up to
+  twice in a city centre); twice that in a region; half under Roads and
+  Growth.
+- The federal government gives each state a tenth of its towns' taxes a year.
+  Each January a state takes a third of what a council keeps beyond two years'
+  taxes: the reserves rich big cities piled up at the 70% tax floor (step 2).
+- A treasury keeps six months of the grant; money beyond it (land premiums,
+  levies, caretaker years) makes the platform stronger, up to double.
+
+### Regions run like Sabah and Sarawak
+
+- Their own land laws: land premiums twice as high; forest and farmland in a
+  town's area are native customary land, which the town gives up only to
+  companies it rates at least Mediocre. Cutting trees lowers the rating, so a
+  company can clear only so much before it has to win the town back.
+- Their own immigration: nobody commutes across a region's border (work there
+  needs a pass), and companies can't found towns there.
+- No land reclamation: no company may turn sea into land within 12 tiles of
+  the region's shores (on a narrow strait that reaches the other shore).
+  Bridges, docks and ships are fine.
+
+### Windows, map, names
+
+- Towns menu, **States**: the federal government, parliament if elected today
+  and the federal grants; the states and territories (colour, towns, people,
+  government and seats, next election); the selected one's capital,
+  government, policy and its strength, voters' concerns, assembly if elected
+  today, treasury and last year's money, land premium, and a region's laws.
+  Buttons: Rename, Go to capital, Map of states.
+- Town window: a line for its state and who governs it, its council as City
+  Hall in a federal territory, and a **State** button.
+- Map: a new view **States** (the button with the map icon): each state in its
+  colour, federal territories white, regions hatched, regions' waters dark
+  blue, borders black.
+- Setting **Council and state names** (was Council names): Malay (Negeri
+  Funnford, Wilayah Persekutuan Funnford, Dewan Bandaraya Funnford) or English
+  (Funnford State, Federal Territory of Funnford, Funnford City Hall).
+- News: the states formed, each region, each state's election, general
+  elections.
+- Script API: `ScriptTown.GetState`, `IsFederalTerritory`, `IsInRegion`,
+  `GetStateGovernment`, `GetStateTreasury`, `SetStateGovernment` (game
+  scripts, for scenarios); `ScriptTile.GetLandPremium`.
+- Saved in chunks STAT (states), SFED (federation), SMAP (map of states) and
+  TSTA (each town's state). Code: `state*.{h,cpp}`,
+  `saveload/state_sl.cpp`; hooks in `landscape.cpp` (premium, native land),
+  `water_cmd.cpp` (reclamation), `town_cmd.cpp` (founding, growth, house
+  choice), `commuting.cpp`, `transit_authority.cpp`, `town_budget.cpp`,
+  `council.cpp`, `smallmap_gui.cpp`, `town_gui.cpp`; sprite 299 (map icon).
+
+### Tests
+
+- Formation: on the usual 256 by 256 test map (2020), 3 states and a federal
+  territory; with 60% sea (seed 3), a main land of 8 towns (a state and the
+  federal territory of Great Brunthill), a region of 4 towns across the
+  strait (Negeri Dudingbury) and an island town that joined the main land's
+  state. Loading step 2's council save forms 3 states and Rudinghall as a
+  federal territory.
+- Land premiums (2020 prices): £34 a tile in Great Brunthill's centre (land
+  worth 58), £6 in the country (worth 10); a piece of track on grass cost £252
+  with a £12 premium; £80 in Dudingbury's centre (worth 67, in a region).
+- A company's land reclamation was refused next to Dudingbury and at Great
+  Brunthill across a narrow strait (within 12 tiles of the region). Native
+  customary land: after nine trees cut near Dudingbury, its rating of the
+  company fell to 185 and it refused more.
+- Platforms (a test game script puts one in power in every state from March
+  2020; mid-2023, one bus company):
+
+| Platform | People | Biggest town's transit budget | Estates |
+|---|---|---|---|
+| Caretaker | 55,487 | £37,851 | 85% |
+| Transit First | 55,544 | £53,901 | 85% |
+| Roads and Growth | 59,488 (+7%) | £34,799 | 85% |
+| Homes and Services | 56,288 (+1%) | £38,222 | 95% |
+
+- Voting: in seven-year games with one bus company serving one city (6% of
+  its commutes by transit), Roads and Growth and Homes and Services won every
+  seat; villages without services or transit split between them. By the
+  voters' sums, Transit First wins a congested city once about a fifth of its
+  commutes go by transit.
+- With town budgets (and so councils and states), commuting and the new
+  buildings off, the baseline runs give identical results; 99/99 unit tests;
+  all 47 test saves (with the new `city-states-demo.csav`: the 60% sea map in
+  November 2022) load, save and reload.
+- Screenshots: the map of states; the States window (the federal territory,
+  the region, English names); the federal territory's town window; the
+  refusal to reclaim land in a region's waters.
+
 ## Roadmap
 
 Sizes are rough: S = one session, M = a few, L = many, XL = a project in itself.
@@ -2230,14 +2409,15 @@ Sizes are rough: S = one session, M = a few, L = many, XL = a project in itself.
 |---|---|---|---|---|
 | M2 | Traffic realism | Done: give way, light settings, traffic map and overlay, amber, routing around jams. | — | |
 | M3 | Zoning | Done: zones, town growth follows them, homes/jobs line in the town window, zones in land info. | — | |
-| M4 | City services and happiness | Part 1 done: police, fire, clinic, school and park with coverage, happiness, growth, ratings and upkeep. Part 2 done: Malaysian and Singaporean town buildings, from kampungs and shophouses to HDB blocks, condominiums and towers, by year, zone, town size and land value. Part 3 step 1 done: hospital, university, stadium and hawker centre that serve a whole town and draw commuters and passengers. Step 2 done: supermarkets, shopping complexes, malls and hypermarkets; town councils (district, municipal, city) that collect licences, build services (companies can co-fund) and run estates as Singapore's town councils do, with a yearly report. Next: step 3, states with assemblies and elections, federal territories, regions across the sea run like Sabah and Sarawak. | L | The owner's calls: councils build, companies can too; states made automatically; elections judge service only. |
+| M4 | City services and happiness | Part 1 done: police, fire, clinic, school and park with coverage, happiness, growth, ratings and upkeep. Part 2 done: Malaysian and Singaporean town buildings, from kampungs and shophouses to HDB blocks, condominiums and towers, by year, zone, town size and land value. Part 3 step 1 done: hospital, university, stadium and hawker centre that serve a whole town and draw commuters and passengers. Step 2 done: supermarkets, shopping complexes, malls and hypermarkets; town councils (district, municipal, city) that collect licences, build services (companies can co-fund) and run estates as Singapore's town councils do, with a yearly report. Step 3 done: states around the biggest cities with assemblies and a parliament elected on the service voters get (Transit First, Roads and Growth, Homes and Services), federal territories run by City Halls, land premiums, and regions across the sea or a land border run like Sabah and Sarawak (own land laws and immigration, no reclamation in their waters). | — | The owner's calls: councils build, companies can too; states made automatically; elections judge service only. |
 | M5 | Town car traffic | Done: commuters drive between homes and jobs along real roads, in their town and up to four towns around, or take transit when it is quick enough; traffic follows their routes, also between towns; transit takes cars off them (see M5, commuting, and part 2). | — | |
 | M6 | City budget and ordinances | Done: towns collect taxes and spend them on transit, running the town and ordinances; they set their own tax rates and bring in ordinances (transit fund, parking limits, low-emission zone, car-free centre, tree planting, transit-oriented development); companies propose them. | — | The owner's call: towns decide, companies lobby. |
 | M7 | Land value and pollution | Done as transit part 14: traffic, diesel vehicles and industry pollute; parks, services and good stations raise land value; map views, tints and lines show both; towns build to fit. | — | |
 | M8 | Utilities | Power and water networks. | XL | Probably skip, or keep it light (arctic/tropic towns already need food/water). |
 
-Recommended order: M4 part 3 step 3 next (states, elections, federal
-territories, regions run like Sabah and Sarawak); M8 only if wanted.
+Recommended order: M4 is complete. Next is the owner's call: renaming the
+PC game to Wira Bandar (decided with the phone game), M8 only if wanted, or
+new ideas.
 
 ## Getting it onto the owner's computer (Windows)
 
@@ -2263,6 +2443,6 @@ Savegame locations (files end in `.sav`; autosaves are in `save/autosave`):
 ## Open questions for the owner
 
 1. Can you share one of your saves, so it can be tested before you play it?
-2. Which milestone next? Agreed: M4 part 3 step 3 (states, elections,
-   federal territories, regions across the sea).
+2. Which milestone next? Open: M4 part 3 is done (states were the last
+   step); the rename to Wira Bandar is ready to do.
 3. A name for the fork.

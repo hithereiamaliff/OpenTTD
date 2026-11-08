@@ -73,6 +73,7 @@
 #include "city_services.h"
 #include "environment.h"
 #include "council.h"
+#include "state.h"
 #include "town_budget.h"
 
 #include "table/strings.h"
@@ -130,6 +131,8 @@ Town::~Town()
 
 	/* Its commuters' cars leave the roads. */
 	OnTownCommutingRemoved(this);
+	/* Its state loses it; a capital passes to the next town. */
+	OnTownRemovedForStates(this);
 
 	/* Delete town authority window
 	 * and remove from list of sorted towns */
@@ -2150,6 +2153,9 @@ static void DoCreateTown(Town *t, TileIndex tile, uint32_t townnameparts, TownSi
 	UpdateTownGrowthRate(t);
 	UpdateTownMaxPass(t);
 	UpdateAirportsNoise();
+
+	/* A town founded once there are states joins one. */
+	OnTownCreatedForStates(t);
 }
 
 /**
@@ -2270,6 +2276,9 @@ std::tuple<CommandCost, Money, TownID> CmdFoundTown(DoCommandFlags flags, TileIn
 
 	if (!random_location) {
 		CommandCost ret = TownCanBePlacedHere(tile, false);
+		if (ret.Failed()) return { ret, 0, TownID::Invalid() };
+		/* A region controls who settles there. */
+		ret = CheckTownFoundingForStates(tile);
 		if (ret.Failed()) return { ret, 0, TownID::Invalid() };
 	}
 
@@ -2982,6 +2991,7 @@ static bool TryBuildTownHouse(Town *t, TileIndex tile, TownExpandModes modes)
 
 		/* Towns build what fits the value of the land. */
 		uint cur_prob = ScaleCityHouseProbability(hs, ScaleHouseProbabilityByLandValue(hs.probability, hs, tile));
+		cur_prob = ScaleStateHouseProbability(t, hs, cur_prob);
 		probability_max += cur_prob;
 		probs.emplace_back(hs.Index(), cur_prob);
 	}
@@ -3723,6 +3733,16 @@ static CommandCost TownActionBuildStatue(Town *t, DoCommandFlags flags)
 }
 
 /**
+ * A state funds new buildings in a town for three months (under Roads and Growth, see state.cpp).
+ * @param t The town.
+ */
+void FundTownBuildingsByState(Town *t)
+{
+	t->fund_buildings_months = 3;
+	UpdateTownGrowth(t);
+}
+
+/**
  * Perform the "fund new buildings" town action.
  * @param t The town to fund buildings in.
  * @param flags Type of operation.
@@ -4037,6 +4057,8 @@ static uint GetNormalGrowthRate(Town *t)
 	/* Polluted air makes them grow slower, and so do high taxes. */
 	m = m * (100 + GetTownPollutionGrowthPenalty(t)) / 100;
 	m = m * GetTownTaxGrowthPercent(t) / 100;
+	/* Under Roads and Growth towns grow faster. */
+	m = m * GetStateGrowthPercent(t) / 100;
 
 	return TownTicksToGameTicks(m / (t->cache.num_houses / 50 + 1));
 }

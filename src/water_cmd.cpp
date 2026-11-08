@@ -19,6 +19,7 @@
 #include "depot_base.h"
 #include "depot_func.h"
 #include "water.h"
+#include "state.h"
 #include "industry_map.h"
 #include "newgrf_canal.h"
 #include "strings_func.h"
@@ -600,6 +601,12 @@ static CommandCost ClearTile_Water(TileIndex tile, DoCommandFlags flags)
 			/* Make sure no vehicle is on the tile */
 			CommandCost ret = EnsureNoVehicleOnGround(tile);
 			if (ret.Failed()) return ret;
+
+			/* Nobody may reclaim land in a region's waters. */
+			if (GetWaterClass(tile) == WaterClass::Sea) {
+				ret = CheckReclamation(tile);
+				if (ret.Failed()) return ret;
+			}
 
 			Owner owner = GetTileOwner(tile);
 			if (owner != OWNER_WATER && owner != OWNER_NONE) {

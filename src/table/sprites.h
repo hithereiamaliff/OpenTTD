@@ -432,7 +432,8 @@ static constexpr SpriteID SPR_CITY_HOUSE_BASE = SPR_TRAFFIC_LIGHTS_BASE + 253; /
 static constexpr SpriteID SPR_CIVIC_SERVICE_BASE = SPR_TRAFFIC_LIGHTS_BASE + 273; ///< Hospital, university, stadium (four parts each), hawker centre.
 static constexpr SpriteID SPR_IMG_CIVIC_SERVICE_BASE = SPR_TRAFFIC_LIGHTS_BASE + 286; ///< Icons of the hospital, university, stadium and hawker centre tools.
 /* Shops (city_houses.cpp) follow at +290, drawn as town buildings from SPR_CITY_HOUSE_BASE (sprite 37 on). */
-static constexpr uint16_t TRAFFIC_LIGHTS_SPRITE_COUNT = 299;
+static constexpr SpriteID SPR_IMG_STATES_MAP = SPR_TRAFFIC_LIGHTS_BASE + 299; ///< Icon of the map of states.
+static constexpr uint16_t TRAFFIC_LIGHTS_SPRITE_COUNT = 300;
 
 static const SpriteID SPR_NEWGRFS_BASE = SPR_TRAFFIC_LIGHTS_BASE + TRAFFIC_LIGHTS_SPRITE_COUNT;
 

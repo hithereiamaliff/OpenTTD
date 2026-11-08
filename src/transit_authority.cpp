@@ -23,6 +23,7 @@
 #include "line.h"
 #include "map_func.h"
 #include "satisfaction.h"
+#include "state.h"
 #include "town_map.h"
 #include "news_func.h"
 #include "order_base.h"
@@ -130,7 +131,7 @@ Money GetTownTransitBudget(const Town *t)
 {
 	if (t->cache.population < MIN_TRANSIT_POPULATION) return 0;
 	/* With town budgets, a share of the town's taxes: as much as before on land of medium value and at normal taxes. */
-	if (AreTownBudgetsOn()) return GetTownTaxBase(t) * GetTownTransitSharePercent(t) / 100;
+	if (AreTownBudgetsOn()) return GetTownTaxBase(t) * (GetTownTransitSharePercent(t) + GetStateTransitGrantPercent(t)) / 100;
 	return GetTransitBusYearCost() * t->cache.population * BUDGET_BUSES_PER_10K / 10000;
 }
 

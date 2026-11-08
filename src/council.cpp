@@ -41,6 +41,7 @@
 
 #include "stdafx.h"
 #include "council.h"
+#include "state.h"
 #include "council_cmd.h"
 #include "city_services.h"
 #include "command_func.h"
@@ -490,10 +491,10 @@ static bool BuildCouncilService(Town *t, CityService service, CompanyID cofunder
 	if (service == CityService::University) c.counts.universities++;
 	if (service == CityService::Stadium) c.counts.stadiums++;
 	if (Company::IsValidID(cofunder)) {
-		AddNewsItem(GetEncodedString(STR_NEWS_COUNCIL_SERVICE_COFUNDED, GetCouncilName(c.level), t->index, GetCityServiceShortName(service), cofunder),
+		AddNewsItem(GetEncodedString(STR_NEWS_COUNCIL_SERVICE_COFUNDED, GetTownCouncilName(t), t->index, GetCityServiceShortName(service), cofunder),
 				NewsType::General, NewsStyle::Normal, {}, tile);
 	} else {
-		AddNewsItem(GetEncodedString(STR_NEWS_COUNCIL_SERVICE, GetCouncilName(c.level), t->index, GetCityServiceShortName(service)),
+		AddNewsItem(GetEncodedString(STR_NEWS_COUNCIL_SERVICE, GetTownCouncilName(t), t->index, GetCityServiceShortName(service)),
 				NewsType::General, NewsStyle::Normal, {}, tile);
 	}
 	SetWindowDirty(WindowClass::TownBudget, t->index);
@@ -591,7 +592,8 @@ static void UpdateEstates(Town *t)
 	const Money upkeep = TaxWorth(static_cast<uint64_t>(n.flats) * (UPKEEP_PERCENT * 2 + (age > 20 ? age - 20 : 0)) / 2) / 12;
 	const Money paid = PayForEstates(t, upkeep, true);
 	const int funded = upkeep > 0 ? static_cast<int>(paid * 100 / upkeep) : 100;
-	const int target = 40 + 45 * funded / 100;
+	/* Under Homes and Services the state's estates programme keeps them better still. */
+	const int target = 40 + 45 * funded / 100 + (GetTownGovernment(t) == Platform::HomesAndServices ? 10 : 0);
 	const int condition = c.estate_condition;
 	int step = (target - condition) / 12;
 	if (step == 0 && target != condition) step = target > condition ? 1 : -1;
@@ -737,7 +739,7 @@ static void ReviewEstates(Town *t)
 			c.estate_condition = 100;
 			c.paint++;
 			c.repainted = year;
-			if (n.flats >= 500) AddNewsItem(GetEncodedString(STR_NEWS_COUNCIL_REPAINT, GetCouncilName(c.level), t->index), NewsType::General, NewsStyle::Small, {}, t->index);
+			if (n.flats >= 500) AddNewsItem(GetEncodedString(STR_NEWS_COUNCIL_REPAINT, GetTownCouncilName(t), t->index), NewsType::General, NewsStyle::Small, {}, t->index);
 			MarkWholeScreenDirty();
 		}
 	}

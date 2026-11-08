@@ -22,6 +22,7 @@
 #include "town_budget_type.h"
 #include "commuting_type.h"
 #include "council_type.h"
+#include "state_type.h"
 
 /** The air where a town's people live and what their land is worth, updated monthly (see environment.cpp). */
 struct TownEnvironment {
@@ -211,6 +212,7 @@ struct Town : TownPool::PoolItem<&_town_pool> {
 	TownBudget budget{}; ///< City fork: its taxes, spending, reserves and ordinances (saved in chunk TBUD).
 	TownCommuting commuting{}; ///< City fork: where its people work and how they get there (saved in chunk TCOM).
 	TownCouncil council{}; ///< City fork: its council, the services it builds and the estates it runs (saved in chunk TCNL).
+	StateID state = INVALID_STATE; ///< City fork: the state or federal territory it belongs to (saved in chunk TSTA).
 
 	uint8_t fund_buildings_months = 0; ///< fund buildings program in action?
 	uint8_t road_build_months = 0; ///< fund road reconstruction in action?
@@ -336,6 +338,7 @@ void UpdateTownRadius(Town *t);
 CommandCost CheckIfAuthorityAllowsNewStation(TileIndex tile, DoCommandFlags flags);
 Town *ClosestTownFromTile(TileIndex tile, uint threshold);
 void ChangeTownRating(Town *t, int add, int max, DoCommandFlags flags);
+void FundTownBuildingsByState(Town *t);
 HouseZone GetTownRadiusGroup(const Town *t, TileIndex tile);
 void SetTownRatingTestMode(bool mode);
 TownActions GetMaskOfTownActions(CompanyID cid, const Town *t);

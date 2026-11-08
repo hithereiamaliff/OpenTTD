@@ -36,6 +36,8 @@
 #include "../../commuting.h"
 #include "../../town_budget_cmd.h"
 #include "../../council.h"
+#include "../../state.h"
+#include "../../state_cmd.h"
 #include "../../council_cmd.h"
 #include "../../transit_authority_cmd.h"
 #include "../../safeguards.h"
@@ -694,4 +696,43 @@ static bool IsValidCityService(ScriptTown::CityService service)
 	if (!IsValidCityService(service)) return -1;
 
 	return ::GetCityServiceBuildCost(static_cast<::CityService>(service));
+}
+
+/* static */ SQInteger ScriptTown::GetState(TownID town_id)
+{
+	if (!IsValidTown(town_id) || ::GetTownState(::Town::Get(town_id)) == nullptr) return -1;
+	return ::Town::Get(town_id)->state;
+}
+
+/* static */ bool ScriptTown::IsFederalTerritory(TownID town_id)
+{
+	return IsValidTown(town_id) && ::IsFederalTerritory(::Town::Get(town_id));
+}
+
+/* static */ bool ScriptTown::IsInRegion(TownID town_id)
+{
+	return IsValidTown(town_id) && ::IsRegionTown(::Town::Get(town_id));
+}
+
+/* static */ SQInteger ScriptTown::GetStateGovernment(TownID town_id)
+{
+	if (!IsValidTown(town_id) || ::GetTownState(::Town::Get(town_id)) == nullptr) return -1;
+	return to_underlying(::GetTownGovernment(::Town::Get(town_id)));
+}
+
+/* static */ Money ScriptTown::GetStateTreasury(TownID town_id)
+{
+	if (!IsValidTown(town_id)) return -1;
+	const ::State *s = ::GetTownState(::Town::Get(town_id));
+	if (s == nullptr) return -1;
+	return s->treasury;
+}
+
+/* static */ bool ScriptTown::SetStateGovernment(TownID town_id, SQInteger platform)
+{
+	EnforceDeityMode(false);
+	EnforcePrecondition(false, IsValidTown(town_id));
+	EnforcePrecondition(false, ::GetTownState(::Town::Get(town_id)) != nullptr);
+	EnforcePrecondition(false, platform >= 0 && platform < to_underlying(::Platform::End));
+	return ScriptObject::Command<Commands::SetStateGovernment>::Do(::Town::Get(town_id)->state, static_cast<::Platform>(platform));
 }

@@ -2165,6 +2165,26 @@ for part in ((0, 0), (0, 1), (1, 0), (1, 1)):
 print("house rows end at", houses_y)
 
 assert len(sprites) == 299, len(sprites)
+
+# Icon of the map of states: two states split by a border, a capital's star, the sea.
+icon(340, 934, [
+    "................",
+    ".KKKKKKKKKKKKKK.",
+    ".KRRRRRRKGGGGBK.",
+    ".KRRRYRRKGGGBBK.",
+    ".KRRYYYRRKGGBBK.",
+    ".KRRRYRRRKGGGBK.",
+    ".KRRRRRRKGGGGBK.",
+    ".KRRRRRKGGGGGBK.",
+    ".KRRRRRRKGGGBBK.",
+    ".KRRRRRRRKGGBBK.",
+    ".KRRRRRRKGGGGBK.",
+    ".KKKKKKKKKKKKKK.",
+    "................",
+    "................",
+], {'K': rgb_index((40, 40, 40)), 'R': rgb_index((200, 60, 50)), 'G': rgb_index((60, 160, 70)), 'Y': rgb_index((250, 220, 60)), 'B': rgb_index((60, 110, 200))}, "icon states map")
+
+assert len(sprites) == 300, len(sprites)
 sheet.save(f"{SRC}/city.png", optimize=True)
 
 header = """// This file is part of OpenTTD.
@@ -2207,6 +2227,7 @@ header = """// This file is part of OpenTTD.
 //   286-289: icons: hospital, university, stadium, hawker centre
 //   290-298: shops: supermarket, shopping complex (along X: two parts, along Y: two parts),
 //            hypermarket (four parts: (0,0), (0,1), (1,0), (1,1))
+//   299:   icon: map of states
 //
    -1 * 0\t 0C "City fork graphics"
    -1 * 5\t 05 1C FF %02X %02X

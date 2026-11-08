@@ -30,6 +30,7 @@ enum SmallMapWidgets : WidgetID {
 	WID_SM_LINES,          ///< Button to select the network map of lines.
 	WID_SM_POLLUTION,      ///< Button to select the air pollution view.
 	WID_SM_LAND_VALUE,     ///< Button to select the land value view.
+	WID_SM_STATES,         ///< Button to select the map of states.
 	WID_SM_CENTERMAP,      ///< Button to move smallmap center to main window center.
 	WID_SM_TOGGLETOWNNAME, ///< Toggle button to display town names.
 	WID_SM_SELECT_BUTTONS, ///< Selection widget for the buttons present in some smallmap modes.

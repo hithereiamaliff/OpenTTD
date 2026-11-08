@@ -798,6 +798,12 @@ enum class WindowClass : uint16_t {
 	TownBudget,
 
 	/**
+	 * States window; %Window numbers:
+	 *   - 0 = #StatesWidgets
+	 */
+	States,
+
+	/**
 	 * Depot yard window; %Window numbers:
 	 *   - #DepotID = #DepotYardWidgets
 	 */

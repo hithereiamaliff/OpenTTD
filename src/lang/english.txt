@@ -485,6 +485,7 @@ STR_TOWN_MENU_TOWN_DIRECTORY                                    :Town directory
 STR_TOWN_MENU_FOUND_TOWN                                        :Found town
 STR_TOWN_MENU_ZONING                                            :Zoning
 STR_TOWN_MENU_CITY_SERVICES                                     :City services
+STR_TOWN_MENU_STATES                                            :States
 STR_TOWN_MENU_POLLUTION_MAP                                     :Air pollution map
 STR_TOWN_MENU_LAND_VALUE_MAP                                    :Land value map
 STR_TOWN_MENU_COMMUTER_MAP                                      :Commuter traffic map
@@ -787,7 +788,7 @@ STR_HIGHSCORE_PRESIDENT_OF_COMPANY_ACHIEVES_STATUS              :{BIG_FONT}{WHIT
 # Smallmap window
 STR_SMALLMAP_CAPTION                                            :{WHITE}Map - {STRING}
 
-###length 11
+###length 12
 STR_SMALLMAP_TYPE_CONTOURS                                      :Contours
 STR_SMALLMAP_TYPE_VEHICLES                                      :Vehicles
 STR_SMALLMAP_TYPE_INDUSTRIES                                    :Industries
@@ -799,6 +800,7 @@ STR_SMALLMAP_TYPE_TRAFFIC                                       :Road traffic
 STR_SMALLMAP_TYPE_LINES                                         :Lines
 STR_SMALLMAP_TYPE_POLLUTION                                     :Air pollution
 STR_SMALLMAP_TYPE_LAND_VALUE                                    :Land value
+STR_SMALLMAP_TYPE_STATES                                        :States
 
 STR_SMALLMAP_TOOLTIP_SHOW_LAND_CONTOURS_ON_MAP                  :{BLACK}Show land contours on map
 STR_SMALLMAP_TOOLTIP_SHOW_VEHICLES_ON_MAP                       :{BLACK}Show vehicles on map
@@ -811,6 +813,7 @@ STR_SMALLMAP_TOOLTIP_SHOW_TRAFFIC_ON_MAP                        :{BLACK}Show roa
 STR_SMALLMAP_TOOLTIP_SHOW_LINES_ON_MAP                          :{BLACK}Show your lines on the map in their colours, from stop to stop
 STR_SMALLMAP_TOOLTIP_SHOW_POLLUTION_ON_MAP                      :{BLACK}Show air pollution on the map, on Malaysia's and Singapore's air pollutant index
 STR_SMALLMAP_TOOLTIP_SHOW_LAND_VALUE_ON_MAP                     :{BLACK}Show what land is worth on the map
+STR_SMALLMAP_TOOLTIP_SHOW_STATES_ON_MAP                         :{BLACK}Show the states and federal territories on the map, and the waters of regions run like Sabah and Sarawak
 STR_SMALLMAP_TOOLTIP_INDUSTRY_SELECTION                         :{BLACK}Click on an industry type to toggle displaying it. Ctrl+Click disables all types except the selected one. Ctrl+Click on it again to enable all industry types
 STR_SMALLMAP_TOOLTIP_COMPANY_SELECTION                          :{BLACK}Click on a company to toggle displaying its property. Ctrl+Click disables all companies except the selected one. Ctrl+Click on it again to enable all companies
 STR_SMALLMAP_TOOLTIP_CARGO_SELECTION                            :{BLACK}Click on a cargo to toggle displaying its property. Ctrl+Click disables all cargoes except the selected one. Ctrl+Click on it again to enable all cargoes
@@ -835,6 +838,12 @@ STR_SMALLMAP_LEGENDA_LAND_VALUE_HIGH                            :{TINY_FONT}{BLA
 STR_SMALLMAP_LEGENDA_LAND_VALUE_MEDIUM                          :{TINY_FONT}{BLACK}Medium land value
 STR_SMALLMAP_LEGENDA_LAND_VALUE_LOW                             :{TINY_FONT}{BLACK}Low land value
 STR_SMALLMAP_LEGENDA_LAND_VALUE_VERY_LOW                        :{TINY_FONT}{BLACK}Very low land value
+STR_SMALLMAP_LEGENDA_STATE                                      :{TINY_FONT}{BLACK}A state (each its own colour)
+STR_SMALLMAP_LEGENDA_STATE_TERRITORY                            :{TINY_FONT}{BLACK}Federal territory
+STR_SMALLMAP_LEGENDA_STATE_REGION                               :{TINY_FONT}{BLACK}Region with its own laws (hatched)
+STR_SMALLMAP_LEGENDA_STATE_REGION_WATERS                        :{TINY_FONT}{BLACK}Region's waters: no land reclamation
+STR_SMALLMAP_LEGENDA_STATE_BORDER                               :{TINY_FONT}{BLACK}State border
+STR_SMALLMAP_LEGENDA_STATE_NONE                                 :{TINY_FONT}{BLACK}No state
 STR_SMALLMAP_LEGENDA_RAILROADS                                  :{TINY_FONT}{BLACK}Railways
 STR_SMALLMAP_LEGENDA_STATIONS_AIRPORTS_DOCKS                    :{TINY_FONT}{BLACK}Stations/Airports/Docks
 STR_SMALLMAP_LEGENDA_BUILDINGS_INDUSTRIES                       :{TINY_FONT}{BLACK}Buildings/Industries
@@ -2192,11 +2201,13 @@ STR_CONFIG_SETTING_TOWN_BUILDING_STYLE_MALAYSIAN                :Malaysian and S
 STR_CONFIG_SETTING_TOWN_BUILDING_STYLE_BOTH                     :Both
 STR_CONFIG_SETTING_TOWN_BUDGETS                                 :Town budgets and ordinances: {STRING2}
 STR_CONFIG_SETTING_TOWN_COUNCILS                                :Town councils: {STRING2}
-STR_CONFIG_SETTING_COUNCIL_NAMES                                :Council names: {STRING2}
-STR_CONFIG_SETTING_COUNCIL_NAMES_HELPTEXT                       :How towns' councils are called in windows and news: in Malay (Majlis Daerah, Majlis Perbandaran and Majlis Bandaraya Funnford) or in English (Funnford District Council, Municipal Council and City Council). News already in the list keeps its names
+STR_CONFIG_SETTING_COUNCIL_NAMES                                :Council and state names: {STRING2}
+STR_CONFIG_SETTING_COUNCIL_NAMES_HELPTEXT                       :How councils, states and federal territories are called in windows and news: in Malay (Majlis Daerah, Majlis Perbandaran and Majlis Bandaraya Funnford; Negeri Funnford; Wilayah Persekutuan Funnford and Dewan Bandaraya Funnford) or in English (Funnford District Council, Municipal Council and City Council; Funnford State; Federal Territory of Funnford and Funnford City Hall). News already in the list keeps its names
 STR_CONFIG_SETTING_COUNCIL_NAMES_MALAY                          :Malay (Majlis Perbandaran Funnford)
 STR_CONFIG_SETTING_COUNCIL_NAMES_ENGLISH                        :English (Funnford Municipal Council)
 STR_CONFIG_SETTING_TOWN_COUNCILS_HELPTEXT                       :Towns are run by councils, as in Malaysia: a district council (majlis daerah) at first, a municipal council (majlis perbandaran) from 4,000 people with the income to match, a city council (majlis bandaraya) from 12,000 after three years as a municipality. Beside the town's taxes, councils collect business licences from shops and offices, and they build city services from what they save: clinics, schools, police and fire stations, parks and hawker centres where the town lacks them; a hospital and a stadium once a municipality, a university once a city. Companies can co-fund the next one in the town's Budget window. Councils also run the estates of flats as Singapore's town councils do: service and conservancy charges pay for upkeep and for repainting every six years; old estates are renewed and the oldest blocks rebuilt. Needs town budgets{}Off: towns as before
+STR_CONFIG_SETTING_STATES                                       :States and elections: {STRING2}
+STR_CONFIG_SETTING_STATES_HELPTEXT                              :Towns are grouped into states, as in Malaysia: the biggest towns, spread over the map, become state capitals and every other town joins the nearest one on its land. The biggest city becomes a federal territory run by its City Hall (on big maps one more city too). A land across the sea, or behind a narrow neck of land, with two towns or more is a region run like Sabah and Sarawak: its own land laws (dearer land; forest and farmland near its towns are native customary land, which a town gives up only to companies it rates at least Mediocre) and immigration (no commuting across its border; companies can't found towns there), and nobody may reclaim land in its waters.{}States hold the land: companies pay a premium for land they clear, build on or reshape, more where land is dear. States get a federal grant and a third of what a council keeps beyond two years' taxes. Every five years each state elects its assembly and the country its parliament (a seat a town, one more for each 10,000 people). Voters judge only what they get: traffic, transit, the air, city services, housing and taxes. The platforms (no real parties): Transit First (grants to the towns' transit budgets), Roads and Growth (faster growth, cheaper land) and Homes and Services (grants to the councils' services and estates). See the Towns menu, States. Needs town councils{}Off: no states
 STR_CONFIG_SETTING_TOWN_BUDGETS_HELPTEXT                        :Towns collect taxes, more from bigger towns and dearer land. A quarter goes to transit (the transit budget for contracts, passes and concessions), 60% to running the town; the rest pays for ordinances or builds reserves. Towns cut taxes when they have money put by and raise them when they run short; high taxes make a town less happy and slow its growth.{}Towns bring in ordinances when their problems call for them and they can afford them: parking limits, a low-emission zone, a car-free centre, tree planting, transit-oriented development, a transit fund. Companies can propose them in the town's Budget window.{}Off: no budgets and no ordinances; transit budgets as before
 STR_CONFIG_SETTING_COMMUTING                                    :Commuting: {STRING2}
 STR_CONFIG_SETTING_COMMUTING_HELPTEXT                           :Towns work out once a month where their people work and how they get there. 45% of a town's people go to work on a day, more to places with many jobs, fewer the further away, also in up to four towns within 64 tiles they can get to by road or transit. Each can drive (the quickest way over the town's roads, slowed by town traffic, then parking: longer in the centre, longer with parking limits, from the edge of a car-free centre) or, within reach of a stop, take transit (walking, waiting, riding, changing, the fare, walking on). The quicker transit is against the car, the more take it: half when it takes as long. At least as many take it as the share of the town's passengers your services carry says. Drivers' cars follow their routes, so the roads between homes and jobs get busy; homes and workplaces whose commuters find transit quick send up to twice the passengers. Needs town traffic. Off: traffic comes from the homes and jobs around each road, as before
@@ -4002,6 +4013,9 @@ STR_TOWN_VIEW_ZONING_WANTS_COMMERCIAL                           :{BLACK}Homes fo
 STR_TOWN_VIEW_ZONING_WANTS_RESIDENTIAL                          :{BLACK}Homes for {ORANGE}{COMMA}{BLACK}, jobs for {ORANGE}{COMMA}{BLACK}: wants more homes
 STR_TOWN_VIEW_COUNCIL                                           :{BLACK}Council: {ORANGE}{STRING1}{BLACK}{RAW_STRING}
 STR_TOWN_VIEW_COUNCIL_KIND                                      :{BLACK} ({STRING})
+STR_TOWN_VIEW_STATE                                             :{BLACK}State: {ORANGE}{RAW_STRING}{BLACK}, government {ORANGE}{STRING}
+STR_TOWN_VIEW_STATE_REGION                                      :{BLACK}State: {ORANGE}{RAW_STRING}{BLACK} (own laws), government {ORANGE}{STRING}
+STR_TOWN_VIEW_TERRITORY                                         :{BLACK}Federal territory: {ORANGE}{RAW_STRING}{BLACK}, federal government {ORANGE}{STRING}
 STR_TOWN_VIEW_HAPPINESS                                         :{BLACK}Happiness: {ORANGE}{NUM}%{BLACK}. City services reach:
 STR_TOWN_VIEW_HAPPINESS_SATISFACTION                            :{BLACK}Happiness: {ORANGE}{NUM}%{BLACK} (riders' satisfaction {ORANGE}{NUM}%{BLACK}). City services reach:
 STR_TOWN_VIEW_SERVICE_PERCENT                                   :{BLACK}{NUM}%
@@ -4048,6 +4062,8 @@ STR_TOWN_VIEW_TRANSIT_BUTTON                                    :{BLACK}Transit
 STR_TOWN_VIEW_TRANSIT_TOOLTIP                                   :{BLACK}Show the town's transit authority: its budget, and its tenders and contracts for lines
 STR_TOWN_VIEW_BUDGET_BUTTON                                     :{BLACK}Budget
 STR_TOWN_VIEW_BUDGET_TOOLTIP                                    :{BLACK}Show the town's budget and ordinances: its taxes, spending and reserves, the rules it has brought in, and the ones you can propose
+STR_TOWN_VIEW_STATE_BUTTON                                      :{BLACK}State
+STR_TOWN_VIEW_STATE_TOOLTIP                                     :{BLACK}Show the town's state: its government, voters, money and laws
 STR_TOWN_VIEW_RENAME_TOOLTIP                                    :{BLACK}Change town name
 STR_TOWN_VIEW_CARGO_GRAPH                                       :Cargo Graph
 STR_TOWN_VIEW_CARGO_GRAPH_TOOLTIP                               :Show graph of town's cargo history
@@ -5449,6 +5465,7 @@ STR_TOWN_BUDGET_COUNCIL_SINCE                                   :{BLACK} since {
 STR_TOWN_BUDGET_COUNCIL_NEXT_MUNICIPAL                          :{BLACK}Municipality at {COMMA} people and {CURRENCY_LONG} a year in taxes and licences
 STR_TOWN_BUDGET_COUNCIL_NEXT_CITY                               :{BLACK}City status at {COMMA} people and {CURRENCY_LONG} a year, after 3 years as a municipality
 STR_TOWN_BUDGET_COUNCIL_NEXT_NONE                               :{BLACK}City council: the highest standing a town can have
+STR_TOWN_BUDGET_COUNCIL_NEXT_CITY_HALL                          :{BLACK}City Hall of a federal territory: a city's powers, and a federal grant of a tenth of its taxes for new services
 STR_TOWN_BUDGET_COUNCIL_INCOME                                  :{BLACK}Business licences: {CURRENCY_LONG} last year ({CURRENCY_LONG} so far); charges from flats: {CURRENCY_LONG}
 STR_TOWN_BUDGET_COUNCIL_SERVICE                                 :{BLACK}New services: a {ORANGE}{STRING}{BLACK} next, {CURRENCY_LONG}; it can spend {CURRENCY_LONG}. {COMMA} built
 STR_TOWN_BUDGET_COUNCIL_SERVICE_NONE                            :{BLACK}New services: none needed now. {COMMA} built, {CURRENCY_LONG} spent on them last year
@@ -5470,6 +5487,67 @@ STR_COUNCIL_NAME_CITY_ENGLISH                                   :{TOWN} City Cou
 STR_COUNCIL_KIND_DISTRICT                                       :district council
 STR_COUNCIL_KIND_MUNICIPAL                                      :municipal council
 STR_COUNCIL_KIND_CITY                                           :city council
+STR_COUNCIL_KIND_CITY_HALL                                      :city hall
+STR_COUNCIL_NAME_CITY_HALL                                      :Dewan Bandaraya {TOWN}
+STR_COUNCIL_NAME_CITY_HALL_ENGLISH                              :{TOWN} City Hall
+STR_STATE_NAME                                                  :Negeri {TOWN}
+STR_STATE_NAME_ENGLISH                                          :{TOWN} State
+STR_STATE_NAME_TERRITORY                                        :Wilayah Persekutuan {TOWN}
+STR_STATE_NAME_TERRITORY_ENGLISH                                :Federal Territory of {TOWN}
+STR_STATE_NAME_DISSOLVED                                        :(dissolved)
+STR_PLATFORM_NONE                                               :Caretaker
+STR_PLATFORM_TRANSIT_FIRST                                      :Transit First
+STR_PLATFORM_ROADS_AND_GROWTH                                   :Roads and Growth
+STR_PLATFORM_HOMES_AND_SERVICES                                 :Homes and Services
+STR_NEWS_STATES_FORMED                                          :{BIG_FONT}{BLACK}States formed!{}The towns now make up {NUM} state{P "" s} around their biggest cities, each with an assembly elected every five years. {TOWN} becomes a federal territory, run by its City Hall. First general election: May {NUM}
+STR_NEWS_STATES_FORMED_TWO                                      :{BIG_FONT}{BLACK}States formed!{}The towns now make up {NUM} state{P "" s} around their biggest cities, each with an assembly elected every five years. {TOWN} and {TOWN} become federal territories, run by their City Halls. First general election: May {NUM}
+STR_NEWS_STATE_REGION                                           :{BIG_FONT}{BLACK}{RAW_STRING} keeps its own laws{}Across the sea or a land border, it is run like Sabah and Sarawak: its own land laws and immigration, and nobody may reclaim land in its waters
+STR_NEWS_STATE_ELECTION                                         :{BIG_FONT}{BLACK}{RAW_STRING} votes: {STRING} wins {NUM} of {NUM} seats and {STRING} the state government
+STR_NEWS_STATE_ELECTION_FORMS                                   :forms
+STR_NEWS_STATE_ELECTION_KEEPS                                   :keeps
+STR_NEWS_GENERAL_ELECTION                                       :{BIG_FONT}{BLACK}General election!{}{STRING} wins {NUM} of {NUM} seats in parliament and {STRING} the federal government, which also runs the federal territories
+STR_ERROR_NATIVE_CUSTOMARY_LAND                                 :{WHITE}Native customary land: {TOWN} gives it up only to companies it rates at least Mediocre
+STR_ERROR_NO_RECLAMATION                                        :{WHITE}No land reclamation in the waters of {RAW_STRING}
+STR_ERROR_REGION_IMMIGRATION                                    :{WHITE}{RAW_STRING} controls immigration: companies can't found towns there
+STR_ERROR_CAN_T_RENAME_STATE                                    :{WHITE}Can't rename the state...
+STR_STATES_CAPTION                                              :{WHITE}States and federal territories
+STR_STATES_LIST_TOOLTIP                                         :{BLACK}The states and federal territories. Click to see one; double-click to go to its capital
+STR_STATES_OFF                                                  :{BLACK}States are off. They need town budgets, town councils, and States and elections on (Settings, Environment, Towns)
+STR_STATES_NOT_FORMED                                           :{BLACK}The states are formed at the start of the next month
+STR_STATES_FEDERATION                                           :{BLACK}Federal government: {ORANGE}{STRING}{BLACK}, {NUM} of {NUM} seats in parliament (elected {NUM}). Next general election: May {NUM}
+STR_STATES_FEDERATION_NONE                                      :{BLACK}Federal government: {ORANGE}caretaker{BLACK} until the first general election, May {NUM}
+STR_STATES_FEDERATION_POLL                                      :{BLACK}Parliament if elected today: {RAW_STRING}. Federal grants last year: {CURRENCY_LONG}
+STR_STATES_SEATS_ITEM                                           :{STRING} {NUM}
+STR_STATES_NAME_REGION                                          :{RAW_STRING} (own laws)
+STR_STATES_ROW_STATE                                            :{ORANGE}{RAW_STRING}{BLACK}: {COMMA} town{P "" s}, {COMMA} people; {STRING}, {NUM} of {NUM} seats; election {NUM}
+STR_STATES_ROW_CARETAKER                                        :{ORANGE}{RAW_STRING}{BLACK}: {COMMA} town{P "" s}, {COMMA} people; caretaker; election {NUM}
+STR_STATES_ROW_TERRITORY                                        :{ORANGE}{RAW_STRING}{BLACK}: {COMMA} people; federal territory ({STRING})
+STR_STATES_SELECT                                               :{BLACK}Select a state to see its government, voters, money and laws
+STR_STATES_DETAIL_DISSOLVED                                     :{BLACK}{RAW_STRING}: it has no towns left
+STR_STATES_DETAIL_STATE                                         :{BLACK}{RAW_STRING}: a state of {COMMA} town{P "" s} and {COMMA} people around its capital {TOWN}, formed in {NUM}
+STR_STATES_DETAIL_TERRITORY                                     :{BLACK}{RAW_STRING}: a federal territory of {COMMA} people, run by {STRING1} under the federal government, formed in {NUM}
+STR_STATES_DETAIL_FEDERAL                                       :{BLACK}Governed by the federal government: {ORANGE}{STRING}
+STR_STATES_DETAIL_CARETAKER                                     :{BLACK}Government: {ORANGE}caretaker{BLACK} until the first election, {STRING} {NUM}
+STR_STATES_DETAIL_GOVERNMENT                                    :{BLACK}Government: {ORANGE}{STRING}{BLACK}, {NUM} of {NUM} seats ({RAW_STRING}), elected {NUM}. Next election: {STRING} {NUM}
+STR_STATES_DETAIL_POLICY                                        :{BLACK}Policy: {STRING1}{RAW_STRING}
+STR_STATES_POLICY_PAUSED                                        : (paused: the treasury is empty)
+STR_STATES_EFFECT_NONE                                          :none until the first election
+STR_STATES_EFFECT_TRANSIT_FIRST                                 :its towns' transit budgets get {NUM}% of their taxes on top; towns readier to tame cars and fund transit
+STR_STATES_EFFECT_ROADS_AND_GROWTH                              :towns grow {NUM}% faster, land premiums halved, new buildings funded each quarter in one town in turn; towns slower to limit cars
+STR_STATES_EFFECT_HOMES_AND_SERVICES                            :councils' services and estates funds get {NUM}% of their towns' taxes; estates kept up to 95%; towns build more estates of flats
+STR_STATES_DETAIL_VOTERS                                        :{BLACK}Voters: traffic jams {NUM}%, transit use {NUM}%, satisfaction {NUM}%, dirty air {NUM}%, short of services {NUM}%, poor housing {NUM}%, taxes {NUM}%
+STR_STATES_DETAIL_POLL                                          :{BLACK}If elected today: {RAW_STRING}
+STR_STATES_DETAIL_MONEY                                         :{BLACK}Treasury: {CURRENCY_LONG}, platform at {NUM}%. Last year: land premiums {CURRENCY_LONG}, from councils {CURRENCY_LONG}, federal grant {CURRENCY_LONG}; spent {CURRENCY_LONG}
+STR_STATES_DETAIL_MONEY_TERRITORY                               :{BLACK}Last year: land premiums {CURRENCY_LONG} to the federation; federal money spent on its platform {CURRENCY_LONG}
+STR_STATES_DETAIL_PREMIUM                                       :{BLACK}Land premium: {CURRENCY_LONG} a tile on land worth 50, more on dearer land; companies pay it for land they clear, build on or reshape
+STR_STATES_DETAIL_REGION                                        :{BLACK}Run like Sabah and Sarawak: land premiums twice as high; forest and farmland near its towns are native customary land, given up only to companies the town rates at least Mediocre; no commuting across its border, and companies can't found towns there; nobody may reclaim land in its waters (12 tiles from its shores)
+STR_STATES_RENAME_QUERY                                         :{WHITE}Rename state
+STR_STATES_RENAME_BUTTON                                        :{BLACK}Rename
+STR_STATES_RENAME_TOOLTIP                                       :{BLACK}Give the selected state a name of your own; leave it empty for its usual name
+STR_STATES_CAPITAL_BUTTON                                       :{BLACK}Go to capital
+STR_STATES_CAPITAL_TOOLTIP                                      :{BLACK}Show the selected state's capital in the main view
+STR_STATES_MAP_BUTTON                                           :{BLACK}Map of states
+STR_STATES_MAP_TOOLTIP                                          :{BLACK}Show the states on the map
 STR_TOWN_BUDGET_PROPOSE_TOOLTIP                                 :{BLACK}Propose the selected ordinance to the town. It agrees if it has the problem, can afford it (from what is left of its taxes, or two years' worth of reserves) and rates your company well enough; the campaign costs about as much as a small station
 STR_ORDINANCE_TRANSIT_FUND                                      :Transit fund
 STR_ORDINANCE_PARKING_LIMITS                                    :Parking limits

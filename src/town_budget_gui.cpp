@@ -12,6 +12,7 @@
 #include "town_budget_cmd.h"
 #include "city_services.h"
 #include "council.h"
+#include "state.h"
 #include "council_cmd.h"
 #include "command_func.h"
 #include "company_base.h"
@@ -91,7 +92,7 @@ struct TownBudgetWindow : Window {
 	{
 		if (widget == WID_TB_CAPTION) {
 			const Town *t = Town::GetIfValid(this->window_number);
-			if (t != nullptr && AreTownCouncilsOn()) return GetString(STR_TOWN_BUDGET_CAPTION_COUNCIL, GetCouncilName(GetCouncilLevel(t)), this->window_number);
+			if (t != nullptr && AreTownCouncilsOn()) return GetString(STR_TOWN_BUDGET_CAPTION_COUNCIL, GetTownCouncilName(t), this->window_number);
 			return GetString(STR_TOWN_BUDGET_CAPTION, this->window_number);
 		}
 		return this->Window::GetWidgetString(widget, stringid);
@@ -137,9 +138,10 @@ struct TownBudgetWindow : Window {
 			case CouncilLevel::Municipal: next = GetString(STR_TOWN_BUDGET_COUNCIL_NEXT_CITY, COUNCIL_CITY_POPULATION, GetCouncilIncomeNeeded(CouncilLevel::City)); break;
 			default: next = GetString(STR_TOWN_BUDGET_COUNCIL_NEXT_NONE); break;
 		}
+		if (IsFederalTerritory(t)) next = GetString(STR_TOWN_BUDGET_COUNCIL_NEXT_CITY_HALL);
 		/* In Malay the name doesn't say what kind of council it is: say it in English. */
-		const std::string kind = AreCouncilNamesEnglish() ? std::string{} : GetString(STR_TOWN_BUDGET_COUNCIL_KIND, GetCouncilKind(c.level));
-		DrawString(ir, GetString(STR_TOWN_BUDGET_COUNCIL, GetCouncilName(c.level), t->index, kind, since));
+		const std::string kind = AreCouncilNamesEnglish() ? std::string{} : GetString(STR_TOWN_BUDGET_COUNCIL_KIND, GetTownCouncilKind(t));
+		DrawString(ir, GetString(STR_TOWN_BUDGET_COUNCIL, GetTownCouncilName(t), t->index, kind, since));
 		ir.top += line;
 		DrawString(ir, next);
 		ir.top += line;

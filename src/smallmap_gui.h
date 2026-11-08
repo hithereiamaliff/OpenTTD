@@ -20,6 +20,7 @@ void BuildLinkStatsLegend();
 
 void BuildIndustriesLegend();
 void ShowSmallMap();
+void ShowSmallMapOfStates();
 void BuildLandLegend();
 void BuildOwnerLegend();
 

@@ -587,6 +587,65 @@ public:
 	static bool CofundCouncilService(TownID town_id);
 
 	/**
+	 * Get the state (or federal territory) a town belongs to. States are
+	 * numbered from 0 in the order they were formed: the federal territories
+	 * first.
+	 * @param town_id The town.
+	 * @pre IsValidTown(town_id).
+	 * @return The state; -1 for an invalid town, or while there are no states.
+	 */
+	static SQInteger GetState(TownID town_id);
+
+	/**
+	 * Is a town a federal territory, run by its City Hall under the federal government?
+	 * @param town_id The town.
+	 * @pre IsValidTown(town_id).
+	 * @return True if it is.
+	 */
+	static bool IsFederalTerritory(TownID town_id);
+
+	/**
+	 * Is a town in a region run like Sabah and Sarawak: a land across the sea
+	 * or behind a land border, with its own land laws and immigration?
+	 * @param town_id The town.
+	 * @pre IsValidTown(town_id).
+	 * @return True if it is.
+	 */
+	static bool IsInRegion(TownID town_id);
+
+	/**
+	 * Get the platform that governs a town: its state's government, or for a
+	 * federal territory the federal one. 0 a caretaker (nobody elected yet),
+	 * 1 Transit First, 2 Roads and Growth, 3 Homes and Services.
+	 * @param town_id The town.
+	 * @pre IsValidTown(town_id).
+	 * @return The platform; -1 for an invalid town, or while there are no states.
+	 */
+	static SQInteger GetStateGovernment(TownID town_id);
+
+	/**
+	 * Get the money in the treasury of a town's state.
+	 * @param town_id The town.
+	 * @pre IsValidTown(town_id).
+	 * @return The money; -1 for an invalid town, or while there are no states.
+	 */
+	static Money GetStateTreasury(TownID town_id);
+
+	/**
+	 * Set the platform that governs a town's state (for a federal territory,
+	 * the federal government's), whatever the voters said, until the next
+	 * election: 0 a caretaker, 1 Transit First, 2 Roads and Growth, 3 Homes
+	 * and Services.
+	 * @param town_id The town.
+	 * @param platform The platform.
+	 * @pre IsValidTown(town_id).
+	 * @pre ScriptCompanyMode::IsDeity().
+	 * @return Whether it has been/can be set.
+	 * @api -ai
+	 */
+	static bool SetStateGovernment(TownID town_id, SQInteger platform);
+
+	/**
 	 * Get how much of a town's car traffic passenger services take off its
 	 * roads: up to 60% when they carry all of its passengers.
 	 * @param town_id The town.

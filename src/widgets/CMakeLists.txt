@@ -60,6 +60,7 @@ add_files(
     terraform_widget.h
     timetable_widget.h
     toolbar_widget.h
+    state_widget.h
     town_widget.h
     town_zoning_widget.h
     traffic_light_widget.h

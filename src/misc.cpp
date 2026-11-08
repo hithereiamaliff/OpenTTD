@@ -10,6 +10,7 @@
 #include "stdafx.h"
 #include "city_clock.h"
 #include "environment.h"
+#include "state.h"
 #include "town_budget.h"
 #include "commuting.h"
 #include "landscape.h"
@@ -178,6 +179,7 @@ void InitializeGame(uint size_x, uint size_y, bool reset_date, bool reset_settin
 	InitializeEnvironment();
 	InitializeTownBudgets();
 	InitializeCommuting();
+	InitializeStates();
 
 	InitializeCompanies();
 	AI::Initialize();

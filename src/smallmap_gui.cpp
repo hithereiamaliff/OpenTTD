@@ -10,6 +10,7 @@
 #include "stdafx.h"
 #include "line.h"
 #include "environment.h"
+#include "state.h"
 #include "order_base.h"
 #include "core/backup_type.hpp"
 #include "clear_map.h"
@@ -146,6 +147,17 @@ static const LegendAndColour _legend_pollution[] = {
 	{.end = true},
 };
 
+static const LegendAndColour _legend_states[] = {
+	{.legend = STR_SMALLMAP_LEGENDA_STATE, .colour = PC_RED},
+	{.legend = STR_SMALLMAP_LEGENDA_STATE_TERRITORY, .colour = PC_WHITE},
+	{.legend = STR_SMALLMAP_LEGENDA_STATE_REGION, .colour = PC_GREEN},
+
+	{.legend = STR_SMALLMAP_LEGENDA_STATE_REGION_WATERS, .colour = PC_DARK_BLUE, .col_break = true},
+	{.legend = STR_SMALLMAP_LEGENDA_STATE_BORDER, .colour = PC_BLACK},
+	{.legend = STR_SMALLMAP_LEGENDA_STATE_NONE, .colour = PC_GREY},
+	{.end = true},
+};
+
 static const LegendAndColour _legend_land_value[] = {
 	{.legend = STR_SMALLMAP_LEGENDA_LAND_VALUE_VERY_HIGH, .colour = PC_WHITE},
 	{.legend = STR_SMALLMAP_LEGENDA_LAND_VALUE_HIGH, .colour = PC_GREEN},
@@ -278,6 +290,7 @@ enum class SmallMapType : uint8_t {
 	Lines, ///< Network map of lines.
 	Pollution, ///< Air pollution legend.
 	LandValue, ///< Land value legend.
+	States, ///< States legend.
 	End, ///< End marker.
 };
 
@@ -294,6 +307,7 @@ static const EnumIndexArray<std::span<const LegendAndColour>, SmallMapType, Smal
 	_legend_lines,
 	_legend_pollution,
 	_legend_land_value,
+	_legend_states,
 };
 
 #define MKCOLOUR(x)         TO_LE32(x)
@@ -651,6 +665,53 @@ static inline uint32_t GetSmallMapLandValuePixels(TileIndex tile, TileType t)
 		return ApplyMask(cs.default_colour, GetMaskPixelsForTileType(tile, t, _smallmap_contours_andor));
 	}
 	return MKCOLOUR_XXXX(GetLandValueColour(GetTileLandValue(tile)));
+}
+
+/**
+ * Is a tile on the north or west edge of its cell of the map of states, where the next cell is another state's?
+ * @param tile The tile.
+ * @return True if a state's border runs along it.
+ */
+static bool IsStateBorderTile(TileIndex tile)
+{
+	const StateID here = GetTileState(tile);
+	const uint x = TileX(tile), y = TileY(tile);
+	if (x % STATE_CELL_SIZE == 0 && x >= STATE_CELL_SIZE) {
+		const TileIndex west = TileXY(x - 1, y);
+		if (GetTileStateCell(west) == StateCell::Land && GetTileState(west) != here) return true;
+	}
+	if (y % STATE_CELL_SIZE == 0 && y >= STATE_CELL_SIZE) {
+		const TileIndex north = TileXY(x, y - 1);
+		if (GetTileStateCell(north) == StateCell::Land && GetTileState(north) != here) return true;
+	}
+	return false;
+}
+
+/**
+ * Return the colour a tile would be displayed with in the small map in mode "States": each state in its
+ * colour (towns darker), federal territories white, regions hatched, a region's waters dark blue, borders
+ * black. Plain land until the states are formed.
+ *
+ * @param tile The tile of which we would like to get the colour.
+ * @param t    Effective tile type of the tile (see #SmallMapWindow::GetTileColours).
+ * @return The colour of tile in the small map in mode "States"
+ */
+static inline uint32_t GetSmallMapStatesPixels(TileIndex tile, TileType t)
+{
+	if (!AreStatesFormed()) {
+		if (t == TileType::Water) return MKCOLOUR_XXXX(PC_WATER);
+		const SmallMapColourScheme &cs = _heightmap_schemes[_settings_client.gui.smallmap_land_colour];
+		return ApplyMask(cs.default_colour, GetMaskPixelsForTileType(tile, t, _smallmap_contours_andor));
+	}
+	const StateCell kind = GetTileStateCell(tile);
+	if (t == TileType::Water) return MKCOLOUR_XXXX((kind == StateCell::RegionWaters ? PC_DARK_BLUE : PC_WATER));
+	const State *s = GetState(GetTileState(tile));
+	if (s == nullptr || kind != StateCell::Land) return MKCOLOUR_XXXX((t == TileType::House ? PC_DARK_GREY : PC_GREY));
+	if (IsStateBorderTile(tile)) return MKCOLOUR_XXXX(PC_BLACK);
+	Shade shade = t == TileType::House ? Shade::Darker : Shade::Normal;
+	if (s->kind == StateKind::FederalTerritory) shade = t == TileType::House ? Shade::Normal : Shade::Lightest;
+	if (s->region && (TileX(tile) + TileY(tile)) % 4 == 0) shade = Shade::Darkest;
+	return MKCOLOUR_XXXX(GetColourGradient(static_cast<Colours>(s->colour), shade));
 }
 
 /**
@@ -1541,6 +1602,9 @@ protected:
 			case SmallMapType::LandValue:
 				return GetSmallMapLandValuePixels(tile, et);
 
+			case SmallMapType::States:
+				return GetSmallMapStatesPixels(tile, et);
+
 			default: NOT_REACHED();
 		}
 	}
@@ -1601,6 +1665,12 @@ protected:
 
 public:
 	friend class NWidgetSmallmapDisplay;
+
+	/** Show the map of states. */
+	void ShowStates()
+	{
+		if (this->map_type != SmallMapType::States) this->SwitchMapType(SmallMapType::States);
+	}
 
 	SmallMapWindow(WindowDesc &desc, int window_number) : Window(desc)
 	{
@@ -1936,6 +2006,7 @@ public:
 			case WID_SM_LINES:      // Show the network map of lines
 			case WID_SM_POLLUTION:  // Show air pollution
 			case WID_SM_LAND_VALUE: // Show land value
+			case WID_SM_STATES:     // Show the states
 				this->SwitchMapType(static_cast<SmallMapType>(widget - WID_SM_CONTOUR));
 				SndClickBeep();
 				break;
@@ -2134,6 +2205,7 @@ class NWidgetSmallmapButtons : public NWidgetContainer {
 		{WID_SM_LINES, WWT_IMGBTN, SPR_IMG_LINES_MAP, STR_SMALLMAP_TOOLTIP_SHOW_LINES_ON_MAP},
 		{WID_SM_POLLUTION, WWT_IMGBTN, SPR_IMG_POLLUTION_MAP, STR_SMALLMAP_TOOLTIP_SHOW_POLLUTION_ON_MAP},
 		{WID_SM_LAND_VALUE, WWT_IMGBTN, SPR_IMG_LAND_VALUE_MAP, STR_SMALLMAP_TOOLTIP_SHOW_LAND_VALUE_ON_MAP},
+		{WID_SM_STATES, WWT_IMGBTN, SPR_IMG_STATES_MAP, STR_SMALLMAP_TOOLTIP_SHOW_STATES_ON_MAP},
 	};
 
 	uint num_buttons; ///< The number of buttons excluding spacers.
@@ -2359,6 +2431,15 @@ static WindowDesc _smallmap_desc(
 void ShowSmallMap()
 {
 	AllocateWindowDescFront<SmallMapWindow>(_smallmap_desc, 0);
+}
+
+/**
+ * Show the smallmap window with the map of states.
+ */
+void ShowSmallMapOfStates()
+{
+	SmallMapWindow *w = AllocateWindowDescFront<SmallMapWindow, true>(_smallmap_desc, 0);
+	if (w != nullptr) w->ShowStates();
 }
 
 /**

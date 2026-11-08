@@ -551,6 +551,16 @@ public:
 	static SQInteger GetLandValue(TileIndex tile);
 
 	/**
+	 * Get the land premium a company pays the state for this tile when it
+	 * clears it, builds on it or reshapes it (grass, rough land, fields,
+	 * trees, houses).
+	 * @param tile The tile.
+	 * @pre ScriptMap::IsValidTile(tile).
+	 * @return The premium; 0 outside the states or while there are none, -1 for an invalid tile.
+	 */
+	static Money GetLandPremium(TileIndex tile);
+
+	/**
 	 * Get the baseprice of building/clearing various tile-related things.
 	 * @param build_type the type to build
 	 * @return The baseprice of building or removing the given object.

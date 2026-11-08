@@ -17,6 +17,7 @@ add_files(
     town_budget_sl.cpp
     commuting_sl.cpp
     council_sl.cpp
+    state_sl.cpp
     city_services_sl.cpp
     company_sl.cpp
     depot_sl.cpp

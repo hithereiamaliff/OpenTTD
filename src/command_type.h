@@ -403,6 +403,8 @@ enum class Commands : uint8_t {
 	ProposeOrdinance, ///< propose an ordinance to a town
 	SetTownOrdinance, ///< bring in or repeal a town's ordinance (game scripts)
 	CofundCouncilService, ///< co-fund a town council's next city service
+	RenameState, ///< rename a state or federal territory
+	SetStateGovernment, ///< set who governs a state, or the federation (game scripts)
 
 	End, ///< @important Must ALWAYS be on the end of this list!! (period)
 };

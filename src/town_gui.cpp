@@ -10,6 +10,7 @@
 #include "stdafx.h"
 #include "town.h"
 #include "council.h"
+#include "state.h"
 #include "viewport_func.h"
 #include "error.h"
 #include "gui.h"
@@ -392,6 +393,7 @@ public:
 	{
 		extern const Town *_viewport_highlight_town;
 		this->SetWidgetLoweredState(WID_TV_CATCHMENT, _viewport_highlight_town == this->town);
+		if (this->GetWidget<NWidgetBase>(WID_TV_STATE) != nullptr) this->SetWidgetDisabledState(WID_TV_STATE, GetTownState(this->town) == nullptr);
 
 		this->DrawWidgets();
 	}
@@ -407,9 +409,15 @@ public:
 
 		/* Its council. */
 		if (AreTownCouncilsOn() && this->town->council.started) {
-			const CouncilLevel level = this->town->council.level;
-			const std::string kind = AreCouncilNamesEnglish() ? std::string{} : GetString(STR_TOWN_VIEW_COUNCIL_KIND, GetCouncilKind(level));
-			DrawString(tr, GetString(STR_TOWN_VIEW_COUNCIL, GetCouncilName(level), this->town->index, kind));
+			const std::string kind = AreCouncilNamesEnglish() ? std::string{} : GetString(STR_TOWN_VIEW_COUNCIL_KIND, GetTownCouncilKind(this->town));
+			DrawString(tr, GetString(STR_TOWN_VIEW_COUNCIL, GetTownCouncilName(this->town), this->town->index, kind));
+			tr.top += GetCharacterHeight(FontSize::Normal);
+		}
+
+		/* Its state, and who governs it. */
+		if (const State *state = GetTownState(this->town); state != nullptr) {
+			const StringID str = state->kind == StateKind::FederalTerritory ? STR_TOWN_VIEW_TERRITORY : (state->region ? STR_TOWN_VIEW_STATE_REGION : STR_TOWN_VIEW_STATE);
+			DrawString(tr, GetString(str, GetStateName(this->town->state), GetPlatformName(GetTownGovernment(this->town))));
 			tr.top += GetCharacterHeight(FontSize::Normal);
 		}
 
@@ -588,6 +596,10 @@ public:
 				ShowTownBudgetWindow(static_cast<TownID>(this->window_number));
 				break;
 
+			case WID_TV_STATE: // the town's state
+				ShowStatesWindow(this->town->state);
+				break;
+
 			case WID_TV_CHANGE_NAME: // rename
 				ShowQueryString(GetString(STR_TOWN_NAME, this->window_number), STR_TOWN_VIEW_RENAME_TOWN_BUTTON, MAX_LENGTH_TOWN_NAME_CHARS, this, CS_ALPHANUMERAL, {QueryStringFlag::EnableDefault, QueryStringFlag::LengthIsInChars});
 				break;
@@ -651,6 +663,7 @@ public:
 		uint traffic_lines = (_settings_game.economy.town_traffic != to_underlying(TownTrafficSetting::Off) ? (IsCommutingOn() ? 3 : 2) : 0) + (IsEnvironmentOn() ? 1 : 0);
 		if (IsTownCommutingKnown(this->town) && (GetCommutersLeaving(this->town).first > 0 || GetCommutersComingTo(this->town).first > 0)) traffic_lines++;
 		if (AreTownCouncilsOn() && this->town->council.started) traffic_lines++; // The council's line.
+		if (GetTownState(this->town) != nullptr) traffic_lines++; // The state's line.
 		uint aimed_height = static_cast<uint>(3 + traffic_lines + CargoSpec::town_production_cargoes[TownProductionEffect::Passengers].size() + CargoSpec::town_production_cargoes[TownProductionEffect::Mail].size()) * GetCharacterHeight(FontSize::Normal);
 		aimed_height += GetServiceRowHeight();
 
@@ -750,6 +763,7 @@ static constexpr std::initializer_list<NWidgetPart> _nested_town_game_view_widge
 		NWidget(WWT_PUSHTXTBTN, Colours::Brown, WID_TV_SHOW_AUTHORITY), SetMinimalSize(80, 12), SetFill(1, 1), SetResize(1, 0), SetStringTip(STR_TOWN_VIEW_LOCAL_AUTHORITY_BUTTON, STR_TOWN_VIEW_LOCAL_AUTHORITY_TOOLTIP),
 		NWidget(WWT_PUSHTXTBTN, Colours::Brown, WID_TV_TRANSIT), SetMinimalSize(40, 12), SetFill(1, 1), SetResize(1, 0), SetStringTip(STR_TOWN_VIEW_TRANSIT_BUTTON, STR_TOWN_VIEW_TRANSIT_TOOLTIP),
 		NWidget(WWT_PUSHTXTBTN, Colours::Brown, WID_TV_BUDGET), SetMinimalSize(40, 12), SetFill(1, 1), SetResize(1, 0), SetStringTip(STR_TOWN_VIEW_BUDGET_BUTTON, STR_TOWN_VIEW_BUDGET_TOOLTIP),
+		NWidget(WWT_PUSHTXTBTN, Colours::Brown, WID_TV_STATE), SetMinimalSize(40, 12), SetFill(1, 1), SetResize(1, 0), SetStringTip(STR_TOWN_VIEW_STATE_BUTTON, STR_TOWN_VIEW_STATE_TOOLTIP),
 		NWidget(WWT_TEXTBTN, Colours::Brown, WID_TV_CATCHMENT), SetMinimalSize(40, 12), SetFill(1, 1), SetResize(1, 0), SetStringTip(STR_BUTTON_CATCHMENT, STR_TOOLTIP_CATCHMENT),
 		NWidget(WWT_PUSHTXTBTN, Colours::Brown, WID_TV_GRAPH), SetFill(1, 0), SetResize(1, 0), SetStringTip(STR_TOWN_VIEW_CARGO_GRAPH, STR_TOWN_VIEW_CARGO_GRAPH_TOOLTIP),
 		NWidget(WWT_RESIZEBOX, Colours::Brown),

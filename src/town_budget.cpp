@@ -31,6 +31,7 @@
 #include "town_budget.h"
 #include "town_budget_cmd.h"
 #include "council.h"
+#include "state.h"
 #include "cargotype.h"
 #include "city_bus.h"
 #include "bridge_map.h"
@@ -494,7 +495,7 @@ static void ReviewTownBudget(Town *t)
 	for (const Candidate &c : candidates) {
 		if (!c.problem || HasOrdinance(t, c.ordinance)) continue;
 		if (GetOrdinanceRefusal(t, c.ordinance, CompanyID::Invalid()) != INVALID_STRING_ID) continue;
-		if (!Chance16(1, c.chance)) continue;
+		if (!Chance16(1, GetStateOrdinanceChance(t, to_underlying(c.ordinance), c.chance))) continue;
 		StartOrdinance(t, c.ordinance, CompanyID::Invalid());
 		return;
 	}
@@ -540,6 +541,8 @@ static const IntervalTimer<TimerGameEconomy> _town_budgets_monthly({TimerGameEco
 			ReviewTownCouncil(t);
 		}
 	}
+	/* The states: formed once, then grants, platforms and elections. */
+	UpdateStatesMonthly();
 	InvalidateWindowClassesData(WindowClass::TownBudget);
 });
 

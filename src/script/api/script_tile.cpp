@@ -17,6 +17,7 @@
 #include "../../tree_map.h"
 #include "../../town.h"
 #include "../../environment.h"
+#include "../../state.h"
 #include "../../landscape.h"
 #include "../../landscape_cmd.h"
 #include "../../terraform_cmd.h"
@@ -331,6 +332,12 @@
 {
 	if (!::IsValidTile(tile)) return -1;
 	return ::GetTileLandValue(tile);
+}
+
+/* static */ Money ScriptTile::GetLandPremium(TileIndex tile)
+{
+	if (!::IsValidTile(tile)) return -1;
+	return ::GetLandPremium(tile);
 }
 
 /* static */ TownID ScriptTile::GetClosestTown(TileIndex tile)

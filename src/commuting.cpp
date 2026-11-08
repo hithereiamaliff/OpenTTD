@@ -56,6 +56,7 @@
 
 #include "stdafx.h"
 #include "commuting.h"
+#include "state.h"
 #include "city_services_type.h"
 #include "city_services.h"
 #include "core/math_func.hpp"
@@ -640,6 +641,8 @@ void UpdateTownCommuting(Town *t)
 		std::vector<std::pair<uint64_t, const Town *>> candidates;
 		for (const Town *other : Town::Iterate()) {
 			if (other == t || other->cache.population < COMMUTE_MIN_POPULATION) continue;
+			/* Work across a region's border needs a pass: nobody commutes over it. */
+			if (!CanCommuteBetween(t, other)) continue;
 			const uint64_t d = DistanceManhattan(t->xy, other->xy);
 			if (d > COMMUTE_AWAY_DISTANCE) continue;
 			candidates.emplace_back(static_cast<uint64_t>(other->cache.population) * 1'000'000 / ((d + 20) * (d + 20)), other);

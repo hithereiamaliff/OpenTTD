@@ -132,6 +132,11 @@ add_files(
     council.h
     council_cmd.h
     council_type.h
+    state.cpp
+    state.h
+    state_cmd.h
+    state_gui.cpp
+    state_type.h
     city_services_gui.cpp
     city_services_type.h
     clear_cmd.cpp

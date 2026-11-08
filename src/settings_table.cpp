@@ -421,6 +421,7 @@ static void TownBudgetsChanged(int32_t)
 /** Town councils are called in Malay or in English now: windows show their names. */
 static void CouncilNamesChanged(int32_t)
 {
+	InvalidateWindowClassesData(WindowClass::States);
 	InvalidateWindowClassesData(WindowClass::TownBudget);
 	SetWindowClassesDirty(WindowClass::TownView);
 	SetWindowClassesDirty(WindowClass::TownBudget);
@@ -430,6 +431,14 @@ static void CouncilNamesChanged(int32_t)
 static void TownCouncilsChanged(int32_t new_value)
 {
 	TownBudgetsChanged(new_value);
+}
+
+/** States were switched on or off: town windows and the states window change. */
+static void StatesChanged(int32_t)
+{
+	InvalidateWindowClassesData(WindowClass::States);
+	SetWindowClassesDirty(WindowClass::TownView);
+	MarkWholeScreenDirty();
 }
 
 /** Commuting, or town traffic, was switched on or off: towns forget their commutes, or work them out at once. */

@@ -22,6 +22,7 @@
 #include "viewport_func.h"
 #include "command_func.h"
 #include "landscape.h"
+#include "state.h"
 #include "void_map.h"
 #include "tgp.h"
 #include "genworld.h"
@@ -722,7 +723,11 @@ CommandCost CmdLandscapeClear(DoCommandFlags flags, TileIndex tile)
 			return CommandCost(STR_ERROR_CAN_T_BUILD_ON_WATER);
 		}
 	} else {
+		/* The state's land: a company pays a premium for it, and in a region may need the town's leave. */
+		CommandCost land = CheckLandForCompany(tile, flags);
+		if (land.Failed()) return land;
 		cost.AddCost(_tile_type_procs[GetTileType(tile)]->clear_tile_proc(tile, flags));
+		if (cost.Succeeded()) cost.AddCost(std::move(land));
 	}
 
 	if (flags.Test(DoCommandFlag::Execute)) {

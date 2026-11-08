@@ -48,6 +48,7 @@ enum TownViewWidgets : WidgetID {
 	WID_TV_GRAPH,
 	WID_TV_TRANSIT, ///< Show the town's transit authority.
 	WID_TV_BUDGET, ///< Show the town's budget and ordinances.
+	WID_TV_STATE, ///< Show the town's state.
 };
 
 /** Widgets of the #FoundTownWindow class. */
