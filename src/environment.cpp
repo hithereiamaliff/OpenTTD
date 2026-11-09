@@ -240,6 +240,8 @@ PaletteID GetEnvironmentOverlayPalette(TileIndex tile)
 {
 	if (_environment_overlay == EnvironmentOverlay::Commuters) return GetCommuteOverlayPalette(tile);
 	if (_environment_overlay == EnvironmentOverlay::None || !IsEnvironmentKnown()) return PAL_NONE;
+	/* Water stays water, as in the map's views. */
+	if (IsTileType(tile, TileType::Water)) return PAL_NONE;
 	if (_environment_overlay == EnvironmentOverlay::Pollution) {
 		const uint api = GetTilePollution(tile);
 		if (api <= 50) return PALETTE_TO_BLUE;

@@ -214,9 +214,11 @@ static void LoadSpriteTables()
 
 	LoadNewGRF(SPR_NEWGRFS_BASE, 2);
 
-	uint total_extra_graphics = SPR_NEWGRFS_BASE - SPR_OPENTTD_BASE;
+	/* Wira Bandar's own sprites (from SPR_TRAFFIC_LIGHTS_BASE on) come from its fallback graphics only: no base set
+	 * has them, so they don't count as missing from the base set. */
+	uint total_extra_graphics = SPR_TRAFFIC_LIGHTS_BASE - SPR_OPENTTD_BASE;
 	Debug(Facility::Sprite, Severity::Info, "Checking sprites from fallback grf");
-	_missing_extra_graphics = GetSpriteCountForFile(default_filename, SPR_OPENTTD_BASE, SPR_NEWGRFS_BASE);
+	_missing_extra_graphics = GetSpriteCountForFile(default_filename, SPR_OPENTTD_BASE, SPR_TRAFFIC_LIGHTS_BASE);
 	Debug(Facility::Sprite, Severity::Error, "{} extra sprites, {} from baseset, {} from fallback", total_extra_graphics, total_extra_graphics - _missing_extra_graphics, _missing_extra_graphics);
 
 	/* The original baseset extra graphics intentionally make use of the fallback graphics.
