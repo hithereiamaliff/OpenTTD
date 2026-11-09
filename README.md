@@ -8,8 +8,14 @@ town budgets and councils, states and elections, and a transit operator's tools:
 modern and electric buses, bus lanes, BRT, metro and more. What each step added, and how it was tested, is
 in [docs/city-builder-plan.md](docs/city-builder-plan.md).
 
-- Windows download, always the latest build:
+- Windows download: the newest version is on the
+  [latest release](https://github.com/hithereiamaliff/wirabandar/releases/tag/latest), named after its
+  version, for example `wirabandar-0.2.0-windows-x64.zip`. Every version keeps its own release on the
+  [releases page](https://github.com/hithereiamaliff/wirabandar/releases), and what changed in each one is in
+  [docs/wirabandar-changelog.md](docs/wirabandar-changelog.md). The game shows its version in the window
+  title, at the bottom of the main menu and in the About window. The old link
   https://github.com/hithereiamaliff/wirabandar/releases/download/latest/wirabandar-windows-x64.zip
+  still gets the newest build.
 - It keeps its settings and saves in `Documents\Wira Bandar`. The first time it starts, it copies the
   settings and saves from `Documents\OpenTTD` (copies; nothing there is moved or deleted), and it still
   finds the graphics, NewGRFs and AIs installed for OpenTTD, in `Documents\OpenTTD` and in OpenTTD's own

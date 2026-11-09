@@ -13,6 +13,13 @@ exactly which code a copy was made from. The version is set in one place,
 `WIRA_BANDAR_VERSION` in `src/rev.h`; raise it, and add the release here,
 with every release.
 
+Downloads carry the version in their name: `wirabandar-0.2.0-windows-x64.zip`
+and so on. Every version has its own release on GitHub (tag `v0.2.0` and so
+on), with its part of this file as notes; a newer build of the same version
+replaces its zip. The rolling `latest` release always has the newest build,
+under its versioned name and under the old name `wirabandar-windows-x64.zip`,
+so links to that name keep working.
+
 ## 0.2.0 (2026-11-09)
 
 Regions run like Sabah and Sarawak decide who comes in, instead of shutting
@@ -33,6 +40,22 @@ people out:
   the state.
 - The States window shows a region's work passes, its jobs and workers, the
   checkpoint and its permit terms.
+
+An in-game tutorial:
+
+- A tutorial window walks the player through the game step by step: it says
+  what to do with the labels on screen, makes the button to click flash and
+  moves on once the step is done. Three chapters: Start a game, Your first
+  bus line, and What's new for OpenTTD players. Leave it at any step (Exit
+  tutorial or its close box) and open it again at any time with Tutorial in
+  the main menu, or the ? button on the main toolbar, then Tutorial; it
+  starts where you left off.
+- It is offered on the first start, and the first time an OpenTTD save
+  (`.sav`) is loaded. It works in any game, old saves included, and keeps
+  your place in `openttd.cfg`, never in saves.
+- The tutorial's welcome and the About window say what the name means:
+  Wira Bandar is "town hero" (wira is Malay for hero, bandar for town), and
+  the game's goal is a city that moves people, not just cars.
 
 ## 0.1.1 (2026-11-09)
 

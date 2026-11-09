@@ -2636,7 +2636,12 @@ new ideas.
   `.github/workflows/city-windows.yml` builds a 64-bit Windows zip on every
   push to `city`: a workflow artifact, plus the rolling `latest` pre-release
   as a stable download link
-  (`releases/download/latest/wirabandar-windows-x64.zip`). Libraries come from vcpkg, cached in
+  (`releases/download/latest/wirabandar-windows-x64.zip`). Since 0.2.0 the
+  zip is named after the version, `wirabandar-<version>-windows-x64.zip`
+  (`WIRA_BANDAR_VERSION` in `src/rev.h`), and every version also gets its own
+  release, tag `v<version>`, with its part of `docs/wirabandar-changelog.md`
+  as notes; `latest` has the versioned zip and the same file under the old
+  name, so old links keep working. Libraries come from vcpkg, cached in
   the Actions cache (no packages published). The exe isn't code-signed, so
   SmartScreen asks once ("More info", "Run anyway").
 - Unzip anywhere and run `wirabandar.exe`. It keeps its own folder,

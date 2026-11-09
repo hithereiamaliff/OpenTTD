@@ -1,8 +1,12 @@
 name: Windows build (Wira Bandar)
 
 # Builds a 64-bit Windows zip of Wira Bandar PC on every push to the 'city' branch,
-# keeps it as a workflow artifact, and publishes it as the rolling "latest"
-# pre-release so there is always one download link.
+# named after its version (wirabandar-<version>-windows-x64.zip, the version is
+# WIRA_BANDAR_VERSION in src/rev.h), and keeps it as a workflow artifact. It
+# publishes it twice: as the release of its version (tag v<version>, with that
+# version's part of docs/wirabandar-changelog.md as notes), and as the rolling
+# "latest" pre-release, which also has it under the old name
+# wirabandar-windows-x64.zip so links to that name keep getting the newest build.
 #
 # Libraries come from vcpkg; the compiled packages are kept in the Actions
 # cache (no packages are published anywhere). The build is not code-signed,
@@ -33,6 +37,17 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v7
+
+    - name: Read the version
+      shell: bash
+      run: |
+        version=$(sed -n 's/.*WIRA_BANDAR_VERSION = "\([0-9][0-9.]*\)".*/\1/p' src/rev.h)
+        if [ -z "${version}" ]; then
+          echo "WIRA_BANDAR_VERSION not found in src/rev.h"
+          exit 1
+        fi
+        echo "WB_VERSION=${version}" >> "${GITHUB_ENV}"
+        echo "Wira Bandar PC ${version}"
 
     - name: Set paths
       shell: bash
@@ -98,14 +113,16 @@ jobs:
         cd build
         cpack
         rm -f bundles/*.sha256
-        mv bundles/wirabandar-*-windows-*.zip bundles/wirabandar-windows-x64.zip
+        mv bundles/wirabandar-*-windows-*.zip "bundles/wirabandar-${WB_VERSION}-windows-x64.zip"
+        # The same file under the old name, for links to the newest build.
+        cp "bundles/wirabandar-${WB_VERSION}-windows-x64.zip" bundles/wirabandar-windows-x64.zip
         ls -la bundles
 
     - name: Store zip
       uses: actions/upload-artifact@v7
       with:
-        name: wirabandar-windows-x64
-        path: build/bundles/wirabandar-windows-x64.zip
+        name: wirabandar-${{ env.WB_VERSION }}-windows-x64
+        path: build/bundles/wirabandar-${{ env.WB_VERSION }}-windows-x64.zip
         retention-days: 30
 
     - name: Publish as the latest pre-release
@@ -116,11 +133,11 @@ jobs:
       run: |
         gh release delete city-latest --cleanup-tag --yes || true
         gh release delete latest --cleanup-tag --yes || true
-        gh release create latest build/bundles/wirabandar-windows-x64.zip \
+        gh release create latest "build/bundles/wirabandar-${WB_VERSION}-windows-x64.zip" build/bundles/wirabandar-windows-x64.zip \
           --prerelease \
           --target "${GITHUB_SHA}" \
-          --title "Wira Bandar PC: latest Windows build" \
-          --notes "Built from ${GITHUB_SHA}.
+          --title "Wira Bandar PC ${WB_VERSION}: latest Windows build" \
+          --notes "Version ${WB_VERSION}, built from ${GITHUB_SHA}. Download wirabandar-${WB_VERSION}-windows-x64.zip; wirabandar-windows-x64.zip is the same file under its old name. What changed in each version is in docs/wirabandar-changelog.md, and every version keeps its own release (this one: v${WB_VERSION}).
 
         How to play:
         1. Unzip anywhere (for example your Desktop) and run wirabandar.exe.
@@ -129,3 +146,28 @@ jobs:
         3. It loads .sav files and saves as .csav. Your .sav files are never overwritten, and normal OpenTTD can't open .csav files.
 
         Wira Bandar PC is a fork of OpenTTD (OpenTTD's code with changes, not a game made from scratch) and, like OpenTTD, free software under the GNU GPL version 2; the source code is this repository."
+
+    - name: Publish as the release of its version
+      if: github.ref == 'refs/heads/city'
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        # This version's part of the changelog: from its heading to the next one.
+        awk -v v="${WB_VERSION}" 'index($0, "## " v " ") == 1 { p = 1; next } /^## / { p = 0 } p' docs/wirabandar-changelog.md > version-notes.md
+        if [ ! -s version-notes.md ]; then
+          echo "What changed is in docs/wirabandar-changelog.md." > version-notes.md
+        fi
+        cat >> version-notes.md <<EOF
+
+        Download wirabandar-${WB_VERSION}-windows-x64.zip below, unzip it anywhere and run wirabandar.exe. Built from ${GITHUB_SHA}.
+
+        Wira Bandar PC is a fork of OpenTTD (OpenTTD's code with changes, not a game made from scratch) and, like OpenTTD, free software under the GNU GPL version 2; the source code is this repository.
+        EOF
+        # A newer build of the same version replaces its release.
+        gh release delete "v${WB_VERSION}" --cleanup-tag --yes || true
+        gh release create "v${WB_VERSION}" "build/bundles/wirabandar-${WB_VERSION}-windows-x64.zip" \
+          --target "${GITHUB_SHA}" \
+          --title "Wira Bandar PC ${WB_VERSION}" \
+          --notes-file version-notes.md \
+          --latest
