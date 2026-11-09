@@ -20,6 +20,37 @@ replaces its zip. The rolling `latest` release always has the newest build,
 under its versioned name and under the old name `wirabandar-windows-x64.zip`,
 so links to that name keep working.
 
+## 0.3.1 (2026-11-09)
+
+Fixes for problems found while updating the player guides for 0.1.1-0.3.0,
+and two the owner found:
+
+- Bus lanes (all day and peak hours), bus-only roads, kerbed busways and the
+  expressway's lanes and barrier show on roads up a slope too; they showed on
+  flat road only.
+- Tram tracks show over bus lanes, busways, bus-only roads and expressway
+  markings, on roads and through drive-through stops; the paint hid them.
+- On a line with even spacing, the departure boards of the stops after the
+  first count the time each bus waits at the first stop for its turn. Two
+  buses leaving the first stop 7 days apart showed "in 17.4 days" and "in
+  17.7 days" at the next stop.
+- The tutorial's Finish, at the end of a chapter, closes the tutorial, as its
+  last line says (it showed the chapters). Tutorial in the main menu, or the ?
+  button on the main toolbar and then Tutorial, opens the chapters again.
+- The tutorial keeps the count of what you did at a step ("Bus stops built: 1
+  of 3") when you click Continue, open the tutorial again or load a game; it
+  started from 0 again. Picking a chapter starts it afresh.
+- The States window fits the selected state's details: since 0.2.0 it was as
+  tall as a region's laws need, with empty space for the other states.
+- The help text of States and elections describes regions as they are since
+  0.2.0: work passes, the checkpoint and permits. Each state of a region keeps
+  its own checkpoint, towards the region's other states too.
+- When the states form, the news of a state named Sabah or Sarawak no longer
+  reads "Sarawak ... is run like Sabah and Sarawak": it "keeps the rights it
+  joined the federation with". The news says so when a region's other states
+  are behind a checkpoint too, and the States window's region line drops the
+  comparison for Sabah and Sarawak as well.
+
 ## 0.3.0 (2026-11-09)
 
 Malaysian and Singaporean names:
