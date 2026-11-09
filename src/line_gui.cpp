@@ -610,27 +610,34 @@ static std::array<StationID, 2> GetNextStops(const OrderList *list, VehicleOrder
 }
 
 /**
- * When will a vehicle next leave a station? Worked out from where it is on
- * its orders and the timetabled or estimated times of those orders.
+ * Go along a vehicle's orders from where it is, working out when it leaves the
+ * stop of each order from the timetabled or estimated times of its orders.
  * @param v The vehicle.
- * @param station The station.
- * @return The departure, if the vehicle stops there.
+ * @param held_at The order where it is held longer than its usual stay: its line's first stop; INVALID_VEH_ORDER_ID for none.
+ * @param hold How much longer it is held there, the first time it leaves it.
+ * @param visit Called with each order's index, the order and the ticks from now until it leaves its stop; returns true to stop there.
  */
-static std::optional<Departure> GetNextDeparture(const Vehicle *v, StationID station)
+template <typename F>
+static void ForEachUpcomingOrder(const Vehicle *v, VehicleOrderID held_at, TimerGameTick::Ticks hold, F visit)
 {
 	const OrderList *list = v->orders;
 	VehicleOrderID num = list->GetNumOrders();
-	if (num == 0 || v->cur_real_order_index >= num) return std::nullopt;
-	if (std::ranges::none_of(list->GetOrders(), [station](const Order &order) { return StopsAt(&order, station); })) return std::nullopt;
+	if (num == 0 || v->cur_real_order_index >= num) return;
 
 	VehicleOrderID idx = v->cur_real_order_index;
 	const Order *order = list->GetOrderAt(idx);
+	/* Held once: the next time it leaves the first stop; a lap later is too far ahead to tell. */
+	auto held = [&](VehicleOrderID at) -> TimerGameTick::Ticks {
+		if (at != held_at) return 0;
+		held_at = INVALID_VEH_ORDER_ID;
+		return hold;
+	};
 	TimerGameTick::Ticks time;
 	if (v->current_order.IsType(OT_LOADING) && v->current_order.GetNonStopType().Any()) {
 		/* Loading at the stop of its current order (a stop that isn't in its
 		 * orders doesn't count): it leaves when its usual stay there is over. */
-		time = std::max<TimerGameTick::Ticks>(0, order->GetWaitTime() - v->current_order_time);
-		if (StopsAt(order, station)) return Departure{time, v->index, idx, GetNextStops(list, idx, station)};
+		time = std::max<TimerGameTick::Ticks>(0, order->GetWaitTime() - v->current_order_time) + held(idx);
+		if (visit(idx, order, time)) return;
 		idx = list->GetNext(idx);
 		order = list->GetOrderAt(idx);
 		time += order->GetTravelTime();
@@ -639,13 +646,71 @@ static std::optional<Departure> GetNextDeparture(const Vehicle *v, StationID sta
 	}
 
 	for (uint steps = 0; steps < num; steps++) {
-		if (StopsAt(order, station)) return Departure{time + order->GetWaitTime(), v->index, idx, GetNextStops(list, idx, station)};
-		time += order->GetWaitTime();
+		time += order->GetWaitTime() + held(idx);
+		if (visit(idx, order, time)) return;
 		idx = list->GetNext(idx);
 		order = list->GetOrderAt(idx);
 		time += order->GetTravelTime();
 	}
-	return std::nullopt;
+}
+
+/**
+ * When will a vehicle next leave a station?
+ * @param v The vehicle.
+ * @param station The station.
+ * @param hold How much longer than its usual stay its line holds it at its first stop for even spacing, the next time it leaves it.
+ * @return The departure, if the vehicle stops there.
+ */
+static std::optional<Departure> GetNextDeparture(const Vehicle *v, StationID station, TimerGameTick::Ticks hold)
+{
+	const OrderList *list = v->orders;
+	std::optional<Departure> departure;
+	ForEachUpcomingOrder(v, hold > 0 ? GetLineFirstStop(list) : INVALID_VEH_ORDER_ID, hold, [&](VehicleOrderID idx, const Order *order, TimerGameTick::Ticks leaves) {
+		if (!StopsAt(order, station)) return false;
+		departure = Departure{leaves, v->index, idx, GetNextStops(list, idx, station)};
+		return true;
+	});
+	return departure;
+}
+
+/**
+ * Does a line hold its vehicles at its first stop to keep them evenly spaced (see MustHoldForLineSpacing)?
+ * @param list The line.
+ * @return True if it does.
+ */
+static bool HoldsForSpacing(const OrderList *list)
+{
+	return list->line.hold_for_spacing && !list->line.on_demand && list->line.target_gap > 0 && GetLineFirstStop(list) != INVALID_VEH_ORDER_ID;
+}
+
+/**
+ * How much longer than their usual stay a line's vehicles wait at its first stop
+ * for even spacing, the next time they leave it: one goes only every target gap.
+ * @param list The line, which holds for spacing.
+ * @param[in,out] holds The vehicles held, and for how long; added to.
+ */
+static void GetLineHolds(const OrderList *list, std::vector<std::pair<VehicleID, TimerGameTick::Ticks>> &holds)
+{
+	const VehicleOrderID first = GetLineFirstStop(list);
+	std::vector<std::pair<TimerGameTick::Ticks, VehicleID>> leaving;
+	for (const Vehicle *v = list->GetFirstSharedVehicle(); v != nullptr; v = v->NextShared()) {
+		if (v->vehstatus.Any({VehState::Stopped, VehState::Crashed})) continue;
+		ForEachUpcomingOrder(v, INVALID_VEH_ORDER_ID, 0, [&](VehicleOrderID idx, const Order *, TimerGameTick::Ticks leaves) {
+			if (idx != first) return false;
+			leaving.emplace_back(leaves, v->index);
+			return true;
+		});
+	}
+	std::ranges::sort(leaving);
+	/* The next may leave a target gap after the last that left; none left yet, any time. */
+	const int64_t next = list->line.last_departure == 0 ? 0 :
+			static_cast<int64_t>(list->line.last_departure + list->line.target_gap) - static_cast<int64_t>(TimerGameTick::counter);
+	TimerGameTick::Ticks earliest = static_cast<TimerGameTick::Ticks>(Clamp<int64_t>(next, 0, INT32_MAX));
+	for (const auto &[when, vehicle] : leaving) {
+		const TimerGameTick::Ticks leaves = std::max(when, earliest);
+		if (leaves > when) holds.emplace_back(vehicle, leaves - when);
+		earliest = leaves + list->line.target_gap;
+	}
 }
 
 /**
@@ -655,32 +720,26 @@ static std::optional<Departure> GetNextDeparture(const Vehicle *v, StationID sta
  */
 static std::vector<Departure> GetDepartures(StationID station)
 {
-	std::vector<Departure> departures;
+	std::vector<const Vehicle *> vehicles;
+	std::vector<const OrderList *> held;
 	for (const Vehicle *v : Vehicle::Iterate()) {
 		if (!v->IsPrimaryVehicle() || v->orders == nullptr || v->vehstatus.Any({VehState::Stopped, VehState::Crashed})) continue;
-		if (auto departure = GetNextDeparture(v, station); departure.has_value()) departures.push_back(*departure);
+		if (std::ranges::none_of(v->orders->GetOrders(), [station](const Order &order) { return StopsAt(&order, station); })) continue;
+		vehicles.push_back(v);
+		if (HoldsForSpacing(v->orders) && std::ranges::find(held, v->orders) == held.end()) held.push_back(v->orders);
 	}
-	auto soonest = [](const Departure &a, const Departure &b) { return a.when != b.when ? a.when < b.when : a.vehicle < b.vehicle; };
-	std::ranges::sort(departures, soonest);
 
 	/* Lines that hold vehicles at their first stop for even spacing let one go
-	 * only every target gap. */
-	std::vector<const OrderList *> held;
-	for (const Departure &d : departures) {
-		const OrderList *list = Vehicle::Get(d.vehicle)->orders;
-		if (list->line.hold_for_spacing && list->line.target_gap > 0 && d.order == GetLineFirstStop(list) && std::ranges::find(held, list) == held.end()) held.push_back(list);
+	 * only every target gap: a vehicle held there leaves every stop after it later too. */
+	std::vector<std::pair<VehicleID, TimerGameTick::Ticks>> holds;
+	for (const OrderList *list : held) GetLineHolds(list, holds);
+
+	std::vector<Departure> departures;
+	for (const Vehicle *v : vehicles) {
+		auto it = std::ranges::find(holds, v->index, &std::pair<VehicleID, TimerGameTick::Ticks>::first);
+		if (auto departure = GetNextDeparture(v, station, it == holds.end() ? 0 : it->second); departure.has_value()) departures.push_back(*departure);
 	}
-	if (held.empty()) return departures;
-	for (const OrderList *list : held) {
-		TimerGameTick::Ticks earliest = list->line.last_departure == 0 ? 0 :
-				static_cast<TimerGameTick::Ticks>(list->line.last_departure + list->line.target_gap - TimerGameTick::counter);
-		for (Departure &d : departures) {
-			if (Vehicle::Get(d.vehicle)->orders != list || d.order != GetLineFirstStop(list)) continue;
-			d.when = std::max(d.when, earliest);
-			earliest = d.when + list->line.target_gap;
-		}
-	}
-	std::ranges::sort(departures, soonest);
+	std::ranges::sort(departures, [](const Departure &a, const Departure &b) { return a.when != b.when ? a.when < b.when : a.vehicle < b.vehicle; });
 	return departures;
 }
 
