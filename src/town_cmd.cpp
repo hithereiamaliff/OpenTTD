@@ -2122,7 +2122,7 @@ static void DoCreateTown(Town *t, TileIndex tile, uint32_t townnameparts, TownSi
 	t->statues = {};
 
 	{
-		TownNameParams tnp(_settings_game.game_creation.town_name);
+		TownNameParams tnp = GetNewTownNameParams();
 		t->townnamegrfid = tnp.grfid;
 		t->townnametype = tnp.type;
 	}
@@ -2244,7 +2244,7 @@ static bool IsUniqueTownName(std::string_view name)
  */
 std::tuple<CommandCost, Money, TownID> CmdFoundTown(DoCommandFlags flags, TileIndex tile, TownSize size, bool city, TownLayout layout, bool random_location, uint32_t townnameparts, const std::string &text)
 {
-	TownNameParams par(_settings_game.game_creation.town_name);
+	TownNameParams par = GetNewTownNameParams();
 
 	if (size >= TownSize::End) return { CMD_ERROR, 0, TownID::Invalid() };
 	if (layout >= TownLayout::End) return { CMD_ERROR, 0, TownID::Invalid() };

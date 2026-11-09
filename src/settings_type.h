@@ -465,6 +465,7 @@ struct GameCreationSettings {
 	uint8_t heightmap_rotation; ///< rotation director for the heightmap
 	uint8_t se_flat_world_height; ///< land height a flat world gets in SE
 	uint8_t town_name; ///< the town name generator used for town names
+	bool malaysian_town_names; ///< Wira Bandar: new towns get Malaysian and Singaporean names (instead of town_name), and the states Malaysian ones
 	LandscapeType landscape; ///< the landscape we're currently in
 	BorderFlags water_borders; ///< bitset of the borders that are water
 	BorderFlagPresets water_border_presets; ///< presets for map border options

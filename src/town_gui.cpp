@@ -1306,7 +1306,7 @@ public:
 			Window(desc),
 			town_layout(_settings_game.economy.town_layout),
 			townname_editbox(MAX_LENGTH_TOWN_NAME_CHARS * MAX_CHAR_LENGTH, MAX_LENGTH_TOWN_NAME_CHARS),
-			params(_settings_game.game_creation.town_name)
+			params(GetNewTownNameParams())
 	{
 		this->InitNested(window_number);
 		this->querystrings[WID_TF_TOWN_NAME_EDITBOX] = &this->townname_editbox;

@@ -20,6 +20,24 @@ replaces its zip. The rolling `latest` release always has the newest build,
 under its versioned name and under the old name `wirabandar-windows-x64.zip`,
 so links to that name keep working.
 
+## 0.3.0 (2026-11-09)
+
+Malaysian and Singaporean names:
+
+- New games name their towns after Malaysia and Singapore: real towns and
+  neighbourhoods (Kampar, Sungai Petani, Ang Mo Kio, Tampines ...) and
+  made-up names from two Malay words (Bukit Indah, Taman Jaya, Sungai
+  Perdana ...). It is the first choice in the map's Town names list and on
+  by default; Settings, Towns, "Malaysian and Singaporean town names" turns
+  it off for new towns.
+- When the states form, the federal territory's city becomes Kuala Lumpur
+  (a second one Putrajaya), the states' capitals take the names of the
+  state capitals of Malaysia from the biggest down (Johor Bahru, George
+  Town, Ipoh, Shah Alam ...), the regions' capitals Kuching and Kota
+  Kinabalu, and the states the names of their states (Johor, Pulau Pinang
+  ... Sarawak, Sabah). Only towns with a Malaysian name are renamed, never
+  one a player named, so older games keep their names.
+
 ## 0.2.0 (2026-11-09)
 
 Regions run like Sabah and Sarawak decide who comes in, instead of shutting

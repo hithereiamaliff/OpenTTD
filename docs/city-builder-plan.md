@@ -2629,6 +2629,38 @@ Recommended order: M4 is complete. Next is the owner's call: renaming the
 PC game to Wira Bandar (decided with the phone game), M8 only if wanted, or
 new ideas.
 
+## Done: Malaysian and Singaporean town names (0.3.0)
+
+The owner's call (2026-11-09): town names from Malaysia and Singapore by
+default, and the cities and capitals named after Malaysia's.
+
+- A town name generator of its own: half of the names are real towns and
+  neighbourhoods (134 Malaysian, 55 Singaporean; the state capitals and
+  Kuala Lumpur, Putrajaya and Labuan left out for the capitals), half are
+  made up from a Malay first word (Bandar, Batu, Bukit, Kampung, Kuala,
+  Sungai, Taman, Tanjung ...) and a second one (Indah, Jaya, Permai, Raja,
+  Merah, Pinang ...), about 900 more.
+- Its own setting, `game_creation.malaysian_town_names` (on by default; the
+  map window's Town names list shows it first, and Settings, Towns has it),
+  instead of a new value of `game_creation.town_name`, whose values above
+  the built-in styles mean NewGRF town names: they keep their meaning. The
+  generator is built-in number 21 (`MALAYSIAN_TOWNNAME_GENERATOR`), so the
+  ranges of town and company name strings grew by one; savegames with such
+  towns don't load in older builds.
+- When the states form, `NameStatesAfterMalaysia()` renames the capitals
+  that have Malaysian names: the federal territories' cities to Kuala
+  Lumpur, Putrajaya and Labuan, the states' capitals biggest first to Johor
+  Bahru, George Town, Ipoh, Shah Alam, Seremban, Melaka, Kuantan, Kuala
+  Terengganu, Kota Bharu, Alor Setar and Kangar, the regions' to Kuching
+  and Kota Kinabalu; the states take the names of their states. Names
+  taken already, and towns a player named, are left alone.
+- Checked: a new 60% sea map (seed 3) got Bandar Jaya, Batu Panjang, Paya
+  Lebar, Sungai Perdana, Tanjung Manggis and the like; when the states
+  formed, Batu Panjang became Kuala Lumpur, Parit Mas Johor Bahru and Paya
+  Lebar Kuching, in Wilayah Persekutuan Kuala Lumpur, Johor and Sarawak.
+  city-budget-demo (English names) formed Wilayah Persekutuan Nennville
+  and Negeri Gredinghall as before.
+
 ## Getting it onto the owner's computer (Windows)
 
 - The owner plays on Windows. The code goes to the GitHub repo

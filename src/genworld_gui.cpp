@@ -356,20 +356,28 @@ static DropDownList BuildMapsizeDropDown()
 	return list;
 }
 
+/** The town names dropdown's item for Wira Bandar's Malaysian and Singaporean names (setting game_creation.malaysian_town_names). */
+static constexpr int MALAYSIAN_TOWN_NAMES_ITEM = 0x10000;
+
 static DropDownList BuildTownNameDropDown()
 {
 	DropDownList list;
+
+	/* Wira Bandar's Malaysian and Singaporean names first. */
+	list.push_back(MakeDropDownListStringItem(STR_MAPGEN_TOWN_NAME_MALAYSIAN, MALAYSIAN_TOWN_NAMES_ITEM));
+	list.push_back(MakeDropDownListDividerItem());
+	const size_t malaysian_size = list.size();
 
 	/* Add and sort newgrf townnames generators */
 	const auto &grf_names = GetGRFTownNameList();
 	for (uint i = 0; i < grf_names.size(); i++) {
 		list.push_back(MakeDropDownListStringItem(grf_names[i], BUILTIN_TOWNNAME_GENERATOR_COUNT + i));
 	}
-	std::sort(list.begin(), list.end(), DropDownListStringItem::NatSortFunc);
+	std::sort(list.begin() + malaysian_size, list.end(), DropDownListStringItem::NatSortFunc);
 
 	size_t newgrf_size = list.size();
 	/* Insert newgrf_names at the top of the list */
-	if (newgrf_size > 0) {
+	if (newgrf_size > malaysian_size) {
 		list.push_back(MakeDropDownListDividerItem()); // separator line
 		newgrf_size++;
 	}
@@ -449,6 +457,7 @@ struct GenerateLandscapeWindow : public Window {
 				return GetString(_num_towns[_settings_newgame.difficulty.number_towns]);
 
 			case WID_GL_TOWNNAME_DROPDOWN: {
+				if (_settings_newgame.game_creation.malaysian_town_names) return GetString(STR_MAPGEN_TOWN_NAME_MALAYSIAN);
 				uint gen = _settings_newgame.game_creation.town_name;
 				StringID name = gen < BUILTIN_TOWNNAME_GENERATOR_COUNT ?
 						STR_MAPGEN_TOWN_NAME_ORIGINAL_ENGLISH + gen :
@@ -676,7 +685,7 @@ struct GenerateLandscapeWindow : public Window {
 				break;
 
 			case WID_GL_TOWNNAME_DROPDOWN: // Townname generator
-				ShowDropDownList(this, BuildTownNameDropDown(), _settings_newgame.game_creation.town_name, WID_GL_TOWNNAME_DROPDOWN);
+				ShowDropDownList(this, BuildTownNameDropDown(), _settings_newgame.game_creation.malaysian_town_names ? MALAYSIAN_TOWN_NAMES_ITEM : _settings_newgame.game_creation.town_name, WID_GL_TOWNNAME_DROPDOWN);
 				break;
 
 			case WID_GL_INDUSTRY_PULLDOWN: // Number of industries
@@ -892,7 +901,8 @@ struct GenerateLandscapeWindow : public Window {
 
 			case WID_GL_TOWNNAME_DROPDOWN: // Town names
 				if (_game_mode == GameMode::Menu || Town::GetNumItems() == 0) {
-					_settings_newgame.game_creation.town_name = index;
+					_settings_newgame.game_creation.malaysian_town_names = index == MALAYSIAN_TOWN_NAMES_ITEM;
+					if (index != MALAYSIAN_TOWN_NAMES_ITEM) _settings_newgame.game_creation.town_name = index;
 					SetWindowDirty(WindowClass::GameOptions, GameOptionsWindowNumber::GameOptions);
 				}
 				break;

@@ -34,7 +34,16 @@ struct TownNameParams {
 		this->type = grf ? GetGRFTownNameType(town_name - BUILTIN_TOWNNAME_GENERATOR_COUNT) : SPECSTR_TOWNNAME_START + town_name;
 	}
 
+	/**
+	 * Initializes this struct from a NewGRF and a name style.
+	 * @param grfid The NewGRF, or none.
+	 * @param type The town name style.
+	 */
+	TownNameParams(GrfID grfid, uint16_t type) : grfid(grfid), type(type) {}
+
 	TownNameParams(const Town *t);
 };
+
+TownNameParams GetNewTownNameParams();
 
 #endif /* TOWNNAME_TYPE_H */

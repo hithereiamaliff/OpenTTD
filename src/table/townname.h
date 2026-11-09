@@ -3316,3 +3316,45 @@ static const std::string_view _name_catalan_river1[] = {
 	" de Segre",
 	" de Francol\u00ed",
 };
+
+/* Wira Bandar (a fork of OpenTTD): Malaysian and Singaporean town names. */
+
+/** Real towns and neighbourhoods of Malaysia and Singapore. The state capitals are left out: states give them to their capitals (see state.cpp). */
+static const std::string_view _name_malaysian_real[] = {
+	"Alor Gajah", "Ampang", "Arau", "Ayer Hitam", "Ayer Keroh", "Bachok", "Bagan Serai", "Balik Pulau", "Baling", "Bangi",
+	"Banting", "Batu Gajah", "Batu Pahat", "Bau", "Beaufort", "Bentong", "Beranang", "Besut", "Betong", "Bintulu",
+	"Bukit Mertajam", "Butterworth", "Cheras", "Cukai", "Dungun", "Gemas", "Gerik", "Gombak", "Gopeng", "Gua Musang",
+	"Gurun", "Jasin", "Jelebu", "Jerantut", "Jertih", "Jitra", "Kajang", "Kampar", "Kapit", "Karak",
+	"Kemaman", "Kepala Batas", "Kepong", "Keningau", "Kerteh", "Klang", "Kluang", "Kota Belud", "Kota Marudu", "Kota Tinggi",
+	"Kuah", "Kuala Kangsar", "Kuala Krai", "Kuala Kubu Bharu", "Kuala Lipis", "Kuala Pilah", "Kuala Selangor", "Kudat", "Kulai", "Kulim",
+	"Kunak", "Lahad Datu", "Lawas", "Limbang", "Lumut", "Lundu", "Machang", "Mantin", "Marang", "Masjid Tanah",
+	"Mentakab", "Merlimau", "Mersing", "Miri", "Muar", "Mukah", "Nibong Tebal", "Nilai", "Padang Besar", "Papar",
+	"Parit Buntar", "Pasir Gudang", "Pasir Mas", "Pekan", "Penampang", "Pendang", "Petaling Jaya", "Pontian", "Port Dickson", "Puchong",
+	"Putatan", "Ranau", "Rantau Panjang", "Raub", "Rawang", "Sandakan", "Saratok", "Sarikei", "Segamat", "Sekinchan",
+	"Selayang", "Semenyih", "Semporna", "Sepang", "Serian", "Seri Iskandar", "Seri Kembangan", "Sibu", "Simpang Renggam", "Sipitang",
+	"Sitiawan", "Skudai", "Slim River", "Sri Aman", "Subang Jaya", "Sungai Buloh", "Sungai Petani", "Sungai Siput", "Taiping", "Tambunan",
+	"Tampin", "Tanah Merah", "Tangkak", "Tanjung Malim", "Tapah", "Tawau", "Teluk Intan", "Temerloh", "Tenom", "Tuaran",
+	"Tumpat", "Ulu Tiram", "Yan", "Yong Peng",
+	/* Singapore */
+	"Aljunied", "Ang Mo Kio", "Balestier", "Bedok", "Bishan", "Boon Lay", "Bukit Batok", "Bukit Merah", "Bukit Panjang", "Bukit Timah",
+	"Buona Vista", "Changi", "Choa Chu Kang", "Clementi", "Dover", "Eunos", "Geylang", "Holland Village", "Hougang", "Joo Chiat",
+	"Jurong", "Kallang", "Katong", "Kembangan", "Kranji", "Lim Chu Kang", "Loyang", "Mandai", "Marine Parade", "Novena",
+	"Pasir Ris", "Paya Lebar", "Potong Pasir", "Punggol", "Queenstown", "Redhill", "Seletar", "Sembawang", "Sengkang", "Serangoon",
+	"Siglap", "Simei", "Tampines", "Tanglin", "Tanjong Pagar", "Telok Blangah", "Tengah", "Thomson", "Tiong Bahru", "Toa Payoh",
+	"Tuas", "Whampoa", "Woodlands", "Yio Chu Kang", "Yishun",
+};
+
+/** First words of made-up Malay place names. */
+static const std::string_view _name_malaysian_1[] = {
+	"Ayer ", "Bandar ", "Batu ", "Bukit ", "Kampung ", "Kota ", "Kuala ", "Padang ", "Parit ", "Pekan ",
+	"Permatang ", "Simpang ", "Sungai ", "Taman ", "Tanjung ", "Tasik ", "Teluk ", "Ulu ",
+};
+
+/** Second words of made-up Malay place names. */
+static const std::string_view _name_malaysian_2[] = {
+	"Aman", "Bahagia", "Baru", "Belimbing", "Besar", "Bintang", "Cempaka", "Damai", "Durian", "Emas",
+	"Gading", "Harmoni", "Hijau", "Indah", "Jambu", "Jaya", "Kelapa", "Kenanga", "Keramat", "Lama",
+	"Limau", "Lumut", "Makmur", "Manggis", "Mas", "Melati", "Merah", "Mewah", "Mutiara", "Nangka",
+	"Panjang", "Pasir", "Perdana", "Permai", "Pinang", "Puteri", "Raja", "Rambutan", "Sejahtera", "Selatan",
+	"Sentosa", "Seri", "Setia", "Tembusu", "Tengah", "Tinggi", "Timur", "Utama", "Utara", "Waras",
+};

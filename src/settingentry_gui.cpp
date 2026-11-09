@@ -836,6 +836,7 @@ SettingsContainer &GetSettingsTree()
 				towns->Add(new SettingEntry("economy.town_budgets"));
 				towns->Add(new SettingEntry("economy.town_councils"));
 				towns->Add(new SettingEntry("economy.states"));
+				towns->Add(new SettingEntry("game_creation.malaysian_town_names"));
 				towns->Add(new SettingEntry("gui.council_names"));
 				towns->Add(new SettingEntry("economy.commuting"));
 				towns->Add(new SettingEntry("economy.allow_town_roads"));

@@ -56,6 +56,7 @@
 #include "tile_map.h"
 #include "town.h"
 #include "town_zoning.h"
+#include "townname_func.h"
 #include "town_budget.h"
 #include "town_traffic.h"
 #include "transit_authority.h"
@@ -698,6 +699,72 @@ static std::vector<const Town *> PickCapitals(const std::vector<const Town *> &t
 	return capitals;
 }
 
+/** State capitals of Malaysia, for the states' capitals as they form, biggest first (see NameStatesAfterMalaysia). */
+static constexpr std::string_view MALAYSIAN_CAPITALS[] = {
+	"Johor Bahru", "George Town", "Ipoh", "Shah Alam", "Seremban", "Melaka", "Kuantan", "Kuala Terengganu", "Kota Bharu", "Alor Setar", "Kangar",
+};
+/** The states of those capitals, in the same order. */
+static constexpr std::string_view MALAYSIAN_STATES[] = {
+	"Johor", "Pulau Pinang", "Perak", "Selangor", "Negeri Sembilan", "Melaka", "Pahang", "Terengganu", "Kelantan", "Kedah", "Perlis",
+};
+static_assert(std::size(MALAYSIAN_CAPITALS) == std::size(MALAYSIAN_STATES));
+/** Capitals of the regions run like Sabah and Sarawak, biggest first. */
+static constexpr std::string_view MALAYSIAN_REGION_CAPITALS[] = { "Kuching", "Kota Kinabalu" };
+/** Their states. */
+static constexpr std::string_view MALAYSIAN_REGION_STATES[] = { "Sarawak", "Sabah" };
+static_assert(std::size(MALAYSIAN_REGION_CAPITALS) == std::size(MALAYSIAN_REGION_STATES));
+/** Cities of the federal territories, biggest first. */
+static constexpr std::string_view MALAYSIAN_FEDERAL_CITIES[] = { "Kuala Lumpur", "Putrajaya", "Labuan" };
+
+/**
+ * With Malaysian and Singaporean town names (setting game_creation.malaysian_town_names), the states that just
+ * formed take Malaysian names: the federal territories' cities become Kuala Lumpur and Putrajaya, the states'
+ * capitals the state capitals of Malaysia (Johor Bahru, George Town, Ipoh ...) and the regions' Kuching and Kota
+ * Kinabalu, biggest first, and the states the names of their states (Johor, Pulau Pinang ... Sarawak, Sabah).
+ * Only towns with a Malaysian town name are renamed, never one a player named; names already taken are skipped.
+ */
+static void NameStatesAfterMalaysia()
+{
+	if (!_settings_game.game_creation.malaysian_town_names) return;
+	auto is_taken = [](std::string_view name) {
+		for (const Town *t : Town::Iterate()) {
+			if (t->name.empty() ? GetTownName(t) == name : t->name == name) return true;
+		}
+		return false;
+	};
+	auto rename = [&](StateID id, std::string_view capital, std::string_view state) {
+		Town *t = Town::GetIfValid(_states[id].capital);
+		if (t == nullptr || !t->name.empty() || !t->townnamegrfid.Empty() || t->townnametype != SPECSTR_TOWNNAME_START + MALAYSIAN_TOWNNAME_GENERATOR) return;
+		if (is_taken(capital)) return;
+		t->name = capital;
+		t->UpdateVirtCoord();
+		if (!state.empty() && _states[id].name.empty()) _states[id].name = state;
+	};
+	/* Biggest capital first, in each kind of state. */
+	std::vector<StateID> order;
+	for (StateID id = 0; id < _states.size(); id++) order.push_back(id);
+	std::ranges::sort(order, [](StateID a, StateID b) {
+		const Town *ta = Town::GetIfValid(_states[a].capital), *tb = Town::GetIfValid(_states[b].capital);
+		const uint pa = ta == nullptr ? 0 : ta->cache.population, pb = tb == nullptr ? 0 : tb->cache.population;
+		return pa != pb ? pa > pb : a < b;
+	});
+	size_t federal = 0, states = 0, regions = 0;
+	for (StateID id : order) {
+		const State &s = _states[id];
+		if (s.kind == StateKind::FederalTerritory) {
+			if (federal < std::size(MALAYSIAN_FEDERAL_CITIES)) rename(id, MALAYSIAN_FEDERAL_CITIES[federal++], {});
+		} else if (s.region) {
+			if (regions < std::size(MALAYSIAN_REGION_CAPITALS)) {
+				rename(id, MALAYSIAN_REGION_CAPITALS[regions], MALAYSIAN_REGION_STATES[regions]);
+				regions++;
+			}
+		} else if (states < std::size(MALAYSIAN_CAPITALS)) {
+			rename(id, MALAYSIAN_CAPITALS[states], MALAYSIAN_STATES[states]);
+			states++;
+		}
+	}
+}
+
 /** Form the states: capitals, federal territories, regions; every town in one. */
 static void FormStates()
 {
@@ -837,6 +904,7 @@ static void FormStates()
 
 	UpdateStateCaches();
 	RebuildStateMap(lands);
+	NameStatesAfterMalaysia();
 
 	uint states = 0, regions = 0;
 	for (StateID id = 0; id < _states.size(); id++) {

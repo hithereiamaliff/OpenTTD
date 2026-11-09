@@ -57,16 +57,21 @@ static const uint TAB_SIZE_GAMESCRIPT = TAB_SIZE * 32;
 /** Number of strings for NewGRFs */
 static const uint TAB_SIZE_NEWGRF     = TAB_SIZE * 256;
 
-/** The number of builtin generators for town names. */
+/** The number of builtin generators for town names that the setting game_creation.town_name picks; the NewGRF ones follow. */
 static constexpr uint16_t BUILTIN_TOWNNAME_GENERATOR_COUNT = 21;
+/**
+ * Wira Bandar: the Malaysian and Singaporean town names, a builtin generator after those. Its own setting
+ * (game_creation.malaysian_town_names) picks it, so the town name setting's values for NewGRF names keep their meaning.
+ */
+static constexpr uint16_t MALAYSIAN_TOWNNAME_GENERATOR = BUILTIN_TOWNNAME_GENERATOR_COUNT;
 
 /** Special strings for town names. The town name is generated dynamically on request. */
 static constexpr uint16_t SPECSTR_TOWNNAME_START = 0x20C0;
-static constexpr uint16_t SPECSTR_TOWNNAME_END = SPECSTR_TOWNNAME_START + BUILTIN_TOWNNAME_GENERATOR_COUNT;
+static constexpr uint16_t SPECSTR_TOWNNAME_END = SPECSTR_TOWNNAME_START + MALAYSIAN_TOWNNAME_GENERATOR + 1;
 
 /** Special strings for company names on the form "TownName transport". */
 static constexpr StringID SPECSTR_COMPANY_NAME_START{0x70EA};
-static constexpr StringID SPECSTR_COMPANY_NAME_END{SPECSTR_COMPANY_NAME_START + BUILTIN_TOWNNAME_GENERATOR_COUNT};
+static constexpr StringID SPECSTR_COMPANY_NAME_END{SPECSTR_COMPANY_NAME_START + MALAYSIAN_TOWNNAME_GENERATOR + 1};
 
 static constexpr StringID SPECSTR_SILLY_NAME{0x70E5}; ///< Special string for silly company names.
 static constexpr StringID SPECSTR_ANDCO_NAME{0x70E6}; ///< Special string for Surname & Co company names.

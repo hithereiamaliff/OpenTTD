@@ -125,6 +125,17 @@ bool VerifyTownName(uint32_t r, const TownNameParams *par, TownNames *town_names
 
 
 /**
+ * How new towns are named: with Malaysian and Singaporean names while that setting is on (Wira Bandar's
+ * default), else in the style chosen for town names.
+ * @return The name parameters for a new town.
+ */
+TownNameParams GetNewTownNameParams()
+{
+	if (_settings_game.game_creation.malaysian_town_names) return TownNameParams(GrfID{}, SPECSTR_TOWNNAME_START + MALAYSIAN_TOWNNAME_GENERATOR);
+	return TownNameParams(_settings_game.game_creation.town_name);
+}
+
+/**
  * Generates valid town name.
  * @param randomizer the source of random data for generating the name
  * @param townnameparts if a name is generated, it's stored there
@@ -133,7 +144,7 @@ bool VerifyTownName(uint32_t r, const TownNameParams *par, TownNames *town_names
  */
 bool GenerateTownName(Randomizer &randomizer, uint32_t *townnameparts, TownNames *town_names)
 {
-	TownNameParams par(_settings_game.game_creation.town_name);
+	TownNameParams par = GetNewTownNameParams();
 
 	/* Do not set i too low, since when we run out of names, we loop
 	 * for #tries only one time anyway - then we stop generating more
@@ -932,6 +943,23 @@ static void MakeCatalanTownName(StringBuilder &builder, uint32_t seed)
 
 
 /**
+ * Generates a Malaysian or Singaporean town name (Wira Bandar): half are real towns and neighbourhoods
+ * of Malaysia and Singapore, the other half made up from two Malay words, like Bukit Indah.
+ * @param builder The builder to write the name to.
+ * @param seed The seed of the town name.
+ */
+static void MakeMalaysianTownName(StringBuilder &builder, uint32_t seed)
+{
+	if (SeedModChance(0, 2, seed) == 0) {
+		builder += _name_malaysian_real[SeedModChance(4, std::size(_name_malaysian_real), seed)];
+		return;
+	}
+	builder += _name_malaysian_1[SeedModChance(12, std::size(_name_malaysian_1), seed)];
+	builder += _name_malaysian_2[SeedModChance(20, std::size(_name_malaysian_2), seed)];
+}
+
+
+/**
  * Type for all town name generator functions.
  * @param builder The builder to write the name to.
  * @param seed The seed of the town name.
@@ -961,7 +989,9 @@ static TownNameGenerator *const _town_name_generators[] = {
 	MakeTurkishTownName,
 	MakeItalianTownName,
 	MakeCatalanTownName,
+	MakeMalaysianTownName, // Wira Bandar: MALAYSIAN_TOWNNAME_GENERATOR, chosen by its own setting
 };
+static_assert(std::size(_town_name_generators) == BUILTIN_TOWNNAME_GENERATOR_COUNT + 1);
 
 
 /**
