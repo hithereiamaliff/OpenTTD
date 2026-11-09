@@ -30,7 +30,7 @@ static constexpr uint REGION_WATERS_CELLS = 3;
 enum class StateCell : uint8_t {
 	Land = 0, ///< Land.
 	Sea = 1, ///< Sea.
-	RegionWaters = 2, ///< Sea within a region's waters: nobody may reclaim land there.
+	RegionWaters = 2, ///< Sea within a region's waters: reclaiming land there needs its permit.
 };
 
 bool AreStatesOn();
@@ -53,7 +53,28 @@ StringID GetTownCouncilKind(const Town *t);
 Money GetLandPremium(TileIndex tile);
 Money GetStateLandPremium(StateID id, uint value);
 CommandCost CheckLandForCompany(TileIndex tile, DoCommandFlags flags);
-CommandCost CheckReclamation(TileIndex tile);
+/** A region's permit for a company's new town or reclaimed sea tile (see GetRegionPermit). */
+struct RegionPermit {
+	StateID state = INVALID_STATE; ///< The region giving it; INVALID_STATE when none is needed.
+	bool cofunded = false; ///< The state pays half; otherwise the company pays a permit fee to the state.
+	Money amount = 0; ///< The state's half, or the fee.
+
+	/**
+	 * What the permit changes in the company's cost.
+	 * @return Less by the state's half, or more by the fee.
+	 */
+	Money GetCompanyCostChange() const { return this->cofunded ? -this->amount : this->amount; }
+};
+
+CommandCost GetRegionPermit(TileIndex tile, Money cost, bool waters, RegionPermit &permit);
+void ApplyRegionPermit(const RegionPermit &permit);
+uint GetRegionWorkPassPercent(StateID id);
+/** A region's immigration checkpoint adds this many minutes to every commute across its border. */
+static constexpr uint REGION_CHECKPOINT_MINUTES = 15;
+/** A region's permit fee for a new town or reclaimed land when it doesn't co-fund them, in percent of their cost. */
+static constexpr uint REGION_PERMIT_FEE_PERCENT = 25;
+std::pair<uint64_t, uint64_t> GetRegionJobsAndWorkers(StateID id);
+bool DoesRegionWantGrowth(StateID id);
 
 /** While one lives, the sea a command clears stays sea, under a dock or a ship depot: that isn't land reclamation. */
 struct BuildingOnSeaScope {
@@ -63,8 +84,8 @@ struct BuildingOnSeaScope {
 	BuildingOnSeaScope &operator=(const BuildingOnSeaScope &) = delete;
 };
 
-CommandCost CheckTownFoundingForStates(TileIndex tile);
-bool CanCommuteBetween(const Town *a, const Town *b);
+uint GetCommuteWorkPassPercent(const Town *home, const Town *work);
+bool IsCommuteAcrossRegionBorder(const Town *home, const Town *work);
 uint GetPlatformStrength(StateID id);
 uint GetStateTransitGrantPercent(const Town *t);
 uint GetStateGrowthPercent(const Town *t);

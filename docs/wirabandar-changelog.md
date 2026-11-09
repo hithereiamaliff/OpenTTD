@@ -13,6 +13,27 @@ exactly which code a copy was made from. The version is set in one place,
 `WIRA_BANDAR_VERSION` in `src/rev.h`; raise it, and add the release here,
 with every release.
 
+## 0.2.0 (2026-11-09)
+
+Regions run like Sabah and Sarawak decide who comes in, instead of shutting
+people out:
+
+- Commuting across a region's border: people may live on one side and work
+  on the other. A checkpoint adds 15 minutes to every such commute, and a
+  region gives work passes to only part of the people from elsewhere who
+  would work in its towns: more when its towns lack workers, fewer when
+  they lack jobs, more under Roads and Growth and fewer under Homes and
+  Services (at least 20%). The rest find work on their own side. Its own
+  people may work outside it.
+- New towns founded by companies and land reclaimed in a region's waters
+  need its permit. The council of the region's nearest town must rate the
+  company Mediocre or better. When the region wants to grow (its towns lack
+  workers, or Roads and Growth governs), the state co-funds them and pays
+  half; otherwise the company pays the full cost and a permit fee of 25% to
+  the state.
+- The States window shows a region's work passes, its jobs and workers, the
+  checkpoint and its permit terms.
+
 ## 0.1.1 (2026-11-09)
 
 Fixes for problems found while writing the player guides.

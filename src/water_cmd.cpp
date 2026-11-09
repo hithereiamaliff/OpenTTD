@@ -604,9 +604,10 @@ static CommandCost ClearTile_Water(TileIndex tile, DoCommandFlags flags)
 			CommandCost ret = EnsureNoVehicleOnGround(tile);
 			if (ret.Failed()) return ret;
 
-			/* Nobody may reclaim land in a region's waters. */
+			/* Reclaiming land in a region's waters needs its permit: it co-funds it, or takes a permit fee. */
+			RegionPermit permit;
 			if (GetWaterClass(tile) == WaterClass::Sea) {
-				ret = CheckReclamation(tile);
+				ret = GetRegionPermit(tile, base_cost, true, permit);
 				if (ret.Failed()) return ret;
 			}
 
@@ -633,9 +634,10 @@ static CommandCost ClearTile_Water(TileIndex tile, DoCommandFlags flags)
 				DoClearSquare(tile);
 				MarkCanalsAndRiversAroundDirty(tile);
 				ClearNeighbourNonFloodingStates(tile);
+				ApplyRegionPermit(permit);
 			}
 
-			return CommandCost(ExpensesType::Construction, base_cost);
+			return CommandCost(ExpensesType::Construction, base_cost + permit.GetCompanyCostChange());
 		}
 
 		case WaterTileType::Coast:

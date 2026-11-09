@@ -153,6 +153,8 @@ static constexpr uint TRANSFER_TICKS = 170;
 static constexpr uint FARE_TICKS = 340;
 /** What paying a congestion charge feels like, in ticks: three minutes. */
 static constexpr uint CHARGE_TICKS = 510;
+/** Passing a region's immigration checkpoint on the way to work across its border, in ticks (170 a minute). */
+static constexpr uint CHECKPOINT_TICKS = REGION_CHECKPOINT_MINUTES * 170;
 /** Walk from the edge of a car-free centre, in ticks: five minutes. */
 static constexpr uint CAR_FREE_WALK_TICKS = 860;
 /** Riders who stay on feel at most this much of a vehicle standing at a stop, in ticks. */
@@ -507,6 +509,8 @@ struct CommuteCell {
 	int32_t road = -1; ///< Road node where its car trips start and end, or -1.
 	uint32_t arrive = 0; ///< Parking and walking to work by car, in ticks.
 	uint32_t charge = 0; ///< Extra cost of driving there: a congestion charge, in ticks.
+	uint32_t checkpoint = 0; ///< Time at a region's border checkpoint on the way there, in ticks.
+	uint8_t passes = 100; ///< Share of the commuters who would work there that may (a region's work passes), in percent.
 	std::vector<CommuteAccess> access; ///< Stops within reach.
 };
 
@@ -650,8 +654,6 @@ void UpdateTownCommuting(Town *t)
 		std::vector<std::pair<uint64_t, const Town *>> candidates;
 		for (const Town *other : Town::Iterate()) {
 			if (other == t || other->cache.population < COMMUTE_MIN_POPULATION) continue;
-			/* Work across a region's border needs a pass: nobody commutes over it. */
-			if (!CanCommuteBetween(t, other)) continue;
 			const uint64_t d = DistanceManhattan(t->xy, other->xy);
 			if (d > COMMUTE_AWAY_DISTANCE) continue;
 			candidates.emplace_back(static_cast<uint64_t>(other->cache.population) * 1'000'000 / ((d + 20) * (d + 20)), other);
@@ -783,6 +785,7 @@ void UpdateTownCommuting(Town *t)
 	}
 
 	/* Each cell's centre, its road and what arriving there by car costs. */
+	std::vector<std::pair<const Town *, uint8_t>> border_passes; ///< Work passes for the towns across a region's border, worked out once.
 	std::vector<std::vector<int32_t>> cell_nodes(cells.size());
 	for (size_t i = 0; i < nodes.size(); i++) cell_nodes[cell_of(TileX(nodes[i].tile), TileY(nodes[i].tile))].push_back(static_cast<int32_t>(i));
 	for (uint cy = 0; cy < gh; cy++) {
@@ -809,6 +812,13 @@ void UpdateTownCommuting(Town *t)
 			const HouseZone zone = GetTownRadiusGroup(there, cell.centre);
 			cell.arrive = GetParkingTicks(there, zone) + (best == UINT_MAX ? 0 : best * WALK_TICKS_PER_TILE);
 			if (there->transit.congestion_charge && IsInCongestionChargeZone(there, cell.centre)) cell.charge = CHARGE_TICKS;
+			/* Work across a region's border: its checkpoint on the way, and only those it gives work passes. */
+			if (IsCommuteAcrossRegionBorder(t, there)) {
+				auto it = std::ranges::find(border_passes, there, &std::pair<const Town *, uint8_t>::first);
+				if (it == border_passes.end()) it = border_passes.insert(border_passes.end(), {there, static_cast<uint8_t>(GetCommuteWorkPassPercent(t, there))});
+				cell.checkpoint = CHECKPOINT_TICKS;
+				cell.passes = it->second;
+			}
 		}
 	}
 
@@ -1005,17 +1015,17 @@ void UpdateTownCommuting(Town *t)
 			if (d == o || to.jobs == 0) continue;
 			Reach &r = reach[d];
 			if (to.road >= 0 && car_dist[to.road] != UNREACHED) {
-				r.car_time = car_dist[to.road] + to.arrive;
+				r.car_time = car_dist[to.road] + to.arrive + to.checkpoint;
 				r.car = r.car_time + to.charge;
 			}
 			for (const CommuteAccess &a : to.access) {
 				const uint32_t post = 2 * a.station + 1;
 				if (transit_cost[post] == UNREACHED) continue;
 				const uint32_t walk = static_cast<uint32_t>(a.walk_sum / a.weight) * WALK_TICKS_PER_TILE + WALK_TICKS_PER_TILE / 2;
-				const uint32_t cost = transit_cost[post] + walk * WALK_WEIGHT;
+				const uint32_t cost = transit_cost[post] + walk * WALK_WEIGHT + to.checkpoint;
 				if (cost < r.transit) {
 					r.transit = cost;
-					r.ride_time = transit_time[post] + walk;
+					r.ride_time = transit_time[post] + walk + to.checkpoint;
 				}
 			}
 		}
@@ -1030,6 +1040,8 @@ void UpdateTownCommuting(Town *t)
 			const uint64_t dist = DistanceManhattan(from.centre, to.centre);
 			pull[d] = static_cast<uint64_t>(to.jobs) * 16 * GRAVITY_DISTANCE_SQ / (GRAVITY_DISTANCE_SQ + dist * dist);
 			if (r.car == UNREACHED) pull[d] = pull[d] * from.covered / from.weight * to.covered / to.weight;
+			/* Without a work pass for a region, they find work elsewhere. */
+			pull[d] = pull[d] * to.passes / 100;
 			total_pull += pull[d];
 		}
 

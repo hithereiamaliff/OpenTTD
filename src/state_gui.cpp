@@ -29,7 +29,7 @@
 #include "safeguards.h"
 
 /** Lines of the details of the selected state. */
-static constexpr uint STATE_DETAIL_LINES = 15;
+static constexpr uint STATE_DETAIL_LINES = 19;
 
 /** The states window. */
 struct StatesWindow : Window {
@@ -205,7 +205,13 @@ struct StatesWindow : Window {
 
 		/* Its laws. */
 		ir.top = DrawStringMultiLine(ir, GetString(STR_STATES_DETAIL_PREMIUM, GetStateLandPremium(id, 50)));
-		if (s->region) DrawStringMultiLine(ir, STR_STATES_DETAIL_REGION);
+		if (s->region) {
+			/* Its own land laws, immigration and permits, decided by its government. */
+			ir.top = DrawStringMultiLine(ir, STR_STATES_DETAIL_REGION);
+			const auto [jobs, workers] = GetRegionJobsAndWorkers(id);
+			ir.top = DrawStringMultiLine(ir, GetString(STR_STATES_DETAIL_REGION_PASSES, GetRegionWorkPassPercent(id), jobs, workers, REGION_CHECKPOINT_MINUTES));
+			DrawStringMultiLine(ir, DoesRegionWantGrowth(id) ? GetString(STR_STATES_DETAIL_REGION_PERMITS_COFUND) : GetString(STR_STATES_DETAIL_REGION_PERMITS_FEE, REGION_PERMIT_FEE_PERCENT));
+		}
 	}
 
 	void DrawWidget(const Rect &r, WidgetID widget) const override

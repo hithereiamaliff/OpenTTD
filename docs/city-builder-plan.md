@@ -2338,6 +2338,9 @@ to the tribunal of the Law of the Sea in 2003).
 - No land reclamation: no company may turn sea into land within 12 tiles of
   the region's shores (on a narrow strait that reaches the other shore).
   Bridges, docks and ships are fine.
+- Changed in 0.2.0 (the owner's call, 2026-11-09): commuting across the
+  border, new towns and reclamation are allowed by the region's work passes
+  and permits instead; see "Done: region work passes and permits (0.2.0)".
 
 ### Windows, map, names
 
@@ -2530,7 +2533,85 @@ step and open again at any time.
   click the stop itself. Road vehicles and Finances open a company menu first;
   their steps say "choose your company".
 
-## Roadmap
+## Done: fixes from writing the guides (0.1.1)
+
+Five writers played the build of 8 November (430892a9ae) while writing the
+player guides and reported 15 problems. Thirteen were real and are fixed;
+each was checked in the game or with a test AI. Wira Bandar now has a
+version of its own (see `docs/wirabandar-changelog.md`): this batch is
+0.1.1, the first release under the name was 0.1.0.
+
+- Texts: council news and the Budget window name the building ("opens a new
+  clinic", "a police station next"), "1 year old" in the estates line, and
+  towns under 500 people say they never count commuters.
+- Windows: the Budget and Transit windows open as wide as their longest
+  line and widen when one grows; the Tolls window fits its lines; the line
+  map can be made as short as three stops; the line window updates after
+  its own buttons; the Bus Priority and Tolls toolbars open under the Road
+  Construction toolbar.
+- Councils start right after loading a savegame from before them (and when
+  switched on), instead of showing district councils until the next month.
+- Lines: "which needs N vehicles" leaves out the time vehicles wait for
+  their turn at the first stop with even spacing on, held there or queued
+  behind (a new monthly statistic, saved with the line); 12 buses held to a
+  340-tick gap said 12, now 8-10, against 8 without holding.
+- The main menu's "missing 301 sprites" notice is gone (Wira Bandar's own
+  sprites are not counted); the Air pollution and Land value tints leave
+  water untinted.
+- Regions: docks and ship depots may be built in a region's waters; native
+  customary land goes to companies the town rates Mediocre or better, as
+  its message says; the States window lost a "paused" note that could
+  never show.
+- Not changed: a company can't found a town at a random location (only the
+  scenario editor, with no company, can), so the region check can't be
+  skipped that way; the console's `zoomto 1` works (a new game at 200%
+  interface size already starts at that zoom).
+- Tests: 96/96 unit tests; all 47 test saves load, save and reload; test
+  AI `HoldNeed` (vehicles needed with even spacing) and `StateTest` (now
+  also docks and ship depots in a region's waters) in the test kit.
+
+## Done: region work passes and permits (0.2.0)
+
+The owner's call (2026-11-09): a region run like Sabah and Sarawak should
+decide who comes in rather than shut people out, as the real states do with
+immigration checkpoints, passes and permits. In Sabah and Sarawak other
+Malaysians enter with their identity card for a 90-day social visit pass
+(IMM.114), need a work permit (from the state's immigration and labour
+departments) to work there, and employers need a licence to employ
+non-residents; the state may bar anyone or limit their stay (Immigration Act
+1959/63, sections 64-66). The Merapok-Sindumin checkpoint between Sarawak and
+Sabah can take one to two hours to pass at busy times. Reclamation (Tanjung
+Aru in Kota Kinabalu, for one) is approved by the state, which then has
+developers build on it, partly as joint ventures.
+
+- Work passes: people may live on one side of a region's border and work on
+  the other. The region gives work passes to a share of the people from
+  elsewhere who would work in its towns: 50% plus half its labour need
+  (from -100, far more workers than jobs, to 100, far more jobs than
+  workers, by the homes and jobs of its towns, as zoning counts them), 20
+  more under Roads and Growth and 20 fewer under Homes and Services, at
+  least 20%. Those without one work on their own side. Leaving a region
+  needs no pass. Every commute across the border passes the checkpoint: 15
+  minutes more by car and by transit.
+- Permits for new towns founded by companies and for sea turned into land
+  in a region's waters: the council of the region's town nearest the place
+  must rate the company Mediocre or better (as for native customary land).
+  When the region wants to grow (its towns lack workers, labour need 20 or
+  more, or Roads and Growth governs) the state co-funds it and pays half,
+  from its treasury as far as it can and the federal government the rest;
+  otherwise the company pays the full cost and a permit fee of 25% to the
+  state treasury. Docks and ship depots need no permit.
+- The States window shows a region's work passes, its jobs and workers, the
+  checkpoint and its permit terms; the map legend says "reclamation by
+  permit"; the news when regions form names the passes and permits.
+- Not saved: the work passes and terms are worked out from the towns when
+  needed, so savegames are unchanged and every player of a network game
+  gets the same.
+- Code: `state.cpp` (`GetRegionWorkPassPercent`, `GetRegionPermit`,
+  `ApplyRegionPermit`, `GetCommuteWorkPassPercent`), `commuting.cpp` (the
+  checkpoint and the passes per job cell), `town_cmd.cpp` (founding),
+  `water_cmd.cpp` (reclamation), `state_gui.cpp`.
+
 
 Sizes are rough: S = one session, M = a few, L = many, XL = a project in itself.
 

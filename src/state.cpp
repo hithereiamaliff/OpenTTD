@@ -55,6 +55,7 @@
 #include "strings_func.h"
 #include "tile_map.h"
 #include "town.h"
+#include "town_zoning.h"
 #include "town_budget.h"
 #include "town_traffic.h"
 #include "transit_authority.h"
@@ -100,6 +101,12 @@ static constexpr uint ROADS_GROWTH_PERCENT = 15;
 static constexpr uint HOMES_FLATS_PERCENT = 150;
 /** Under Transit First towns get this share of their taxes on top for their transit budgets, in percent. */
 static constexpr uint TRANSIT_GRANT_PERCENT = 10;
+/** A region gives work passes to at least this share of the people from elsewhere who would work there, in percent. */
+static constexpr uint REGION_MIN_WORK_PASSES = 20;
+/** Roads and Growth gives this many more work passes in a region, Homes and Services this many fewer, in percent. */
+static constexpr int REGION_GOVERNMENT_WORK_PASSES = 20;
+/** A region wants to grow (and co-funds new towns and reclamation) when its towns lack this many workers, -100 to 100. */
+static constexpr int REGION_GROWTH_LABOUR_NEED = 20;
 
 /** Colours of the states on the map; federal territories are white. */
 static constexpr Colours STATE_COLOURS[] = {
@@ -996,54 +1003,173 @@ BuildingOnSeaScope::~BuildingOnSeaScope()
 }
 
 /**
- * May the sea here be turned into land? Not in a region's waters, by any company. Docks and ship depots
- * keep the sea under them (see #BuildingOnSeaScope), and so may be built there.
- * @param tile The sea tile.
- * @return An error if not.
+ * What a region's government makes of the work in its towns: one job for every two people living
+ * there is in balance (as for zoning).
+ * @param id The region.
+ * @param[out] jobs People working in its shops and offices.
+ * @param[out] workers People living in its homes who could work.
+ * @return From -100 (far more workers than jobs) to 100 (far more jobs than workers).
  */
-CommandCost CheckReclamation(TileIndex tile)
+static int GetRegionLabourNeed(StateID id, uint64_t &jobs, uint64_t &workers)
 {
-	if (!AreStatesFormed() || !Company::IsValidID(_current_company) || _building_on_sea > 0) return CommandCost();
-	/* The region's waters, and the sea along its shores, in the cells of its coast. */
-	const StateCell kind = GetTileStateCell(tile);
-	const State *s = GetState(GetTileState(tile));
-	if (kind == StateCell::Sea || s == nullptr || !s->region) return CommandCost();
-	Debug(Facility::Misc, Severity::Trace1, "[state] no reclamation at {},{} in the waters of state {}", TileX(tile), TileY(tile), GetTileState(tile));
-	CommandCost error(STR_ERROR_NO_RECLAMATION);
-	if (IsLocalCompany()) error.SetEncodedMessage(GetEncodedString(STR_ERROR_NO_RECLAMATION, GetStateName(GetTileState(tile))));
-	return error;
+	jobs = 0;
+	workers = 0;
+	for (const Town *t : Town::Iterate()) {
+		if (t->state != id) continue;
+		const TownZoneDemand demand = GetTownZoneDemand(t);
+		jobs += demand.jobs;
+		workers += demand.residents / 2;
+	}
+	const int64_t scale = static_cast<int64_t>(std::max(jobs, workers));
+	if (scale == 0) return 0;
+	return static_cast<int>(Clamp<int64_t>((static_cast<int64_t>(jobs) - static_cast<int64_t>(workers)) * 100 / scale, -100, 100));
 }
 
 /**
- * May a company found a town here? Not in a region: it controls who settles there.
- * @param tile The town's centre.
- * @return An error if not.
+ * Share of the people from elsewhere who would work in a region's towns that it gives work passes: as Sabah and
+ * Sarawak do, it lets in more when its towns lack workers and fewer when they lack jobs; Roads and Growth lets in
+ * more, Homes and Services fewer.
+ * @param id The region.
+ * @return The share in percent, from #REGION_MIN_WORK_PASSES to 100.
  */
-CommandCost CheckTownFoundingForStates(TileIndex tile)
+uint GetRegionWorkPassPercent(StateID id)
 {
+	const State *s = GetState(id);
+	if (s == nullptr || !s->region) return 100;
+	uint64_t jobs, workers;
+	int percent = 50 + GetRegionLabourNeed(id, jobs, workers) / 2;
+	switch (GetGovernment(*s)) {
+		case Platform::RoadsAndGrowth: percent += REGION_GOVERNMENT_WORK_PASSES; break;
+		case Platform::HomesAndServices: percent -= REGION_GOVERNMENT_WORK_PASSES; break;
+		default: break;
+	}
+	return static_cast<uint>(Clamp(percent, static_cast<int>(REGION_MIN_WORK_PASSES), 100));
+}
+
+/**
+ * The work a region has, for its window.
+ * @param id The region.
+ * @return Its jobs and the workers living there.
+ */
+std::pair<uint64_t, uint64_t> GetRegionJobsAndWorkers(StateID id)
+{
+	uint64_t jobs, workers;
+	GetRegionLabourNeed(id, jobs, workers);
+	return {jobs, workers};
+}
+
+/**
+ * Does a region's government want to grow, and so co-fund the new towns and the land companies reclaim? When its
+ * towns lack workers, or under Roads and Growth.
+ * @param id The region.
+ * @return True if it does.
+ */
+bool DoesRegionWantGrowth(StateID id)
+{
+	const State *s = GetState(id);
+	if (s == nullptr || !s->region) return false;
+	if (GetGovernment(*s) == Platform::RoadsAndGrowth) return true;
+	uint64_t jobs, workers;
+	return GetRegionLabourNeed(id, jobs, workers) >= REGION_GROWTH_LABOUR_NEED;
+}
+
+/**
+ * The permit a region gives a company for a new town on its land, or for turning sea into land in its waters.
+ * Its towns' councils have a say: the region's town nearest the place must rate the company Mediocre or better.
+ * The region then co-funds it (the company pays half) when it wants to grow, or the company pays it all and a
+ * permit fee to the state. Docks and ship depots keep the sea under them (see #BuildingOnSeaScope) and need none.
+ * @param tile The town's centre, or the sea tile.
+ * @param cost What it costs without the permit.
+ * @param waters True for reclaiming a sea tile, false for founding a town.
+ * @param[out] permit What the permit is: none when none is needed.
+ * @return An error if the region refuses one.
+ */
+CommandCost GetRegionPermit(TileIndex tile, Money cost, bool waters, RegionPermit &permit)
+{
+	permit = {};
 	if (!AreStatesFormed() || !Company::IsValidID(_current_company)) return CommandCost();
-	const State *s = GetState(GetTileState(tile));
-	if (s == nullptr || !s->region || GetTileStateCell(tile) != StateCell::Land) return CommandCost();
-	CommandCost error(STR_ERROR_REGION_IMMIGRATION);
-	if (IsLocalCompany()) error.SetEncodedMessage(GetEncodedString(STR_ERROR_REGION_IMMIGRATION, GetStateName(GetTileState(tile))));
-	return error;
+	if (waters && _building_on_sea > 0) return CommandCost();
+	const StateID id = GetTileState(tile);
+	const State *s = GetState(id);
+	if (s == nullptr || !s->region) return CommandCost();
+	/* A town on the region's land; reclamation in its waters, and along its shores in the cells of its coast. */
+	const StateCell kind = GetTileStateCell(tile);
+	if (waters ? kind == StateCell::Sea : kind != StateCell::Land) return CommandCost();
+
+	const Town *council = nullptr;
+	uint best = UINT_MAX;
+	for (const Town *t : Town::Iterate()) {
+		if (t->state != id) continue;
+		const uint d = DistanceManhattan(tile, t->xy);
+		if (d < best) {
+			best = d;
+			council = t;
+		}
+	}
+	if (council != nullptr) {
+		const int rating = council->have_ratings.Test(_current_company) ? council->ratings[_current_company] : RATING_INITIAL;
+		if (rating <= RATING_POOR) {
+			Debug(Facility::Misc, Severity::Trace1, "[state] no permit at {},{} from state {}: town {} rates company {} at {}", TileX(tile), TileY(tile), id, council->index, _current_company, rating);
+			CommandCost error(STR_ERROR_REGION_PERMIT_REFUSED);
+			if (IsLocalCompany()) error.SetEncodedMessage(GetEncodedString(STR_ERROR_REGION_PERMIT_REFUSED, GetStateName(id), council->index));
+			return error;
+		}
+	}
+
+	permit.state = id;
+	permit.cofunded = DoesRegionWantGrowth(id);
+	permit.amount = permit.cofunded ? cost / 2 : cost * REGION_PERMIT_FEE_PERCENT / 100;
+	return CommandCost();
 }
 
 /**
- * May people live in one town and work in the other? Not across a region's border: a region controls
- * immigration, and work there needs a pass.
- * @param a One town.
- * @param b The other.
- * @return True if they may.
+ * A company built what a region's permit was for: the state pays its half (from its treasury as far as it can, the
+ * federal government the rest), or takes the permit fee.
+ * @param permit The permit.
  */
-bool CanCommuteBetween(const Town *a, const Town *b)
+void ApplyRegionPermit(const RegionPermit &permit)
 {
-	if (!AreStatesFormed()) return true;
+	State *s = GetState(permit.state);
+	if (s == nullptr || permit.amount <= 0) return;
+	if (permit.cofunded) {
+		const Money from_state = std::min(permit.amount, std::max<Money>(0, s->treasury));
+		s->treasury -= from_state;
+		s->spent_this_year += from_state;
+		_federation.grants_this_year += permit.amount - from_state;
+	} else {
+		s->treasury += permit.amount;
+		s->premiums_this_year += permit.amount;
+	}
+}
+
+/**
+ * The share of the people living in one town who would work in the other that may: across into a region,
+ * those the region gives work passes (see GetRegionWorkPassPercent); out of one, everybody.
+ * @param home The town they live in.
+ * @param work The town they would work in.
+ * @return The share in percent.
+ */
+uint GetCommuteWorkPassPercent(const Town *home, const Town *work)
+{
+	if (!IsCommuteAcrossRegionBorder(home, work)) return 100;
+	const State *s = GetState(work->state);
+	return (s != nullptr && s->region) ? GetRegionWorkPassPercent(work->state) : 100;
+}
+
+/**
+ * Do people living in one town and working in the other cross a region's border, and pass its checkpoint?
+ * @param home The town they live in.
+ * @param work The town they work in.
+ * @return True if they do.
+ */
+bool IsCommuteAcrossRegionBorder(const Town *home, const Town *work)
+{
+	if (!AreStatesFormed() || home == work) return false;
 	auto zone = [](const Town *t) -> uint {
 		const State *s = GetState(t->state);
 		return (s != nullptr && s->region) ? t->state : MAX_STATES;
 	};
-	return zone(a) == zone(b);
+	return zone(home) != zone(work);
 }
 
 /* ------------------------------------------------------------------------

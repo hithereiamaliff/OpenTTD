@@ -2277,9 +2277,6 @@ std::tuple<CommandCost, Money, TownID> CmdFoundTown(DoCommandFlags flags, TileIn
 	if (!random_location) {
 		CommandCost ret = TownCanBePlacedHere(tile, false);
 		if (ret.Failed()) return { ret, 0, TownID::Invalid() };
-		/* A region controls who settles there. */
-		ret = CheckTownFoundingForStates(tile);
-		if (ret.Failed()) return { ret, 0, TownID::Invalid() };
 	}
 
 	static const EnumIndexArray<uint8_t, TownSize, TownSize::End> town_price_mult = {15, 25, 40, 25};
@@ -2289,6 +2286,14 @@ std::tuple<CommandCost, Money, TownID> CmdFoundTown(DoCommandFlags flags, TileIn
 	uint8_t mult = city ? city_price_mult[size] : town_price_mult[size];
 
 	cost.MultiplyCost(mult);
+
+	/* A region gives a company a permit to settle people there: it co-funds the town, or takes a permit fee. */
+	RegionPermit permit;
+	if (!random_location) {
+		CommandCost ret = GetRegionPermit(tile, cost.GetCost(), false, permit);
+		if (ret.Failed()) return { ret, 0, TownID::Invalid() };
+		cost.AddCost(permit.GetCompanyCostChange());
+	}
 
 	/* Create the town */
 	TownID new_town = TownID::Invalid();
@@ -2313,6 +2318,7 @@ std::tuple<CommandCost, Money, TownID> CmdFoundTown(DoCommandFlags flags, TileIn
 		if (t == nullptr) return { CommandCost(STR_ERROR_NO_SPACE_FOR_TOWN), 0, TownID::Invalid() };
 
 		new_town = t->index;
+		ApplyRegionPermit(permit);
 
 		if (!text.empty()) {
 			t->name = text;

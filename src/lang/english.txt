@@ -842,7 +842,7 @@ STR_SMALLMAP_LEGENDA_LAND_VALUE_VERY_LOW                        :{TINY_FONT}{BLA
 STR_SMALLMAP_LEGENDA_STATE                                      :{TINY_FONT}{BLACK}A state (each its own colour)
 STR_SMALLMAP_LEGENDA_STATE_TERRITORY                            :{TINY_FONT}{BLACK}Federal territory
 STR_SMALLMAP_LEGENDA_STATE_REGION                               :{TINY_FONT}{BLACK}Region with its own laws (hatched)
-STR_SMALLMAP_LEGENDA_STATE_REGION_WATERS                        :{TINY_FONT}{BLACK}Region's waters: no land reclamation
+STR_SMALLMAP_LEGENDA_STATE_REGION_WATERS                        :{TINY_FONT}{BLACK}Region's waters: reclamation by permit
 STR_SMALLMAP_LEGENDA_STATE_BORDER                               :{TINY_FONT}{BLACK}State border
 STR_SMALLMAP_LEGENDA_STATE_NONE                                 :{TINY_FONT}{BLACK}No state
 STR_SMALLMAP_LEGENDA_RAILROADS                                  :{TINY_FONT}{BLACK}Railways
@@ -5519,14 +5519,13 @@ STR_PLATFORM_ROADS_AND_GROWTH                                   :Roads and Growt
 STR_PLATFORM_HOMES_AND_SERVICES                                 :Homes and Services
 STR_NEWS_STATES_FORMED                                          :{BIG_FONT}{BLACK}States formed!{}The towns now make up {NUM} state{P "" s} around their biggest cities, each with an assembly elected every five years. {TOWN} becomes a federal territory, run by its City Hall. First general election: May {NUM}
 STR_NEWS_STATES_FORMED_TWO                                      :{BIG_FONT}{BLACK}States formed!{}The towns now make up {NUM} state{P "" s} around their biggest cities, each with an assembly elected every five years. {TOWN} and {TOWN} become federal territories, run by their City Halls. First general election: May {NUM}
-STR_NEWS_STATE_REGION                                           :{BIG_FONT}{BLACK}{RAW_STRING} keeps its own laws{}Across the sea or a land border, it is run like Sabah and Sarawak: its own land laws and immigration, and nobody may reclaim land in its waters
+STR_NEWS_STATE_REGION                                           :{BIG_FONT}{BLACK}{RAW_STRING} keeps its own laws{}Across the sea or a land border, it is run like Sabah and Sarawak: its own land laws and immigration (work passes, a checkpoint at its border), and permits for new towns and for land reclamation in its waters
 STR_NEWS_STATE_ELECTION                                         :{BIG_FONT}{BLACK}{RAW_STRING} votes: {STRING} wins {NUM} of {NUM} seats and {STRING} the state government
 STR_NEWS_STATE_ELECTION_FORMS                                   :forms
 STR_NEWS_STATE_ELECTION_KEEPS                                   :keeps
 STR_NEWS_GENERAL_ELECTION                                       :{BIG_FONT}{BLACK}General election!{}{STRING} wins {NUM} of {NUM} seats in parliament and {STRING} the federal government, which also runs the federal territories
 STR_ERROR_NATIVE_CUSTOMARY_LAND                                 :{WHITE}Native customary land: {TOWN} gives it up only to companies it rates at least Mediocre
-STR_ERROR_NO_RECLAMATION                                        :{WHITE}No land reclamation in the waters of {RAW_STRING}
-STR_ERROR_REGION_IMMIGRATION                                    :{WHITE}{RAW_STRING} controls immigration: companies can't found towns there
+STR_ERROR_REGION_PERMIT_REFUSED                                 :{WHITE}{RAW_STRING} gives no permit: {TOWN} rates your company Poor or worse
 STR_ERROR_CAN_T_RENAME_STATE                                    :{WHITE}Can't rename the state...
 STR_STATES_CAPTION                                              :{WHITE}States and federal territories
 STR_STATES_LIST_TOOLTIP                                         :{BLACK}The states and federal territories. Click to see one; double-click to go to its capital
@@ -5557,7 +5556,10 @@ STR_STATES_DETAIL_POLL                                          :{BLACK}If elect
 STR_STATES_DETAIL_MONEY                                         :{BLACK}Treasury: {CURRENCY_LONG}, platform at {NUM}%. Last year: land premiums {CURRENCY_LONG}, from councils {CURRENCY_LONG}, federal grant {CURRENCY_LONG}; spent {CURRENCY_LONG}
 STR_STATES_DETAIL_MONEY_TERRITORY                               :{BLACK}Last year: land premiums {CURRENCY_LONG} to the federation; federal money spent on its platform {CURRENCY_LONG}
 STR_STATES_DETAIL_PREMIUM                                       :{BLACK}Land premium: {CURRENCY_LONG} a tile on land worth 50, more on dearer land; companies pay it for land they clear, build on or reshape
-STR_STATES_DETAIL_REGION                                        :{BLACK}Run like Sabah and Sarawak: land premiums twice as high; forest and farmland near its towns are native customary land, given up only to companies the town rates at least Mediocre; no commuting across its border, and companies can't found towns there; nobody may reclaim land in its waters (12 tiles from its shores)
+STR_STATES_DETAIL_REGION                                        :{BLACK}Run like Sabah and Sarawak: land premiums twice as high; forest and farmland near its towns are native customary land, given up only to companies the town rates at least Mediocre
+STR_STATES_DETAIL_REGION_PASSES                                 :{BLACK}Immigration: work passes for {NUM}% of the people from elsewhere who would work in its towns (jobs for {COMMA}, workers for {COMMA}); its checkpoint adds {NUM} minutes to every commute across its border
+STR_STATES_DETAIL_REGION_PERMITS_COFUND                         :{BLACK}Permits for new towns and for land reclamation in its waters: for companies its towns rate Mediocre or better; it wants to grow, so the state pays half
+STR_STATES_DETAIL_REGION_PERMITS_FEE                            :{BLACK}Permits for new towns and for land reclamation in its waters: for companies its towns rate Mediocre or better, who pay the full cost and a permit fee of {NUM}%
 STR_STATES_RENAME_QUERY                                         :{WHITE}Rename state
 STR_STATES_RENAME_BUTTON                                        :{BLACK}Rename
 STR_STATES_RENAME_TOOLTIP                                       :{BLACK}Give the selected state a name of your own; leave it empty for its usual name
