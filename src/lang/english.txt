@@ -2356,7 +2356,7 @@ STR_VIDEO_DRIVER_ERROR_HARDWARE_ACCELERATION_CRASH              :GPU driver cras
 
 # Intro window
 STR_INTRO_CAPTION                                               :{WHITE}Wira Bandar PC, a fork of OpenTTD
-STR_INTRO_VERSION                                               :Wira Bandar PC {REV}, a fork of OpenTTD
+STR_INTRO_VERSION                                               :Wira Bandar PC {RAW_STRING}, a fork of OpenTTD
 
 STR_INTRO_NEW_GAME                                              :{BLACK}New Game
 STR_INTRO_LOAD_GAME                                             :{BLACK}Load Game
@@ -3571,7 +3571,7 @@ STR_LAI_OBJECT_DESCRIPTION_COMPANY_OWNED_LAND                   :Company-owned l
 # About OpenTTD window
 STR_ABOUT_OPENTTD                                               :{WHITE}About Wira Bandar PC
 STR_ABOUT_ORIGINAL_COPYRIGHT                                    :{BLACK}Original copyright {COPYRIGHT} 1995 Chris Sawyer, All rights reserved
-STR_ABOUT_VERSION                                               :{BLACK}Wira Bandar PC version {REV}, a fork of OpenTTD
+STR_ABOUT_VERSION                                               :{BLACK}Wira Bandar PC {RAW_STRING} (build {REV}), a fork of OpenTTD
 STR_ABOUT_BUILT_ON_OPENTTD                                      :{BLACK}Wira Bandar is a fork of OpenTTD: OpenTTD's code with changes
 STR_ABOUT_NOT_FROM_SCRATCH                                      :{BLACK}It wasn't made from scratch; the credits below are OpenTTD's
 STR_ABOUT_SOURCE_CODE                                           :{BLACK}Source code: github.com/hithereiamaliff/wirabandar (GNU GPL v2)

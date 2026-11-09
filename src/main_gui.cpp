@@ -28,6 +28,8 @@
 #include "error.h"
 #include "news_gui.h"
 #include "misc_cmd.h"
+#include "rev.h"
+#include "strings_func.h"
 #include "timer/timer.h"
 #include "timer/timer_window.h"
 
@@ -257,7 +259,7 @@ struct MainWindow : Window
 			DrawSprite(SPR_WIRA_BANDAR_LOGO, PAL_NONE, (this->width - name_width) / 2, ScaleGUITrad(50));
 
 			int text_y = this->height - GetCharacterHeight(FontSize::Normal) * 2;
-			DrawString(0, this->width - 1, text_y, STR_INTRO_VERSION, TextColour::White, {AlignmentH::Centre, AlignmentV::Middle});
+			DrawString(0, this->width - 1, text_y, GetString(STR_INTRO_VERSION, WIRA_BANDAR_VERSION), TextColour::White, {AlignmentH::Centre, AlignmentV::Middle});
 		}
 	}
 

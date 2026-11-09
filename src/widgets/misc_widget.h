@@ -26,6 +26,7 @@ enum AboutWidgets : WidgetID {
 	WID_A_SCROLLING_TEXT, ///< The actually scrolling text.
 	WID_A_WEBSITE,        ///< URL of OpenTTD website.
 	WID_A_COPYRIGHT,      ///< Copyright string
+	WID_A_VERSION,        ///< Wira Bandar's version and the build.
 };
 
 /** Widgets of the #QueryStringWindow class. */

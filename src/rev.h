@@ -21,4 +21,11 @@ extern const uint32_t _openttd_newgrf_version;
 
 bool IsReleasedVersion();
 
+/**
+ * The version of Wira Bandar PC (a fork of OpenTTD), MAJOR.MINOR.PATCH, raised with every release: fixes
+ * raise the last number, new features the middle one (see docs/wirabandar-changelog.md). Which build it is
+ * (date, branch, commit) is still _openttd_revision.
+ */
+static constexpr std::string_view WIRA_BANDAR_VERSION = "0.1.1";
+
 #endif /* REV_H */

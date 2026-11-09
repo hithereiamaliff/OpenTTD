@@ -452,7 +452,7 @@ static constexpr std::initializer_list<NWidgetPart> _nested_about_widgets = {
 	EndContainer(),
 	NWidget(WWT_PANEL, Colours::Grey), SetPIP(4, 2, 4),
 		NWidget(WWT_LABEL, Colours::Invalid), SetStringTip(STR_ABOUT_ORIGINAL_COPYRIGHT),
-		NWidget(WWT_LABEL, Colours::Invalid), SetStringTip(STR_ABOUT_VERSION),
+		NWidget(WWT_LABEL, Colours::Invalid, WID_A_VERSION),
 		NWidget(WWT_LABEL, Colours::Invalid), SetStringTip(STR_ABOUT_BUILT_ON_OPENTTD),
 		NWidget(WWT_LABEL, Colours::Invalid), SetStringTip(STR_ABOUT_NOT_FROM_SCRATCH),
 		NWidget(WWT_LABEL, Colours::Invalid), SetStringTip(STR_ABOUT_SOURCE_CODE),
@@ -554,6 +554,7 @@ struct AboutWindow : public Window {
 
 	std::string GetWidgetString(WidgetID widget, StringID stringid) const override
 	{
+		if (widget == WID_A_VERSION) return GetString(STR_ABOUT_VERSION, WIRA_BANDAR_VERSION);
 		if (widget == WID_A_WEBSITE) return "Website: https://www.openttd.org";
 		if (widget == WID_A_COPYRIGHT) return GetString(STR_ABOUT_COPYRIGHT_OPENTTD, _openttd_revision_year);
 		return this->Window::GetWidgetString(widget, stringid);

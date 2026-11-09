@@ -190,5 +190,5 @@ void VideoDriver::SleepTillNextTick()
  */
 /* static */ std::string VideoDriver::GetCaption()
 {
-	return fmt::format("Wira Bandar PC {} (a fork of OpenTTD)", _openttd_revision);
+	return fmt::format("Wira Bandar PC {} (a fork of OpenTTD)", WIRA_BANDAR_VERSION);
 }
