@@ -30,10 +30,12 @@ VehicleOrderID GetLineFirstStop(const OrderList *list);
 Colours GetLineColour(const OrderList *list);
 uint32_t GetLineAverageGap(const LineInfo &line);
 uint32_t GetLineAverageWait(const LineInfo &line);
+uint32_t GetLineAverageHold(const LineInfo &line);
 uint GetLineVehiclesNeeded(const OrderList *list);
 
 void OnLineVehicleDeparts(Vehicle *v, uint8_t occupancy);
 bool MustHoldForLineSpacing(const Vehicle *v);
+void OnLineVehicleHeld(const Vehicle *v);
 void OnLineRidersDelivered(const Vehicle *front, uint count);
 
 int DrawLineBadge(const Rect &r, const OrderList *list, bool rtl = false);

@@ -56,6 +56,7 @@ struct LineMonthStats {
 	uint32_t brt_gated = 0; ///< Of those, at BRT stations.
 	uint32_t brt_level = 0; ///< Of those, by low-floor buses at BRT stations.
 	uint32_t crossings = 0; ///< Level crossings entered by the line's trains (see metro.cpp).
+	uint32_t held = 0; ///< Ticks vehicles waited for their turn at the first stop for even spacing, held there or queued behind.
 };
 
 /** The line of a shared order list. */
@@ -82,6 +83,7 @@ struct LineInfo {
 	uint8_t offpeak_vehicles = UINT8_MAX; ///< Vehicles that keep running between the peaks of the city clock; UINT8_MAX for all of them.
 	bool on_demand = false; ///< Its vehicles pick their next stop by demand instead of running the stops in order.
 	bool driverless = false; ///< Its trains run without drivers (see metro.cpp).
+	TimerGameTick::TickCounter queue_counted = 0; ///< NOSAVE: When the vehicles queued for the first stop were last counted (see OnLineVehicleHeld).
 
 	/**
 	 * Remember the gap before a departure from the first stop.

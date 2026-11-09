@@ -17,8 +17,10 @@
 #include "command_func.h"
 #include "company_func.h"
 #include "fare.h"
+#include "map_func.h"
 #include "transit_authority.h"
 #include "order_base.h"
+#include "station_base.h"
 #include "string_func.h"
 #include "timer/timer.h"
 #include "timer/timer_game_economy.h"
@@ -36,6 +38,8 @@ static constexpr TimerGameTick::Ticks LINE_EARLY_TOLERANCE = Ticks::DAY_TICKS;
 static constexpr TimerGameTick::Ticks LINE_LATE_TOLERANCE = 3 * Ticks::DAY_TICKS;
 /** Longest target gap between departures that can be set. */
 static constexpr TimerGameTick::Ticks LINE_MAX_TARGET_GAP = 365 * Ticks::DAY_TICKS;
+/** Vehicles standing still this close to the first stop, on their way to it, queue for it (see OnLineVehicleHeld). */
+static constexpr uint LINE_QUEUE_DISTANCE = 8;
 
 /**
  * The order of a line that counts as its first stop: departures from there
@@ -96,8 +100,26 @@ uint32_t GetLineAverageWait(const LineInfo &line)
 }
 
 /**
+ * How long vehicles waited for their turn at the first stop to keep the
+ * departures evenly spaced, held there or queued behind a held vehicle, on
+ * average per departure, over this month and the last.
+ * @param line The line.
+ * @return The average wait in ticks; 0 if none or not known.
+ */
+uint32_t GetLineAverageHold(const LineInfo &line)
+{
+	const uint64_t departures = static_cast<uint64_t>(line.this_month.departures) + line.last_month.departures;
+	if (departures == 0) return 0;
+	return static_cast<uint32_t>((static_cast<uint64_t>(line.this_month.held) + line.last_month.held) / departures);
+}
+
+/**
  * How many vehicles a line needs to run at its target gap, from the measured
- * (or timetabled) time of one round trip.
+ * (or timetabled) time of one round trip. Even spacing stretches the measured
+ * times of the first stop (vehicles held there) and of the way into it
+ * (vehicles queued behind them), but the vehicles only wait for their turn
+ * then: where those times aren't timetabled, that wait is left out, else the
+ * line would always seem to need every vehicle it has.
  * @param list The order list.
  * @return The number of vehicles, or 0 if there is no target or the round trip isn't known yet.
  */
@@ -105,7 +127,14 @@ uint GetLineVehiclesNeeded(const OrderList *list)
 {
 	TimerGameTick::Ticks round_trip = list->GetTotalDuration();
 	if (list->line.target_gap <= 0 || round_trip <= 0) return 0;
-	return CeilDiv(round_trip, list->line.target_gap);
+	const VehicleOrderID first = GetLineFirstStop(list);
+	if (const Order *order = first == INVALID_VEH_ORDER_ID ? nullptr : list->GetOrderAt(first); order != nullptr) {
+		TimerGameTick::Ticks measured = 0;
+		if (!order->IsWaitTimetabled()) measured += order->GetWaitTime();
+		if (!order->IsTravelTimetabled()) measured += order->GetTravelTime();
+		round_trip -= std::min<TimerGameTick::Ticks>(GetLineAverageHold(list->line), measured);
+	}
+	return CeilDiv(std::max<TimerGameTick::Ticks>(round_trip, 1), list->line.target_gap);
 }
 
 /**
@@ -158,6 +187,30 @@ bool MustHoldForLineSpacing(const Vehicle *v)
 	if (order == nullptr || order->GetDestination() != v->last_station_visited) return false;
 
 	return TimerGameTick::counter < list->line.last_departure + list->line.target_gap;
+}
+
+/**
+ * A vehicle of a line waits a tick longer at the first stop for even spacing.
+ * The vehicles of the line queued for the stop behind it (standing still
+ * nearby on their way to it) wait for their turn too: count them once a tick.
+ * @param v The vehicle (front), held at the first stop.
+ */
+void OnLineVehicleHeld(const Vehicle *v)
+{
+	OrderList *list = v->orders;
+	if (list == nullptr) return;
+	LineInfo &line = list->line;
+	line.this_month.held++;
+	if (line.queue_counted == TimerGameTick::counter) return;
+	line.queue_counted = TimerGameTick::counter;
+	const Station *st = Station::GetIfValid(v->last_station_visited);
+	if (st == nullptr) return;
+	for (const Vehicle *u = list->GetFirstSharedVehicle(); u != nullptr; u = u->NextShared()) {
+		if (u == v || u->cur_speed != 0 || u->cur_real_order_index != v->cur_real_order_index || u->current_order.IsType(OT_LOADING)) continue;
+		if (u->vehstatus.Any({VehState::Hidden, VehState::Stopped, VehState::Crashed})) continue;
+		if (DistanceManhattan(u->tile, st->xy) > LINE_QUEUE_DISTANCE) continue;
+		line.this_month.held++;
+	}
 }
 
 /**
@@ -262,8 +315,9 @@ CommandCost CmdSetLineProperty(DoCommandFlags flags, VehicleID veh_id, LinePrope
 		}
 		/* Between the peaks, the line keeps its new number of vehicles running right away. */
 		if (property == LineProperty::OffPeakVehicles) ApplyOffPeakVehicles(v->orders);
-		SetWindowDirty(WindowClass::Line, v->orders->index.base());
-		SetWindowDirty(WindowClass::LineMap, v->orders->index.base());
+		/* The line window's buttons follow what changed: Even spacing needs a frequency, switches show pressed. */
+		InvalidateWindowData(WindowClass::Line, v->orders->index.base());
+		InvalidateWindowData(WindowClass::LineMap, v->orders->index.base());
 		InvalidateWindowClassesData(GetWindowClassForVehicleType(v->type), 0);
 		InvalidateWindowClassesData(WindowClass::VehicleTimetable, 0);
 		/* Running costs change without drivers. */

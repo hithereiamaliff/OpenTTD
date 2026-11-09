@@ -41,7 +41,8 @@
 	SaveLoad::Variable<VarFileType::U32>(prefix ".brt_stops", SLE_OBJECT_ADDRESS(LineInfo, member.brt_stops)), \
 	SaveLoad::Variable<VarFileType::U32>(prefix ".brt_gated", SLE_OBJECT_ADDRESS(LineInfo, member.brt_gated)), \
 	SaveLoad::Variable<VarFileType::U32>(prefix ".brt_level", SLE_OBJECT_ADDRESS(LineInfo, member.brt_level)), \
-	SaveLoad::Variable<VarFileType::U32>(prefix ".crossings", SLE_OBJECT_ADDRESS(LineInfo, member.crossings))
+	SaveLoad::Variable<VarFileType::U32>(prefix ".crossings", SLE_OBJECT_ADDRESS(LineInfo, member.crossings)), \
+	SaveLoad::Variable<VarFileType::U32>(prefix ".held", SLE_OBJECT_ADDRESS(LineInfo, member.held))
 
 static const SaveLoad _line_desc[] = {
 	SaveLoad::String("number", SLE_OBJECT_ADDRESS(LineInfo, number), StringValidationSetting::AllowControlCode),

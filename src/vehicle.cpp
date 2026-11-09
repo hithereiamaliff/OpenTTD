@@ -2480,7 +2480,10 @@ void Vehicle::HandleLoading(bool mode)
 			if (mode || !this->vehicle_flags.Test(VehicleFlag::LoadingFinished) || this->current_order_time < wait_time) return;
 
 			/* Lines that keep even spacing hold their vehicles at the first stop. */
-			if (MustHoldForLineSpacing(this)) return;
+			if (MustHoldForLineSpacing(this)) {
+				OnLineVehicleHeld(this);
+				return;
+			}
 
 			/* An electric bus running low charges under a stop's charger before it goes on. */
 			if (MustWaitToCharge(this)) return;
