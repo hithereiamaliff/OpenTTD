@@ -2505,9 +2505,14 @@ step and open again at any time.
   also be "pressed" when games start or load, as `UnInitWindowSystem` closes
   every window. The window has `NoClose`, so "close all windows" leaves it.
 - **Text:** `english.txt` (`STR_TUTORIAL_*`, `STR_ABOUT_MENU_TUTORIAL`,
-  `STR_INTRO_TUTORIAL`, `STR_INTRO_TOOLTIP_TUTORIAL`). The welcome page is to
-  get the owner's wording on what the name Wira Bandar means and what the
-  game's goal is (being written with the guides session).
+  `STR_INTRO_TUTORIAL`, `STR_INTRO_TOOLTIP_TUTORIAL`).
+- **The name and the goal** (the owner's wording, approved 2026-11-09 with
+  the guides session): the welcome page says what Wira Bandar means ("town
+  hero": wira is Malay for hero, bandar for town) and the game's goal (a city
+  that moves people, not just cars); the About window has the short version
+  in two lines after the fork credits (`STR_ABOUT_NAME_MEANING`,
+  `STR_ABOUT_GOAL`); the chapters' last steps point at
+  wirabandar.techmavie.digital/about, which has the full version.
 - **Tested** on the Linux build under Xvfb (2560x1600, 200%): the welcome
   offer; Start a game (New Game, climate, the year raised from 1995 to 2000
   moves it on, Generate); the whole bus chapter in the new game (three stops,

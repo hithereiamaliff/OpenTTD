@@ -3575,6 +3575,8 @@ STR_ABOUT_VERSION                                               :{BLACK}Wira Ban
 STR_ABOUT_BUILT_ON_OPENTTD                                      :{BLACK}Wira Bandar is a fork of OpenTTD: OpenTTD's code with changes
 STR_ABOUT_NOT_FROM_SCRATCH                                      :{BLACK}It wasn't made from scratch; the credits below are OpenTTD's
 STR_ABOUT_SOURCE_CODE                                           :{BLACK}Source code: github.com/hithereiamaliff/wirabandar (GNU GPL v2)
+STR_ABOUT_NAME_MEANING                                          :{BLACK}Wira Bandar means "town hero": wira is hero, bandar is town
+STR_ABOUT_GOAL                                                  :{BLACK}Your goal: a city that moves people, not just cars
 STR_ABOUT_COPYRIGHT_OPENTTD                                     :{BLACK}OpenTTD {COPYRIGHT} 2002-{RAW_STRING} The OpenTTD team
 
 # Framerate display window
@@ -6942,7 +6944,7 @@ STR_TUTORIAL_CHAPTER_NEW_BUTTON                                 :{BLACK}3. What'
 STR_TUTORIAL_CHAPTER_NEW_TOOLTIP                                :{BLACK}What changes when you load an OpenTTD save, how to switch the new features off, and where Wira Bandar's new tools are
 
 STR_TUTORIAL_WELCOME_TITLE                                      :Welcome to Wira Bandar PC
-STR_TUTORIAL_WELCOME_TEXT                                       :{BLACK}Wira Bandar PC is a fork of OpenTTD: OpenTTD's transport game with changes, about cities and public transport in Malaysia and Singapore.{}{}New here? The tutorial shows you step by step how to start a game and build your first bus line. It makes the button to click flash, and moves on once you've done each step. You can leave it at any step.{}{}You'll always find it under Tutorial in the main menu, and in a game under the ? button on the main toolbar.
+STR_TUTORIAL_WELCOME_TEXT                                       :{BLACK}Wira Bandar PC is a fork of OpenTTD: OpenTTD's transport game with changes, about cities and public transport in Malaysia and Singapore.{}{}Wira Bandar means "town hero": wira is Malay for hero, bandar for town. Your goal: build a city that moves people, not just cars, where the buses come on time, the air stays clean and every kampung can grow into a city worth living in.{}{}New here? The tutorial shows you step by step how to start a game and build your first bus line. It makes the button to click flash, and moves on once you've done each step. You can leave it at any step.{}{}You'll always find it under Tutorial in the main menu, and in a game under the ? button on the main toolbar.
 STR_TUTORIAL_WELCOME_START                                      :{BLACK}Start the tutorial
 
 STR_TUTORIAL_OLD_SAVE_TITLE                                     :This game comes from OpenTTD
@@ -7007,7 +7009,7 @@ STR_TUTORIAL_BUS_DEPARTURES_TEXT                                :{BLACK}Click th
 STR_TUTORIAL_BUS_TOWN_TITLE                                     :See what the town thinks
 STR_TUTORIAL_BUS_TOWN_TEXT                                      :{BLACK}Click the town's name on the map. Its window shows the town's happiness and your riders' satisfaction. Click the flashing {ORANGE}Transit{BLACK} button at the bottom: the town's transit authority, with its budget, resident passes, concession fares and tenders for lines.
 STR_TUTORIAL_BUS_DONE_TITLE                                     :Your first line runs!
-STR_TUTORIAL_BUS_DONE_TEXT                                      :{BLACK}You built a bus line, numbered it, spaced its buses evenly and set its fares.{}{}What next: add a second line through the town, try electric buses with chargers, paint bus lanes when town traffic slows your buses, or bid for the town's next tender. The guides at wirabandar.techmavie.digital explain every feature.
+STR_TUTORIAL_BUS_DONE_TEXT                                      :{BLACK}You built a bus line, numbered it, spaced its buses evenly and set its fares.{}{}What next: add a second line through the town, try electric buses with chargers, paint bus lanes when town traffic slows your buses, or bid for the town's next tender. The guides at wirabandar.techmavie.digital explain every feature, and wirabandar.techmavie.digital/about tells more about the name and the goal.
 
 STR_TUTORIAL_NEW_OLD_SAVE_TITLE                                 :What changes in an OpenTTD save
 STR_TUTORIAL_NEW_OLD_SAVE_TEXT                                  :{BLACK}Your game keeps everything in it. Wira Bandar's new features start empty and switch on with their default settings:{}- Nothing new is built for you: no traffic lights, zones, lines or bus lanes until you build them.{}- Towns get budgets, councils and states, and their people commute and drive, so roads fill with town traffic.{}- In the temperate and sub-tropical climates, new houses are Malaysian and Singaporean.{}- Your vehicles keep running, and road vehicles give way at junctions.
@@ -7030,4 +7032,4 @@ STR_TUTORIAL_NEW_ROAD_TOOLS_TEXT                                :{BLACK}Open {OR
 STR_TUTORIAL_NEW_LINES_TITLE                                    :Lines, departures and fares
 STR_TUTORIAL_NEW_LINES_TEXT                                     :{BLACK}Vehicles that share their orders form a line, with a number, name and colour: in a vehicle list, set {ORANGE}Group by{BLACK} to {ORANGE}Lines (shared orders){BLACK} and click a line. Station windows have a {ORANGE}Departures{BLACK} board, and the {ORANGE}Finances{BLACK} window has {ORANGE}Fares{BLACK}. The chapter {ORANGE}Your first bus line{BLACK} goes through them step by step.
 STR_TUTORIAL_NEW_DONE_TITLE                                     :That's the tour
-STR_TUTORIAL_NEW_DONE_TEXT                                      :{BLACK}The guides at wirabandar.techmavie.digital explain every feature, with tutorials for BRT corridors, councils and states. Open this tutorial again at any time: the {ORANGE}?{BLACK} button on the main toolbar, then {ORANGE}Tutorial{BLACK}.
+STR_TUTORIAL_NEW_DONE_TEXT                                      :{BLACK}The guides at wirabandar.techmavie.digital explain every feature, with tutorials for BRT corridors, councils and states; wirabandar.techmavie.digital/about tells more about the name and the goal. Open this tutorial again at any time: the {ORANGE}?{BLACK} button on the main toolbar, then {ORANGE}Tutorial{BLACK}.

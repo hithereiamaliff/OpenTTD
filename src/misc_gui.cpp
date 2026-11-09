@@ -456,6 +456,8 @@ static constexpr std::initializer_list<NWidgetPart> _nested_about_widgets = {
 		NWidget(WWT_LABEL, Colours::Invalid), SetStringTip(STR_ABOUT_BUILT_ON_OPENTTD),
 		NWidget(WWT_LABEL, Colours::Invalid), SetStringTip(STR_ABOUT_NOT_FROM_SCRATCH),
 		NWidget(WWT_LABEL, Colours::Invalid), SetStringTip(STR_ABOUT_SOURCE_CODE),
+		NWidget(WWT_LABEL, Colours::Invalid), SetStringTip(STR_ABOUT_NAME_MEANING),
+		NWidget(WWT_LABEL, Colours::Invalid), SetStringTip(STR_ABOUT_GOAL),
 		NWidget(WWT_FRAME, Colours::Grey), SetPadding(0, 5, 1, 5),
 			NWidget(WWT_EMPTY, Colours::Invalid, WID_A_SCROLLING_TEXT),
 		EndContainer(),
