@@ -141,6 +141,8 @@ CommandCost CmdBuildShipDepot(DoCommandFlags flags, TileIndex tile, Axis axis)
 	WaterClass wc2 = GetWaterClass(tile2);
 	CommandCost cost = CommandCost(ExpensesType::Construction, _price[Price::BuildDepotShip]);
 
+	/* The depot keeps the sea under it: not land reclamation, even in a region's waters. */
+	BuildingOnSeaScope on_sea;
 	bool add_cost = !IsWaterTile(tile);
 	CommandCost ret = Command<Commands::LandscapeClear>::Do(flags | DoCommandFlag::Auto, tile);
 	if (ret.Failed()) return ret;

@@ -5545,8 +5545,7 @@ STR_STATES_DETAIL_TERRITORY                                     :{BLACK}{RAW_STR
 STR_STATES_DETAIL_FEDERAL                                       :{BLACK}Governed by the federal government: {ORANGE}{STRING}
 STR_STATES_DETAIL_CARETAKER                                     :{BLACK}Government: {ORANGE}caretaker{BLACK} until the first election, {STRING} {NUM}
 STR_STATES_DETAIL_GOVERNMENT                                    :{BLACK}Government: {ORANGE}{STRING}{BLACK}, {NUM} of {NUM} seats ({RAW_STRING}), elected {NUM}. Next election: {STRING} {NUM}
-STR_STATES_DETAIL_POLICY                                        :{BLACK}Policy: {STRING1}{RAW_STRING}
-STR_STATES_POLICY_PAUSED                                        : (paused: the treasury is empty)
+STR_STATES_DETAIL_POLICY                                        :{BLACK}Policy: {STRING1}
 STR_STATES_EFFECT_NONE                                          :none until the first election
 STR_STATES_EFFECT_TRANSIT_FIRST                                 :its towns' transit budgets get {NUM}% of their taxes on top; towns readier to tame cars and fund transit
 STR_STATES_EFFECT_ROADS_AND_GROWTH                              :towns grow {NUM}% faster, land premiums halved, new buildings funded each quarter in one town in turn; towns slower to limit cars

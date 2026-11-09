@@ -947,7 +947,7 @@ Money GetStateLandPremium(StateID id, uint value)
 /**
  * A company takes a tile of land (grass, rough land, fields, trees, a house): it pays the state a land
  * premium. In a region, forest and farmland in a town's area are its people's native customary land: they
- * give it up only to a company their town rates at least mediocre.
+ * give it up only to a company their town rates at least Mediocre (above Poor, as the town window names ratings).
  * @param tile The tile.
  * @param flags The command's flags; the premium goes to the state when it is done.
  * @return The premium, or an error.
@@ -966,7 +966,7 @@ CommandCost CheckLandForCompany(TileIndex tile, DoCommandFlags flags)
 		const Town *t = ClosestTownFromTile(tile, _settings_game.economy.dist_local_authority);
 		if (t != nullptr && t->state == id) {
 			const int rating = t->have_ratings.Test(_current_company) ? t->ratings[_current_company] : RATING_INITIAL;
-			if (rating < RATING_MEDIOCRE) {
+			if (rating <= RATING_POOR) {
 				Debug(Facility::Misc, Severity::Trace1, "[state] native customary land at {},{}: town {} rates company {} at {}", TileX(tile), TileY(tile), t->index, _current_company, rating);
 				return CommandCostWithParam(STR_ERROR_NATIVE_CUSTOMARY_LAND, t->index);
 			}
@@ -982,14 +982,28 @@ CommandCost CheckLandForCompany(TileIndex tile, DoCommandFlags flags)
 	return cost;
 }
 
+/** Commands building a dock or a ship depot on the sea now (see #BuildingOnSeaScope). */
+static uint _building_on_sea = 0;
+
+BuildingOnSeaScope::BuildingOnSeaScope()
+{
+	_building_on_sea++;
+}
+
+BuildingOnSeaScope::~BuildingOnSeaScope()
+{
+	_building_on_sea--;
+}
+
 /**
- * May the sea here be turned into land? Not in a region's waters, by any company.
+ * May the sea here be turned into land? Not in a region's waters, by any company. Docks and ship depots
+ * keep the sea under them (see #BuildingOnSeaScope), and so may be built there.
  * @param tile The sea tile.
  * @return An error if not.
  */
 CommandCost CheckReclamation(TileIndex tile)
 {
-	if (!AreStatesFormed() || !Company::IsValidID(_current_company)) return CommandCost();
+	if (!AreStatesFormed() || !Company::IsValidID(_current_company) || _building_on_sea > 0) return CommandCost();
 	/* The region's waters, and the sea along its shores, in the cells of its coast. */
 	const StateCell kind = GetTileStateCell(tile);
 	const State *s = GetState(GetTileState(tile));

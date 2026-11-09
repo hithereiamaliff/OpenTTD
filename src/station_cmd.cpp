@@ -47,6 +47,7 @@
 #include "station_base.h"
 #include "station_func.h"
 #include "station_kdtree.h"
+#include "state.h"
 #include "roadstop_base.h"
 #include "newgrf_railtype.h"
 #include "newgrf_roadtype.h"
@@ -2941,7 +2942,11 @@ CommandCost CmdBuildDock(DoCommandFlags flags, TileIndex tile, StationID station
 	WaterClass wc = GetWaterClass(tile_cur);
 
 	bool add_cost = !IsWaterTile(tile_cur);
-	ret = Command<Commands::LandscapeClear>::Do(flags, tile_cur);
+	{
+		/* The dock keeps the sea under it: not land reclamation, even in a region's waters. */
+		BuildingOnSeaScope on_sea;
+		ret = Command<Commands::LandscapeClear>::Do(flags, tile_cur);
+	}
 	if (ret.Failed()) return ret;
 	if (add_cost) cost.AddCost(ret.GetCost());
 

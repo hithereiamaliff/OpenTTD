@@ -54,6 +54,15 @@ Money GetLandPremium(TileIndex tile);
 Money GetStateLandPremium(StateID id, uint value);
 CommandCost CheckLandForCompany(TileIndex tile, DoCommandFlags flags);
 CommandCost CheckReclamation(TileIndex tile);
+
+/** While one lives, the sea a command clears stays sea, under a dock or a ship depot: that isn't land reclamation. */
+struct BuildingOnSeaScope {
+	BuildingOnSeaScope();
+	~BuildingOnSeaScope();
+	BuildingOnSeaScope(const BuildingOnSeaScope &) = delete;
+	BuildingOnSeaScope &operator=(const BuildingOnSeaScope &) = delete;
+};
+
 CommandCost CheckTownFoundingForStates(TileIndex tile);
 bool CanCommuteBetween(const Town *a, const Town *b);
 uint GetPlatformStrength(StateID id);

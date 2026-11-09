@@ -189,8 +189,7 @@ struct StatesWindow : Window {
 		static constexpr uint EFFECT_PERCENT[] = {0, 10, 15, 10};
 		static_assert(std::size(EFFECTS) == to_underlying(Platform::End) && std::size(EFFECT_PERCENT) == to_underlying(Platform::End));
 		const uint strength = GetPlatformStrength(id);
-		const std::string paused = (government != Platform::None && strength == 0) ? GetString(STR_STATES_POLICY_PAUSED) : std::string{};
-		ir.top = DrawStringMultiLine(ir, GetString(STR_STATES_DETAIL_POLICY, EFFECTS[to_underlying(government)], EFFECT_PERCENT[to_underlying(government)] * strength / 100, paused));
+		ir.top = DrawStringMultiLine(ir, GetString(STR_STATES_DETAIL_POLICY, EFFECTS[to_underlying(government)], EFFECT_PERCENT[to_underlying(government)] * strength / 100));
 
 		/* Its voters. */
 		const VoterConcerns &c = this->concerns;
