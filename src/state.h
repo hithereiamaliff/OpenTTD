@@ -93,6 +93,14 @@ uint GetStateGrowthPercent(const Town *t);
 uint ScaleStateHouseProbability(const Town *t, const HouseSpec &hs, uint probability);
 uint GetStateOrdinanceChance(const Town *t, uint ordinance, uint chance);
 
+std::string GetSeatsText(const PlatformSeats &seats);
+uint GetTotalSeats(const PlatformSeats &seats);
+bool IsElectionCampaign(StateID id);
+StringID GetElectionMonthName(StateID id);
+std::vector<ElectionResult> &GetElections();
+const ElectionResult *GetLastElection(StateID id);
+void ShowElectionNightWindow(StateID id, bool count);
+
 VoterConcerns GetVoterConcerns(const Town *t);
 uint GetServiceScore(const VoterConcerns &c);
 std::array<int, PLATFORM_COUNT> GetPlatformAppeal(const VoterConcerns &c);

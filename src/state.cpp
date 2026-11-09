@@ -38,6 +38,7 @@
 #include "stdafx.h"
 #include "state.h"
 #include "state_cmd.h"
+#include "federal.h"
 #include "city_services.h"
 #include "clear_map.h"
 #include "command_func.h"
@@ -62,6 +63,7 @@
 #include "transit_authority.h"
 #include "water_map.h"
 #include "window_func.h"
+#include "timer/timer.h"
 #include "timer/timer_game_economy.h"
 
 #include "table/strings.h"
@@ -72,12 +74,15 @@ std::vector<State> _states; ///< The states and federal territories (saved in ch
 Federation _federation; ///< The federation (saved in chunk SFED).
 std::vector<uint8_t> _state_cells; ///< The map of states: the state of each cell, or #INVALID_STATE (saved in chunk SMAP).
 std::vector<uint8_t> _state_cell_kinds; ///< What each cell is: a #StateCell (saved in chunk SMAP).
+std::vector<ElectionResult> _elections; ///< The last general election and the last election of each region (saved in chunk SELN).
 
 /** A state's assembly and parliament are elected for this many years. */
 static constexpr int TERM_YEARS = 5;
 /** General elections are held in this month (May), the elections of the regions in this one (September). */
 static constexpr uint8_t GENERAL_ELECTION_MONTH = 4;
 static constexpr uint8_t REGION_ELECTION_MONTH = 8;
+/** The results of an election are declared this many days after polling day. */
+static constexpr int ELECTION_DECLARE_DAYS = 2;
 /** A town has a seat, and one more for each this many people. */
 static constexpr uint PEOPLE_PER_SEAT = 10000;
 /** Towns per state the map aims for, and the most states (as Malaysia's 13) on the main land and in a region. */
@@ -783,6 +788,8 @@ static void FormStates()
 	_states.clear();
 	_federation = {};
 	_federation.formed = true;
+	_elections.clear();
+	InitializeFederal();
 	const int year = TimerGameEconomy::year.base();
 	_federation.formed_year = year;
 	_federation.next_election = year + 1;
@@ -1274,15 +1281,18 @@ uint GetStateTransitGrantPercent(const Town *t)
 }
 
 /**
- * How a town's state changes the time between its new houses: shorter under Roads and Growth.
+ * How a town's state changes the time between its new houses: shorter under Roads and Growth, and under a federal
+ * government of Roads and Growth.
  * @param t The town.
  * @return The time in percent of normal.
  */
 uint GetStateGrowthPercent(const Town *t)
 {
 	const State *s = GetTownState(t);
-	if (s == nullptr || GetGovernment(*s) != Platform::RoadsAndGrowth) return 100;
-	return 100 - ROADS_GROWTH_PERCENT * GetPlatformStrength(t->state) / 100;
+	if (s == nullptr) return 100;
+	uint faster = GetFederalGrowthPercent(t);
+	if (GetGovernment(*s) == Platform::RoadsAndGrowth) faster += ROADS_GROWTH_PERCENT * GetPlatformStrength(t->state) / 100;
+	return 100 - faster;
 }
 
 /**
@@ -1551,27 +1561,145 @@ VoterConcerns GetStateConcerns(StateID id)
 	return c;
 }
 
+/* ------------------------------------------------------------------------
+ * The run-up to an election, polling day and the results.
+ *
+ * Two months before polling day the assembly (for a general election
+ * parliament and the assemblies of the states on the main land) is
+ * dissolved, and the government carries on as a caretaker: it keeps up what
+ * it pays for but starts nothing new. Nomination day is a month before
+ * polling day. On polling day (the first of the month) the votes are counted
+ * town by town, which the election night window shows; the results are
+ * declared two days later.
+ * ------------------------------------------------------------------------ */
+
 /**
- * A state elects its assembly; the platform with the most seats forms its government.
- * @param id The state.
+ * The seats of each platform, in words: "Transit First 7, Roads and Growth 3, Homes and Services 2".
+ * @param seats The seats.
+ * @return The words.
  */
-static void HoldStateElection(StateID id)
+std::string GetSeatsText(const PlatformSeats &seats)
+{
+	std::string text;
+	for (uint p = 0; p < PLATFORM_COUNT; p++) {
+		if (!text.empty()) text += ", ";
+		text += GetString(STR_STATES_SEATS_ITEM, GetPlatformName(static_cast<Platform>(p + 1)), seats[p]);
+	}
+	return text;
+}
+
+/**
+ * All the seats.
+ * @param seats The seats of each platform.
+ * @return Their sum.
+ */
+uint GetTotalSeats(const PlatformSeats &seats)
+{
+	uint total = 0;
+	for (uint16_t n : seats) total += n;
+	return total;
+}
+
+/**
+ * Is the run-up to an election on: the assembly dissolved and the government a caretaker until polling day?
+ * @param id The state, or #INVALID_STATE for the general election. States on the main land and federal
+ *           territories vote with parliament; regions on their own.
+ * @return True from two months before polling day until polling day.
+ */
+bool IsElectionCampaign(StateID id)
+{
+	if (!AreStatesFormed()) return false;
+	const int year = TimerGameEconomy::year.base();
+	const uint month = TimerGameEconomy::month;
+	const State *s = GetState(id);
+	if (s == nullptr || s->kind != StateKind::State || !s->region) {
+		return year >= _federation.next_election && month + 2 >= GENERAL_ELECTION_MONTH && month < GENERAL_ELECTION_MONTH;
+	}
+	return s->towns > 0 && year >= s->next_election && month + 2 >= REGION_ELECTION_MONTH && month < REGION_ELECTION_MONTH;
+}
+
+/**
+ * The month of polling day of a state's next election.
+ * @param id The state, or #INVALID_STATE for the general election.
+ * @return The month's name.
+ */
+StringID GetElectionMonthName(StateID id)
+{
+	const State *s = GetState(id);
+	return (s != nullptr && s->kind == StateKind::State && s->region) ? STR_MONTH_SEP : STR_MONTH_MAY;
+}
+
+/**
+ * The elections kept: the last general election and the last election of each region.
+ * @return The elections.
+ */
+std::vector<ElectionResult> &GetElections()
+{
+	return _elections;
+}
+
+/**
+ * The last election of a region, or the last general election.
+ * @param id The region, or #INVALID_STATE for the general election.
+ * @return The election, or nullptr if there was none yet.
+ */
+const ElectionResult *GetLastElection(StateID id)
+{
+	for (const ElectionResult &r : _elections) {
+		if (r.state == id) return &r;
+	}
+	return nullptr;
+}
+
+/**
+ * Keep an election, in place of the last one of the same kind.
+ * @param r The election.
+ */
+static void KeepElection(ElectionResult &&r)
+{
+	std::erase_if(_elections, [&r](const ElectionResult &e) { return e.state == r.state; });
+	_elections.push_back(std::move(r));
+}
+
+/**
+ * Order the towns of an election the way the count declares them: the smallest towns first, the big cities last.
+ * @param towns The towns.
+ */
+static void SortForCount(std::vector<ElectionTown> &towns)
+{
+	std::ranges::sort(towns, [](const ElectionTown &a, const ElectionTown &b) {
+		const Town *ta = Town::GetIfValid(a.town), *tb = Town::GetIfValid(b.town);
+		const uint pa = ta == nullptr ? 0 : ta->cache.population, pb = tb == nullptr ? 0 : tb->cache.population;
+		return pa != pb ? pa < pb : a.town < b.town;
+	});
+}
+
+/**
+ * A state elects its assembly, seat by seat; the platform with the most seats forms its government.
+ * @param id The state.
+ * @param[out] towns If not nullptr, the seats each town gave.
+ * @return The seats each platform won; none if the state has no towns.
+ */
+static PlatformSeats ElectAssembly(StateID id, std::vector<ElectionTown> *towns)
 {
 	State &s = _states[id];
+	PlatformSeats seats{};
 	const std::vector<TownVoters> voters = GetVoters(id);
 	if (voters.empty()) {
 		s.next_election = TimerGameEconomy::year.base() + TERM_YEARS;
-		return;
+		return seats;
 	}
 	const uint score = GetVotersScore(voters);
 	const int bonus = GetIncumbentBonus(score, s.service_score, s.elected);
-	PlatformSeats seats{};
 	for (const TownVoters &v : voters) {
 		const VoterConcerns &c = v.concerns;
 		const std::array<int, PLATFORM_COUNT> appeal = GetPlatformAppeal(c);
 		Debug(Facility::Misc, Severity::Trace1, "[state] votes town {} people {}: traffic {} transit {} satisfaction {} air {} services {} housing {} taxes {} growth {}; appeal {} {} {}",
 				v.town->index, v.town->cache.population, c.traffic, c.transit, c.satisfaction, c.air, c.services, c.housing, c.taxes, c.growth, appeal[0], appeal[1], appeal[2]);
-		VoteInTown(v.town, v.concerns, s.government, bonus, true, seats);
+		PlatformSeats here{};
+		VoteInTown(v.town, v.concerns, s.government, bonus, true, here);
+		for (uint p = 0; p < PLATFORM_COUNT; p++) seats[p] += here[p];
+		if (towns != nullptr) towns->push_back({v.town->index, here});
 	}
 	const Platform before = s.government;
 	s.government = FormGovernment(seats, before);
@@ -1579,56 +1707,198 @@ static void HoldStateElection(StateID id)
 	s.elected = TimerGameEconomy::year.base();
 	s.next_election = s.elected + TERM_YEARS;
 	s.service_score = static_cast<uint8_t>(score);
-	uint total = 0;
-	for (uint16_t n : seats) total += n;
 	Debug(Facility::Misc, Severity::Trace1, "[state] election {} '{}': seats {} {} {} of {}, government {} (was {}), score {}, bonus {}",
-			id, GetStateName(id), seats[0], seats[1], seats[2], total, to_underlying(s.government), to_underlying(before), score, bonus);
-	const StringID verb = before == s.government ? STR_NEWS_STATE_ELECTION_KEEPS : STR_NEWS_STATE_ELECTION_FORMS;
-	EncodedString headline = GetEncodedString(STR_NEWS_STATE_ELECTION, GetStateName(id), GetPlatformName(s.government), seats[to_underlying(s.government) - 1], total, verb);
-	if (Town::IsValidID(s.capital)) {
-		AddNewsItem(std::move(headline), NewsType::General, NewsStyle::Small, {}, s.capital);
+			id, GetStateName(id), seats[0], seats[1], seats[2], GetTotalSeats(seats), to_underlying(s.government), to_underlying(before), score, bonus);
+	return seats;
+}
+
+/**
+ * Announce news about an election in the state's capital, or the federal territory's city for a general election.
+ * @param id The state, or #INVALID_STATE for the general election.
+ * @param headline The news.
+ * @param style Its style.
+ */
+static void AddElectionNews(StateID id, EncodedString &&headline, NewsStyle style)
+{
+	TownID where = TownID::Invalid();
+	if (const State *s = GetState(id); s != nullptr) {
+		where = s->capital;
 	} else {
-		AddNewsItem(std::move(headline), NewsType::General, NewsStyle::Small, {});
+		for (const State &st : _states) {
+			if (st.kind == StateKind::FederalTerritory && Town::IsValidID(st.capital)) {
+				where = st.capital;
+				break;
+			}
+		}
+	}
+	if (Town::IsValidID(where)) {
+		AddNewsItem(std::move(headline), NewsType::General, style, {}, where);
+	} else {
+		AddNewsItem(std::move(headline), NewsType::General, style, {});
 	}
 }
 
-/** A general election: parliament, and the assemblies of the states that aren't regions, which vote on their own. */
-static void HoldGeneralElection()
+/**
+ * The states whose assemblies are elected with parliament: those on the main land with towns.
+ * @return How many.
+ */
+static uint CountStatesVotingWithParliament()
 {
-	for (StateID id = 0; id < _states.size(); id++) {
-		const State &s = _states[id];
-		if (s.kind == StateKind::State && !s.region && s.towns > 0) HoldStateElection(id);
-	}
-	const std::vector<TownVoters> voters = GetVoters(INVALID_STATE);
-	const uint score = GetVotersScore(voters);
-	const int bonus = GetIncumbentBonus(score, _federation.service_score, _federation.elected);
-	PlatformSeats seats{};
-	for (const TownVoters &v : voters) VoteInTown(v.town, v.concerns, _federation.government, bonus, true, seats);
-	const Platform before = _federation.government;
-	_federation.government = FormGovernment(seats, before);
-	_federation.seats = seats;
-	_federation.elected = TimerGameEconomy::year.base();
-	_federation.next_election = _federation.elected + TERM_YEARS;
-	_federation.service_score = static_cast<uint8_t>(score);
-	uint total = 0;
-	for (uint16_t n : seats) total += n;
-	Debug(Facility::Misc, Severity::Trace1, "[state] general election: seats {} {} {} of {}, government {} (was {}), score {}, bonus {}",
-			seats[0], seats[1], seats[2], total, to_underlying(_federation.government), to_underlying(before), score, bonus);
-	const StringID verb = before == _federation.government ? STR_NEWS_STATE_ELECTION_KEEPS : STR_NEWS_STATE_ELECTION_FORMS;
-	TownID capital = TownID::Invalid();
+	uint states = 0;
 	for (const State &s : _states) {
-		if (s.kind == StateKind::FederalTerritory && Town::IsValidID(s.capital)) {
-			capital = s.capital;
-			break;
-		}
+		if (s.kind == StateKind::State && !s.region && s.towns > 0) states++;
 	}
-	EncodedString headline = GetEncodedString(STR_NEWS_GENERAL_ELECTION, GetPlatformName(_federation.government), seats[to_underlying(_federation.government) - 1], total, verb);
-	if (Town::IsValidID(capital)) {
-		AddNewsItem(std::move(headline), NewsType::General, NewsStyle::Normal, {}, capital);
+	return states;
+}
+
+/**
+ * Two months before polling day: the assembly (for a general election parliament and the assemblies of the
+ * states on the main land) is dissolved; the government carries on as a caretaker.
+ * @param id The region, or #INVALID_STATE for the general election.
+ */
+static void DissolveForElection(StateID id)
+{
+	const int year = TimerGameEconomy::year.base();
+	if (id == INVALID_STATE) {
+		const uint states = CountStatesVotingWithParliament();
+		if (_federation.government == Platform::None) {
+			AddElectionNews(id, GetEncodedString(STR_NEWS_ELECTION_CALLED_GENERAL, year, states), NewsStyle::Normal);
+		} else {
+			AddElectionNews(id, GetEncodedString(STR_NEWS_ELECTION_DISSOLVED_GENERAL, GetPlatformName(_federation.government), year, states), NewsStyle::Normal);
+		}
+		return;
+	}
+	const State &s = _states[id];
+	if (s.government == Platform::None) {
+		AddElectionNews(id, GetEncodedString(STR_NEWS_ELECTION_CALLED_STATE, GetStateName(id), year), NewsStyle::Small);
 	} else {
-		AddNewsItem(std::move(headline), NewsType::General, NewsStyle::Normal, {});
+		AddElectionNews(id, GetEncodedString(STR_NEWS_ELECTION_DISSOLVED_STATE, GetStateName(id), GetPlatformName(s.government), year), NewsStyle::Small);
 	}
 }
+
+/**
+ * A month before polling day: nomination day. Every platform stands in every seat; the polls say how it looks.
+ * @param id The region, or #INVALID_STATE for the general election.
+ */
+static void HoldNominationDay(StateID id)
+{
+	const int year = TimerGameEconomy::year.base();
+	if (id == INVALID_STATE) {
+		const PlatformSeats poll = GetFederalPoll();
+		const uint seats = GetTotalSeats(poll);
+		AddElectionNews(id, GetEncodedString(STR_NEWS_ELECTION_NOMINATION_GENERAL, seats * PLATFORM_COUNT, seats, GetSeatsText(poll), year), NewsStyle::Normal);
+		return;
+	}
+	const PlatformSeats poll = GetStatePoll(id);
+	const uint seats = GetTotalSeats(poll);
+	AddElectionNews(id, GetEncodedString(STR_NEWS_ELECTION_NOMINATION_STATE, GetStateName(id), seats * PLATFORM_COUNT, seats, GetSeatsText(poll), year), NewsStyle::Small);
+}
+
+/** Polling day of a general election: parliament, and the assemblies of the states on the main land, which vote with it. */
+static void HoldGeneralElection()
+{
+	const int year = TimerGameEconomy::year.base();
+	ElectionResult r;
+	r.state = INVALID_STATE;
+	r.year = year;
+	r.month = GENERAL_ELECTION_MONTH;
+
+	for (StateID id = 0; id < _states.size(); id++) {
+		const State &s = _states[id];
+		if (s.kind != StateKind::State || s.region || s.towns == 0) continue;
+		const Platform before = s.government;
+		const PlatformSeats seats = ElectAssembly(id, nullptr);
+		r.assemblies.push_back({id, before, _states[id].government, seats});
+	}
+
+	const std::vector<TownVoters> voters = GetVoters(INVALID_STATE);
+	const uint score = GetVotersScore(voters);
+	/* Voters judge the federal government on their service, and on the projects of its plan companies delivered. */
+	int bonus = GetIncumbentBonus(score, _federation.service_score, _federation.elected);
+	if (_federation.government != Platform::None) bonus += GetFederalProjectVotes();
+	for (const TownVoters &v : voters) {
+		PlatformSeats here{};
+		VoteInTown(v.town, v.concerns, _federation.government, bonus, true, here);
+		for (uint p = 0; p < PLATFORM_COUNT; p++) r.seats[p] += here[p];
+		r.towns.push_back({v.town->index, here});
+	}
+	r.before = _federation.government;
+	_federation.government = FormGovernment(r.seats, r.before);
+	r.after = _federation.government;
+	_federation.seats = r.seats;
+	_federation.elected = year;
+	_federation.next_election = year + TERM_YEARS;
+	_federation.service_score = static_cast<uint8_t>(score);
+	Debug(Facility::Misc, Severity::Trace1, "[state] general election: seats {} {} {} of {}, government {} (was {}), score {}, bonus {}",
+			r.seats[0], r.seats[1], r.seats[2], GetTotalSeats(r.seats), to_underlying(r.after), to_underlying(r.before), score, bonus);
+
+	SortForCount(r.towns);
+	const uint towns = static_cast<uint>(r.towns.size());
+	const uint assemblies = static_cast<uint>(r.assemblies.size());
+	KeepElection(std::move(r));
+	AddElectionNews(INVALID_STATE, GetEncodedString(STR_NEWS_ELECTION_POLLING_GENERAL, towns, assemblies), NewsStyle::Normal);
+	ShowElectionNightWindow(INVALID_STATE, true);
+}
+
+/**
+ * Polling day of a region, which votes on its own.
+ * @param id The region.
+ */
+static void HoldRegionElection(StateID id)
+{
+	ElectionResult r;
+	r.state = id;
+	r.year = TimerGameEconomy::year.base();
+	r.month = REGION_ELECTION_MONTH;
+	r.before = _states[id].government;
+	r.seats = ElectAssembly(id, &r.towns);
+	r.after = _states[id].government;
+	if (r.towns.empty()) return;
+
+	SortForCount(r.towns);
+	const uint towns = static_cast<uint>(r.towns.size());
+	KeepElection(std::move(r));
+	AddElectionNews(id, GetEncodedString(STR_NEWS_ELECTION_POLLING_STATE, GetStateName(id), towns), NewsStyle::Normal);
+	ShowElectionNightWindow(id, true);
+}
+
+/**
+ * Two days after polling day: the results are declared.
+ * @param r The election.
+ */
+static void DeclareElection(ElectionResult &r)
+{
+	r.declared = true;
+	if (r.after == Platform::None) return;
+	const StringID verb = r.before == r.after ? STR_NEWS_STATE_ELECTION_KEEPS : STR_NEWS_STATE_ELECTION_FORMS;
+	const uint won = r.seats[to_underlying(r.after) - 1];
+	if (r.state == INVALID_STATE) {
+		std::string states;
+		for (const ElectionAssembly &a : r.assemblies) {
+			if (a.after == Platform::None || a.state >= _states.size()) continue;
+			if (!states.empty()) states += ", ";
+			states += GetString(STR_NEWS_ELECTION_ASSEMBLY_ITEM, GetPlatformName(a.after), GetStateName(a.state), a.seats[to_underlying(a.after) - 1], GetTotalSeats(a.seats));
+		}
+		AddElectionNews(INVALID_STATE, GetEncodedString(STR_NEWS_ELECTION_RESULT_GENERAL, GetPlatformName(r.after), won, GetTotalSeats(r.seats), GetSeatsText(r.seats), verb, states), NewsStyle::Normal);
+		/* The government elected makes its five-year plan. */
+		StartFederalPlan();
+	} else if (r.state < _states.size()) {
+		AddElectionNews(r.state, GetEncodedString(STR_NEWS_ELECTION_RESULT_STATE, GetPlatformName(r.after), GetStateName(r.state), won, GetTotalSeats(r.seats), GetSeatsText(r.seats), verb), NewsStyle::Normal);
+	}
+	InvalidateWindowClassesData(WindowClass::States);
+	InvalidateWindowClassesData(WindowClass::ElectionNight);
+}
+
+/** Each day: declare the results two days after polling day. */
+static const IntervalTimer<TimerGameEconomy> _states_daily({TimerGameEconomy::Trigger::Day, TimerGameEconomy::Priority::None}, [](auto)
+{
+	if (!AreStatesFormed() || _game_mode == GameMode::Editor) return;
+	const TimerGameEconomy::Date today = TimerGameEconomy::date;
+	for (ElectionResult &r : _elections) {
+		if (r.declared) continue;
+		if (today >= TimerGameEconomy::ConvertYMDToDate(TimerGameEconomy::Year{r.year}, r.month, 1) + ELECTION_DECLARE_DAYS) DeclareElection(r);
+	}
+});
 
 /* ------------------------------------------------------------------------
  * Money, each month and each year.
@@ -1698,6 +1968,11 @@ static void StatesNewYear()
 	}
 	_federation.grants_last_year = _federation.grants_this_year;
 	_federation.grants_this_year = 0;
+	_federation.programmes_last_year = _federation.programmes_this_year;
+	_federation.programmes_this_year = 0;
+	_federation.projects_last_year = _federation.projects_this_year;
+	_federation.projects_this_year = 0;
+	UpdateFederalYearly();
 
 	for (Town *t : Town::Iterate()) {
 		State *s = GetState(t->state);
@@ -1768,18 +2043,29 @@ void UpdateStatesMonthly()
 	if (TimerGameEconomy::month % 3 == 0) {
 		for (StateID id = 0; id < _states.size(); id++) {
 			const State &s = _states[id];
-			if (s.kind == StateKind::State && s.government == Platform::RoadsAndGrowth && CanSpend(s) && s.towns > 0) FundBuildingsInTurn(id);
+			/* A caretaker starts nothing new. */
+			if (s.kind == StateKind::State && s.government == Platform::RoadsAndGrowth && CanSpend(s) && s.towns > 0 && !IsElectionCampaign(id)) FundBuildingsInTurn(id);
 		}
 	}
 
+	/* Elections: dissolution two months before polling day, nomination day a month before, polling day. */
 	const int year = TimerGameEconomy::year.base();
-	if (TimerGameEconomy::month == GENERAL_ELECTION_MONTH && year >= _federation.next_election) HoldGeneralElection();
-	if (TimerGameEconomy::month == REGION_ELECTION_MONTH) {
-		for (StateID id = 0; id < _states.size(); id++) {
-			const State &s = _states[id];
-			if (s.kind == StateKind::State && s.region && s.towns > 0 && year >= s.next_election) HoldStateElection(id);
-		}
+	const uint month = TimerGameEconomy::month;
+	if (year >= _federation.next_election) {
+		if (month + 2 == GENERAL_ELECTION_MONTH) DissolveForElection(INVALID_STATE);
+		if (month + 1 == GENERAL_ELECTION_MONTH) HoldNominationDay(INVALID_STATE);
+		if (month == GENERAL_ELECTION_MONTH) HoldGeneralElection();
 	}
+	for (StateID id = 0; id < _states.size(); id++) {
+		const State &s = _states[id];
+		if (s.kind != StateKind::State || !s.region || s.towns == 0 || year < s.next_election) continue;
+		if (month + 2 == REGION_ELECTION_MONTH) DissolveForElection(id);
+		if (month + 1 == REGION_ELECTION_MONTH) HoldNominationDay(id);
+		if (month == REGION_ELECTION_MONTH) HoldRegionElection(id);
+	}
+
+	/* The federal government's programmes and plan. */
+	UpdateFederalMonthly();
 	InvalidateWindowClassesData(WindowClass::States);
 }
 
@@ -1835,4 +2121,6 @@ void InitializeStates()
 	_federation = {};
 	_state_cells.clear();
 	_state_cell_kinds.clear();
+	_elections.clear();
+	InitializeFederal();
 }

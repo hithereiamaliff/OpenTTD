@@ -537,11 +537,12 @@ struct TollNetwork {
 
 /**
  * Follow a company's expressway from a toll plaza: the plazas on it, and the towns whose roads join it.
- * @param start The toll plaza.
+ * @param start The toll plaza, or any tile of the expressway.
  * @param owner The company.
  * @param[out] net The network.
+ * @param[out] visited If not nullptr, the expressway's tiles are added to it.
  */
-static void FindTollNetwork(TileIndex start, Owner owner, TollNetwork &net)
+static void FindTollNetwork(TileIndex start, Owner owner, TollNetwork &net, std::set<TileIndex> *visited = nullptr)
 {
 	std::vector<TileIndex> queue{start};
 	std::set<TileIndex> seen{start};
@@ -573,6 +574,29 @@ static void FindTollNetwork(TileIndex start, Owner owner, TollNetwork &net)
 		}
 	}
 	std::sort(net.plazas.begin(), net.plazas.end());
+	if (visited != nullptr) visited->insert(seen.begin(), seen.end());
+}
+
+/**
+ * Does a company's expressway link two towns: roads from both join it? For the federal government's plan.
+ * @param a One town.
+ * @param b The other town.
+ * @return The company whose expressway links them, or CompanyID::Invalid().
+ */
+CompanyID FindExpresswayLink(const Town *a, const Town *b)
+{
+	std::set<TileIndex> done;
+	TileArea area(a->xy, 1, 1);
+	area.Expand(ACCESS_TOWN_DISTANCE);
+	for (TileIndex tile : area) {
+		if (!IsExpresswayRoad(tile) || done.contains(tile)) continue;
+		const Owner owner = GetRoadOwner(tile, RoadTramType::Road);
+		if (!Company::IsValidID(owner)) continue;
+		TollNetwork net;
+		FindTollNetwork(tile, owner, net, &done);
+		if (net.towns.contains(a->index) && net.towns.contains(b->index)) return owner;
+	}
+	return CompanyID::Invalid();
 }
 
 /**

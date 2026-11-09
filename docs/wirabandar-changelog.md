@@ -20,6 +20,60 @@ replaces its zip. The rolling `latest` release always has the newest build,
 under its versioned name and under the old name `wirabandar-windows-x64.zip`,
 so links to that name keep working.
 
+## 0.4.0 (2026-11-09)
+
+Elections you see coming, and a federal government that does more than pay
+grants (the owner's picks).
+
+The run-up to every election, with news popups:
+
+- Two months before polling day the assembly is dissolved (for a general
+  election parliament and the assemblies of the states on the main land) and
+  the government carries on as a caretaker: it keeps paying for what it runs
+  but starts nothing new (no funded buildings, no federal hospitals, no new
+  plan). The States window says so. Before the first election the news says
+  the election is called.
+- A month before polling day, nomination day: every platform stands in every
+  seat, and the news gives the polls.
+- Polling day (1 May for general elections, 1 September for regions): the
+  election night window opens and counts the seats town by town, the
+  smallest towns first and the big cities last, with a bar for each platform
+  against a majority and the latest towns declared; then the winner, and for
+  a general election the states' assemblies. Skip to the result, or count
+  again; the States window's Last election button opens it again.
+- Two days later the results are declared in the news.
+
+The federal government:
+
+- National programmes: the platform elected to parliament works across the
+  whole country, on top of each state's own. Transit First pays a national
+  transit fund of 5% of every town's taxes into its transit budget, and half
+  of the monthly passes riders buy, so more of them buy one (as Malaysia's
+  My50). Roads and Growth subsidises fuel, 20% off the running costs of road
+  vehicles that burn it (not trams or electric buses), and towns grow 5%
+  faster. Homes and Services builds, each January, a hospital for the biggest
+  town of 6,000 people without one, or else a university for the biggest of
+  12,000 without one; the town runs it.
+- A five-year plan, as the Rancangan Malaysia: when the results of a general
+  election are declared, the government offers companies projects that match
+  its platform. Transit First: a metro line for the biggest city (a railway
+  line with four stations in it and eight departures a month) and BRT lines
+  for the capitals (a bus line graded BRT with three stops and eight
+  departures). Roads and Growth: expressways joining capitals. Homes and
+  Services: hospitals and a university. The first company to deliver a
+  project is paid; what nobody delivers lapses when the next plan begins.
+  Each project delivered gives the federal government 2 more votes in every
+  seat at the next general election (at most 8). Games with a federal
+  government already get their first plan at once.
+- Federal transit agencies, as Prasarana in Kuala Lumpur: a federal
+  territory's transit budget gets 25% of its taxes on top from federal money,
+  and its agency invites tenders three times as often as a town, picking
+  railway and BRT lines four times as readily. Its transit window and
+  tenders name the agency.
+- The States window's Federal government button shows all of it: the
+  government, its programmes, its plan with each project and what it needs,
+  and what it spent.
+
 ## 0.3.1 (2026-11-09)
 
 Fixes for problems found while updating the player guides for 0.1.1-0.3.0,

@@ -2661,6 +2661,95 @@ default, and the cities and capitals named after Malaysia's.
   city-budget-demo (English names) formed Wilayah Persekutuan Nennville
   and Negeri Gredinghall as before.
 
+## Done: the run-up to elections, and the federal government (0.4.0)
+
+The owner found that elections passed unseen ("only after opening the States
+window did I know an election had just happened") and that the federal
+government did nothing but pay grants. Their calls (2026-11-09): popups for
+the caretaker government, the run-up, polling day and the result; an
+election night window that counts the votes; and for the federal government
+national programmes, a five-year plan of projects and a transit agency for
+the federal territories (not more money for states of its own platform).
+
+### Elections
+
+- `IsElectionCampaign()`: from two months before polling day (March for
+  general elections, July for regions) the assembly is dissolved and the
+  government is a caretaker. Worked out from the date, so nothing new is
+  saved for it. Caretakers keep paying grants but start nothing new: no
+  funded buildings under Roads and Growth, no federal hospitals, no plan.
+- News: dissolution (or "first election called"), nomination day a month
+  before polling day (candidates, and the polls from `GetFederalPoll()` /
+  `GetStatePoll()`), polling day, and the results two days later (a daily
+  timer). General elections use the newspaper style; a region's dissolution
+  and nomination day the small one.
+- Polling day keeps each town's seats (`ElectionResult`, chunk SELN: the
+  last general election and the last of each region), sorted smallest town
+  first, which is the order the election night window declares them in
+  (`election_gui.cpp`). The window paces the count to about 7 seconds
+  (80-700 ms a town), draws a bar per platform against a majority line,
+  lists the five towns declared last, then the winner and, for a general
+  election, the states' assemblies. It opens by itself only with a GUI; the
+  States window's Last election button opens it again.
+
+### Federal government (`federal.cpp`, `federal_gui.cpp`)
+
+- National programmes on the federal platform, for towns in states (the
+  territories already have the federal platform): Transit First adds 5% of
+  taxes to transit budgets (`GetFederalTransitGrantPercent`) and pays half
+  of monthly passes (`GetPassUptake` weighs the half riders pay; the company
+  still gets the full price); Roads and Growth takes 20% off the running
+  costs of road vehicles that burn fuel (`RoadVehicle::GetRunningCost`) and
+  makes towns grow 5% faster (`GetStateGrowthPercent`); Homes and Services
+  builds a hospital or a university each January in the biggest town that
+  lacks one (`BuildFederalCityService`, paid by the federation, run by the
+  town).
+- The five-year plan (chunk SFPR, `Federation::plan`): made when the results
+  of a general election are declared, or at once in a game with a federal
+  government but no plan. Up to four projects matching the platform: a
+  metro line for the biggest city of 8,000 people (a territory's first) and
+  BRT lines for capitals of 2,500; expressways joining capitals 24-200 tiles
+  apart on the same land (`FindExpresswayLink` follows a company's
+  expressway, as the toll networks do); hospitals for towns of 5,000 and a
+  university for a town of 10,000 without one. Checked monthly; the first
+  company to deliver is paid (30,000, 12,000, 80 a tile and 1.5 times the
+  building's price, in base object prices); a project lapses when its town
+  gets the building from elsewhere, or when the next plan begins. Delivered
+  projects add 2 votes each (at most 8) to the federal government at the
+  next general election.
+- Federal transit agencies: a territory's transit budget gets 25% of its
+  taxes on top; it tenders three times as often and picks railway and BRT
+  lines four times as readily; its window and tender news name the agency.
+- The Federal government window (States window button) lists the
+  government, the programmes, the plan and its projects (click to go to the
+  town), the agencies and the federal money (`programmes_*`, `projects_*`
+  saved in SFED).
+
+### Tests
+
+- A 60% sea map (seed 3), a game script putting one platform in power and a
+  test AI. Homes and Services: plan 1 offered a hospital for Kuala Lumpur
+  (£270,000); the AI built one and was paid the next month; at the May 1996
+  general election that project gave the government +2 votes (bonus 2), Roads
+  and Growth won, the AI's diesel bus went from £834 to £667 a year (the fuel
+  subsidy) and plan 2 offered an expressway Kuala Lumpur - Johor Bahru
+  (£451,200). Transit First: plan 1 offered BRT lines for four capitals
+  (£360,000 each); Johor Bahru's transit budget was 40% of its taxes (25% +
+  state 10% + national fund 5%) against 25% under Homes and Services; Kuala
+  Lumpur, a territory, 60% (25% + the agency's 25% + its platform's 10%).
+  Sarawak, the region, voted on its own in September 1997.
+- city-states-demo run to 2026: plan 1 at once (a hospital for Great
+  Brunthill), the federal programme built a university there in January
+  2023 and left the hospital to companies; the May 2026 general election
+  went to Roads and Growth with plan 2.
+- Under Xvfb: the dissolution popup on 1 March, nomination day ("39
+  candidates stand for 13 seats"), the polling day popup with the election
+  night window counting 13 towns, the result in the window and the news on 3
+  May, then "Five-year plan 2!"; the States window as a caretaker; the
+  Federal government window; Kuala Lumpur's federal transit agency window.
+- 96/96 unit tests, 4/4 script regression tests; all 47 test saves load,
+  run, save and reload; a game saved after an election and a plan reloads.
+
 ## Getting it onto the owner's computer (Windows)
 
 - The owner plays on Windows. The code goes to the GitHub repo

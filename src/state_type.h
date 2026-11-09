@@ -10,6 +10,7 @@
 #ifndef STATE_TYPE_H
 #define STATE_TYPE_H
 
+#include "company_type.h"
 #include "economy_type.h"
 #include "town_type.h"
 
@@ -83,6 +84,73 @@ struct Federation {
 	uint8_t service_score = 0; ///< How voters rated the service they get, at the last general election.
 	Money grants_this_year = 0; ///< Federal grants paid this year: to the states and the city halls.
 	Money grants_last_year = 0; ///< The same last year.
+	uint8_t plan = 0; ///< Number of the federal government's five-year plan; 0 before the first.
+	int32_t plan_year = 0; ///< Year the plan began.
+	Money programmes_this_year = 0; ///< Spent on the national programmes this year: transit grants, the pass and fuel subsidies, hospitals and universities.
+	Money programmes_last_year = 0; ///< The same last year.
+	Money projects_this_year = 0; ///< Paid to companies for the plan's projects this year.
+	Money projects_last_year = 0; ///< The same last year.
+};
+
+/** The seats a town gave each platform in an election. */
+struct ElectionTown {
+	TownID town = TownID::Invalid(); ///< The town.
+	PlatformSeats seats{}; ///< Seats each platform won there.
+};
+
+/** A state's assembly, elected with parliament at a general election. */
+struct ElectionAssembly {
+	StateID state = INVALID_STATE; ///< The state.
+	Platform before = Platform::None; ///< Who governed it before.
+	Platform after = Platform::None; ///< Who governs it now.
+	PlatformSeats seats{}; ///< Seats each platform won.
+};
+
+/**
+ * An election: a general election (parliament, with the assemblies of the states on the main land) or a region's.
+ * The last general election and the last election of each region are kept (saved in chunk SELN).
+ */
+struct ElectionResult {
+	StateID state = INVALID_STATE; ///< The region that voted, or #INVALID_STATE for a general election.
+	int32_t year = 0; ///< Year of polling day.
+	uint8_t month = 0; ///< Month of polling day, the first of the month.
+	Platform before = Platform::None; ///< Who governed before.
+	Platform after = Platform::None; ///< Who governs now.
+	PlatformSeats seats{}; ///< Seats each platform won, in parliament or in the region's assembly.
+	bool declared = false; ///< The results were announced, two days after polling day.
+	std::vector<ElectionTown> towns{}; ///< The seats of each town, in the order the count declares them: the smallest town first.
+	std::vector<ElectionAssembly> assemblies{}; ///< For a general election: the states' assemblies elected with parliament.
+};
+
+/** Kinds of project in the federal government's five-year plan. */
+enum class FederalProjectType : uint8_t {
+	MetroLine, ///< A railway line with four stations or more in a city, running often.
+	BrtLine, ///< A bus line graded BRT with three stops or more in a town, running often.
+	Expressway, ///< A company's expressway that roads from two towns join.
+	Hospital, ///< A hospital built by a company in a town that has none.
+	University, ///< A university built by a company in a town that has none.
+	End, ///< End marker.
+};
+
+/** Stages of a project of the five-year plan. */
+enum class FederalProjectState : uint8_t {
+	Open, ///< Offered: the first company to deliver it is paid.
+	Delivered, ///< A company delivered it and was paid.
+	Lapsed, ///< Nobody delivered it before the plan ended, or it isn't needed any more.
+	End, ///< End marker.
+};
+
+/** A project of the federal government's five-year plan (saved in chunk SFPR). */
+struct FederalProject {
+	FederalProjectType type = FederalProjectType::MetroLine; ///< What it is.
+	FederalProjectState state = FederalProjectState::Open; ///< Its stage.
+	uint8_t plan = 0; ///< Number of the plan it belongs to.
+	TownID town = TownID::Invalid(); ///< The town it is for.
+	TownID town2 = TownID::Invalid(); ///< An expressway's other town.
+	CompanyID company = CompanyID::Invalid(); ///< The company that delivered it.
+	Money payment = 0; ///< What the federal government pays the company that delivers it.
+	int32_t offered = 0; ///< Year it was offered.
+	int32_t done = 0; ///< Year it was delivered or lapsed.
 };
 
 /** What a town's voters make of things, each 0-100: the higher, the more of it. */

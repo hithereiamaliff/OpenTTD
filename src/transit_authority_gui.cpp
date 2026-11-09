@@ -17,6 +17,7 @@
 #include "company_func.h"
 #include "dropdown_func.h"
 #include "dropdown_type.h"
+#include "federal.h"
 #include "line.h"
 #include "order_base.h"
 #include "station_base.h"
@@ -87,7 +88,7 @@ struct TransitAuthorityWindow : Window {
 	{
 		switch (widget) {
 			case WID_TRA_BUDGET:
-				size.height = WidgetDimensions::scaled.framerect.Vertical() + 5 * GetCharacterHeight(FontSize::Normal);
+				size.height = WidgetDimensions::scaled.framerect.Vertical() + this->GetBudgetLineCount() * GetCharacterHeight(FontSize::Normal);
 				/* Wide enough for the longest line; the window widens when a line outgrows it (see OnInvalidateData). */
 				size.width = std::max({size.width, static_cast<uint>(ScaleGUITrad(560)), this->GetBudgetWidth()});
 				break;
@@ -102,7 +103,10 @@ struct TransitAuthorityWindow : Window {
 
 	std::string GetWidgetString(WidgetID widget, StringID stringid) const override
 	{
-		if (widget == WID_TRA_CAPTION) return GetString(STR_TRANSIT_CAPTION, this->window_number);
+		if (widget == WID_TRA_CAPTION) {
+			const Town *t = Town::GetIfValid(this->window_number);
+			return GetString(t != nullptr && HasFederalTransitAgency(t) ? STR_TRANSIT_CAPTION_AGENCY : STR_TRANSIT_CAPTION, this->window_number);
+		}
 		return this->Window::GetWidgetString(widget, stringid);
 	}
 
@@ -171,6 +175,12 @@ struct TransitAuthorityWindow : Window {
 		} else {
 			lines.push_back(GetString(STR_TRANSIT_BUDGET, budget, GetTownTransitCommitted(t), std::max<Money>(0, GetTownTransitAvailable(t))));
 		}
+		/* Federal money: the agency of a federal territory, the national transit fund. */
+		if (HasFederalTransitAgency(t)) {
+			lines.push_back(GetString(STR_TRANSIT_FEDERAL_AGENCY, GetFederalAgencyBudgetPercent(t), FEDERAL_AGENCY_TENDER_FACTOR));
+		} else if (GetFederalTransitGrantPercent(t) > 0) {
+			lines.push_back(GetString(STR_TRANSIT_FEDERAL_FUND, GetFederalTransitGrantPercent(t)));
+		}
 		lines.push_back(GetString(STR_TRANSIT_FARES, t->transit.fares_last_year, t->transit.fares_this_year));
 		if (t->transit.congestion_charge) {
 			lines.push_back(GetString(STR_TRANSIT_CONGESTION_CHARGE, t->transit.charge_since, t->transit.charged_last_month, t->transit.charge_income_last_month, t->transit.charge_last_year));
@@ -192,6 +202,16 @@ struct TransitAuthorityWindow : Window {
 			lines.push_back(GetString(STR_TRANSIT_NO_CONCESSIONS));
 		}
 		return lines;
+	}
+
+	/**
+	 * How many lines the panel above the list has room for: five, more with federal money.
+	 * @return The lines.
+	 */
+	uint GetBudgetLineCount() const
+	{
+		const Town *t = Town::GetIfValid(this->window_number);
+		return std::max<uint>(5, t == nullptr ? 0 : static_cast<uint>(this->GetBudgetLines(t).size()));
 	}
 
 	/**
@@ -327,7 +347,9 @@ struct TransitAuthorityWindow : Window {
 		const Town *t = Town::Get(this->window_number);
 		this->SetWidgetDisabledState(WID_TRA_CHARGE, !Company::IsValidID(_local_company) || t->transit.congestion_charge);
 		/* A line outgrew the panel, the congestion charge's say: widen the window. */
-		if (this->GetBudgetWidth() > this->GetWidget<NWidgetBase>(WID_TRA_BUDGET)->current_x) this->ReInit();
+		const NWidgetBase *budget = this->GetWidget<NWidgetBase>(WID_TRA_BUDGET);
+		const uint height = WidgetDimensions::scaled.framerect.Vertical() + this->GetBudgetLineCount() * GetCharacterHeight(FontSize::Normal);
+		if (this->GetBudgetWidth() > budget->current_x || height != budget->smallest_y) this->ReInit();
 		this->SetDirty();
 	}
 };

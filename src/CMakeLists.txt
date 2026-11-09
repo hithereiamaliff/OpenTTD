@@ -137,6 +137,10 @@ add_files(
     state_cmd.h
     state_gui.cpp
     state_type.h
+    election_gui.cpp
+    federal.cpp
+    federal.h
+    federal_gui.cpp
     city_services_gui.cpp
     city_services_type.h
     clear_cmd.cpp

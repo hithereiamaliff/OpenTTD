@@ -20,8 +20,10 @@
 #include "core/random_func.hpp"
 #include "economy_func.h"
 #include "fare.h"
+#include "federal.h"
 #include "line.h"
 #include "map_func.h"
+#include "metro.h"
 #include "satisfaction.h"
 #include "state.h"
 #include "town_map.h"
@@ -131,7 +133,11 @@ Money GetTownTransitBudget(const Town *t)
 {
 	if (t->cache.population < MIN_TRANSIT_POPULATION) return 0;
 	/* With town budgets, a share of the town's taxes: as much as before on land of medium value and at normal taxes. */
-	if (AreTownBudgetsOn()) return GetTownTaxBase(t) * (GetTownTransitSharePercent(t) + GetStateTransitGrantPercent(t)) / 100;
+	if (AreTownBudgetsOn()) {
+		/* The state's grant under Transit First, the national transit fund of a Transit First federal government, and the federal transit agency of a territory. */
+		const uint percent = GetTownTransitSharePercent(t) + GetStateTransitGrantPercent(t) + GetFederalTransitGrantPercent(t) + GetFederalAgencyBudgetPercent(t);
+		return GetTownTaxBase(t) * percent / 100;
+	}
 	return GetTransitBusYearCost() * t->cache.population * BUDGET_BUSES_PER_10K / 10000;
 }
 
@@ -745,7 +751,9 @@ static void MaybeOpenTender(Town *t, TimerGameEconomy::Date today)
 		if (c.town == t->index && c.state == TransitContractState::Tender) return;
 	}
 	if (t->transit.last_tender != TimerGameEconomy::Date{} && today - t->transit.last_tender < TENDER_PAUSE_DAYS) return;
-	if (!Chance16(1, TENDER_CHANCE)) return;
+	/* A federal territory's transit agency tenders more often. */
+	const bool agency = HasFederalTransitAgency(t);
+	if (!Chance16(1, agency ? std::max<uint>(1, TENDER_CHANCE / FEDERAL_AGENCY_TENDER_FACTOR) : TENDER_CHANCE)) return;
 
 	Money available = GetTownTransitAvailable(t);
 	std::vector<std::pair<OrderList *, uint>> candidates;
@@ -760,6 +768,8 @@ static void MaybeOpenTender(Town *t, TimerGameEconomy::Date today)
 		Money profit = 0;
 		for (const Vehicle *u = v; u != nullptr; u = u->NextShared()) profit += u->GetDisplayProfitLastYear();
 		uint weight = profit < 0 ? 3 : 1;
+		/* A federal transit agency wants railway (metro, LRT) and BRT lines first. */
+		if (agency && (IsTrainLine(list) || GetLineBrtScore(list).grade != BrtGrade::None)) weight *= FEDERAL_AGENCY_LINE_WEIGHT;
 		candidates.emplace_back(list, weight);
 		total += weight;
 	}
@@ -782,7 +792,11 @@ static void MaybeOpenTender(Town *t, TimerGameEconomy::Date today)
 	c.line = chosen->index;
 	c.type = Chance16(FREE_LINE_SHARE, 100) ? TransitContractType::FreeLine : TransitContractType::GrossCost;
 	OpenTender(c, today);
-	AddContractNews(c, c.type == TransitContractType::FreeLine ? STR_NEWS_TRANSIT_TENDER_FREE : STR_NEWS_TRANSIT_TENDER, c.cost_basis, c.end);
+	if (agency) {
+		AddContractNews(c, c.type == TransitContractType::FreeLine ? STR_NEWS_TRANSIT_TENDER_FREE_AGENCY : STR_NEWS_TRANSIT_TENDER_AGENCY, c.cost_basis, c.end);
+	} else {
+		AddContractNews(c, c.type == TransitContractType::FreeLine ? STR_NEWS_TRANSIT_TENDER_FREE : STR_NEWS_TRANSIT_TENDER, c.cost_basis, c.end);
+	}
 }
 
 /**

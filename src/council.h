@@ -41,6 +41,7 @@ Money GetCouncilIncomeNeeded(CouncilLevel level);
 Money GetCouncilSurplusLastYear(const Town *t);
 Money GetCouncilSpendable(const Town *t);
 CityService GetCouncilPlannedService(const Town *t);
+bool BuildFederalCityService(Town *t, CityService service, Money &cost);
 bool IsCouncilServiceAvailable(const Town *t, CityService service);
 uint32_t GetTownFlatsPopulation(const Town *t);
 uint32_t GetTownFlatsAge(const Town *t);

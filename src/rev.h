@@ -26,6 +26,6 @@ bool IsReleasedVersion();
  * raise the last number, new features the middle one (see docs/wirabandar-changelog.md). Which build it is
  * (date, branch, commit) is still _openttd_revision.
  */
-static constexpr std::string_view WIRA_BANDAR_VERSION = "0.3.1";
+static constexpr std::string_view WIRA_BANDAR_VERSION = "0.4.0";
 
 #endif /* REV_H */

@@ -15,6 +15,7 @@
 #include "company_base.h"
 #include "company_func.h"
 #include "economy_func.h"
+#include "federal.h"
 #include "order_base.h"
 #include "road_func.h"
 #include "roadveh.h"
@@ -82,13 +83,15 @@ FarePolicy GetVehicleFare(const Vehicle *front)
 
 /**
  * How many riders buy a monthly pass: the cheaper the pass compared with
- * paying for each of a month's trips, the more.
+ * paying for each of a month's trips, the more. When the federal government
+ * pays part of it (Transit First), riders weigh what is left for them.
  * @param pass Pass price in single fares, 0 if there is no pass.
  * @return Share of riders, in percent.
  */
 uint GetPassUptake(uint8_t pass)
 {
 	if (pass == 0 || pass >= FARE_PASS_MAX) return 0;
+	if (IsFederalPassSubsidyOn()) pass = static_cast<uint8_t>(std::max<uint>(1, pass * (100 - FEDERAL_PASS_SUBSIDY_PERCENT) / 100));
 	return (FARE_PASS_MAX - pass) * 3 / 2;
 }
 
@@ -295,6 +298,8 @@ void FaresMonthlyLoop()
 			stats.holders = static_cast<uint32_t>((static_cast<uint64_t>(stats.riders) * uptake + 50 * TRIPS_PER_PASS) / (100 * TRIPS_PER_PASS));
 			stats.income = GetFare(FarePolicy{FareScheme::Flat, fare.price, FareConcession::None, 0}, stats.holders, 0, 0, cargo, false) * fare.pass;
 			if (stats.income > 0) SubtractMoneyFromCompany(c->index, CommandCost(GetFareRevenueType(static_cast<FareMode>(mode)), -stats.income));
+			/* The company gets the full price; the federal government pays its share of it. */
+			if (stats.income > 0 && IsFederalPassSubsidyOn()) OnFederalPassSubsidy(stats.income * FEDERAL_PASS_SUBSIDY_PERCENT / 100);
 		}
 	}
 

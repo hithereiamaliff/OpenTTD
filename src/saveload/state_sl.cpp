@@ -11,7 +11,9 @@
  * The states and federal territories are kept in chunk STAT, the federation
  * (the federal government and its elections) in SFED, the map of states in
  * SMAP and each town's state in TSTA. Savegames without them form their
- * states in the first month.
+ * states in the first month. The last elections (for the election night
+ * window and the results still to declare) are kept in SELN, the projects
+ * of the federal government's five-year plan in SFPR.
  */
 
 #include "../stdafx.h"
@@ -19,6 +21,7 @@
 #include "saveload.h"
 #include "saveload_error.hpp"
 
+#include "../federal.h"
 #include "../map_func.h"
 #include "../state.h"
 #include "../town.h"
@@ -29,6 +32,8 @@ extern std::vector<State> _states;
 extern Federation _federation;
 extern std::vector<uint8_t> _state_cells;
 extern std::vector<uint8_t> _state_cell_kinds;
+extern std::vector<ElectionResult> _elections;
+extern std::vector<FederalProject> _federal_projects;
 
 static const SaveLoad _state_desc[] = {
 	SaveLoad::Variable<VarFileType::U16>("capital", SLE_OBJECT_ADDRESS(State, capital)),
@@ -95,6 +100,12 @@ static const SaveLoad _federation_desc[] = {
 	SaveLoad::Variable<VarFileType::U8>("service_score", SLE_GLOBAL_ADDRESS(_federation.service_score)),
 	SaveLoad::Variable<VarFileType::I64>("grants_this_year", SLE_GLOBAL_ADDRESS(_federation.grants_this_year)),
 	SaveLoad::Variable<VarFileType::I64>("grants_last_year", SLE_GLOBAL_ADDRESS(_federation.grants_last_year)),
+	SaveLoad::Variable<VarFileType::U8>("plan", SLE_GLOBAL_ADDRESS(_federation.plan)),
+	SaveLoad::Variable<VarFileType::I32>("plan_year", SLE_GLOBAL_ADDRESS(_federation.plan_year)),
+	SaveLoad::Variable<VarFileType::I64>("programmes_this_year", SLE_GLOBAL_ADDRESS(_federation.programmes_this_year)),
+	SaveLoad::Variable<VarFileType::I64>("programmes_last_year", SLE_GLOBAL_ADDRESS(_federation.programmes_last_year)),
+	SaveLoad::Variable<VarFileType::I64>("projects_this_year", SLE_GLOBAL_ADDRESS(_federation.projects_this_year)),
+	SaveLoad::Variable<VarFileType::I64>("projects_last_year", SLE_GLOBAL_ADDRESS(_federation.projects_last_year)),
 };
 
 /** The federation. */
@@ -208,15 +219,138 @@ struct TSTAChunkHandler : ChunkHandler {
 	}
 };
 
+/** The seats each town gave in an election. */
+class SlElectionTowns : public VectorSaveLoadHandler<SlElectionTowns, ElectionResult, ElectionTown> {
+public:
+	static inline const SaveLoad description[] = {
+		SaveLoad::Variable<VarFileType::U16>("town", SLE_OBJECT_ADDRESS(ElectionTown, town)),
+		SaveLoad::Array<VarFileType::U16, PLATFORM_COUNT>("seats", SLE_OBJECT_ADDRESS(ElectionTown, seats)),
+	};
+	static inline const SaveLoadCompatTable compat_description = {};
+
+	std::vector<ElectionTown> &GetVector(ElectionResult *r) const override { return r->towns; }
+};
+
+/** The states' assemblies elected with parliament. */
+class SlElectionAssemblies : public VectorSaveLoadHandler<SlElectionAssemblies, ElectionResult, ElectionAssembly> {
+public:
+	static inline const SaveLoad description[] = {
+		SaveLoad::Variable<VarFileType::U8>("state", SLE_OBJECT_ADDRESS(ElectionAssembly, state)),
+		SaveLoad::Variable<VarFileType::U8>("before", SLE_OBJECT_ADDRESS(ElectionAssembly, before)),
+		SaveLoad::Variable<VarFileType::U8>("after", SLE_OBJECT_ADDRESS(ElectionAssembly, after)),
+		SaveLoad::Array<VarFileType::U16, PLATFORM_COUNT>("seats", SLE_OBJECT_ADDRESS(ElectionAssembly, seats)),
+	};
+	static inline const SaveLoadCompatTable compat_description = {};
+
+	std::vector<ElectionAssembly> &GetVector(ElectionResult *r) const override { return r->assemblies; }
+};
+
+static const SaveLoad _election_desc[] = {
+	SaveLoad::Variable<VarFileType::U8>("state", SLE_OBJECT_ADDRESS(ElectionResult, state)),
+	SaveLoad::Variable<VarFileType::I32>("year", SLE_OBJECT_ADDRESS(ElectionResult, year)),
+	SaveLoad::Variable<VarFileType::U8>("month", SLE_OBJECT_ADDRESS(ElectionResult, month)),
+	SaveLoad::Variable<VarFileType::U8>("before", SLE_OBJECT_ADDRESS(ElectionResult, before)),
+	SaveLoad::Variable<VarFileType::U8>("after", SLE_OBJECT_ADDRESS(ElectionResult, after)),
+	SaveLoad::Array<VarFileType::U16, PLATFORM_COUNT>("seats", SLE_OBJECT_ADDRESS(ElectionResult, seats)),
+	SaveLoad::Variable<VarFileType::Bool>("declared", SLE_OBJECT_ADDRESS(ElectionResult, declared)),
+	SaveLoad::StructList<SlElectionTowns>("towns"),
+	SaveLoad::StructList<SlElectionAssemblies>("assemblies"),
+};
+
+/** The last general election and the last election of each region. */
+struct SELNChunkHandler : ChunkHandler {
+	SELNChunkHandler() : ChunkHandler("SELN", ChunkType::Table) {}
+
+	void Save() const override
+	{
+		SlTableHeader(_election_desc);
+
+		for (size_t i = 0; i < _elections.size(); i++) {
+			SlSetArrayIndex(i);
+			SlObject(&_elections[i], _election_desc);
+		}
+	}
+
+	void Load() const override
+	{
+		const std::vector<SaveLoad> slt = SlTableHeader(_election_desc);
+
+		_elections.clear();
+		while (SlIterateArray() != -1) {
+			ElectionResult &r = _elections.emplace_back();
+			SlObject(&r, slt);
+			if (r.before >= Platform::End) r.before = Platform::None;
+			if (r.after >= Platform::End) r.after = Platform::None;
+			for (ElectionAssembly &a : r.assemblies) {
+				if (a.before >= Platform::End) a.before = Platform::None;
+				if (a.after >= Platform::End) a.after = Platform::None;
+			}
+		}
+	}
+
+	void FixPointers() const override
+	{
+		/* After the states are loaded: only elections of states that are there. */
+		std::erase_if(_elections, [](const ElectionResult &r) { return r.state != INVALID_STATE && r.state >= _states.size(); });
+		for (ElectionResult &r : _elections) {
+			std::erase_if(r.assemblies, [](const ElectionAssembly &a) { return a.state >= _states.size(); });
+		}
+	}
+};
+
+static const SaveLoad _federal_project_desc[] = {
+	SaveLoad::Variable<VarFileType::U8>("type", SLE_OBJECT_ADDRESS(FederalProject, type)),
+	SaveLoad::Variable<VarFileType::U8>("state", SLE_OBJECT_ADDRESS(FederalProject, state)),
+	SaveLoad::Variable<VarFileType::U8>("plan", SLE_OBJECT_ADDRESS(FederalProject, plan)),
+	SaveLoad::Variable<VarFileType::U16>("town", SLE_OBJECT_ADDRESS(FederalProject, town)),
+	SaveLoad::Variable<VarFileType::U16>("town2", SLE_OBJECT_ADDRESS(FederalProject, town2)),
+	SaveLoad::Variable<VarFileType::U8>("company", SLE_OBJECT_ADDRESS(FederalProject, company)),
+	SaveLoad::Variable<VarFileType::I64>("payment", SLE_OBJECT_ADDRESS(FederalProject, payment)),
+	SaveLoad::Variable<VarFileType::I32>("offered", SLE_OBJECT_ADDRESS(FederalProject, offered)),
+	SaveLoad::Variable<VarFileType::I32>("done", SLE_OBJECT_ADDRESS(FederalProject, done)),
+};
+
+/** The projects of the federal government's five-year plan, and of the plan before it. */
+struct SFPRChunkHandler : ChunkHandler {
+	SFPRChunkHandler() : ChunkHandler("SFPR", ChunkType::Table) {}
+
+	void Save() const override
+	{
+		SlTableHeader(_federal_project_desc);
+
+		for (size_t i = 0; i < _federal_projects.size(); i++) {
+			SlSetArrayIndex(i);
+			SlObject(&_federal_projects[i], _federal_project_desc);
+		}
+	}
+
+	void Load() const override
+	{
+		const std::vector<SaveLoad> slt = SlTableHeader(_federal_project_desc);
+
+		_federal_projects.clear();
+		while (SlIterateArray() != -1) {
+			FederalProject &p = _federal_projects.emplace_back();
+			SlObject(&p, slt);
+		}
+		/* Keep what makes sense. */
+		std::erase_if(_federal_projects, [](const FederalProject &p) { return p.type >= FederalProjectType::End || p.state >= FederalProjectState::End; });
+	}
+};
+
 static const STATChunkHandler STAT;
 static const SFEDChunkHandler SFED;
 static const SMAPChunkHandler SMAP;
 static const TSTAChunkHandler TSTA;
+static const SELNChunkHandler SELN;
+static const SFPRChunkHandler SFPR;
 static const ChunkHandlerRef state_chunk_handlers[] = {
 	STAT,
 	SFED,
 	SMAP,
 	TSTA,
+	SELN,
+	SFPR,
 };
 
 extern const ChunkHandlerTable _state_chunk_handlers(state_chunk_handlers);

@@ -833,6 +833,18 @@ enum class WindowClass : uint16_t {
 	 */
 	Tutorial,
 
+	/**
+	 * Election night window; %Window numbers:
+	 *   - #StateID of a region, or #INVALID_STATE for a general election = #ElectionNightWidgets
+	 */
+	ElectionNight,
+
+	/**
+	 * Federal government window; %Window numbers:
+	 *   - 0 = #FederalPlanWidgets
+	 */
+	FederalPlan,
+
 	Invalid = 0xFFFF, ///< Invalid window.
 };
 

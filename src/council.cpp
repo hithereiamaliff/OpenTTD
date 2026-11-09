@@ -502,6 +502,33 @@ static bool BuildCouncilService(Town *t, CityService service, CompanyID cofunder
 }
 
 /**
+ * The federal government builds a hospital or a university in a town under its Homes and Services programme, and
+ * pays for it; the town runs it.
+ * @param t The town.
+ * @param service The service.
+ * @param[out] cost What it cost the federal government.
+ * @return True if it found a place and built it.
+ */
+bool BuildFederalCityService(Town *t, CityService service, Money &cost)
+{
+	const TileIndex tile = FindCouncilServiceSite(t, service);
+	if (tile == INVALID_TILE) return false;
+	CommandCost res;
+	{
+		AutoRestoreBackup cur_company(_current_company, OWNER_TOWN);
+		res = Command<Commands::BuildObject>::Do(DoCommandFlag::Execute, tile, GetObjectTypeOfCityService(service), 0);
+	}
+	if (res.Failed()) return false;
+	cost = res.GetCost();
+	if (service == CityService::Hospital) t->council.counts.hospitals++;
+	if (service == CityService::University) t->council.counts.universities++;
+	Debug(Facility::Misc, Severity::Trace1, "[federal] builds service {} in town {} at {} {} for {}", to_underlying(service), t->index, TileX(tile), TileY(tile), cost);
+	AddNewsItem(GetEncodedString(STR_NEWS_FEDERAL_SERVICE, GetCityServiceBuildingName(service), t->index), NewsType::General, NewsStyle::Normal, {}, tile);
+	SetWindowDirty(WindowClass::TownBudget, t->index);
+	return true;
+}
+
+/**
  * Why a council wouldn't take a company's money towards its next service now.
  * @param t The town.
  * @param company The company.

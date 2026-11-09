@@ -10,6 +10,7 @@
 #include "stdafx.h"
 #include "state.h"
 #include "state_cmd.h"
+#include "federal.h"
 #include "command_func.h"
 #include "gfx_func.h"
 #include "network/network.h"
@@ -61,28 +62,6 @@ struct StatesWindow : Window {
 		this->OnInvalidateData();
 	}
 
-	/**
-	 * The seats of each platform, in words: "Transit First 7, Roads and Growth 3, Homes and Services 2".
-	 * @param seats The seats.
-	 * @return The words.
-	 */
-	static std::string SeatsText(const PlatformSeats &seats)
-	{
-		std::string text;
-		for (uint p = 0; p < PLATFORM_COUNT; p++) {
-			if (!text.empty()) text += ", ";
-			text += GetString(STR_STATES_SEATS_ITEM, GetPlatformName(static_cast<Platform>(p + 1)), seats[p]);
-		}
-		return text;
-	}
-
-	static uint TotalSeats(const PlatformSeats &seats)
-	{
-		uint total = 0;
-		for (uint16_t n : seats) total += n;
-		return total;
-	}
-
 	void UpdateWidgetSize(WidgetID widget, Dimension &size, [[maybe_unused]] const Dimension &padding, [[maybe_unused]] Dimension &fill, [[maybe_unused]] Dimension &resize) override
 	{
 		switch (widget) {
@@ -119,11 +98,14 @@ struct StatesWindow : Window {
 		std::string text;
 		if (f.government == Platform::None) {
 			text = GetString(STR_STATES_FEDERATION_NONE, f.next_election);
+		} else if (IsElectionCampaign(INVALID_STATE)) {
+			/* Parliament is dissolved for the general election. */
+			text = GetString(STR_STATES_FEDERATION_CARETAKER, GetPlatformName(f.government), f.next_election);
 		} else {
-			text = GetString(STR_STATES_FEDERATION, GetPlatformName(f.government), f.seats[to_underlying(f.government) - 1], TotalSeats(f.seats), f.elected, f.next_election);
+			text = GetString(STR_STATES_FEDERATION, GetPlatformName(f.government), f.seats[to_underlying(f.government) - 1], GetTotalSeats(f.seats), f.elected, f.next_election);
 		}
 		ir.top = DrawStringMultiLine(ir, text);
-		DrawStringMultiLine(ir, GetString(STR_STATES_FEDERATION_POLL, SeatsText(this->federal_poll), f.grants_last_year));
+		DrawStringMultiLine(ir, GetString(STR_STATES_FEDERATION_POLL, GetSeatsText(this->federal_poll), f.grants_last_year));
 	}
 
 	void DrawList(const Rect &r) const
@@ -151,7 +133,7 @@ struct StatesWindow : Window {
 				str = GetString(STR_STATES_ROW_CARETAKER, name, s.towns, s.population, s.next_election);
 			} else {
 				str = GetString(STR_STATES_ROW_STATE, name, s.towns, s.population, GetPlatformName(s.government),
-						s.seats[to_underlying(s.government) - 1], TotalSeats(s.seats), s.next_election);
+						s.seats[to_underlying(s.government) - 1], GetTotalSeats(s.seats), s.next_election);
 			}
 			DrawString(text, str);
 			ir.top += line;
@@ -187,13 +169,22 @@ struct StatesWindow : Window {
 		}
 
 		/* Who governs it, and what that does. */
+		const bool campaign = IsElectionCampaign(id);
 		if (s->kind == StateKind::FederalTerritory) {
-			lines.push_back(GetString(STR_STATES_DETAIL_FEDERAL, GetPlatformName(government)));
+			if (campaign && government != Platform::None) {
+				lines.push_back(GetString(STR_STATES_DETAIL_FEDERAL_CARETAKER, GetPlatformName(government), f.next_election));
+			} else {
+				lines.push_back(GetString(STR_STATES_DETAIL_FEDERAL, GetPlatformName(government)));
+			}
 		} else if (government == Platform::None) {
 			lines.push_back(GetString(STR_STATES_DETAIL_CARETAKER, month, s->next_election));
+		} else if (campaign) {
+			/* The assembly is dissolved for the election: the government carries on as a caretaker. */
+			lines.push_back(GetString(STR_STATES_DETAIL_GOVERNMENT_CARETAKER, GetPlatformName(government), month, s->next_election, s->elected,
+					s->seats[to_underlying(government) - 1], GetTotalSeats(s->seats), GetSeatsText(s->seats)));
 		} else {
-			lines.push_back(GetString(STR_STATES_DETAIL_GOVERNMENT, GetPlatformName(government), s->seats[to_underlying(government) - 1], TotalSeats(s->seats),
-					SeatsText(s->seats), s->elected, month, s->next_election));
+			lines.push_back(GetString(STR_STATES_DETAIL_GOVERNMENT, GetPlatformName(government), s->seats[to_underlying(government) - 1], GetTotalSeats(s->seats),
+					GetSeatsText(s->seats), s->elected, month, s->next_election));
 		}
 		static constexpr StringID EFFECTS[] = {STR_STATES_EFFECT_NONE, STR_STATES_EFFECT_TRANSIT_FIRST, STR_STATES_EFFECT_ROADS_AND_GROWTH, STR_STATES_EFFECT_HOMES_AND_SERVICES};
 		static constexpr uint EFFECT_PERCENT[] = {0, 10, 15, 10};
@@ -204,7 +195,7 @@ struct StatesWindow : Window {
 		/* Its voters. */
 		const VoterConcerns &c = this->concerns;
 		lines.push_back(GetString(STR_STATES_DETAIL_VOTERS, c.traffic, c.transit, c.satisfaction, c.air, c.services, c.housing, c.taxes));
-		if (s->kind == StateKind::State) lines.push_back(GetString(STR_STATES_DETAIL_POLL, SeatsText(this->poll)));
+		if (s->kind == StateKind::State) lines.push_back(GetString(STR_STATES_DETAIL_POLL, GetSeatsText(this->poll)));
 
 		/* Its money. */
 		if (s->kind == StateKind::FederalTerritory) {
@@ -290,7 +281,26 @@ struct StatesWindow : Window {
 			case WID_ST_MAP:
 				ShowSmallMapOfStates();
 				break;
+
+			case WID_ST_ELECTION:
+				ShowElectionNightWindow(this->GetElectionShown(), false);
+				break;
+
+			case WID_ST_FEDERAL:
+				ShowFederalPlanWindow();
+				break;
 		}
+	}
+
+	/**
+	 * The election the Last election button shows: the selected region's, or the last general election.
+	 * @return The region, or #INVALID_STATE for the general election.
+	 */
+	StateID GetElectionShown() const
+	{
+		const State *s = this->selected >= 0 ? GetState(static_cast<StateID>(this->selected)) : nullptr;
+		if (s != nullptr && s->kind == StateKind::State && s->region && GetLastElection(static_cast<StateID>(this->selected)) != nullptr) return static_cast<StateID>(this->selected);
+		return INVALID_STATE;
 	}
 
 	void OnQueryTextFinished(std::optional<std::string> str) override
@@ -323,6 +333,8 @@ struct StatesWindow : Window {
 		const bool none = this->selected < 0 || !AreStatesFormed();
 		this->SetWidgetDisabledState(WID_ST_RENAME, none || (_networking && !_network_server));
 		this->SetWidgetDisabledState(WID_ST_CAPITAL, none);
+		this->SetWidgetDisabledState(WID_ST_ELECTION, GetLastElection(this->GetElectionShown()) == nullptr);
+		this->SetWidgetDisabledState(WID_ST_FEDERAL, !AreStatesFormed());
 		this->SetDirty();
 		this->FitDetails();
 	}
@@ -346,6 +358,8 @@ static constexpr std::initializer_list<NWidgetPart> _nested_states_widgets = {
 		NWidget(WWT_PUSHTXTBTN, Colours::Brown, WID_ST_RENAME), SetFill(1, 0), SetResize(1, 0), SetStringTip(STR_STATES_RENAME_BUTTON, STR_STATES_RENAME_TOOLTIP),
 		NWidget(WWT_PUSHTXTBTN, Colours::Brown, WID_ST_CAPITAL), SetFill(1, 0), SetResize(1, 0), SetStringTip(STR_STATES_CAPITAL_BUTTON, STR_STATES_CAPITAL_TOOLTIP),
 		NWidget(WWT_PUSHTXTBTN, Colours::Brown, WID_ST_MAP), SetFill(1, 0), SetResize(1, 0), SetStringTip(STR_STATES_MAP_BUTTON, STR_STATES_MAP_TOOLTIP),
+		NWidget(WWT_PUSHTXTBTN, Colours::Brown, WID_ST_ELECTION), SetFill(1, 0), SetResize(1, 0), SetStringTip(STR_STATES_ELECTION_BUTTON, STR_STATES_ELECTION_TOOLTIP),
+		NWidget(WWT_PUSHTXTBTN, Colours::Brown, WID_ST_FEDERAL), SetFill(1, 0), SetResize(1, 0), SetStringTip(STR_STATES_FEDERAL_BUTTON, STR_STATES_FEDERAL_TOOLTIP),
 		NWidget(WWT_RESIZEBOX, Colours::Brown),
 	EndContainer(),
 };

@@ -20,6 +20,23 @@ enum StatesWidgets : WidgetID {
 	WID_ST_RENAME, ///< Rename the selected state.
 	WID_ST_CAPITAL, ///< Show the selected state's capital.
 	WID_ST_MAP, ///< Show the map of states.
+	WID_ST_ELECTION, ///< Show the count of the last election.
+	WID_ST_FEDERAL, ///< Show the federal government: its programmes and plan.
+};
+
+/** Widgets of the #ElectionNightWindow class. */
+enum ElectionNightWidgets : WidgetID {
+	WID_EN_CAPTION, ///< Caption of the window.
+	WID_EN_COUNT, ///< The count: seats declared, each platform's seats, the latest towns and the result.
+	WID_EN_SKIP, ///< Skip to the result, or count again.
+};
+
+/** Widgets of the #FederalPlanWindow class. */
+enum FederalPlanWidgets : WidgetID {
+	WID_FP_CAPTION, ///< Caption of the window.
+	WID_FP_SUMMARY, ///< The government, its programmes, its plan and its money.
+	WID_FP_LIST, ///< The projects of the plan.
+	WID_FP_SCROLLBAR, ///< Scrollbar of the list.
 };
 
 #endif /* WIDGETS_STATE_WIDGET_H */

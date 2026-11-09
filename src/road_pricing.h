@@ -41,6 +41,7 @@ static constexpr uint TOLL_FREEZE_YEARS = 5; ///< How long a toll freeze lasts.
 
 bool IsExpresswayRoad(TileIndex tile);
 bool DrawExpressway(const TileInfo *ti);
+CompanyID FindExpresswayLink(const Town *a, const Town *b);
 
 TollPlaza *GetTollPlaza(TileIndex tile);
 /**

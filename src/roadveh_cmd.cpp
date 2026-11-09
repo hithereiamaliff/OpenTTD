@@ -14,6 +14,7 @@
 #include "road_pricing.h"
 #include "city_bus.h"
 #include "depot_yard.h"
+#include "federal.h"
 #include "stop_charger.h"
 #include "command_func.h"
 #include "error_func.h"
@@ -1727,8 +1728,9 @@ Money RoadVehicle::GetRunningCost() const
 	uint cost_factor = GetVehicleProperty(this, PROP_ROADVEH_RUNNING_COST_FACTOR, e->VehInfo<RoadVehicleInfo>().running_cost);
 	if (cost_factor == 0) return 0;
 
-	/* The home depot's yard makes running dearer (no room) or cheaper (own fuel, solar roofs). */
-	return GetPrice(e->VehInfo<RoadVehicleInfo>().running_cost_class, cost_factor, e->GetGRF()) * GetHomeDepotRunningCostPercent(this) / 100;
+	/* The home depot's yard makes running dearer (no room) or cheaper (own fuel, solar roofs); a Roads and Growth
+	 * federal government subsidises fuel. */
+	return GetPrice(e->VehInfo<RoadVehicleInfo>().running_cost_class, cost_factor, e->GetGRF()) * GetHomeDepotRunningCostPercent(this) / 100 * GetFederalFuelCostPercent(this) / 100;
 }
 
 bool RoadVehicle::Tick()
