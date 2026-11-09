@@ -6929,6 +6929,7 @@ STR_TUTORIAL_BACK_TOOLTIP                                       :{BLACK}Go back 
 STR_TUTORIAL_NEXT                                               :{BLACK}Next
 STR_TUTORIAL_FINISH                                             :{BLACK}Finish
 STR_TUTORIAL_NEXT_TOOLTIP                                       :{BLACK}Go to the next step. Steps also move on by themselves once you've done them
+STR_TUTORIAL_FINISH_TOOLTIP                                     :{BLACK}Close the tutorial. To open its chapters again, click Tutorial in the main menu, or in a game the ? button on the main toolbar, then Tutorial
 STR_TUTORIAL_EXIT                                               :{BLACK}Exit tutorial
 STR_TUTORIAL_EXIT_TOOLTIP                                       :{BLACK}Leave the tutorial. To open it again, click Tutorial in the main menu, or in a game the ? button on the main toolbar, then Tutorial: it starts where you left off
 STR_TUTORIAL_START_TOOLTIP                                      :{BLACK}Start the tutorial

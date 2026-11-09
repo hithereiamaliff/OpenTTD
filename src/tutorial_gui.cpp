@@ -12,8 +12,9 @@
  * do, makes the button to click flash (the highlight game scripts use), and
  * moves on by itself once the step is done. It works in any game, an old
  * OpenTTD save included, because it only looks at the game and its windows;
- * it changes nothing in the game itself. Where the player is goes in
- * openttd.cfg (gui.tutorial_*), not in the savegame.
+ * it changes nothing in the game itself. Where the player is, and how much
+ * of the step they did, goes in openttd.cfg (gui.tutorial_*), not in the
+ * savegame.
  */
 
 #include "stdafx.h"
@@ -594,12 +595,48 @@ struct TutorialWindow : Window {
 		}
 	}
 
-	/** Remember the step's measure as it is now, for Add and Change. */
+	/**
+	 * Can the step's measure be taken now?
+	 * @return True in the main menu for Start a game, in a game for the others.
+	 */
+	bool CanMeasure() const
+	{
+		const TutorialStep &s = this->CurrentStep();
+		if (s.measure == nullptr) return false;
+		return (s.chapter == TutorialChapter::Start) ? _game_mode == GameMode::Menu : TutorialInGame();
+	}
+
+	/**
+	 * Remember the step's measure as it is now, for Add and Change. For Add, what the player did
+	 * at the step before (Continue, the tutorial opened again, a game loaded) stays counted.
+	 */
 	void TakeBaseline()
 	{
 		const TutorialStep &s = this->CurrentStep();
-		bool can_measure = (s.chapter == TutorialChapter::Start) ? _game_mode == GameMode::Menu : TutorialInGame();
-		this->baseline = (s.measure != nullptr && can_measure) ? s.measure() : 0;
+		this->baseline = this->CanMeasure() ? s.measure() : 0;
+		if (s.check != TutorialCheck::Add) return;
+		if (_settings_client.gui.tutorial_progress_step == s.id) {
+			if (this->CanMeasure()) this->baseline -= _settings_client.gui.tutorial_progress;
+		} else if (this->auto_advance) {
+			/* Shown again after Back, a step only counts anew; the one the player came from keeps its count. */
+			_settings_client.gui.tutorial_progress_step = std::string{s.id};
+			_settings_client.gui.tutorial_progress = 0;
+		}
+	}
+
+	/** Keep the count of what the player did at the step, for when they come back to it. */
+	void SaveProgress() const
+	{
+		const TutorialStep &s = this->CurrentStep();
+		if (s.check != TutorialCheck::Add || !this->auto_advance || !this->CanMeasure() || _settings_client.gui.tutorial_progress_step != s.id) return;
+		_settings_client.gui.tutorial_progress = static_cast<uint16_t>(Clamp(s.measure() - this->baseline, 0, s.goal));
+	}
+
+	/** Start the steps afresh: a chapter from its start, or the tutorial finished. */
+	static void ForgetProgress()
+	{
+		_settings_client.gui.tutorial_progress_step.clear();
+		_settings_client.gui.tutorial_progress = 0;
 	}
 
 	/**
@@ -688,6 +725,7 @@ struct TutorialWindow : Window {
 
 		if (this->page == TutorialPage::Step) {
 			this->SetWidgetDisabledState(WID_TUT_BACK, !this->HasPreviousStep());
+			this->GetWidget<NWidgetCore>(WID_TUT_NEXT)->SetToolTip(this->HasNextStep() ? STR_TUTORIAL_NEXT_TOOLTIP : STR_TUTORIAL_FINISH_TOOLTIP);
 		}
 		if (this->page == TutorialPage::Contents) {
 			auto stored = FindTutorialStep(_settings_client.gui.tutorial_step);
@@ -966,6 +1004,7 @@ struct TutorialWindow : Window {
 				break;
 
 			case WID_TUT_START:
+				ForgetProgress();
 				if (this->page == TutorialPage::OldSave) {
 					this->GoToStep(FirstStepOf(TutorialChapter::New), true);
 				} else {
@@ -986,10 +1025,11 @@ struct TutorialWindow : Window {
 				if (this->HasNextStep()) {
 					this->GoToStep(this->NextStep(), true);
 				} else {
-					/* The end of a chapter: nothing to come back to. */
+					/* The end of a chapter: Finish closes the tutorial, with nothing to come back to.
+					 * Tutorial in the main menu or the Help menu opens its chapters again. */
 					_settings_client.gui.tutorial_step.clear();
-					this->page = TutorialPage::Contents;
-					this->Refresh();
+					ForgetProgress();
+					this->Close();
 				}
 				break;
 
@@ -998,14 +1038,17 @@ struct TutorialWindow : Window {
 				break;
 
 			case WID_TUT_CHAPTER_START:
+				ForgetProgress();
 				this->GoToStep(FirstStepOf(TutorialChapter::Start), true);
 				break;
 
 			case WID_TUT_CHAPTER_BUS:
+				ForgetProgress();
 				this->GoToStep(FirstStepOf(TutorialChapter::Bus), true);
 				break;
 
 			case WID_TUT_CHAPTER_NEW:
+				ForgetProgress();
 				this->GoToStep(FirstStepOf(TutorialChapter::New), true);
 				break;
 		}
@@ -1014,6 +1057,7 @@ struct TutorialWindow : Window {
 	/** Look whether the step is done, and keep its buttons flashing. */
 	const IntervalTimer<TimerWindow> check_interval = {std::chrono::milliseconds(250), [this](auto) {
 		if (this->page != TutorialPage::Step) return;
+		this->SaveProgress();
 		if (this->auto_advance && this->IsStepDone() && this->HasNextStep()) {
 			this->GoToStep(this->NextStep(), true);
 			return;

@@ -256,6 +256,8 @@ struct GUISettings {
 	bool tutorial_seen_old_save; ///< City fork: the tutorial was offered when an OpenTTD save was loaded for the first time.
 	bool tutorial_dismissed; ///< City fork: the player left the tutorial, so it doesn't come back by itself.
 	std::string tutorial_step; ///< City fork: the tutorial step the player is at (its name), or empty.
+	std::string tutorial_progress_step; ///< City fork: the tutorial step whose count of things done is kept (its name), or empty.
+	uint16_t tutorial_progress; ///< City fork: how many things the player did at that step, such as bus stops built.
 	uint8_t max_num_autosaves; ///< controls how many autosavegames are made before the game starts to overwrite (names them 0 to max_num_autosaves - 1)
 	bool population_in_label; ///< show the population of a town in its label?
 	uint8_t right_mouse_btn_emulation; ///< should we emulate right mouse clicking?
