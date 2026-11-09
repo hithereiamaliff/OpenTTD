@@ -2084,6 +2084,26 @@ static RoadType GetDefaultRoadType(RoadTramType rtt)
 	}
 }
 
+/**
+ * Where a toolbar opened from the road toolbar (bus priority, tolls) opens: right under the road toolbar, at
+ * its right end, so it hides none of the road toolbar's buttons; under the other one when that is there already.
+ * @param window_width The width of the new toolbar.
+ * @return The top-left corner of the new toolbar.
+ */
+Point AlignInitialRoadSubToolbar(int window_width)
+{
+	const Window *road = FindWindowByClass(WindowClass::BuildToolbar);
+	if (road == nullptr) return AlignInitialConstructionToolbar(window_width);
+	Point pt = {_current_text_dir == TD_RTL ? road->left : road->left + road->width - window_width, road->top + road->height};
+	for (int pass = 0; pass < 2; pass++) {
+		for (WindowClass cls : {WindowClass::BusPriority, WindowClass::TollsToolbar}) {
+			const Window *w = FindWindowByClass(cls);
+			if (w != nullptr && w->top == pt.y && w->left < pt.x + window_width && pt.x < w->left + w->width) pt.y = w->top + w->height;
+		}
+	}
+	return pt;
+}
+
 /** Set the initial (default) road & tram type to use. */
 void SetDefaultRoadGui()
 {

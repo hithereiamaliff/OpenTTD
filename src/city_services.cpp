@@ -53,6 +53,7 @@
 struct CityServiceInfo {
 	StringID name; ///< Name of the building.
 	StringID short_name; ///< Name of the service in lists, like "police".
+	StringID in_text; ///< Name of the building within a sentence, like "police station".
 	uint radius; ///< Houses within this many tiles are covered.
 	uint build_cost; ///< Build cost, as a multiple of the base object price.
 	uint yearly_upkeep; ///< Upkeep per year, as a multiple of the base object price.
@@ -66,15 +67,15 @@ struct CityServiceInfo {
 
 /** The city services; costs are multiples of the base object price (about one pound at the start). */
 static const CityServiceInfo _city_service_info[CITY_SERVICE_COUNT] = {
-	{STR_CITY_SERVICE_POLICE, STR_CITY_SERVICE_POLICE_SHORT,          10,  750, 150, 30, PALETTE_TO_BLUE,   1,   0, 30,  0},
-	{STR_CITY_SERVICE_FIRE, STR_CITY_SERVICE_FIRE_SHORT,              10,  750, 150, 42, PALETTE_TO_RED,    1,   0, 30,  0},
-	{STR_CITY_SERVICE_HEALTH, STR_CITY_SERVICE_HEALTH_SHORT,          10,  900, 180, 30, PALETTE_TO_WHITE,  1,   0, 30,  0},
-	{STR_CITY_SERVICE_EDUCATION, STR_CITY_SERVICE_EDUCATION_SHORT,    10,  750, 150, 24, PALETTE_TO_ORANGE, 1,   0, 30,  0},
-	{STR_CITY_SERVICE_PARK, STR_CITY_SERVICE_PARK_SHORT,               5,  125,  25, 16, PALETTE_TO_GREEN,  1,   0, 30,  0},
-	{STR_CITY_SERVICE_HOSPITAL, STR_CITY_SERVICE_HOSPITAL_SHORT,      22, 6000, 900, 46, PALETTE_TO_PINK,   2,  70, 60,  0},
-	{STR_CITY_SERVICE_UNIVERSITY, STR_CITY_SERVICE_UNIVERSITY_SHORT,  22, 5000, 700, 40, PALETTE_TO_PURPLE, 2, 110, 45,  4},
-	{STR_CITY_SERVICE_STADIUM, STR_CITY_SERVICE_STADIUM_SHORT,        16, 4000, 400, 41, PALETTE_TO_YELLOW, 2,  30, 12,  8},
-	{STR_CITY_SERVICE_MARKET, STR_CITY_SERVICE_MARKET_SHORT,           8,  600, 100, 15, PALETTE_TO_CREAM,  1,  60, 40, 12},
+	{STR_CITY_SERVICE_POLICE, STR_CITY_SERVICE_POLICE_SHORT, STR_CITY_SERVICE_POLICE_IN_TEXT,                 10,  750, 150, 30, PALETTE_TO_BLUE,   1,   0, 30,  0},
+	{STR_CITY_SERVICE_FIRE, STR_CITY_SERVICE_FIRE_SHORT, STR_CITY_SERVICE_FIRE_IN_TEXT,                       10,  750, 150, 42, PALETTE_TO_RED,    1,   0, 30,  0},
+	{STR_CITY_SERVICE_HEALTH, STR_CITY_SERVICE_HEALTH_SHORT, STR_CITY_SERVICE_HEALTH_IN_TEXT,                 10,  900, 180, 30, PALETTE_TO_WHITE,  1,   0, 30,  0},
+	{STR_CITY_SERVICE_EDUCATION, STR_CITY_SERVICE_EDUCATION_SHORT, STR_CITY_SERVICE_EDUCATION_IN_TEXT,        10,  750, 150, 24, PALETTE_TO_ORANGE, 1,   0, 30,  0},
+	{STR_CITY_SERVICE_PARK, STR_CITY_SERVICE_PARK_SHORT, STR_CITY_SERVICE_PARK_IN_TEXT,                        5,  125,  25, 16, PALETTE_TO_GREEN,  1,   0, 30,  0},
+	{STR_CITY_SERVICE_HOSPITAL, STR_CITY_SERVICE_HOSPITAL_SHORT, STR_CITY_SERVICE_HOSPITAL_IN_TEXT,           22, 6000, 900, 46, PALETTE_TO_PINK,   2,  70, 60,  0},
+	{STR_CITY_SERVICE_UNIVERSITY, STR_CITY_SERVICE_UNIVERSITY_SHORT, STR_CITY_SERVICE_UNIVERSITY_IN_TEXT,     22, 5000, 700, 40, PALETTE_TO_PURPLE, 2, 110, 45,  4},
+	{STR_CITY_SERVICE_STADIUM, STR_CITY_SERVICE_STADIUM_SHORT, STR_CITY_SERVICE_STADIUM_IN_TEXT,              16, 4000, 400, 41, PALETTE_TO_YELLOW, 2,  30, 12,  8},
+	{STR_CITY_SERVICE_MARKET, STR_CITY_SERVICE_MARKET_SHORT, STR_CITY_SERVICE_MARKET_IN_TEXT,                  8,  600, 100, 15, PALETTE_TO_CREAM,  1,  60, 40, 12},
 };
 static_assert(std::size(_city_service_info) == CITY_SERVICE_COUNT);
 
@@ -156,6 +157,16 @@ StringID GetCityServiceName(CityService service)
 StringID GetCityServiceShortName(CityService service)
 {
 	return _city_service_info[to_underlying(service)].short_name;
+}
+
+/**
+ * Name of the building of a city service within a sentence, like "police station".
+ * @param service The service.
+ * @return The name.
+ */
+StringID GetCityServiceBuildingName(CityService service)
+{
+	return _city_service_info[to_underlying(service)].in_text;
 }
 
 /**

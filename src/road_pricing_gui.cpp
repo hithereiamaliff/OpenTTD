@@ -18,6 +18,7 @@
 #include "gui.h"
 #include "hotkeys.h"
 #include "road_cmd.h"
+#include "road_gui.h"
 #include "road_map.h"
 #include "sound_func.h"
 #include "strings_func.h"
@@ -46,7 +47,8 @@ struct TollsToolbarWindow : Window {
 
 	Point OnInitialPosition(int16_t sm_width, [[maybe_unused]] int16_t sm_height, [[maybe_unused]] int window_number) override
 	{
-		return AlignInitialConstructionToolbar(sm_width);
+		/* Under the road toolbar it opens from, not over its last buttons. */
+		return AlignInitialRoadSubToolbar(sm_width);
 	}
 
 	void OnClick([[maybe_unused]] Point pt, WidgetID widget, [[maybe_unused]] int click_count) override
@@ -143,11 +145,65 @@ struct TollsWindow : Window {
 		return plazas;
 	}
 
+	/**
+	 * The lines of the window: where tolls come from, a freeze, last month's income, then the toll plazas.
+	 * @param c The company.
+	 * @return The lines; the empty one leaves a gap above the plazas.
+	 */
+	std::vector<std::string> GetInfoLines(const Company *c) const
+	{
+		std::vector<std::string> lines;
+		lines.push_back(GetString(STR_TOLLS_EXPLAIN));
+		if (TimerGameEconomy::date < c->tolls.freeze_until) {
+			lines.push_back(GetString(STR_TOLLS_FROZEN, c->tolls.freeze_until, GetEffectiveTollLevel(c->index)));
+		} else {
+			lines.push_back(GetString(STR_TOLLS_NOT_FROZEN));
+		}
+		lines.push_back(GetString(STR_TOLLS_INCOME, c->tolls.income_last_month, c->tolls.compensation_last_month));
+		lines.emplace_back();
+
+		std::vector<TileIndex> plazas = this->GetPlazas();
+		if (plazas.empty()) {
+			lines.push_back(GetString(STR_TOLLS_NO_PLAZAS));
+			return lines;
+		}
+		uint shown = 0;
+		for (TileIndex tile : plazas) {
+			if (shown == TOLLS_LIST_LINES) {
+				lines.push_back(GetString(STR_TOLLS_MORE, plazas.size() - shown));
+				break;
+			}
+			const TollPlaza *p = GetTollPlaza(tile);
+			const Town *t = ClosestTownFromTile(tile, UINT_MAX);
+			std::string where = t == nullptr ? GetString(STR_TOLLS_PLAZA_AT, TileX(tile), TileY(tile)) : GetString(STR_TOLLS_PLAZA_NEAR, t->index, TileX(tile), TileY(tile));
+			StringID kind = p->free_flow ? STR_TOLLS_PLAZA_FREE_FLOW : STR_TOLLS_PLAZA_BOOTHS;
+			lines.push_back(GetString(STR_TOLLS_PLAZA, where, kind, p->towns, p->trips, p->vehicles, p->income, p->concession_end, p->cut));
+			shown++;
+		}
+		return lines;
+	}
+
+	/**
+	 * Size of the panel for its lines now: as many lines as it has, as wide as the longest.
+	 * @return The size, frame included.
+	 */
+	Dimension GetInfoSize() const
+	{
+		const Company *c = Company::GetIfValid(this->window_number);
+		const std::vector<std::string> lines = c == nullptr ? std::vector<std::string>{} : this->GetInfoLines(c);
+		uint width = 0;
+		for (const std::string &line : lines) width = std::max(width, GetStringBoundingBox(line).width);
+		const uint count = std::max<uint>(static_cast<uint>(lines.size()), TOLLS_HEAD_LINES + 1);
+		return {width + WidgetDimensions::scaled.framerect.Horizontal(), WidgetDimensions::scaled.framerect.Vertical() + count * GetCharacterHeight(FontSize::Normal)};
+	}
+
 	void UpdateWidgetSize(WidgetID widget, Dimension &size, [[maybe_unused]] const Dimension &padding, [[maybe_unused]] Dimension &fill, [[maybe_unused]] Dimension &resize) override
 	{
 		if (widget != WID_TO_INFO) return;
-		size.height = WidgetDimensions::scaled.framerect.Vertical() + (TOLLS_HEAD_LINES + TOLLS_LIST_LINES + 1) * GetCharacterHeight(FontSize::Normal);
-		size.width = std::max<uint>(size.width, ScaleGUITrad(780));
+		/* Fit the lines; the window fits them again when plazas come or go, or a line outgrows it (see OnInvalidateData). */
+		const Dimension d = this->GetInfoSize();
+		size.height = d.height;
+		size.width = std::max(size.width, d.width);
 	}
 
 	std::string GetWidgetString(WidgetID widget, StringID stringid) const override
@@ -167,37 +223,9 @@ struct TollsWindow : Window {
 		const Company *c = Company::GetIfValid(this->window_number);
 		if (c == nullptr) return;
 		Rect ir = r.Shrink(WidgetDimensions::scaled.framerect);
-		const int line = GetCharacterHeight(FontSize::Normal);
-
-		DrawString(ir, GetString(STR_TOLLS_EXPLAIN));
-		ir.top += line;
-		if (TimerGameEconomy::date < c->tolls.freeze_until) {
-			DrawString(ir, GetString(STR_TOLLS_FROZEN, c->tolls.freeze_until, GetEffectiveTollLevel(c->index)));
-		} else {
-			DrawString(ir, STR_TOLLS_NOT_FROZEN);
-		}
-		ir.top += line;
-		DrawString(ir, GetString(STR_TOLLS_INCOME, c->tolls.income_last_month, c->tolls.compensation_last_month));
-		ir.top += line * 2;
-
-		std::vector<TileIndex> plazas = this->GetPlazas();
-		if (plazas.empty()) {
-			DrawString(ir, STR_TOLLS_NO_PLAZAS);
-			return;
-		}
-		uint shown = 0;
-		for (TileIndex tile : plazas) {
-			if (shown == TOLLS_LIST_LINES) {
-				DrawString(ir, GetString(STR_TOLLS_MORE, plazas.size() - shown));
-				break;
-			}
-			const TollPlaza *p = GetTollPlaza(tile);
-			const Town *t = ClosestTownFromTile(tile, UINT_MAX);
-			std::string where = t == nullptr ? GetString(STR_TOLLS_PLAZA_AT, TileX(tile), TileY(tile)) : GetString(STR_TOLLS_PLAZA_NEAR, t->index, TileX(tile), TileY(tile));
-			StringID kind = p->free_flow ? STR_TOLLS_PLAZA_FREE_FLOW : STR_TOLLS_PLAZA_BOOTHS;
-			DrawString(ir, GetString(STR_TOLLS_PLAZA, where, kind, p->towns, p->trips, p->vehicles, p->income, p->concession_end, p->cut));
-			ir.top += line;
-			shown++;
+		for (const std::string &line : this->GetInfoLines(c)) {
+			DrawString(ir, line);
+			ir.top += GetCharacterHeight(FontSize::Normal);
 		}
 	}
 
@@ -245,6 +273,10 @@ struct TollsWindow : Window {
 		}
 		const bool mine = this->window_number == _local_company.base();
 		this->SetWidgetsDisabledState(!mine, WID_TO_LEVEL, WID_TO_SCHEME);
+		/* Plazas came or went, or a line outgrew the window: fit the lines again. */
+		const NWidgetBase *info = this->GetWidget<NWidgetBase>(WID_TO_INFO);
+		const Dimension d = this->GetInfoSize();
+		if (d.height != info->smallest_y || d.width > info->smallest_x) this->ReInit();
 		this->SetDirty();
 	}
 };

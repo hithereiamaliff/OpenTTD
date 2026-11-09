@@ -189,6 +189,15 @@ bool IsTownCommutingKnown(const Town *t)
 }
 
 /**
+ * People a town needs before it works out its commutes.
+ * @return The population.
+ */
+uint GetCommuteMinPopulation()
+{
+	return COMMUTE_MIN_POPULATION;
+}
+
+/**
  * Commuters' cars on a road tile.
  * @param tile The tile.
  * @return Cars a day in one direction; as many come back.

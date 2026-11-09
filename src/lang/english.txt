@@ -3172,6 +3172,15 @@ STR_CITY_SERVICE_STADIUM                                        :Stadium
 STR_CITY_SERVICE_STADIUM_SHORT                                  :stadium
 STR_CITY_SERVICE_MARKET                                         :Hawker centre
 STR_CITY_SERVICE_MARKET_SHORT                                   :hawker centre
+STR_CITY_SERVICE_POLICE_IN_TEXT                                 :police station
+STR_CITY_SERVICE_FIRE_IN_TEXT                                   :fire station
+STR_CITY_SERVICE_HEALTH_IN_TEXT                                 :clinic
+STR_CITY_SERVICE_EDUCATION_IN_TEXT                              :school
+STR_CITY_SERVICE_PARK_IN_TEXT                                   :park
+STR_CITY_SERVICE_HOSPITAL_IN_TEXT                               :hospital
+STR_CITY_SERVICE_UNIVERSITY_IN_TEXT                             :university
+STR_CITY_SERVICE_STADIUM_IN_TEXT                                :stadium
+STR_CITY_SERVICE_MARKET_IN_TEXT                                 :hawker centre
 
 # Traffic light window
 STR_TRAFFIC_LIGHT_CAPTION                                       :{WHITE}Traffic lights in {TOWN}
@@ -4033,6 +4042,7 @@ STR_TOWN_VIEW_TRAFFIC_VERY_HEAVY                                :very heavy
 STR_TOWN_VIEW_TRAFFIC_TRANSIT                                   :{BLACK}Your services take {ORANGE}{NUM}%{BLACK} of cars off the road
 STR_TOWN_VIEW_COMMUTERS                                         :{BLACK}Commuters: {ORANGE}{COMMA}{BLACK} a day, {ORANGE}{NUM}%{BLACK} by transit
 STR_TOWN_VIEW_COMMUTERS_UNKNOWN                                 :{BLACK}Commuters: not counted yet (towns count them once a month)
+STR_TOWN_VIEW_COMMUTERS_SMALL_TOWN                              :{BLACK}Commuters: not counted (towns count them from {COMMA} people)
 STR_TOWN_VIEW_COMMUTE_TIMES                                     :{BLACK}Door to door: {ORANGE}{NUM} min{BLACK} by car, {ORANGE}{NUM} min{BLACK} by transit
 STR_TOWN_VIEW_COMMUTE_TIMES_CAR                                 :{BLACK}Door to door: {ORANGE}{NUM} min{BLACK} by car; transit doesn't go where they work
 STR_TOWN_VIEW_COMMUTERS_BETWEEN_TOWNS                           :{BLACK}Other towns: {ORANGE}{COMMA}{BLACK} work there ({NUM}% by transit), {ORANGE}{COMMA}{BLACK} come to work here ({NUM}%)
@@ -5475,7 +5485,7 @@ STR_TOWN_BUDGET_COUNCIL_NEXT_CITY_HALL                          :{BLACK}City Hal
 STR_TOWN_BUDGET_COUNCIL_INCOME                                  :{BLACK}Business licences: {CURRENCY_LONG} last year ({CURRENCY_LONG} so far); charges from flats: {CURRENCY_LONG}
 STR_TOWN_BUDGET_COUNCIL_SERVICE                                 :{BLACK}New services: a {ORANGE}{STRING}{BLACK} next, {CURRENCY_LONG}; it can spend {CURRENCY_LONG}. {COMMA} built
 STR_TOWN_BUDGET_COUNCIL_SERVICE_NONE                            :{BLACK}New services: none needed now. {COMMA} built, {CURRENCY_LONG} spent on them last year
-STR_TOWN_BUDGET_COUNCIL_ESTATES                                 :{BLACK}Estates: {COMMA} people in flats, {NUM} years old; condition {ORANGE}{NUM}%{BLACK}, repainted {NUM}{RAW_STRING}; fund {CURRENCY_LONG}
+STR_TOWN_BUDGET_COUNCIL_ESTATES                                 :{BLACK}Estates: {COMMA} people in flats, {NUM} year{P "" s} old; condition {ORANGE}{NUM}%{BLACK}, repainted {NUM}{RAW_STRING}; fund {CURRENCY_LONG}
 STR_TOWN_BUDGET_COUNCIL_RENEWED                                 :{BLACK}, renewed {NUM}
 STR_TOWN_BUDGET_COUNCIL_ESTATES_NONE                            :{BLACK}Estates: no flats yet
 STR_TOWN_BUDGET_COUNCIL_REPORT                                  :{BLACK}Yearly report: services {STRING}, estates {STRING}, finances {STRING}

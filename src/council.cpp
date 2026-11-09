@@ -491,10 +491,10 @@ static bool BuildCouncilService(Town *t, CityService service, CompanyID cofunder
 	if (service == CityService::University) c.counts.universities++;
 	if (service == CityService::Stadium) c.counts.stadiums++;
 	if (Company::IsValidID(cofunder)) {
-		AddNewsItem(GetEncodedString(STR_NEWS_COUNCIL_SERVICE_COFUNDED, GetTownCouncilName(t), t->index, GetCityServiceShortName(service), cofunder),
+		AddNewsItem(GetEncodedString(STR_NEWS_COUNCIL_SERVICE_COFUNDED, GetTownCouncilName(t), t->index, GetCityServiceBuildingName(service), cofunder),
 				NewsType::General, NewsStyle::Normal, {}, tile);
 	} else {
-		AddNewsItem(GetEncodedString(STR_NEWS_COUNCIL_SERVICE, GetTownCouncilName(t), t->index, GetCityServiceShortName(service)),
+		AddNewsItem(GetEncodedString(STR_NEWS_COUNCIL_SERVICE, GetTownCouncilName(t), t->index, GetCityServiceBuildingName(service)),
 				NewsType::General, NewsStyle::Normal, {}, tile);
 	}
 	SetWindowDirty(WindowClass::TownBudget, t->index);

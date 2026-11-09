@@ -21,5 +21,6 @@ void ConnectRoadToStructure(TileIndex tile, DiagDirection direction);
 DropDownList GetRoadTypeDropDownList(RoadTramTypes rtts, bool for_replacement = false, bool all_option = false);
 DropDownList GetScenRoadTypeDropDownList(RoadTramTypes rtts);
 void SetDefaultRoadGui();
+Point AlignInitialRoadSubToolbar(int window_width);
 
 #endif /* ROAD_GUI_H */

@@ -77,7 +77,8 @@ struct TownBudgetWindow : Window {
 		switch (widget) {
 			case WID_TB_SUMMARY:
 				size.height = WidgetDimensions::scaled.framerect.Vertical() + (this->councils ? 11 : 5) * GetCharacterHeight(FontSize::Normal);
-				size.width = std::max<uint>(size.width, ScaleGUITrad(600));
+				/* Wide enough for the longest line; the window widens when a line outgrows it (see OnInvalidateData). */
+				size.width = std::max({size.width, static_cast<uint>(ScaleGUITrad(600)), this->GetSummaryWidth()});
 				break;
 
 			case WID_TB_LIST:
@@ -124,13 +125,12 @@ struct TownBudgetWindow : Window {
 
 	/**
 	 * The council's lines: its standing, licences and charges, new services, estates and report.
-	 * @param ir Where to draw; its top moves down past the lines.
+	 * @param lines Where the lines go.
 	 * @param t The town.
 	 */
-	void DrawCouncil(Rect &ir, const Town *t) const
+	void AddCouncilLines(std::vector<std::string> &lines, const Town *t) const
 	{
 		const TownCouncil &c = t->council;
-		const int line = GetCharacterHeight(FontSize::Normal);
 		const std::string since = c.since != 0 ? GetString(STR_TOWN_BUDGET_COUNCIL_SINCE, c.since) : std::string{};
 		std::string next;
 		switch (c.level) {
@@ -141,35 +141,71 @@ struct TownBudgetWindow : Window {
 		if (IsFederalTerritory(t)) next = GetString(STR_TOWN_BUDGET_COUNCIL_NEXT_CITY_HALL);
 		/* In Malay the name doesn't say what kind of council it is: say it in English. */
 		const std::string kind = AreCouncilNamesEnglish() ? std::string{} : GetString(STR_TOWN_BUDGET_COUNCIL_KIND, GetTownCouncilKind(t));
-		DrawString(ir, GetString(STR_TOWN_BUDGET_COUNCIL, GetTownCouncilName(t), t->index, kind, since));
-		ir.top += line;
-		DrawString(ir, next);
-		ir.top += line;
-		DrawString(ir, GetString(STR_TOWN_BUDGET_COUNCIL_INCOME, c.licences_last_year, c.licences_this_year, c.charges_last_year));
-		ir.top += line;
+		lines.push_back(GetString(STR_TOWN_BUDGET_COUNCIL, GetTownCouncilName(t), t->index, kind, since));
+		lines.push_back(std::move(next));
+		lines.push_back(GetString(STR_TOWN_BUDGET_COUNCIL_INCOME, c.licences_last_year, c.licences_this_year, c.charges_last_year));
 		const CityService plan = GetCouncilPlannedService(t);
 		if (plan == CityService::End) {
-			DrawString(ir, GetString(STR_TOWN_BUDGET_COUNCIL_SERVICE_NONE, c.services_built, c.built_last_year));
+			lines.push_back(GetString(STR_TOWN_BUDGET_COUNCIL_SERVICE_NONE, c.services_built, c.built_last_year));
 		} else {
-			DrawString(ir, GetString(STR_TOWN_BUDGET_COUNCIL_SERVICE, GetCityServiceShortName(plan), GetCityServiceBuildCost(plan), GetCouncilSpendable(t), c.services_built));
+			lines.push_back(GetString(STR_TOWN_BUDGET_COUNCIL_SERVICE, GetCityServiceBuildingName(plan), GetCityServiceBuildCost(plan), GetCouncilSpendable(t), c.services_built));
 		}
-		ir.top += line;
 		const uint32_t flats = GetTownFlatsPopulation(t);
 		if (flats == 0) {
-			DrawString(ir, GetString(STR_TOWN_BUDGET_COUNCIL_ESTATES_NONE));
+			lines.push_back(GetString(STR_TOWN_BUDGET_COUNCIL_ESTATES_NONE));
 		} else {
 			const std::string renewed = c.renewed != 0 ? GetString(STR_TOWN_BUDGET_COUNCIL_RENEWED, c.renewed) : std::string{};
-			DrawString(ir, GetString(STR_TOWN_BUDGET_COUNCIL_ESTATES, flats, GetTownFlatsAge(t), c.estate_condition, c.repainted, renewed, c.estates_fund));
+			lines.push_back(GetString(STR_TOWN_BUDGET_COUNCIL_ESTATES, flats, GetTownFlatsAge(t), c.estate_condition, c.repainted, renewed, c.estates_fund));
 		}
-		ir.top += line;
 		static constexpr StringID BANDS[] = {STR_COUNCIL_BAND_NONE, STR_COUNCIL_BAND_GREEN, STR_COUNCIL_BAND_AMBER, STR_COUNCIL_BAND_RED};
 		const auto &report = c.report;
 		if (report[to_underlying(ReportItem::Services)] == ReportBand::None) {
-			DrawString(ir, GetString(STR_TOWN_BUDGET_COUNCIL_REPORT_NONE));
+			lines.push_back(GetString(STR_TOWN_BUDGET_COUNCIL_REPORT_NONE));
 		} else {
-			DrawString(ir, GetString(STR_TOWN_BUDGET_COUNCIL_REPORT, BANDS[to_underlying(report[0])], BANDS[to_underlying(report[1])], BANDS[to_underlying(report[2])]));
+			lines.push_back(GetString(STR_TOWN_BUDGET_COUNCIL_REPORT, BANDS[to_underlying(report[0])], BANDS[to_underlying(report[1])], BANDS[to_underlying(report[2])]));
 		}
-		ir.top += line;
+	}
+
+	/**
+	 * The lines of the summary: the council's, then taxes, spending, fees, reserves and what they do.
+	 * @param t The town.
+	 * @return The lines.
+	 */
+	std::vector<std::string> GetSummaryLines(const Town *t) const
+	{
+		std::vector<std::string> lines;
+		if (this->councils && AreTownCouncilsOn()) this->AddCouncilLines(lines, t);
+		const TownBudget &b = t->budget;
+		const Money base = GetTownTaxBase(t);
+		const uint value = (IsEnvironmentKnown() && t->environment.land_value != 0) ? t->environment.land_value : 50;
+		lines.push_back(GetString(STR_TOWN_BUDGET_TAXES, b.tax_rate, value, GetTownYearlyTaxes(t)));
+		const Money ordinances = base * (GetTownOrdinanceCostPercent(t) - (HasOrdinance(t, Ordinance::TransitFund) ? GetOrdinanceCostPercent(Ordinance::TransitFund) : 0)) / 100;
+		if (AreTownCouncilsOn()) {
+			/* A tenth of the running costs goes into the council's services fund. */
+			lines.push_back(GetString(STR_TOWN_BUDGET_SPENDING_COUNCIL, base * GetTownTransitSharePercent(t) / 100, GetTownTransitSharePercent(t),
+					base * (TOWN_RUNNING_SHARE - COUNCIL_SERVICES_PERCENT) / 100, base * COUNCIL_SERVICES_PERCENT / 100, ordinances));
+		} else {
+			lines.push_back(GetString(STR_TOWN_BUDGET_SPENDING, base * GetTownTransitSharePercent(t) / 100, GetTownTransitSharePercent(t),
+					base * TOWN_RUNNING_SHARE / 100, ordinances));
+		}
+		lines.push_back(GetString(STR_TOWN_BUDGET_FEES, b.fees_last_year, b.fees_this_year, b.lez_charged_last_month));
+		lines.push_back(GetString(b.reserves < 0 ? STR_TOWN_BUDGET_RESERVES_NEGATIVE : STR_TOWN_BUDGET_RESERVES, b.reserves, b.taxes_last_year, b.spent_last_year));
+		const int happiness = GetTownBudgetHappiness(t);
+		lines.push_back(GetString(STR_TOWN_BUDGET_EFFECTS, fmt::format("{:+}", happiness), GetTownTaxGrowthPercent(t), b.trees_planted));
+		return lines;
+	}
+
+	/**
+	 * Width the summary needs for its longest line now.
+	 * @return The width, frame included; 0 without a town or budgets.
+	 */
+	uint GetSummaryWidth() const
+	{
+		const Town *t = Town::GetIfValid(this->window_number);
+		if (t == nullptr || !AreTownBudgetsOn()) return 0;
+		uint width = 0;
+		for (const std::string &line : this->GetSummaryLines(t)) width = std::max(width, GetStringBoundingBox(line).width);
+		return width + WidgetDimensions::scaled.framerect.Horizontal();
 	}
 
 	void DrawSummary(const Rect &r, const Town *t) const
@@ -179,28 +215,10 @@ struct TownBudgetWindow : Window {
 			DrawStringMultiLine(ir, STR_TOWN_BUDGET_OFF);
 			return;
 		}
-		if (this->councils && AreTownCouncilsOn()) this->DrawCouncil(ir, t);
-		const TownBudget &b = t->budget;
-		const Money base = GetTownTaxBase(t);
-		const uint value = (IsEnvironmentKnown() && t->environment.land_value != 0) ? t->environment.land_value : 50;
-		DrawString(ir, GetString(STR_TOWN_BUDGET_TAXES, b.tax_rate, value, GetTownYearlyTaxes(t)));
-		ir.top += GetCharacterHeight(FontSize::Normal);
-		const Money ordinances = base * (GetTownOrdinanceCostPercent(t) - (HasOrdinance(t, Ordinance::TransitFund) ? GetOrdinanceCostPercent(Ordinance::TransitFund) : 0)) / 100;
-		if (AreTownCouncilsOn()) {
-			/* A tenth of the running costs goes into the council's services fund. */
-			DrawString(ir, GetString(STR_TOWN_BUDGET_SPENDING_COUNCIL, base * GetTownTransitSharePercent(t) / 100, GetTownTransitSharePercent(t),
-					base * (TOWN_RUNNING_SHARE - COUNCIL_SERVICES_PERCENT) / 100, base * COUNCIL_SERVICES_PERCENT / 100, ordinances));
-		} else {
-			DrawString(ir, GetString(STR_TOWN_BUDGET_SPENDING, base * GetTownTransitSharePercent(t) / 100, GetTownTransitSharePercent(t),
-					base * TOWN_RUNNING_SHARE / 100, ordinances));
+		for (const std::string &line : this->GetSummaryLines(t)) {
+			DrawString(ir, line);
+			ir.top += GetCharacterHeight(FontSize::Normal);
 		}
-		ir.top += GetCharacterHeight(FontSize::Normal);
-		DrawString(ir, GetString(STR_TOWN_BUDGET_FEES, b.fees_last_year, b.fees_this_year, b.lez_charged_last_month));
-		ir.top += GetCharacterHeight(FontSize::Normal);
-		DrawString(ir, GetString(b.reserves < 0 ? STR_TOWN_BUDGET_RESERVES_NEGATIVE : STR_TOWN_BUDGET_RESERVES, b.reserves, b.taxes_last_year, b.spent_last_year));
-		ir.top += GetCharacterHeight(FontSize::Normal);
-		const int happiness = GetTownBudgetHappiness(t);
-		DrawString(ir, GetString(STR_TOWN_BUDGET_EFFECTS, fmt::format("{:+}", happiness), GetTownTaxGrowthPercent(t), b.trees_planted));
 	}
 
 	void DrawList(const Rect &r, const Town *t) const
@@ -284,6 +302,9 @@ struct TownBudgetWindow : Window {
 		}
 		if (this->councils != AreTownCouncilsOn()) {
 			this->councils = AreTownCouncilsOn();
+			this->ReInit();
+		} else if (this->GetSummaryWidth() > this->GetWidget<NWidgetBase>(WID_TB_SUMMARY)->current_x) {
+			/* A line outgrew the summary, a growing town's spending say: widen the window. */
 			this->ReInit();
 		}
 		bool disabled = this->selected < 0 || !Company::IsValidID(_local_company) || IsInForce(t, this->selected);

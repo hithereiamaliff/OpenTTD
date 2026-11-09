@@ -88,7 +88,8 @@ struct TransitAuthorityWindow : Window {
 		switch (widget) {
 			case WID_TRA_BUDGET:
 				size.height = WidgetDimensions::scaled.framerect.Vertical() + 5 * GetCharacterHeight(FontSize::Normal);
-				size.width = std::max<uint>(size.width, ScaleGUITrad(560));
+				/* Wide enough for the longest line; the window widens when a line outgrows it (see OnInvalidateData). */
+				size.width = std::max({size.width, static_cast<uint>(ScaleGUITrad(560)), this->GetBudgetWidth()});
 				break;
 
 			case WID_TRA_LIST:
@@ -156,6 +157,56 @@ struct TransitAuthorityWindow : Window {
 		}
 	}
 
+	/**
+	 * The lines above the list: the town's transit budget, fares, congestion charge and fare schemes.
+	 * @param t The town.
+	 * @return The lines.
+	 */
+	std::vector<std::string> GetBudgetLines(const Town *t) const
+	{
+		std::vector<std::string> lines;
+		const Money budget = GetTownTransitBudget(t);
+		if (budget == 0) {
+			lines.push_back(GetString(STR_TRANSIT_BUDGET_NONE));
+		} else {
+			lines.push_back(GetString(STR_TRANSIT_BUDGET, budget, GetTownTransitCommitted(t), std::max<Money>(0, GetTownTransitAvailable(t))));
+		}
+		lines.push_back(GetString(STR_TRANSIT_FARES, t->transit.fares_last_year, t->transit.fares_this_year));
+		if (t->transit.congestion_charge) {
+			lines.push_back(GetString(STR_TRANSIT_CONGESTION_CHARGE, t->transit.charge_since, t->transit.charged_last_month, t->transit.charge_income_last_month, t->transit.charge_last_year));
+		} else {
+			lines.push_back(GetString(STR_TRANSIT_NO_CONGESTION_CHARGE, GetCongestionChargeZoneLevel(t), 1));
+		}
+		if (!t->transit.policy_set) {
+			lines.push_back(GetString(STR_TRANSIT_SCHEMES_UNDECIDED));
+			return lines;
+		}
+		if (t->transit.resident_pass) {
+			lines.push_back(GetString(STR_TRANSIT_RESIDENT_PASS, RESIDENT_PASS_SHARE, RESIDENT_PASS_FARES, t->transit.last_pass_holders, t->transit.last_pass_paid));
+		} else {
+			lines.push_back(GetString(STR_TRANSIT_NO_RESIDENT_PASS));
+		}
+		if (t->transit.pays_concessions) {
+			lines.push_back(GetString(STR_TRANSIT_CONCESSIONS, t->transit.last_concessions_paid));
+		} else {
+			lines.push_back(GetString(STR_TRANSIT_NO_CONCESSIONS));
+		}
+		return lines;
+	}
+
+	/**
+	 * Width the lines above the list need for the longest of them now.
+	 * @return The width, frame included; 0 without a town.
+	 */
+	uint GetBudgetWidth() const
+	{
+		const Town *t = Town::GetIfValid(this->window_number);
+		if (t == nullptr) return 0;
+		uint width = 0;
+		for (const std::string &line : this->GetBudgetLines(t)) width = std::max(width, GetStringBoundingBox(line).width);
+		return width + WidgetDimensions::scaled.framerect.Horizontal();
+	}
+
 	void DrawWidget(const Rect &r, WidgetID widget) const override
 	{
 		const Town *t = Town::GetIfValid(this->window_number);
@@ -163,39 +214,12 @@ struct TransitAuthorityWindow : Window {
 		Rect ir = r.Shrink(WidgetDimensions::scaled.framerect);
 
 		switch (widget) {
-			case WID_TRA_BUDGET: {
-				Money budget = GetTownTransitBudget(t);
-				if (budget == 0) {
-					DrawString(ir, STR_TRANSIT_BUDGET_NONE);
-				} else {
-					DrawString(ir, GetString(STR_TRANSIT_BUDGET, budget, GetTownTransitCommitted(t), std::max<Money>(0, GetTownTransitAvailable(t))));
-				}
-				ir.top += GetCharacterHeight(FontSize::Normal);
-				DrawString(ir, GetString(STR_TRANSIT_FARES, t->transit.fares_last_year, t->transit.fares_this_year));
-				ir.top += GetCharacterHeight(FontSize::Normal);
-				if (t->transit.congestion_charge) {
-					DrawString(ir, GetString(STR_TRANSIT_CONGESTION_CHARGE, t->transit.charge_since, t->transit.charged_last_month, t->transit.charge_income_last_month, t->transit.charge_last_year));
-				} else {
-					DrawString(ir, GetString(STR_TRANSIT_NO_CONGESTION_CHARGE, GetCongestionChargeZoneLevel(t), 1));
-				}
-				ir.top += GetCharacterHeight(FontSize::Normal);
-				if (!t->transit.policy_set) {
-					DrawString(ir, STR_TRANSIT_SCHEMES_UNDECIDED);
-					break;
-				}
-				if (t->transit.resident_pass) {
-					DrawString(ir, GetString(STR_TRANSIT_RESIDENT_PASS, RESIDENT_PASS_SHARE, RESIDENT_PASS_FARES, t->transit.last_pass_holders, t->transit.last_pass_paid));
-				} else {
-					DrawString(ir, STR_TRANSIT_NO_RESIDENT_PASS);
-				}
-				ir.top += GetCharacterHeight(FontSize::Normal);
-				if (t->transit.pays_concessions) {
-					DrawString(ir, GetString(STR_TRANSIT_CONCESSIONS, t->transit.last_concessions_paid));
-				} else {
-					DrawString(ir, STR_TRANSIT_NO_CONCESSIONS);
+			case WID_TRA_BUDGET:
+				for (const std::string &line : this->GetBudgetLines(t)) {
+					DrawString(ir, line);
+					ir.top += GetCharacterHeight(FontSize::Normal);
 				}
 				break;
-			}
 
 			case WID_TRA_LIST: {
 				std::vector<const TransitContract *> contracts = this->GetContracts();
@@ -302,6 +326,8 @@ struct TransitAuthorityWindow : Window {
 		this->SetWidgetDisabledState(WID_TRA_LINE, c == nullptr || (OrderList::GetIfValid(c->line) == nullptr && !IsFeederOffer(*c)));
 		const Town *t = Town::Get(this->window_number);
 		this->SetWidgetDisabledState(WID_TRA_CHARGE, !Company::IsValidID(_local_company) || t->transit.congestion_charge);
+		/* A line outgrew the panel, the congestion charge's say: widen the window. */
+		if (this->GetBudgetWidth() > this->GetWidget<NWidgetBase>(WID_TRA_BUDGET)->current_x) this->ReInit();
 		this->SetDirty();
 	}
 };

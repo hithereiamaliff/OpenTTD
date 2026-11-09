@@ -21,6 +21,7 @@ struct Town;
 
 bool IsCommutingOn();
 bool IsTownCommutingKnown(const Town *t);
+uint GetCommuteMinPopulation();
 uint GetCommuteCars(TileIndex tile);
 uint GetTownCommuteTransitShare(const Town *t);
 uint GetCommuteMinutes(uint ticks);

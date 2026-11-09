@@ -38,6 +38,7 @@ Money GetCityServiceBuildCost(CityService service);
 Money GetCityServiceYearlyUpkeep(CityService service);
 StringID GetCityServiceName(CityService service);
 StringID GetCityServiceShortName(CityService service);
+StringID GetCityServiceBuildingName(CityService service);
 SpriteID GetCityServiceIcon(CityService service);
 PaletteID GetCityServicePalette(CityService service);
 

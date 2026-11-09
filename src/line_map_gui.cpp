@@ -199,8 +199,9 @@ struct LineMapWindow : Window {
 				break;
 
 			case WID_LM_MAP:
+				/* At least three stops; it opens with room for about eight (the default size, see _line_map_desc). */
 				resize.height = this->RowHeight();
-				size.height = WidgetDimensions::scaled.framerect.Vertical() + 8 * this->RowHeight();
+				size.height = WidgetDimensions::scaled.framerect.Vertical() + 3 * this->RowHeight();
 				fill.height = resize.height;
 				break;
 		}
@@ -460,8 +461,9 @@ static constexpr std::initializer_list<NWidgetPart> _nested_line_map_widgets = {
 	EndContainer(),
 };
 
+/** The line map opens 294 pixels high at 1x, room for eight stops with the default fonts; it can be made as short as three. */
 static WindowDesc _line_map_desc(
-	WindowPosition::Automatic, "view_line_map", 0, 0,
+	WindowPosition::Automatic, "view_line_map", 0, 294,
 	WindowClass::LineMap, WindowClass::None,
 	{},
 	_nested_line_map_widgets

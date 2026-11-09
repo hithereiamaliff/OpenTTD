@@ -16,6 +16,7 @@
 #include "road_map.h"
 #include "sound_func.h"
 #include "road_cmd.h"
+#include "road_gui.h"
 #include "tilehighlight_func.h"
 #include "traffic_light.h"
 #include "traffic_light_cmd.h"
@@ -41,7 +42,8 @@ struct BusPriorityWindow : Window {
 
 	Point OnInitialPosition(int16_t sm_width, [[maybe_unused]] int16_t sm_height, [[maybe_unused]] int window_number) override
 	{
-		return AlignInitialConstructionToolbar(sm_width);
+		/* Under the road toolbar it opens from, not over its last buttons. */
+		return AlignInitialRoadSubToolbar(sm_width);
 	}
 
 	void OnClick([[maybe_unused]] Point pt, WidgetID widget, [[maybe_unused]] int click_count) override

@@ -483,7 +483,12 @@ public:
 				}
 			} else {
 				if (IsCommutingOn()) {
-					DrawString(tr, STR_TOWN_VIEW_COMMUTERS_UNKNOWN);
+					/* Small towns never count them; bigger ones count them at the start of the month. */
+					if (this->town->cache.population < GetCommuteMinPopulation()) {
+						DrawString(tr, GetString(STR_TOWN_VIEW_COMMUTERS_SMALL_TOWN, GetCommuteMinPopulation()));
+					} else {
+						DrawString(tr, STR_TOWN_VIEW_COMMUTERS_UNKNOWN);
+					}
 					tr.top += GetCharacterHeight(FontSize::Normal);
 				}
 				DrawString(tr, GetString(STR_TOWN_VIEW_TRAFFIC_TRANSIT, GetTownCarReduction(this->town)));
