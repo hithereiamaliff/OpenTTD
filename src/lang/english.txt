@@ -5418,18 +5418,21 @@ STR_TRANSIT_CAPTION                                             :{WHITE}{TOWN} t
 STR_TRANSIT_CAPTION_AGENCY                                      :{WHITE}{TOWN} federal transit agency
 STR_TRANSIT_BUDGET                                              :{BLACK}Budget: {CURRENCY_LONG} a year, {CURRENCY_LONG} in contracts, {CURRENCY_LONG} free
 STR_TRANSIT_BUDGET_NONE                                         :{BLACK}No transit budget: towns have one from 1,500 people
-STR_TRANSIT_FEDERAL_AGENCY                                      :{BLACK}Federal territory: its federal transit agency adds {NUM}% of its taxes to the budget, and tenders railway and BRT lines first, {NUM} times as often as a town
+STR_TRANSIT_FEDERAL_AGENCY                                      :{BLACK}Federal territory: its federal transit agency adds {NUM}% of its taxes to the budget, picks railway and BRT lines first for its tenders, and is {NUM} times as likely as a town to invite one each month
 STR_TRANSIT_FEDERAL_FUND                                        :{BLACK}National transit fund (Transit First federal government): {NUM}% of the town's taxes on top
 STR_TRANSIT_FARES                                               :{BLACK}Fares from its contracts: {CURRENCY_LONG} last year, {CURRENCY_LONG} this year
 STR_TRANSIT_SCHEMES_UNDECIDED                                   :{BLACK}Resident pass and concessions: decided once the town has 1,500 people
 STR_TRANSIT_RESIDENT_PASS                                       :{BLACK}Resident pass ({NUM}% of riders from here ride free, the town pays {NUM} fares a pass): {COMMA} pass{P "" es}, {CURRENCY_SHORT} last month
+STR_TRANSIT_RESIDENT_PASS_AGENCY                                :{BLACK}Resident pass ({NUM}% of riders from here ride free, the agency pays {NUM} fares a pass): {COMMA} pass{P "" es}, {CURRENCY_SHORT} last month
 STR_TRANSIT_NO_RESIDENT_PASS                                    :{BLACK}No resident pass
 STR_TRANSIT_CONCESSIONS                                         :{BLACK}Concessions: the town pays back concession fares from here: {CURRENCY_SHORT} last month
+STR_TRANSIT_CONCESSIONS_AGENCY                                  :{BLACK}Concessions: the agency pays back concession fares from here: {CURRENCY_SHORT} last month
 STR_TRANSIT_NO_CONCESSIONS                                      :{BLACK}Concessions: not paid back by the town
 STR_TRANSIT_CONGESTION_CHARGE                                   :{BLACK}Congestion charge since {DATE_SHORT}: {NUM} company vehicle{P "" s} paid last month; {CURRENCY_LONG} last month, {CURRENCY_LONG} last year
 STR_TRANSIT_NO_CONGESTION_CHARGE                                :{BLACK}No congestion charge; roads in the centre are at congestion level {DECIMAL} on average
 STR_TRANSIT_LIST_TOOLTIP                                        :{BLACK}Tenders and contracts for lines in this town. Under a contract the town keeps the fares and pays a monthly fee; on a free line riders ride free and the town pays the fee. A feeder line links a railway station with houses no stop reaches: the first company to run one gets a contract. The fee shrinks with missed departures; regularity and punctuality earn up to 5% more or less. Click one to select it
 STR_TRANSIT_EMPTY                                               :{BLACK}No tenders or contracts yet. Now and then the town invites tenders for a line that serves it, those losing money first, or asks for a feeder bus to its railway station, if its budget allows
+STR_TRANSIT_EMPTY_AGENCY                                        :{BLACK}No tenders or contracts yet. Now and then the agency invites tenders for a line that serves the territory, railway and BRT lines first and those losing money next, or asks for a feeder bus to its railway station, if its budget allows
 STR_TRANSIT_TYPE_GROSS_COST                                     :contract
 STR_TRANSIT_TYPE_FREE                                           :free line
 STR_TRANSIT_TYPE_FEEDER                                         :feeder contract
@@ -5519,13 +5522,13 @@ STR_STATE_NAME_ENGLISH                                          :{TOWN} State
 STR_STATE_NAME_TERRITORY                                        :Wilayah Persekutuan {TOWN}
 STR_STATE_NAME_TERRITORY_ENGLISH                                :Federal Territory of {TOWN}
 STR_STATE_NAME_DISSOLVED                                        :(dissolved)
-STR_PLATFORM_NONE                                               :Caretaker
+STR_PLATFORM_NONE                                               :caretaker
 STR_PLATFORM_TRANSIT_FIRST                                      :Transit First
 STR_PLATFORM_ROADS_AND_GROWTH                                   :Roads and Growth
 STR_PLATFORM_HOMES_AND_SERVICES                                 :Homes and Services
 STR_NEWS_STATES_FORMED                                          :{BIG_FONT}{BLACK}States formed!{}The towns now make up {NUM} state{P "" s} around their biggest cities, each with an assembly elected every five years. {TOWN} becomes a federal territory, run by its City Hall. First general election: May {NUM}
 STR_NEWS_STATES_FORMED_TWO                                      :{BIG_FONT}{BLACK}States formed!{}The towns now make up {NUM} state{P "" s} around their biggest cities, each with an assembly elected every five years. {TOWN} and {TOWN} become federal territories, run by their City Halls. First general election: May {NUM}
-STR_NEWS_STATE_REGION                                           :{BIG_FONT}{BLACK}{RAW_STRING} keeps its own laws{}Across the sea or a land border, {STRING}: its own land laws and immigration ({STRING}), and permits for new towns and for land reclamation in its waters
+STR_NEWS_STATE_REGION                                           :{BIG_FONT}{BLACK}{RAW_STRING} keeps its own laws!{}Across the sea or a land border, {STRING}: its own land laws and immigration ({STRING}), and permits for new towns and for land reclamation in its waters
 STR_NEWS_STATE_REGION_LIKE                                      :it is run like Sabah and Sarawak
 STR_NEWS_STATE_REGION_RIGHTS                                    :it keeps the rights it joined the federation with
 STR_NEWS_STATE_REGION_IMMIGRATION                               :work passes, a checkpoint at its border
@@ -5534,19 +5537,19 @@ STR_NEWS_STATE_ELECTION_FORMS                                   :forms
 STR_NEWS_STATE_ELECTION_KEEPS                                   :keeps
 STR_NEWS_ELECTION_DISSOLVED_GENERAL                             :{BIG_FONT}{BLACK}Parliament dissolved!{}The {STRING} federal government carries on as a caretaker until polling day, 1 May {NUM}, when parliament is elected with {NUM} state assembl{P y ies}. Caretakers keep paying for what they run, but start nothing new
 STR_NEWS_ELECTION_CALLED_GENERAL                                :{BIG_FONT}{BLACK}First general election called!{}On polling day, 1 May {NUM}, the towns elect parliament and {NUM} state assembl{P y ies}. Caretakers run the federation and the states until then
-STR_NEWS_ELECTION_DISSOLVED_STATE                               :{BIG_FONT}{BLACK}{RAW_STRING}'s assembly dissolved{}The {STRING} government carries on as a caretaker until polling day, 1 September {NUM}. Caretakers keep paying for what they run, but start nothing new
-STR_NEWS_ELECTION_CALLED_STATE                                  :{BIG_FONT}{BLACK}{RAW_STRING} calls its first election{}On polling day, 1 September {NUM}, its towns elect the state assembly. A caretaker runs the state until then
+STR_NEWS_ELECTION_DISSOLVED_STATE                               :{BIG_FONT}{BLACK}{RAW_STRING}'s assembly dissolved!{}The {STRING} government carries on as a caretaker until polling day, 1 September {NUM}. Caretakers keep paying for what they run, but start nothing new
+STR_NEWS_ELECTION_CALLED_STATE                                  :{BIG_FONT}{BLACK}{RAW_STRING} calls its first election!{}On polling day, 1 September {NUM}, its towns elect the state assembly. A caretaker runs the state until then
 STR_NEWS_ELECTION_NOMINATION_GENERAL                            :{BIG_FONT}{BLACK}Nomination day!{}{NUM} candidates stand for {NUM} seats in parliament: Transit First, Roads and Growth and Homes and Services in every seat. The polls: {RAW_STRING}. Polling day: 1 May {NUM}
-STR_NEWS_ELECTION_NOMINATION_STATE                              :{BIG_FONT}{BLACK}Nomination day in {RAW_STRING}{}{NUM} candidates stand for {NUM} seats in the state assembly. The polls: {RAW_STRING}. Polling day: 1 September {NUM}
+STR_NEWS_ELECTION_NOMINATION_STATE                              :{BIG_FONT}{BLACK}Nomination day in {RAW_STRING}!{}{NUM} candidates stand for {NUM} seats in the state assembly. The polls: {RAW_STRING}. Polling day: 1 September {NUM}
 STR_NEWS_ELECTION_POLLING_GENERAL                               :{BIG_FONT}{BLACK}Polling day!{}Voters in {NUM} town{P "" s} elect parliament and {NUM} state assembl{P y ies}. The count goes on tonight; the results are declared in two days
-STR_NEWS_ELECTION_POLLING_STATE                                 :{BIG_FONT}{BLACK}Polling day in {RAW_STRING}{}Voters in {NUM} town{P "" s} elect the state assembly. The count goes on tonight; the results are declared in two days
+STR_NEWS_ELECTION_POLLING_STATE                                 :{BIG_FONT}{BLACK}Polling day in {RAW_STRING}!{}Voters in {NUM} town{P "" s} elect the state assembly. The count goes on tonight; the results are declared in two days
 STR_NEWS_ELECTION_RESULT_GENERAL                                :{BIG_FONT}{BLACK}{STRING} wins the general election!{}{NUM} of {NUM} seats in parliament ({RAW_STRING}): it {STRING} the federal government. The states: {RAW_STRING}
 STR_NEWS_ELECTION_RESULT_STATE                                  :{BIG_FONT}{BLACK}{STRING} wins in {RAW_STRING}!{}{NUM} of {NUM} seats in the state assembly ({RAW_STRING}): it {STRING} the state government
 STR_NEWS_ELECTION_ASSEMBLY_ITEM                                 :{STRING} in {RAW_STRING} ({NUM} of {NUM} seats)
 STR_NEWS_FEDERAL_PLAN                                           :{BIG_FONT}{BLACK}Five-year plan {NUM}!{}The {STRING} federal government offers {NUM} project{P "" s}, paid to the first company to deliver each: {RAW_STRING}. Projects delivered count for it at the next general election
-STR_NEWS_FEDERAL_PLAN_NONE                                      :{BIG_FONT}{BLACK}Five-year plan {NUM}{}The {STRING} federal government finds no project for companies this time
+STR_NEWS_FEDERAL_PLAN_NONE                                      :{BIG_FONT}{BLACK}Five-year plan {NUM}!{}The {STRING} federal government finds no project for companies this time
 STR_NEWS_FEDERAL_PROJECT_DELIVERED                              :{BIG_FONT}{BLACK}{COMPANY} delivers {RAW_STRING}!{}The federal government pays it {CURRENCY_LONG} under its five-year plan
-STR_NEWS_FEDERAL_SERVICE                                        :{BIG_FONT}{BLACK}The federal government opens a new {STRING} in {TOWN}{}Its Homes and Services programme pays for it; the town runs it
+STR_NEWS_FEDERAL_SERVICE                                        :{BIG_FONT}{BLACK}The federal government opens a new {STRING} in {TOWN}!{}Its Homes and Services programme pays for it; the town runs it
 STR_ERROR_NATIVE_CUSTOMARY_LAND                                 :{WHITE}Native customary land: {TOWN} gives it up only to companies it rates at least Mediocre
 STR_ERROR_REGION_PERMIT_REFUSED                                 :{WHITE}{RAW_STRING} gives no permit: {TOWN} rates your company Poor or worse
 STR_ERROR_CAN_T_RENAME_STATE                                    :{WHITE}Can't rename the state...
@@ -5621,12 +5624,12 @@ STR_FEDERAL_GOVERNMENT_CARETAKER                                :{BLACK}Governme
 STR_FEDERAL_GOVERNMENT_NONE                                     :{BLACK}Government: {ORANGE}caretaker{BLACK} until the first general election, May {NUM}
 STR_FEDERAL_PROGRAMMES                                          :{BLACK}National programmes: {RAW_STRING}
 STR_FEDERAL_PROGRAMME_NONE                                      :none until the first general election
-STR_FEDERAL_PROGRAMME_TRANSIT_FIRST                             :Transit First. A national transit fund adds {NUM}% of every town's taxes to its transit budget, and the federal government pays {NUM}% of the monthly passes riders buy, so more of them buy one
-STR_FEDERAL_PROGRAMME_ROADS_AND_GROWTH                          :Roads and Growth. A fuel subsidy takes {NUM}% off the running costs of road vehicles that burn fuel (not trams or electric buses), and towns everywhere grow {NUM}% faster
+STR_FEDERAL_PROGRAMME_TRANSIT_FIRST                             :Transit First. A national transit fund adds {NUM}% of the taxes of every town in the states to its transit budget, and the federal government pays {NUM}% of the monthly passes riders buy, so more of them buy one
+STR_FEDERAL_PROGRAMME_ROADS_AND_GROWTH                          :Roads and Growth. A fuel subsidy takes {NUM}% off the running costs of road vehicles that burn fuel (not trams or electric buses), and towns in the states grow {NUM}% faster
 STR_FEDERAL_PROGRAMME_HOMES_AND_SERVICES                        :Homes and Services. Each January a new hospital for the biggest town of {COMMA} people or more without one, or else a university for the biggest of {COMMA} or more; the town runs it
 STR_FEDERAL_PLAN_NONE                                           :{BLACK}Five-year plan: none yet. The government elected makes one when the results of the general election are declared
 STR_FEDERAL_PLAN                                                :{BLACK}Five-year plan {NUM}, from {NUM}: {NUM} project{P "" s}, {NUM} delivered and {NUM} open. The first company to deliver a project is paid; what is left lapses when the next plan begins. Each project delivered gives the federal government {NUM} more votes in every seat at the next general election, at most {NUM}
-STR_FEDERAL_AGENCIES                                            :{BLACK}Federal transit agencies: each federal territory's transit budget gets {NUM}% of its taxes on top, and its agency tenders railway and BRT lines first, {NUM} times as often as a town
+STR_FEDERAL_AGENCIES                                            :{BLACK}Federal transit agencies: each federal territory's transit budget gets {NUM}% of its taxes on top; its agency picks railway and BRT lines first for its tenders and is {NUM} times as likely as a town to invite one each month
 STR_FEDERAL_MONEY                                               :{BLACK}Last year the federal government paid {CURRENCY_LONG} in grants to the states and City Halls, {CURRENCY_LONG} for its programmes and transit agencies, and {CURRENCY_LONG} for the projects of its plan. This year so far: {CURRENCY_LONG}
 STR_FEDERAL_LIST_TOOLTIP                                        :{BLACK}The projects of the five-year plan. Click one to see its town
 STR_FEDERAL_LIST_EMPTY                                          :{BLACK}The plan has no projects: nothing that matches the government's platform was needed
@@ -5731,8 +5734,8 @@ STR_ERROR_CAN_T_BID                                             :{WHITE}Can't bi
 STR_ERROR_CAN_T_END_CONTRACT                                    :{WHITE}Can't end the contract...
 STR_NEWS_TRANSIT_TENDER                                         :{BIG_FONT}{BLACK}{TOWN} invites tenders to run {RAW_STRING} under a 5-year contract (8 years with electric buses): the town keeps the fares and pays a monthly fee. The line costs {CURRENCY_LONG} a month; bid in the town's transit window by {DATE_LONG}
 STR_NEWS_TRANSIT_TENDER_FREE                                    :{BIG_FONT}{BLACK}{TOWN} invites tenders to run {RAW_STRING} as a free line for 5 years (8 with electric buses): riders ride free and the town pays a monthly fee. The line costs {CURRENCY_LONG} a month; bid in the town's transit window by {DATE_LONG}
-STR_NEWS_TRANSIT_TENDER_AGENCY                                  :{BIG_FONT}{BLACK}{TOWN}'s federal transit agency invites tenders to run {RAW_STRING} under a 5-year contract (8 years with electric buses): the agency keeps the fares and pays a monthly fee. The line costs {CURRENCY_LONG} a month; bid in the town's transit window by {DATE_LONG}
-STR_NEWS_TRANSIT_TENDER_FREE_AGENCY                             :{BIG_FONT}{BLACK}{TOWN}'s federal transit agency invites tenders to run {RAW_STRING} as a free line for 5 years (8 with electric buses): riders ride free and the agency pays a monthly fee. The line costs {CURRENCY_LONG} a month; bid in the town's transit window by {DATE_LONG}
+STR_NEWS_TRANSIT_TENDER_AGENCY                                  :{BIG_FONT}{BLACK}{TOWN}'s federal transit agency invites tenders to run {RAW_STRING} under a 5-year contract (8 years with electric buses): the agency keeps the fares and pays a monthly fee. The line costs {CURRENCY_LONG} a month; bid in the agency's window by {DATE_LONG}
+STR_NEWS_TRANSIT_TENDER_FREE_AGENCY                             :{BIG_FONT}{BLACK}{TOWN}'s federal transit agency invites tenders to run {RAW_STRING} as a free line for 5 years (8 with electric buses): riders ride free and the agency pays a monthly fee. The line costs {CURRENCY_LONG} a month; bid in the agency's window by {DATE_LONG}
 STR_NEWS_TRANSIT_WON                                            :{BIG_FONT}{BLACK}{TOWN} gives its contract for {RAW_STRING} to {COMPANY}: {CURRENCY_LONG} a month for {NUM} years
 STR_NEWS_TRANSIT_WON_FREE                                       :{BIG_FONT}{BLACK}{TOWN} makes {RAW_STRING} a free line run by {COMPANY}: {CURRENCY_LONG} a month for {NUM} years
 STR_NEWS_TRANSIT_FEEDER_WANTED                                  :{BIG_FONT}{BLACK}{TOWN} wants a feeder bus between {STATION} and houses {NUM} tiles away that no stop reaches: about {CURRENCY_LONG} a month for 5 years to the first company whose bus line links them, by {DATE_LONG}

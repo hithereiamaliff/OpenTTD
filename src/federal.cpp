@@ -427,6 +427,7 @@ static void PlanTransitProjects()
 /** Roads and Growth: expressways joining the capitals closest to each other that no expressway joins yet, on the same land. */
 static void PlanRoadProjects()
 {
+	const std::vector<uint16_t> lands = GetTownLands();
 	std::vector<const Town *> capitals;
 	for (const State &s : GetStates()) {
 		if (Town::IsValidID(s.capital)) capitals.push_back(Town::Get(s.capital));
@@ -440,13 +441,13 @@ static void PlanRoadProjects()
 	for (size_t i = 0; i < capitals.size(); i++) {
 		for (size_t j = i + 1; j < capitals.size(); j++) {
 			const Town *a = capitals[i], *b = capitals[j];
-			/* The main land, or one region: expressways don't cross the sea. */
-			const State *sa = GetTownState(a), *sb = GetTownState(b);
-			if (sa == nullptr || sb == nullptr) continue;
-			if ((sa->region || sb->region) && a->state != b->state) continue;
+			/* The main land, or one region's land: expressways don't cross the sea or a land border. */
+			const uint16_t land = lands[a->index.base()];
+			if (land == 0 || land != lands[b->index.base()]) continue;
 			const uint d = DistanceManhattan(a->xy, b->xy);
 			if (d < EXPRESSWAY_MIN_DISTANCE || d > EXPRESSWAY_MAX_DISTANCE) continue;
 			if (Company::IsValidID(FindExpresswayLink(a, b))) continue;
+			Debug(Facility::Misc, Severity::Trace2, "[federal] expressway candidate town {} - town {} on land {}, {} tiles", a->index, b->index, land, d);
 			pairs.push_back({a, b, d});
 		}
 	}
@@ -587,11 +588,16 @@ static void CountProgrammes()
 	}
 }
 
-/** Each month: the plan's projects, and what the programmes cost. A game with a federal government but no plan yet gets one. */
+/**
+ * Each month: the plan's projects, and what the programmes cost. A game with a federal government but no plan yet
+ * gets one, unless a general election is near: the government elected makes its plan when the results are declared.
+ */
 void UpdateFederalMonthly()
 {
 	if (!AreStatesFormed()) return;
-	if (_federation.government != Platform::None && _federation.plan == 0 && !IsElectionCampaign(INVALID_STATE)) StartFederalPlan();
+	const ElectionResult *last = GetLastElection(INVALID_STATE);
+	const bool results_due = last != nullptr && !last->declared;
+	if (_federation.government != Platform::None && _federation.plan == 0 && !IsElectionCampaign(INVALID_STATE) && !results_due) StartFederalPlan();
 	CheckFederalProjects();
 	CountProgrammes();
 	InvalidateWindowClassesData(WindowClass::FederalPlan);

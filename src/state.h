@@ -47,6 +47,7 @@ StateCell GetTileStateCell(TileIndex tile);
 
 std::string GetStateName(StateID id);
 bool IsSabahOrSarawak(StateID id);
+std::vector<uint16_t> GetTownLands();
 StringID GetPlatformName(Platform platform);
 StringID GetTownCouncilName(const Town *t);
 StringID GetTownCouncilKind(const Town *t);

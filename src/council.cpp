@@ -522,7 +522,7 @@ bool BuildFederalCityService(Town *t, CityService service, Money &cost)
 	cost = res.GetCost();
 	if (service == CityService::Hospital) t->council.counts.hospitals++;
 	if (service == CityService::University) t->council.counts.universities++;
-	Debug(Facility::Misc, Severity::Trace1, "[federal] builds service {} in town {} at {} {} for {}", to_underlying(service), t->index, TileX(tile), TileY(tile), cost);
+	Debug(Facility::Misc, Severity::Trace1, "[federal] builds service {} in town {} ({} people) at {} {} for {} in {}", to_underlying(service), t->index, t->cache.population, TileX(tile), TileY(tile), cost, TimerGameEconomy::year.base());
 	AddNewsItem(GetEncodedString(STR_NEWS_FEDERAL_SERVICE, GetCityServiceBuildingName(service), t->index), NewsType::General, NewsStyle::Normal, {}, tile);
 	SetWindowDirty(WindowClass::TownBudget, t->index);
 	return true;

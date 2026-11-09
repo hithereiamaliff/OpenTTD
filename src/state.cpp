@@ -521,6 +521,20 @@ static uint16_t GetTownLand(const StateLands &l, const Town *t)
 }
 
 /**
+ * Which land each town stands on, split by the sea and by narrow necks of land as when the states formed: towns
+ * on one land have the same number. For the federal plan, whose expressways stay on one land.
+ * @return The land of each town, by town index; 0 for none.
+ */
+std::vector<uint16_t> GetTownLands()
+{
+	std::vector<uint16_t> lands(Town::GetPoolSize(), 0);
+	if (!AreStatesFormed()) return lands;
+	const StateLands l = FindLands();
+	for (const Town *t : Town::Iterate()) lands[t->index.base()] = GetTownLand(l, t);
+	return lands;
+}
+
+/**
  * Work out the map of states: each land cell belongs to the state of the nearest town on its land (nearest
  * along the land); a federal territory covers only its city, and the state around it the land beyond; land
  * without towns goes to the nearest state. A region's waters reach #REGION_WATERS_CELLS cells from its shores.

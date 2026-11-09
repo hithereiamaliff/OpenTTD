@@ -191,13 +191,14 @@ struct TransitAuthorityWindow : Window {
 			lines.push_back(GetString(STR_TRANSIT_SCHEMES_UNDECIDED));
 			return lines;
 		}
+		const bool agency = HasFederalTransitAgency(t);
 		if (t->transit.resident_pass) {
-			lines.push_back(GetString(STR_TRANSIT_RESIDENT_PASS, RESIDENT_PASS_SHARE, RESIDENT_PASS_FARES, t->transit.last_pass_holders, t->transit.last_pass_paid));
+			lines.push_back(GetString(agency ? STR_TRANSIT_RESIDENT_PASS_AGENCY : STR_TRANSIT_RESIDENT_PASS, RESIDENT_PASS_SHARE, RESIDENT_PASS_FARES, t->transit.last_pass_holders, t->transit.last_pass_paid));
 		} else {
 			lines.push_back(GetString(STR_TRANSIT_NO_RESIDENT_PASS));
 		}
 		if (t->transit.pays_concessions) {
-			lines.push_back(GetString(STR_TRANSIT_CONCESSIONS, t->transit.last_concessions_paid));
+			lines.push_back(GetString(agency ? STR_TRANSIT_CONCESSIONS_AGENCY : STR_TRANSIT_CONCESSIONS, t->transit.last_concessions_paid));
 		} else {
 			lines.push_back(GetString(STR_TRANSIT_NO_CONCESSIONS));
 		}
@@ -244,7 +245,7 @@ struct TransitAuthorityWindow : Window {
 			case WID_TRA_LIST: {
 				std::vector<const TransitContract *> contracts = this->GetContracts();
 				if (contracts.empty()) {
-					DrawStringMultiLine(ir, STR_TRANSIT_EMPTY);
+					DrawStringMultiLine(ir, HasFederalTransitAgency(t) ? STR_TRANSIT_EMPTY_AGENCY : STR_TRANSIT_EMPTY);
 					break;
 				}
 				int row = this->RowHeight();

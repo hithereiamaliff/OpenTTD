@@ -751,9 +751,9 @@ static void MaybeOpenTender(Town *t, TimerGameEconomy::Date today)
 		if (c.town == t->index && c.state == TransitContractState::Tender) return;
 	}
 	if (t->transit.last_tender != TimerGameEconomy::Date{} && today - t->transit.last_tender < TENDER_PAUSE_DAYS) return;
-	/* A federal territory's transit agency tenders more often. */
+	/* A federal territory's transit agency is more likely to tender each month: three chances in four, against one. */
 	const bool agency = HasFederalTransitAgency(t);
-	if (!Chance16(1, agency ? std::max<uint>(1, TENDER_CHANCE / FEDERAL_AGENCY_TENDER_FACTOR) : TENDER_CHANCE)) return;
+	if (!Chance16(agency ? std::min<uint>(FEDERAL_AGENCY_TENDER_FACTOR, TENDER_CHANCE) : 1, TENDER_CHANCE)) return;
 
 	Money available = GetTownTransitAvailable(t);
 	std::vector<std::pair<OrderList *, uint>> candidates;

@@ -2677,7 +2677,8 @@ the federal territories (not more money for states of its own platform).
   general elections, July for regions) the assembly is dissolved and the
   government is a caretaker. Worked out from the date, so nothing new is
   saved for it. Caretakers keep paying grants but start nothing new: no
-  funded buildings under Roads and Growth, no federal hospitals, no plan.
+  funded buildings under Roads and Growth, no plan. (Federal hospitals are
+  built in January, outside any run-up, so the check there never applies.)
 - News: dissolution (or "first election called"), nomination day a month
   before polling day (candidates, and the polls from `GetFederalPoll()` /
   `GetStatePoll()`), polling day, and the results two days later (a daily
@@ -2708,8 +2709,9 @@ the federal territories (not more money for states of its own platform).
   of a general election are declared, or at once in a game with a federal
   government but no plan. Up to four projects matching the platform: a
   metro line for the biggest city of 8,000 people (a territory's first) and
-  BRT lines for capitals of 2,500; expressways joining capitals 24-200 tiles
-  apart on the same land (`FindExpresswayLink` follows a company's
+  BRT lines for capitals of 2,500; expressways joining the three closest
+  pairs of capitals 24-200 tiles apart on the same land, the main land or
+  one region's (`GetTownLands`; `FindExpresswayLink` follows a company's
   expressway, as the toll networks do); hospitals for towns of 5,000 and a
   university for a town of 10,000 without one. Checked monthly; the first
   company to deliver is paid (30,000, 12,000, 80 a tile and 1.5 times the
@@ -2738,10 +2740,12 @@ the federal territories (not more money for states of its own platform).
   state 10% + national fund 5%) against 25% under Homes and Services; Kuala
   Lumpur, a territory, 60% (25% + the agency's 25% + its platform's 10%).
   Sarawak, the region, voted on its own in September 1997.
-- city-states-demo run to 2026: plan 1 at once (a hospital for Great
-  Brunthill), the federal programme built a university there in January
-  2023 and left the hospital to companies; the May 2026 general election
-  went to Roads and Growth with plan 2.
+- city-states-demo run to 2026 (0.4.1): plan 1 at once (a hospital for
+  Great Brunthill, left to companies); the federal programme built a
+  university there in January 2026, with 12,714 people (it needs 12,000);
+  the May 2026 general election went to Roads and Growth with plan 2 (an
+  expressway Great Brunthill - Flardingham). (The 0.4.0 note said January
+  2023, which was wrong: Great Brunthill had about 9,450 people then.)
 - Under Xvfb: the dissolution popup on 1 March, nomination day ("39
   candidates stand for 13 seats"), the polling day popup with the election
   night window counting 13 towns, the result in the window and the news on 3
@@ -2749,6 +2753,13 @@ the federal territories (not more money for states of its own platform).
   Federal government window; Kuala Lumpur's federal transit agency window.
 - 96/96 unit tests, 4/4 script regression tests; all 47 test saves load,
   run, save and reload; a game saved after an election and a plan reloads.
+- 0.4.1: a new game (seed 3, 60% sea) through its first general election
+  makes plan 1 once, with the results (0.4.0 made plan 1 on polling day and
+  plan 2 two days later); on seed 2 (512 by 512, 45% sea, a region of three
+  states) the region's capitals are expressway candidates (120, 128 and 184
+  tiles apart, logged at misc=8), though plan 1 took the three closest pairs
+  on the main land; 96/96 unit tests, 4/4 script regression tests, all 47
+  test saves as in 0.4.0.
 
 ## Getting it onto the owner's computer (Windows)
 

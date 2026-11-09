@@ -20,6 +20,32 @@ replaces its zip. The rolling `latest` release always has the newest build,
 under its versioned name and under the old name `wirabandar-windows-x64.zip`,
 so links to that name keep working.
 
+## 0.4.1 (2026-11-09)
+
+Fixes for problems found while writing the guides for 0.4.0:
+
+- The first general election of a game made the five-year plan twice:
+  "Five-year plan 1!" on polling day, before the results, and "Five-year plan
+  2!" with the same projects two days later, which pushed the results back
+  in the news. The plan now comes once, with the results.
+- A federal territory's transit agency is three times as likely as a town to
+  invite a tender each month, as meant; it invited one every month it could.
+- Under Roads and Growth the five-year plan's expressways can also join two
+  capitals in the same region, on the region's own land; it only joined
+  capitals on the main land. The plan still offers three at most, the pairs
+  closest together.
+- The agency's transit window and tender news say the agency pays and
+  invites tenders (they said the town), and point to the agency's window.
+- The national programmes say the transit fund and the faster growth are for
+  the towns in the states, as they work (they said every town): the federal
+  territories have the federal platform as their own government instead.
+- Headlines about regions ("Sarawak keeps its own laws!", the assembly
+  dissolved, nomination day, polling day, a first election called), a plan
+  without projects and a new federal hospital or university end with "!", so
+  the message history no longer runs them into the next sentence.
+- "caretaker" is written in lower case in the States and town windows, as
+  everywhere else ("Governed by the federal government: caretaker").
+
 ## 0.4.0 (2026-11-09)
 
 Elections you see coming, and a federal government that does more than pay
@@ -30,8 +56,8 @@ The run-up to every election, with news popups:
 - Two months before polling day the assembly is dissolved (for a general
   election parliament and the assemblies of the states on the main land) and
   the government carries on as a caretaker: it keeps paying for what it runs
-  but starts nothing new (no funded buildings, no federal hospitals, no new
-  plan). The States window says so. Before the first election the news says
+  but starts nothing new (no funded buildings, no new plan). The States
+  window says so. Before the first election the news says
   the election is called.
 - A month before polling day, nomination day: every platform stands in every
   seat, and the news gives the polls.
