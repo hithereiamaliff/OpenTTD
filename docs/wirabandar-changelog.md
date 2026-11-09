@@ -74,7 +74,21 @@ The federal government:
   government, its programmes, its plan with each project and what it needs,
   and what it spent.
 
+Also in this download, the fixes of 0.3.1, which had no download of its own:
+
+- Bus lanes, bus-only roads, kerbed busways and expressway markings show on
+  roads up a slope, and tram tracks show over them.
+- On a line with even spacing, the departure boards after the first stop
+  count each bus's wait at the first stop.
+- The tutorial's Finish closes it, and a step keeps its count when you come
+  back to it.
+- The States window fits the selected state; the help text of States and
+  elections, the news when a region forms and the States window describe
+  regions as they are since 0.2.0.
+
 ## 0.3.1 (2026-11-09)
+
+No download of its own: these fixes came out with 0.4.0.
 
 Fixes for problems found while updating the player guides for 0.1.1-0.3.0,
 and two the owner found:
