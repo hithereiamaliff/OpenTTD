@@ -28,8 +28,8 @@
 
 #include "safeguards.h"
 
-/** Lines of the details of the selected state. */
-static constexpr uint STATE_DETAIL_LINES = 19;
+/** Width of the window's text, in unscaled pixels. */
+static constexpr uint STATES_TEXT_WIDTH = 640;
 
 /** The states window. */
 struct StatesWindow : Window {
@@ -43,8 +43,13 @@ struct StatesWindow : Window {
 	{
 		this->CreateNestedTree();
 		this->vscroll = this->GetScrollbar(WID_ST_SCROLLBAR);
+		/* Selected before the window takes its size, which fits the selected state's details. */
+		if (select < GetStates().size()) {
+			this->selected = select;
+		} else if (!GetStates().empty()) {
+			this->selected = 0;
+		}
 		this->FinishInitNested(window_number);
-		if (select < GetStates().size()) this->selected = select;
 		this->OnInvalidateData();
 	}
 
@@ -83,7 +88,7 @@ struct StatesWindow : Window {
 		switch (widget) {
 			case WID_ST_FEDERATION:
 				size.height = WidgetDimensions::scaled.framerect.Vertical() + 3 * GetCharacterHeight(FontSize::Normal);
-				size.width = std::max<uint>(size.width, ScaleGUITrad(640));
+				size.width = std::max<uint>(size.width, ScaleGUITrad(STATES_TEXT_WIDTH));
 				break;
 
 			case WID_ST_LIST:
@@ -93,7 +98,8 @@ struct StatesWindow : Window {
 				break;
 
 			case WID_ST_DETAILS:
-				size.height = WidgetDimensions::scaled.framerect.Vertical() + STATE_DETAIL_LINES * GetCharacterHeight(FontSize::Normal);
+				/* As tall as the selected state's details at the window's narrowest: a region's laws take more lines. */
+				size.height = WidgetDimensions::scaled.framerect.Vertical() + this->GetDetailsHeight();
 				break;
 		}
 	}
@@ -152,18 +158,22 @@ struct StatesWindow : Window {
 		}
 	}
 
-	void DrawDetails(const Rect &r) const
+	/**
+	 * The details of the selected state, a paragraph each.
+	 * @return The paragraphs.
+	 */
+	std::vector<std::string> GetDetails() const
 	{
-		Rect ir = r.Shrink(WidgetDimensions::scaled.framerect);
+		std::vector<std::string> lines;
 		const State *s = this->selected >= 0 ? GetState(static_cast<StateID>(this->selected)) : nullptr;
 		if (s == nullptr || !AreStatesFormed()) {
-			DrawStringMultiLine(ir, STR_STATES_SELECT);
-			return;
+			lines.push_back(GetString(STR_STATES_SELECT));
+			return lines;
 		}
 		const StateID id = static_cast<StateID>(this->selected);
 		if (!Town::IsValidID(s->capital)) {
-			DrawStringMultiLine(ir, GetString(STR_STATES_DETAIL_DISSOLVED, GetStateName(id)));
-			return;
+			lines.push_back(GetString(STR_STATES_DETAIL_DISSOLVED, GetStateName(id)));
+			return lines;
 		}
 		const Federation &f = GetFederation();
 		const Platform government = s->kind == StateKind::FederalTerritory ? f.government : s->government;
@@ -171,47 +181,75 @@ struct StatesWindow : Window {
 
 		/* What it is. */
 		if (s->kind == StateKind::FederalTerritory) {
-			ir.top = DrawStringMultiLine(ir, GetString(STR_STATES_DETAIL_TERRITORY, GetStateName(id), s->population, GetTownCouncilName(Town::Get(s->capital)), s->capital, s->formed));
+			lines.push_back(GetString(STR_STATES_DETAIL_TERRITORY, GetStateName(id), s->population, GetTownCouncilName(Town::Get(s->capital)), s->capital, s->formed));
 		} else {
-			ir.top = DrawStringMultiLine(ir, GetString(STR_STATES_DETAIL_STATE, GetStateName(id), s->towns, s->population, s->capital, s->formed));
+			lines.push_back(GetString(STR_STATES_DETAIL_STATE, GetStateName(id), s->towns, s->population, s->capital, s->formed));
 		}
 
 		/* Who governs it, and what that does. */
 		if (s->kind == StateKind::FederalTerritory) {
-			ir.top = DrawStringMultiLine(ir, GetString(STR_STATES_DETAIL_FEDERAL, GetPlatformName(government)));
+			lines.push_back(GetString(STR_STATES_DETAIL_FEDERAL, GetPlatformName(government)));
 		} else if (government == Platform::None) {
-			ir.top = DrawStringMultiLine(ir, GetString(STR_STATES_DETAIL_CARETAKER, month, s->next_election));
+			lines.push_back(GetString(STR_STATES_DETAIL_CARETAKER, month, s->next_election));
 		} else {
-			ir.top = DrawStringMultiLine(ir, GetString(STR_STATES_DETAIL_GOVERNMENT, GetPlatformName(government), s->seats[to_underlying(government) - 1], TotalSeats(s->seats),
+			lines.push_back(GetString(STR_STATES_DETAIL_GOVERNMENT, GetPlatformName(government), s->seats[to_underlying(government) - 1], TotalSeats(s->seats),
 					SeatsText(s->seats), s->elected, month, s->next_election));
 		}
 		static constexpr StringID EFFECTS[] = {STR_STATES_EFFECT_NONE, STR_STATES_EFFECT_TRANSIT_FIRST, STR_STATES_EFFECT_ROADS_AND_GROWTH, STR_STATES_EFFECT_HOMES_AND_SERVICES};
 		static constexpr uint EFFECT_PERCENT[] = {0, 10, 15, 10};
 		static_assert(std::size(EFFECTS) == to_underlying(Platform::End) && std::size(EFFECT_PERCENT) == to_underlying(Platform::End));
 		const uint strength = GetPlatformStrength(id);
-		ir.top = DrawStringMultiLine(ir, GetString(STR_STATES_DETAIL_POLICY, EFFECTS[to_underlying(government)], EFFECT_PERCENT[to_underlying(government)] * strength / 100));
+		lines.push_back(GetString(STR_STATES_DETAIL_POLICY, EFFECTS[to_underlying(government)], EFFECT_PERCENT[to_underlying(government)] * strength / 100));
 
 		/* Its voters. */
 		const VoterConcerns &c = this->concerns;
-		ir.top = DrawStringMultiLine(ir, GetString(STR_STATES_DETAIL_VOTERS, c.traffic, c.transit, c.satisfaction, c.air, c.services, c.housing, c.taxes));
-		if (s->kind == StateKind::State) ir.top = DrawStringMultiLine(ir, GetString(STR_STATES_DETAIL_POLL, SeatsText(this->poll)));
+		lines.push_back(GetString(STR_STATES_DETAIL_VOTERS, c.traffic, c.transit, c.satisfaction, c.air, c.services, c.housing, c.taxes));
+		if (s->kind == StateKind::State) lines.push_back(GetString(STR_STATES_DETAIL_POLL, SeatsText(this->poll)));
 
 		/* Its money. */
 		if (s->kind == StateKind::FederalTerritory) {
-			ir.top = DrawStringMultiLine(ir, GetString(STR_STATES_DETAIL_MONEY_TERRITORY, s->premiums_last_year, s->spent_last_year));
+			lines.push_back(GetString(STR_STATES_DETAIL_MONEY_TERRITORY, s->premiums_last_year, s->spent_last_year));
 		} else {
-			ir.top = DrawStringMultiLine(ir, GetString(STR_STATES_DETAIL_MONEY, s->treasury, strength, s->premiums_last_year, s->levies_last_year, s->grants_last_year, s->spent_last_year));
+			lines.push_back(GetString(STR_STATES_DETAIL_MONEY, s->treasury, strength, s->premiums_last_year, s->levies_last_year, s->grants_last_year, s->spent_last_year));
 		}
 
 		/* Its laws. */
-		ir.top = DrawStringMultiLine(ir, GetString(STR_STATES_DETAIL_PREMIUM, GetStateLandPremium(id, 50)));
+		lines.push_back(GetString(STR_STATES_DETAIL_PREMIUM, GetStateLandPremium(id, 50)));
 		if (s->region) {
 			/* Its own land laws, immigration and permits, decided by its government. */
-			ir.top = DrawStringMultiLine(ir, STR_STATES_DETAIL_REGION);
+			lines.push_back(GetString(IsSabahOrSarawak(id) ? STR_STATES_DETAIL_REGION_RIGHTS : STR_STATES_DETAIL_REGION));
 			const auto [jobs, workers] = GetRegionJobsAndWorkers(id);
-			ir.top = DrawStringMultiLine(ir, GetString(STR_STATES_DETAIL_REGION_PASSES, GetRegionWorkPassPercent(id), jobs, workers, REGION_CHECKPOINT_MINUTES));
-			DrawStringMultiLine(ir, DoesRegionWantGrowth(id) ? GetString(STR_STATES_DETAIL_REGION_PERMITS_COFUND) : GetString(STR_STATES_DETAIL_REGION_PERMITS_FEE, REGION_PERMIT_FEE_PERCENT));
+			lines.push_back(GetString(STR_STATES_DETAIL_REGION_PASSES, GetRegionWorkPassPercent(id), jobs, workers, REGION_CHECKPOINT_MINUTES));
+			lines.push_back(DoesRegionWantGrowth(id) ? GetString(STR_STATES_DETAIL_REGION_PERMITS_COFUND) : GetString(STR_STATES_DETAIL_REGION_PERMITS_FEE, REGION_PERMIT_FEE_PERCENT));
 		}
+		return lines;
+	}
+
+	/**
+	 * Height of the selected state's details at the window's narrowest.
+	 * @return The height, without the frame.
+	 */
+	int GetDetailsHeight() const
+	{
+		const int width = ScaleGUITrad(STATES_TEXT_WIDTH) - WidgetDimensions::scaled.framerect.Horizontal();
+		int height = 0;
+		for (const std::string &line : this->GetDetails()) height += GetStringHeight(line, width);
+		return height;
+	}
+
+	/** Fit the details to the selected state: taller for a region's laws, shorter for others; a list made taller stays so. */
+	void FitDetails()
+	{
+		const NWidgetBase *nwid = this->GetWidget<NWidgetBase>(WID_ST_DETAILS);
+		const int wanted = WidgetDimensions::scaled.framerect.Vertical() + this->GetDetailsHeight();
+		const int now = static_cast<int>(nwid->smallest_y);
+		if (wanted != now) this->ReInit(0, wanted - now);
+	}
+
+	void DrawDetails(const Rect &r) const
+	{
+		Rect ir = r.Shrink(WidgetDimensions::scaled.framerect);
+		for (const std::string &line : this->GetDetails()) ir.top = DrawStringMultiLine(ir, line);
 	}
 
 	void DrawWidget(const Rect &r, WidgetID widget) const override
@@ -286,6 +324,7 @@ struct StatesWindow : Window {
 		this->SetWidgetDisabledState(WID_ST_RENAME, none || (_networking && !_network_server));
 		this->SetWidgetDisabledState(WID_ST_CAPITAL, none);
 		this->SetDirty();
+		this->FitDetails();
 	}
 };
 

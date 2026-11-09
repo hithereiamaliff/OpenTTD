@@ -713,6 +713,18 @@ static constexpr std::string_view MALAYSIAN_REGION_CAPITALS[] = { "Kuching", "Ko
 /** Their states. */
 static constexpr std::string_view MALAYSIAN_REGION_STATES[] = { "Sarawak", "Sabah" };
 static_assert(std::size(MALAYSIAN_REGION_CAPITALS) == std::size(MALAYSIAN_REGION_STATES));
+
+/**
+ * Is a state called Sabah or Sarawak, the states regions are run like? Its texts then don't compare it with them.
+ * @param id The state.
+ * @return True if it is.
+ */
+bool IsSabahOrSarawak(StateID id)
+{
+	const std::string name = GetStateName(id);
+	return std::ranges::find(MALAYSIAN_REGION_STATES, name) != std::end(MALAYSIAN_REGION_STATES);
+}
+
 /** Cities of the federal territories, biggest first. */
 static constexpr std::string_view MALAYSIAN_FEDERAL_CITIES[] = { "Kuala Lumpur", "Putrajaya", "Labuan" };
 
@@ -924,10 +936,15 @@ static void FormStates()
 		AddNewsItem(GetEncodedString(STR_NEWS_STATES_FORMED, states, territories[0]->index, _federation.next_election),
 				NewsType::General, NewsStyle::Normal, {}, territories[0]->index);
 	}
-	for (StateID id = 0; id < _states.size(); id++) {
-		const State &s = _states[id];
-		if (!s.region) continue;
-		AddNewsItem(GetEncodedString(STR_NEWS_STATE_REGION, GetStateName(id)), NewsType::General, NewsStyle::Small, {}, s.capital);
+	/* Each state of a region keeps its own laws, and its own checkpoint also towards the region's other states. */
+	for (uint16_t land = 0; land < lands.area.size(); land++) {
+		if (!is_region_land(land)) continue;
+		const StringID immigration = capitals_of[land].size() > 1 ? STR_NEWS_STATE_REGION_IMMIGRATION_NEIGHBOURS : STR_NEWS_STATE_REGION_IMMIGRATION;
+		for (const Town *c : capitals_of[land]) {
+			const StateID id = state_of_capital[c->index.base()];
+			const StringID like = IsSabahOrSarawak(id) ? STR_NEWS_STATE_REGION_RIGHTS : STR_NEWS_STATE_REGION_LIKE;
+			AddNewsItem(GetEncodedString(STR_NEWS_STATE_REGION, GetStateName(id), like, immigration), NewsType::General, NewsStyle::Small, {}, _states[id].capital);
+		}
 	}
 	InvalidateWindowClassesData(WindowClass::States);
 	SetWindowClassesDirty(WindowClass::TownView);
