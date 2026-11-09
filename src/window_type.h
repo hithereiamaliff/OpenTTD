@@ -827,6 +827,12 @@ enum class WindowClass : uint16_t {
 	 */
 	Tolls,
 
+	/**
+	 * Tutorial; %Window numbers:
+	 *   - 0 = #TutorialWidgets
+	 */
+	Tutorial,
+
 	Invalid = 0xFFFF, ///< Invalid window.
 };
 

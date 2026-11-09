@@ -66,6 +66,7 @@ add_files(
     traffic_light_widget.h
     transparency_widget.h
     tree_widget.h
+    tutorial_widget.h
     vehicle_widget.h
     viewport_widget.h
     waypoint_widget.h

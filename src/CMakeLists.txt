@@ -610,6 +610,8 @@ add_files(
     timetable_gui.cpp
     toolbar_gui.cpp
     toolbar_gui.h
+    tutorial_gui.cpp
+    tutorial_gui.h
     town.h
     town_budget.cpp
     town_budget.h

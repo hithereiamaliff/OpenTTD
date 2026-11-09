@@ -1365,6 +1365,7 @@ static uint GetWindowZPriority(WindowClass wc)
 			[[fallthrough]];
 
 		case WindowClass::NetworkAskRelay:
+		case WindowClass::Tutorial: // City fork: stays above the windows it asks the player to use, such as World Generation.
 		case WindowClass::ModalProgress:
 		case WindowClass::NetworkStatus:
 		case WindowClass::SavePreset:

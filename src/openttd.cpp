@@ -30,6 +30,7 @@
 #include "command_func.h"
 #include "news_func.h"
 #include "fios.h"
+#include "tutorial_gui.h"
 #include "console_func.h"
 #include "spritecache.h"
 #include "screenshot.h"
@@ -333,6 +334,10 @@ static void LoadIntroGame(bool load_newgrfs = true)
 	CheckForMissingGlyphs();
 
 	MusicLoop(); // ensure music is correct
+
+	/* City fork: offer the tutorial on the first start, or go on with it. After loading the title
+	 * game, as loading it resets the windows. */
+	TutorialOnMainMenu();
 }
 
 void MakeNewgameSettingsLive()
@@ -880,6 +885,8 @@ static void MakeNewGameDone()
 	CheckEngines();
 	CheckIndustries();
 	MarkWholeScreenDirty();
+
+	TutorialOnGameStart(false);
 }
 
 static void MakeNewGame(bool from_heightmap, bool reset_settings)
@@ -1096,6 +1103,13 @@ void SwitchToMode(SwitchMode new_mode)
 				OnStartGame(_network_dedicated);
 				/* Decrease pause counter (was increased from opening load dialog) */
 				Command<Commands::Pause>::Post(PauseMode::SaveLoad, false);
+
+				/* City fork: go on with the tutorial, or offer it the first time an OpenTTD save (.sav, not .csav) is loaded. */
+				if (!_network_dedicated) {
+					std::string extension = FS2OTTD(std::filesystem::path(OTTD2FS(_file_to_saveload.name)).extension().native());
+					bool openttd_save = _file_to_saveload.ftype.abstract == AbstractFileType::Savegame && !StrEqualsIgnoreCase(extension, SAVEGAME_EXTENSION);
+					TutorialOnGameStart(openttd_save);
+				}
 			}
 
 			UpdateSocialIntegration(GameMode::Normal);

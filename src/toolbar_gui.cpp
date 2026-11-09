@@ -68,6 +68,7 @@
 #include "timer/timer_window.h"
 #include "timer/timer_game_calendar.h"
 #include "help_gui.h"
+#include "tutorial_gui.h"
 #include "core/string_consumer.hpp"
 #include "screensaver.h"
 
@@ -1112,14 +1113,14 @@ static CallBackFunction ToolbarHelpClick(Window *w)
 {
 	if (_settings_client.gui.newgrf_developer_tools) {
 		PopupMainToolbarMenu(w, _game_mode == GameMode::Editor ? (WidgetID)WID_TE_HELP : (WidgetID)WID_TN_HELP, {STR_ABOUT_MENU_LAND_BLOCK_INFO,
-				STR_ABOUT_MENU_HELP, STR_NULL, STR_ABOUT_MENU_ENTER_SCREENSAVER_MODE,
+				STR_ABOUT_MENU_HELP, STR_ABOUT_MENU_TUTORIAL, STR_NULL, STR_ABOUT_MENU_ENTER_SCREENSAVER_MODE,
 				STR_ABOUT_MENU_TOGGLE_CONSOLE, STR_ABOUT_MENU_AI_DEBUG,
 				STR_ABOUT_MENU_SCREENSHOT, STR_ABOUT_MENU_SHOW_FRAMERATE, STR_ABOUT_MENU_ABOUT_OPENTTD,
 				STR_ABOUT_MENU_SPRITE_ALIGNER, STR_ABOUT_MENU_TOGGLE_BOUNDING_BOXES, STR_ABOUT_MENU_TOGGLE_DIRTY_BLOCKS,
 				STR_ABOUT_MENU_TOGGLE_WIDGET_OUTLINES});
 	} else {
 		PopupMainToolbarMenu(w, _game_mode == GameMode::Editor ? (WidgetID)WID_TE_HELP : (WidgetID)WID_TN_HELP, {STR_ABOUT_MENU_LAND_BLOCK_INFO,
-				STR_ABOUT_MENU_HELP, STR_NULL, STR_ABOUT_MENU_ENTER_SCREENSAVER_MODE, STR_ABOUT_MENU_TOGGLE_CONSOLE, STR_ABOUT_MENU_AI_DEBUG,
+				STR_ABOUT_MENU_HELP, STR_ABOUT_MENU_TUTORIAL, STR_NULL, STR_ABOUT_MENU_ENTER_SCREENSAVER_MODE, STR_ABOUT_MENU_TOGGLE_CONSOLE, STR_ABOUT_MENU_AI_DEBUG,
 				STR_ABOUT_MENU_SCREENSHOT, STR_ABOUT_MENU_SHOW_FRAMERATE, STR_ABOUT_MENU_ABOUT_OPENTTD});
 	}
 	return CallBackFunction::None;
@@ -1204,16 +1205,17 @@ static CallBackFunction MenuClickHelp(int index)
 	switch (index) {
 		case 0: return PlaceLandBlockInfo();
 		case 1: ShowHelpWindow(); break;
-		case 2: ToggleScreensaverMode(); break;
-		case 3: IConsoleSwitch(); break;
-		case 4: ShowScriptDebugWindow(CompanyID::Invalid(), _ctrl_pressed); break;
-		case 5: ShowScreenshotWindow(); break;
-		case 6: ShowFramerateWindow(); break;
-		case 7: ShowAboutWindow(); break;
-		case 8: ShowSpriteAlignerWindow(); break;
-		case 9: ToggleBoundingBoxes(); break;
-		case 10: ToggleDirtyBlocks(); break;
-		case 11: ToggleWidgetOutlines(); break;
+		case 2: ShowTutorial(); break; // City fork.
+		case 3: ToggleScreensaverMode(); break;
+		case 4: IConsoleSwitch(); break;
+		case 5: ShowScriptDebugWindow(CompanyID::Invalid(), _ctrl_pressed); break;
+		case 6: ShowScreenshotWindow(); break;
+		case 7: ShowFramerateWindow(); break;
+		case 8: ShowAboutWindow(); break;
+		case 9: ShowSpriteAlignerWindow(); break;
+		case 10: ToggleBoundingBoxes(); break;
+		case 11: ToggleDirtyBlocks(); break;
+		case 12: ToggleWidgetOutlines(); break;
 	}
 	return CallBackFunction::None;
 }

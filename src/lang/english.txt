@@ -546,6 +546,7 @@ STR_NEWS_MENU_DELETE_ALL_MESSAGES                               :Delete all mess
 # About menu
 STR_ABOUT_MENU_LAND_BLOCK_INFO                                  :Land area information
 STR_ABOUT_MENU_HELP                                             :Help & manuals
+STR_ABOUT_MENU_TUTORIAL                                         :Tutorial
 STR_ABOUT_MENU_ENTER_SCREENSAVER_MODE                           :Toggle screensaver mode
 STR_ABOUT_MENU_TOGGLE_CONSOLE                                   :Toggle console
 STR_ABOUT_MENU_AI_DEBUG                                         :AI/Game script debug
@@ -2367,6 +2368,7 @@ STR_INTRO_MULTIPLAYER                                           :{BLACK}Multipla
 STR_INTRO_GAME_OPTIONS                                          :{BLACK}Game Options
 STR_INTRO_HIGHSCORE                                             :{BLACK}Highscore Table
 STR_INTRO_HELP                                                  :{BLACK}Help & Manuals
+STR_INTRO_TUTORIAL                                              :{BLACK}Tutorial
 STR_INTRO_ONLINE_CONTENT                                        :{BLACK}Online Content
 STR_INTRO_QUIT                                                  :{BLACK}Exit
 
@@ -2385,6 +2387,7 @@ STR_INTRO_TOOLTIP_TOYLAND_LANDSCAPE                             :{BLACK}Select '
 STR_INTRO_TOOLTIP_GAME_OPTIONS                                  :{BLACK}Open game options
 STR_INTRO_TOOLTIP_HIGHSCORE                                     :{BLACK}Open highscore table
 STR_INTRO_TOOLTIP_HELP                                          :{BLACK}Get access to documentation and online resources
+STR_INTRO_TOOLTIP_TUTORIAL                                      :{BLACK}Learn to play step by step: start a game, build your first bus line, or see what's new for OpenTTD players
 STR_INTRO_TOOLTIP_ONLINE_CONTENT                                :{BLACK}Check for new and updated content to download
 STR_INTRO_TOOLTIP_QUIT                                          :{BLACK}Exit 'Wira Bandar'
 
@@ -6898,3 +6901,124 @@ STR_BADGE_CONFIG_FILTERS                                        :{WHITE}Badge Fi
 STR_BADGE_CONFIG_PREVIEW                                        :Preview Image
 STR_BADGE_CONFIG_NAME                                           :Name
 STR_BADGE_FILTER_ANY_LABEL                                      :Any {STRING}
+
+# Tutorial (City fork; see tutorial_gui.cpp)
+STR_TUTORIAL_CAPTION                                            :{WHITE}Tutorial
+STR_TUTORIAL_CAPTION_STEP                                       :{WHITE}Tutorial: {STRING}, step {NUM} of {NUM}
+STR_TUTORIAL_CLOSE_TOOLTIP                                      :{BLACK}Leave the tutorial. To open it again, click Tutorial in the main menu, or in a game the ? button on the main toolbar, then Tutorial: it starts where you left off
+STR_TUTORIAL_CONTENTS                                           :{BLACK}Contents
+STR_TUTORIAL_CONTENTS_TOOLTIP                                   :{BLACK}Show the chapters of the tutorial
+STR_TUTORIAL_BACK                                               :{BLACK}Back
+STR_TUTORIAL_BACK_TOOLTIP                                       :{BLACK}Go back to the previous step
+STR_TUTORIAL_NEXT                                               :{BLACK}Next
+STR_TUTORIAL_FINISH                                             :{BLACK}Finish
+STR_TUTORIAL_NEXT_TOOLTIP                                       :{BLACK}Go to the next step. Steps also move on by themselves once you've done them
+STR_TUTORIAL_EXIT                                               :{BLACK}Exit tutorial
+STR_TUTORIAL_EXIT_TOOLTIP                                       :{BLACK}Leave the tutorial. To open it again, click Tutorial in the main menu, or in a game the ? button on the main toolbar, then Tutorial: it starts where you left off
+STR_TUTORIAL_START_TOOLTIP                                      :{BLACK}Start the tutorial
+STR_TUTORIAL_NOT_NOW                                            :{BLACK}Not now
+STR_TUTORIAL_NOT_NOW_TOOLTIP                                    :{BLACK}Close this. The tutorial is always there: Tutorial in the main menu, or in a game the ? button on the main toolbar, then Tutorial
+STR_TUTORIAL_CONTINUE                                           :{BLACK}Continue
+STR_TUTORIAL_CONTINUE_TOOLTIP                                   :{BLACK}Go back to the step where you stopped
+STR_TUTORIAL_TITLE                                              :{GOLD}{STRING}
+
+STR_TUTORIAL_CHAPTER_START                                      :Start a game
+STR_TUTORIAL_CHAPTER_BUS                                        :Your first bus line
+STR_TUTORIAL_CHAPTER_NEW                                        :What's new for OpenTTD players
+STR_TUTORIAL_CHAPTER_START_BUTTON                               :{BLACK}1. Start a game
+STR_TUTORIAL_CHAPTER_START_TOOLTIP                              :{BLACK}From the main menu to your first game: the climate, the start year and the map. Only in the main menu
+STR_TUTORIAL_CHAPTER_BUS_BUTTON                                 :{BLACK}2. Your first bus line
+STR_TUTORIAL_CHAPTER_BUS_TOOLTIP                                :{BLACK}Bus stops, a depot and four buses in a town, then a numbered line with even spacing, fares, a departure board and the town's view of it
+STR_TUTORIAL_CHAPTER_NEW_BUTTON                                 :{BLACK}3. What's new for OpenTTD players
+STR_TUTORIAL_CHAPTER_NEW_TOOLTIP                                :{BLACK}What changes when you load an OpenTTD save, how to switch the new features off, and where Wira Bandar's new tools are
+
+STR_TUTORIAL_WELCOME_TITLE                                      :Welcome to Wira Bandar PC
+STR_TUTORIAL_WELCOME_TEXT                                       :{BLACK}Wira Bandar PC is a fork of OpenTTD: OpenTTD's transport game with changes, about cities and public transport in Malaysia and Singapore.{}{}New here? The tutorial shows you step by step how to start a game and build your first bus line. It makes the button to click flash, and moves on once you've done each step. You can leave it at any step.{}{}You'll always find it under Tutorial in the main menu, and in a game under the ? button on the main toolbar.
+STR_TUTORIAL_WELCOME_START                                      :{BLACK}Start the tutorial
+
+STR_TUTORIAL_OLD_SAVE_TITLE                                     :This game comes from OpenTTD
+STR_TUTORIAL_OLD_SAVE_TEXT                                      :{BLACK}Everything in it is kept. Wira Bandar's new features start empty and switch on with their default settings: towns get budgets, councils and states, their people commute and drive, and new houses are Malaysian and Singaporean.{}{}A short tour shows what's new, where the new tools are, and how to switch features off to play as in OpenTTD.
+STR_TUTORIAL_OLD_SAVE_START                                     :{BLACK}Show me what's new
+
+STR_TUTORIAL_CONTENTS_TITLE                                     :Tutorial
+STR_TUTORIAL_CONTENTS_TEXT                                      :{BLACK}Pick a chapter. Each step says what to do and makes the button to click flash; it moves on by itself once you've done it. Click Next to skip a step, or Exit tutorial to leave at any time.
+STR_TUTORIAL_CONTENTS_STOPPED_AT                                :{BLACK}You stopped at: {ORANGE}{STRING}{BLACK}, {ORANGE}{STRING}{BLACK}. Click Continue to go on from there.
+
+STR_TUTORIAL_STATUS_NEEDS_GAME                                  :{ORANGE}This step needs a game. In the main menu, click New Game and then Generate, or Load Game and then a save: the tutorial goes on there.
+STR_TUTORIAL_STATUS_READ                                        :{BLACK}Click {ORANGE}Next{BLACK} when you're ready.
+STR_TUTORIAL_STATUS_LAST                                        :{BLACK}Click {ORANGE}Finish{BLACK} to close the tutorial.
+STR_TUTORIAL_STATUS_DONE                                        :{GREEN}Done!
+STR_TUTORIAL_STATUS_WAITING                                     :{BLACK}Waiting for you to do it, or click {ORANGE}Next{BLACK} to skip it.
+STR_TUTORIAL_PROGRESS_START_YEAR                                :{BLACK}Start year now: {ORANGE}{NUM}{BLACK}. The tutorial goes on at {NUM} or later; click Next to keep yours.
+STR_TUTORIAL_PROGRESS_BUS_STOPS                                 :{BLACK}Bus stops built: {ORANGE}{NUM}{BLACK} of {NUM}
+STR_TUTORIAL_PROGRESS_BUS_SHARE                                 :{BLACK}Buses added: {ORANGE}{NUM}{BLACK} of {NUM}
+STR_TUTORIAL_PROGRESS_DAYS                                      :{BLACK}Days gone by: {ORANGE}{NUM}{BLACK} of {NUM}
+
+STR_TUTORIAL_START_NEW_GAME_TITLE                               :Start a new game
+STR_TUTORIAL_START_NEW_GAME_TEXT                                :{BLACK}In the main menu, click the flashing {ORANGE}New Game{BLACK} button. The {ORANGE}World Generation{BLACK} window opens, where you choose the map for your game.
+STR_TUTORIAL_START_CLIMATE_TITLE                                :Pick a climate
+STR_TUTORIAL_START_CLIMATE_TEXT                                 :{BLACK}The four pictures at the top are the climates. Click the first (temperate) or the third (sub-tropical): in these two, towns build Malaysian and Singaporean buildings, from kampung houses and shophouses to HDB blocks and towers. In the other two, towns build OpenTTD's buildings.
+STR_TUTORIAL_START_YEAR_TITLE                                   :Choose the start year and the map
+STR_TUTORIAL_START_YEAR_TEXT                                    :{BLACK}Set {ORANGE}Date{BLACK} to 2000 or later with the arrow buttons next to it, or click the year and type it: modern city buses are then on sale from the first day.{}{}{ORANGE}Map size{BLACK} 256 x 256 and {ORANGE}No. of towns{BLACK} Normal make a good first map.
+STR_TUTORIAL_START_GENERATE_TITLE                               :Generate the map
+STR_TUTORIAL_START_GENERATE_TEXT                                :{BLACK}Click the flashing {ORANGE}Generate{BLACK} button at the bottom of the window. When the map is ready, your game starts and the tutorial goes on there.
+
+STR_TUTORIAL_BUS_INTRO_TITLE                                    :Your company
+STR_TUTORIAL_BUS_INTRO_TEXT                                     :{BLACK}You run a transport company. The main toolbar at the top has the game's menus; the bar at the bottom shows the date and your money. Wira Bandar's new tools are in the Towns menu, the road toolbar and the town window.{}{}In this chapter you build a bus line through a town: three stops, a depot and four buses. Then you number the line, space its buses evenly and set fares.
+STR_TUTORIAL_BUS_TOWN_DIRECTORY_TITLE                           :Find a town
+STR_TUTORIAL_BUS_TOWN_DIRECTORY_TEXT                            :{BLACK}On the main toolbar, click the flashing {ORANGE}Towns{BLACK} button (the houses) and choose {ORANGE}Town directory{BLACK}.
+STR_TUTORIAL_BUS_PICK_TOWN_TITLE                                :Pick a town
+STR_TUTORIAL_BUS_PICK_TOWN_TEXT                                 :{BLACK}In the town directory, click a town with a few thousand people: the main view jumps to it. Then click the town's name on the map to open its window.{}{}Look for a main street that runs through the centre, from one edge of the town to the other: that's your bus line.
+STR_TUTORIAL_BUS_ROAD_TOOLBAR_TITLE                             :Open the road toolbar
+STR_TUTORIAL_BUS_ROAD_TOOLBAR_TEXT                              :{BLACK}On the main toolbar, click the flashing {ORANGE}Build roads{BLACK} button and choose {ORANGE}Road construction{BLACK}. The {ORANGE}Road Construction{BLACK} toolbar opens.
+STR_TUTORIAL_BUS_STOPS_TITLE                                    :Build three bus stops
+STR_TUTORIAL_BUS_STOPS_TEXT                                     :{BLACK}In {ORANGE}Road Construction{BLACK}, click the flashing bus station button. In the {ORANGE}Bus Station Orientation{BLACK} window, click one of the two pictures on the right: drive-through stops, where the road runs straight through.{}{}Then click a straight piece of your main street (not a junction) near one end of the town, one near the centre and one near the other end. Stops 4 to 8 tiles apart are about right.
+STR_TUTORIAL_BUS_DEPOT_TITLE                                    :Build a depot
+STR_TUTORIAL_BUS_DEPOT_TEXT                                     :{BLACK}In {ORANGE}Road Construction{BLACK}, click the flashing depot button. In the {ORANGE}Road Depot Orientation{BLACK} window, click the picture whose door faces the street, then click a free tile right next to the street, near one end of the line.
+STR_TUTORIAL_BUS_BUY_TITLE                                      :Buy a bus
+STR_TUTORIAL_BUS_BUY_TEXT                                       :{BLACK}Click your depot to open its window, and click {ORANGE}New Vehicles{BLACK}. Pick a bus: the {ORANGE}Kenari City 12{BLACK} if your game started in 2000 or later. Click {ORANGE}Buy Vehicle{BLACK}: the bus appears in the depot, stopped, and its window opens.
+STR_TUTORIAL_BUS_ORDERS_TITLE                                   :Give it orders
+STR_TUTORIAL_BUS_ORDERS_TEXT                                    :{BLACK}In the bus's window, click the flashing orders button (the orange arrow on the right). In the orders window, click {ORANGE}Go To{BLACK} and then the stop itself (not its name sign) at one end of the line. Do the same for the centre stop, the stop at the other end, and the centre stop once more for the way back.
+STR_TUTORIAL_BUS_SHARE_TITLE                                    :Add three buses to the line
+STR_TUTORIAL_BUS_SHARE_TEXT                                     :{BLACK}Close the orders window. In the bus's window, hold {ORANGE}Ctrl{BLACK} and click the flashing clone button (the blue bus at the top right): a second bus appears in the depot, sharing the first bus's orders. Do it twice more, for four buses.{}{}Buses that share their orders are one line: change the orders of one and all of them follow.
+STR_TUTORIAL_BUS_START_TITLE                                    :Start the buses
+STR_TUTORIAL_BUS_START_TEXT                                     :{BLACK}In the depot window, click the flashing green flag to start all the buses in the depot. They set off along their orders.
+STR_TUTORIAL_BUS_LINE_TITLE                                     :Open the line
+STR_TUTORIAL_BUS_LINE_TEXT                                      :{BLACK}On the main toolbar, click the flashing {ORANGE}Road vehicles{BLACK} button and choose your company. At the top of the list, set {ORANGE}Group by{BLACK} to {ORANGE}Lines (shared orders){BLACK}: your four buses show as one row. Click that row to open the line window.
+STR_TUTORIAL_BUS_LINE_NUMBER_TITLE                              :Number and name the line
+STR_TUTORIAL_BUS_LINE_NUMBER_TEXT                               :{BLACK}In the line window, click {ORANGE}Number{BLACK} and type a short number, for example G1. Click {ORANGE}Name{BLACK} and type a name, for example North - South. The number shows on the buses' badges, on departure boards and on line maps.
+STR_TUTORIAL_BUS_WAIT_TITLE                                     :Let it run for a month
+STR_TUTORIAL_BUS_WAIT_TEXT                                      :{BLACK}Let the game run for a month, so the buses make a few trips and the line window's figures fill in. The flashing fast forward button on the main toolbar, next to pause, speeds the game up; click it again to slow down.
+STR_TUTORIAL_BUS_SPACING_TITLE                                  :Space the buses evenly
+STR_TUTORIAL_BUS_SPACING_TEXT                                   :{BLACK}Buses that left the depot together keep running in a bunch, so riders wait long. In the line window, see how long one round trip takes. Click {ORANGE}Frequency{BLACK} and type that number of days divided by your four buses, rounded up. Then click {ORANGE}Even spacing{BLACK}: each bus waits at the first stop until it's its turn.
+STR_TUTORIAL_BUS_FARES_TITLE                                    :Set fares
+STR_TUTORIAL_BUS_FARES_TEXT                                     :{BLACK}On the main toolbar, click the flashing {ORANGE}Finances{BLACK} button and choose your company, then click {ORANGE}Fares{BLACK} at the bottom of the Finances window. In the {ORANGE}Buses{BLACK} row, click {ORANGE}Full fare{BLACK} under {ORANGE}Concessions{BLACK} and choose half fares for students, seniors and disabled riders: riders rate your stops better for it.
+STR_TUTORIAL_BUS_DEPARTURES_TITLE                               :Read the departure board
+STR_TUTORIAL_BUS_DEPARTURES_TEXT                                :{BLACK}Click the name sign of your centre stop to open its station window, then click the flashing {ORANGE}Departures{BLACK} button: the buses leaving in both directions, with their line badge and their next stops.
+STR_TUTORIAL_BUS_TOWN_TITLE                                     :See what the town thinks
+STR_TUTORIAL_BUS_TOWN_TEXT                                      :{BLACK}Click the town's name on the map. Its window shows the town's happiness and your riders' satisfaction. Click the flashing {ORANGE}Transit{BLACK} button at the bottom: the town's transit authority, with its budget, resident passes, concession fares and tenders for lines.
+STR_TUTORIAL_BUS_DONE_TITLE                                     :Your first line runs!
+STR_TUTORIAL_BUS_DONE_TEXT                                      :{BLACK}You built a bus line, numbered it, spaced its buses evenly and set its fares.{}{}What next: add a second line through the town, try electric buses with chargers, paint bus lanes when town traffic slows your buses, or bid for the town's next tender. The guides at wirabandar.techmavie.digital explain every feature.
+
+STR_TUTORIAL_NEW_OLD_SAVE_TITLE                                 :What changes in an OpenTTD save
+STR_TUTORIAL_NEW_OLD_SAVE_TEXT                                  :{BLACK}Your game keeps everything in it. Wira Bandar's new features start empty and switch on with their default settings:{}- Nothing new is built for you: no traffic lights, zones, lines or bus lanes until you build them.{}- Towns get budgets, councils and states, and their people commute and drive, so roads fill with town traffic.{}- In the temperate and sub-tropical climates, new houses are Malaysian and Singaporean.{}- Your vehicles keep running, and road vehicles give way at junctions.
+STR_TUTORIAL_NEW_SETTINGS_TITLE                                 :Play it as in OpenTTD, if you like
+STR_TUTORIAL_NEW_SETTINGS_TEXT                                  :{BLACK}Each new feature can be switched off. Click the flashing {ORANGE}Options and settings{BLACK} button (the gear) and choose {ORANGE}Game options{BLACK}. On the {ORANGE}Advanced{BLACK} tab, open {ORANGE}Environment{BLACK}, then {ORANGE}Towns{BLACK}: {ORANGE}Town traffic{BLACK}, {ORANGE}Air pollution and land value{BLACK}, {ORANGE}Town buildings{BLACK} and {ORANGE}Town budgets and ordinances{BLACK}. {ORANGE}Road vehicles give way at junctions{BLACK} is under {ORANGE}Vehicles{BLACK}, then {ORANGE}Routing{BLACK}. Save the game afterwards: the save keeps these settings.
+STR_TUTORIAL_NEW_ZONING_TITLE                                   :The Towns menu: zoning
+STR_TUTORIAL_NEW_ZONING_TEXT                                    :{BLACK}On the main toolbar, click the flashing {ORANGE}Towns{BLACK} button. Under {ORANGE}Town directory{BLACK} are Wira Bandar's new entries: {ORANGE}Zoning{BLACK}, {ORANGE}City services{BLACK}, {ORANGE}States{BLACK} and three map views. Choose {ORANGE}Zoning{BLACK} (Shift+Z): its toolbar paints zones for homes, shops and offices, industry or parks, and towns build what each zone allows.
+STR_TUTORIAL_NEW_SERVICES_TITLE                                 :City services
+STR_TUTORIAL_NEW_SERVICES_TEXT                                  :{BLACK}Now choose {ORANGE}Towns{BLACK}, then {ORANGE}City services{BLACK} (Shift+C): police and fire stations, clinics, schools and parks, and bigger buildings such as hospitals and stadiums. Towns with good services are happier, grow faster and rate you better.
+STR_TUTORIAL_NEW_STATES_TITLE                                   :States
+STR_TUTORIAL_NEW_STATES_TEXT                                    :{BLACK}Choose {ORANGE}Towns{BLACK}, then {ORANGE}States{BLACK}: towns are grouped into states around the biggest cities, each with a government that voters elect on the service they get. The menu's last three entries colour the map by air pollution, land value and commuter traffic.
+STR_TUTORIAL_NEW_TOWN_WINDOW_TITLE                              :The town window
+STR_TUTORIAL_NEW_TOWN_WINDOW_TEXT                               :{BLACK}Click a town's name on the map to open its window. Its new lines show the town's council and state, homes and jobs, happiness and city services, traffic, commuters, and the air and land value.
+STR_TUTORIAL_NEW_TRANSIT_TITLE                                  :Transit
+STR_TUTORIAL_NEW_TRANSIT_TEXT                                   :{BLACK}In the town window, click the flashing {ORANGE}Transit{BLACK} button: the town's transit authority, with its budget, resident passes, concession fares, and tenders for lines that your company can bid for.
+STR_TUTORIAL_NEW_BUDGET_TITLE                                   :Budget and State
+STR_TUTORIAL_NEW_BUDGET_TEXT                                    :{BLACK}Back in the town window, click the flashing {ORANGE}Budget{BLACK} button: the town's taxes, spending and ordinances, and its council. The {ORANGE}State{BLACK} button next to it shows its state's government and elections.
+STR_TUTORIAL_NEW_ROAD_TOOLS_TITLE                               :New road tools
+STR_TUTORIAL_NEW_ROAD_TOOLS_TEXT                                :{BLACK}Open {ORANGE}Build roads{BLACK}, then {ORANGE}Road construction{BLACK}. After the road stop buttons are five new ones, flashing: traffic lights (S), the traffic overlay (O), a charger over a bus stop for electric buses (G), bus priority with lanes, signals and busways (Y), and tolls (K). The {ORANGE}Build roads{BLACK} menu also has bus-only roads and expressways.
+STR_TUTORIAL_NEW_LINES_TITLE                                    :Lines, departures and fares
+STR_TUTORIAL_NEW_LINES_TEXT                                     :{BLACK}Vehicles that share their orders form a line, with a number, name and colour: in a vehicle list, set {ORANGE}Group by{BLACK} to {ORANGE}Lines (shared orders){BLACK} and click a line. Station windows have a {ORANGE}Departures{BLACK} board, and the {ORANGE}Finances{BLACK} window has {ORANGE}Fares{BLACK}. The chapter {ORANGE}Your first bus line{BLACK} goes through them step by step.
+STR_TUTORIAL_NEW_DONE_TITLE                                     :That's the tour
+STR_TUTORIAL_NEW_DONE_TEXT                                      :{BLACK}The guides at wirabandar.techmavie.digital explain every feature, with tutorials for BRT corridors, councils and states. Open this tutorial again at any time: the {ORANGE}?{BLACK} button on the main toolbar, then {ORANGE}Tutorial{BLACK}.

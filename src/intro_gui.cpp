@@ -14,6 +14,7 @@
 #include "window_func.h"
 #include "textbuf_gui.h"
 #include "help_gui.h"
+#include "tutorial_gui.h"
 #include "network/network.h"
 #include "genworld.h"
 #include "network/network_gui.h"
@@ -314,6 +315,7 @@ struct SelectGameWindow : public Window {
 			case WID_SGI_OPTIONS:         ShowGameOptions(); break;
 			case WID_SGI_HIGHSCORE:       ShowHighscoreTable(); break;
 			case WID_SGI_HELP:            ShowHelpWindow(); break;
+			case WID_SGI_TUTORIAL:        ShowTutorial(); break;
 			case WID_SGI_CONTENT_DOWNLOAD:
 				if (!_network_available) {
 					ShowErrorMessage(GetEncodedString(STR_NETWORK_ERROR_NOTAVAILABLE), {}, WarningLevel::Error);
@@ -363,6 +365,7 @@ static constexpr std::initializer_list<NWidgetPart> _nested_select_game_widgets 
 				NWidget(WWT_PUSHIMGTEXTBTN, Colours::Orange, WID_SGI_CONTENT_DOWNLOAD), SetToolbarMinimalSize(1), SetSpriteStringTip(SPR_IMG_SHOW_VEHICLES, STR_INTRO_ONLINE_CONTENT, STR_INTRO_TOOLTIP_ONLINE_CONTENT), SetAlignment({AlignmentH::Start, AlignmentV::Middle}), SetFill(1, 0),
 				NWidget(WWT_PUSHIMGTEXTBTN, Colours::Orange, WID_SGI_EDIT_SCENARIO), SetToolbarMinimalSize(1), SetSpriteStringTip(SPR_IMG_SMALLMAP, STR_INTRO_SCENARIO_EDITOR, STR_INTRO_TOOLTIP_SCENARIO_EDITOR), SetAlignment({AlignmentH::Start, AlignmentV::Middle}), SetFill(1, 0),
 				NWidget(WWT_PUSHIMGTEXTBTN, Colours::Orange, WID_SGI_HELP), SetToolbarMinimalSize(1), SetSpriteStringTip(SPR_IMG_QUERY, STR_INTRO_HELP, STR_INTRO_TOOLTIP_HELP), SetAlignment({AlignmentH::Start, AlignmentV::Middle}), SetFill(1, 0),
+				NWidget(WWT_PUSHIMGTEXTBTN, Colours::Orange, WID_SGI_TUTORIAL), SetToolbarMinimalSize(1), SetSpriteStringTip(SPR_IMG_STORY_BOOK, STR_INTRO_TUTORIAL, STR_INTRO_TOOLTIP_TUTORIAL), SetAlignment({AlignmentH::Start, AlignmentV::Middle}), SetFill(1, 0),
 			EndContainer(),
 
 			NWidget(NWID_VERTICAL),

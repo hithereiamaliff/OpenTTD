@@ -2457,6 +2457,74 @@ made from scratch.
   saves), so saves load as before and the fork can still take OpenTTD's
   updates.
 
+## Done: the in-game tutorial
+
+The owner asked (2026-11-08) for an interactive tutorial inside the game, for
+new players and for players who load an old save, that they can leave at any
+step and open again at any time.
+
+- **Approach: a window built into the game** (`src/tutorial_gui.cpp`), not a
+  game script. A game script is picked in World Generation and lives in that
+  save, so it can't help in old saves, nor in games that use another game
+  script. The window works in any game: it only looks at the game and its
+  windows, and changes nothing in them, so saves stay as they are.
+- **What the player sees:** a small window ("Tutorial: chapter, step N of M")
+  with what to do, using the labels on screen, and a status line (waiting,
+  progress such as "Bus stops built: 1 of 3", or "Done!"). The button to
+  click flashes, with the highlight game scripts use
+  (`Window::SetWidgetHighlight`). The step moves on by itself once it is done
+  (a window opened, stops built, buses bought, a line numbered, fares
+  changed). **Next** skips a step, **Back** goes back (and then doesn't move on
+  by itself), **Contents** lists the chapters, and **Exit tutorial** or the
+  window's close box leaves it at any step.
+- **Placement:** it stays above ordinary windows and above World Generation,
+  Game Options and Load Game (the z-priority of the progress window). When the
+  step or the flashing buttons change, it moves out of the way of the window
+  it points at, of construction toolbars and of those big windows; a player
+  who moves it keeps it there until then.
+- **Chapters:** Start a game (4 steps, in the main menu; goes on into the
+  next), Your first bus line (18 steps, from the guide's tutorial "Your first
+  city bus network"), What's new for OpenTTD players (11 steps, from the
+  guide's "Your first game" and "Saves").
+- **When it appears:** offered on the first start (a welcome box next to the
+  main menu); offered once when an OpenTTD save (any `.sav`, not `.csav`) is
+  loaded; **Tutorial** in the main menu and in the Help menu (the ? button) at
+  any time. While the player is in it (and hasn't left it), it comes back by
+  itself at the same step in the next game and at the main menu. Steps that
+  need a game say so in the main menu and flash New Game and Load Game, then
+  Generate or Load.
+- **Saving:** client settings in `openttd.cfg`, `[gui]`: `tutorial_seen`,
+  `tutorial_seen_old_save`, `tutorial_dismissed` and `tutorial_step` (the
+  step's name, so steps added later don't shift it). Nothing goes in saves.
+- **Engine changes:** `WindowClass::Tutorial` (end of the list) and its
+  z-priority in `window.cpp`; `WID_SGI_TUTORIAL` (end of the main menu's
+  widgets); Help menu item 2 (the items after it moved down one); calls at the
+  end of `LoadIntroGame` (after the title game, whose loading resets the
+  windows), after a new game and after a loaded game (`openttd.cpp`). The
+  close box is the window's own button drawn like one: a real close box would
+  also be "pressed" when games start or load, as `UnInitWindowSystem` closes
+  every window. The window has `NoClose`, so "close all windows" leaves it.
+- **Text:** `english.txt` (`STR_TUTORIAL_*`, `STR_ABOUT_MENU_TUTORIAL`,
+  `STR_INTRO_TUTORIAL`, `STR_INTRO_TOOLTIP_TUTORIAL`). The welcome page is to
+  get the owner's wording on what the name Wira Bandar means and what the
+  game's goal is (being written with the guides session).
+- **Tested** on the Linux build under Xvfb (2560x1600, 200%): the welcome
+  offer; Start a game (New Game, climate, the year raised from 1995 to 2000
+  moves it on, Generate); the whole bus chapter in the new game (three stops,
+  a depot, a Kenari City 12, orders, three clones, start, the list grouped by
+  lines, number G1, a month at fast forward, frequency and even spacing, half
+  fares, departures, the transit authority), Finish and the chapters; What's
+  new in a new game and in `vanilla-15.3-buses.sav` (offered on load); left
+  with the close box, back at the main menu it stays closed, reopened with the
+  main menu's Tutorial button at the same step (with the needs-a-game note),
+  reopened with Help, Tutorial; the settings saved on quitting and the step
+  resumed after a restart; the road tools step flashes the five new buttons.
+  Unit tests pass; the demo saves load, save and load again (`compat-test`).
+- **Found while testing:** in Go To mode, clicking a stop's name sign aims at
+  the tile under the sign, not the stop (as in OpenTTD), so the step says to
+  click the stop itself. Road vehicles and Finances open a company menu first;
+  their steps say "choose your company".
+
 ## Roadmap
 
 Sizes are rough: S = one session, M = a few, L = many, XL = a project in itself.
