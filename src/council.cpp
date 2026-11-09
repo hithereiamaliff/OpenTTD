@@ -640,6 +640,41 @@ static void StartCouncil(Town *t)
 	c.repainted = TimerGameEconomy::year.base() - static_cast<int>(t->index.base() % REPAINT_YEARS);
 }
 
+bool _town_councils_loaded = false; ///< Whether the savegame being loaded has the towns' councils (chunk TCNL).
+
+/**
+ * Set up the councils of towns that have none yet, at once: after loading a savegame from before councils,
+ * or when councils are switched on. Otherwise towns would show a district council until the next month.
+ */
+void StartTownCouncils()
+{
+	if (!AreTownCouncilsOn()) return;
+	bool any = false;
+	for (const Town *t : Town::Iterate()) any |= !t->council.started;
+	if (!any) return;
+	CountTownBuildings();
+	for (Town *t : Town::Iterate()) {
+		if (!t->council.started) StartCouncil(t);
+	}
+	InvalidateWindowClassesData(WindowClass::TownBudget);
+	SetWindowClassesDirty(WindowClass::TownView);
+}
+
+/** Before a game is loaded or made: it has no councils yet. */
+void InitializeTownCouncils()
+{
+	_town_councils_loaded = false;
+}
+
+/**
+ * A savegame was loaded. One from before councils sets them up now. (Towns founded since the start of the
+ * month have none yet in any savegame; they get theirs at the start of the next month, as everywhere.)
+ */
+void AfterLoadTownCouncils()
+{
+	if (!_town_councils_loaded) StartTownCouncils();
+}
+
 /** Each month: business licences into the town's reserves, a tenth of its taxes into the services fund (out of what the town spends on running itself), charges into the estates' fund, the estates' upkeep, and maybe a new service. */
 void UpdateTownCouncilsMonthly()
 {

@@ -10,7 +10,7 @@
  *
  * Each town's council (its standing, licences, charges, estates, report and
  * what the town had at the start of the month) is kept in chunk TCNL.
- * Savegames without it set up their councils in the first month.
+ * Savegames without it set up their councils right after loading.
  */
 
 #include "../stdafx.h"
@@ -72,6 +72,7 @@ struct TCNLChunkHandler : ChunkHandler {
 	void Load() const override
 	{
 		const std::vector<SaveLoad> slt = SlTableHeader(_town_council_desc);
+		_town_councils_loaded = true;
 
 		int index;
 		while ((index = SlIterateArray()) != -1) {

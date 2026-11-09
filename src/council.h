@@ -53,5 +53,10 @@ Money GetCofundCost(const Town *t);
 void UpdateTownCouncilsMonthly();
 void RotateTownCouncilYear(Town *t);
 void ReviewTownCouncil(Town *t);
+void StartTownCouncils();
+void InitializeTownCouncils();
+void AfterLoadTownCouncils();
+
+extern bool _town_councils_loaded;
 
 #endif /* COUNCIL_H */

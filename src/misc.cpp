@@ -38,6 +38,7 @@
 #include "transit_authority.h"
 #include "town_zoning.h"
 #include "city_services.h"
+#include "council.h"
 #include "depot_yard.h"
 #include "stop_charger.h"
 #include "bus_priority.h"
@@ -170,6 +171,7 @@ void InitializeGame(uint size_x, uint size_y, bool reset_date, bool reset_settin
 	InitializeTransitAuthorities();
 	InitializeTownZones();
 	InitializeCityServices();
+	InitializeTownCouncils();
 	InitializeDepotYards();
 	InitializeStopChargers();
 	InitializeBusPriority();

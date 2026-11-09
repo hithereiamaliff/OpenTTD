@@ -63,6 +63,7 @@
 #include "../picker_func.h"
 #include "../traffic_light.h"
 #include "../town_zoning.h"
+#include "../council.h"
 
 #include "saveload_error.hpp"
 #include "saveload_func.h"
@@ -3434,6 +3435,7 @@ bool AfterLoadGame()
 	AfterLoadStoryBook();
 	AfterLoadTrafficLights();
 	AfterLoadTownZones();
+	AfterLoadTownCouncils();
 
 	_gamelog.PrintDebug(Severity::Error);
 

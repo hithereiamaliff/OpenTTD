@@ -411,6 +411,8 @@ static void EnvironmentChanged(int32_t)
 
 static void TownBudgetsChanged(int32_t)
 {
+	/* Councils switched on (they need budgets too): towns set theirs up at once. */
+	if (_game_mode == GameMode::Normal) StartTownCouncils();
 	UpdateLowEmissionZoneTowns();
 	InvalidateWindowClassesData(WindowClass::TownBudget);
 	InvalidateWindowClassesData(WindowClass::TransitAuthority);
