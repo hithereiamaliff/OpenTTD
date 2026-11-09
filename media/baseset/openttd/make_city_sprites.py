@@ -365,6 +365,21 @@ class Building:
                 if x0 <= x < x1 and y0 <= y < y1:
                     self.set(px_, py, fn(x, y))
 
+    def ground_sloped(self, fn, slope):
+        """Paint the ground of a tile with two neighbouring corners raised one level
+        (SLOPE_NE, SLOPE_SE, SLOPE_SW or SLOPE_NW), where fn(x, y) returns a colour."""
+        # Height z = a * x + b * y + c over the tile; the N corner is (0, 0), E (0, 16), S (16, 16), W (16, 0).
+        a, b, c = {0x0C: (-0.5, 0, 8), 0x06: (0, 0.5, 0), 0x03: (0.5, 0, 0), 0x09: (0, -0.5, 8)}[slope]
+        for py in range(-10, 34):
+            for px_ in range(0, 65):
+                cx, cy = px_ + 0.5, py + 0.5
+                d = (cx - 32) / 2
+                # On screen cx = 32 + 2 * (y - x) and cy = x + y - z.
+                x = (cy - d * (1 - b) + c) / (2 - a - b)
+                y = x + d
+                if 0 <= x < 16 and 0 <= y < 16:
+                    self.set(px_, py, fn(x, y))
+
     def pole(self, x, y, z0, z1, flag=True):
         """A flag pole with a flag in company colours on top."""
         sx, sy = round(32 + 2 * (y - x)), round(x + y)
@@ -2238,6 +2253,25 @@ icon(4, 2240, logo_rows, {'F': rgb_index((252, 176, 48)), 'H': rgb_index((252, 2
                           'S': rgb_index((112, 72, 24))}, "logo wira bandar")
 
 assert len(sprites) == 301, len(sprites)
+
+# Road markings on roads up a slope: all-day bus lane, peak bus lane, bus-only road, kerbed
+# busway, expressway; each on SLOPE_NE, SLOPE_SE, SLOPE_SW, SLOPE_NW (roads along X climb
+# to the north-east or south-west, along Y to the south-east or north-west).
+SLOPED_MARKINGS = [
+    (lambda axis: lane_fn(axis, False), "bus lane"),
+    (lambda axis: lane_fn(axis, True), "peak bus lane"),
+    (bus_road_fn, "bus-only road"),
+    (busway_fn, "kerbed busway"),
+    (expressway_fn, "expressway"),
+]
+for m, (make_fn, name) in enumerate(SLOPED_MARKINGS):
+    for s, (slope, axis, slope_name) in enumerate(((0x0C, 'x', "NE"), (0x06, 'y', "SE"), (0x03, 'x', "SW"), (0x09, 'y', "NW"))):
+        k = m * 4 + s
+        b = Building()
+        b.ground_sloped(make_fn(axis), slope)
+        b.emit(4 + (k % 7) * 72, 2280 + (k // 7) * 50, f"{name} on slope {slope_name}")
+
+assert len(sprites) == 321, len(sprites)
 sheet.save(f"{SRC}/city.png", optimize=True)
 
 header = """// This file is part of OpenTTD.
@@ -2282,6 +2316,8 @@ header = """// This file is part of OpenTTD.
 //            hypermarket (four parts: (0,0), (0,1), (1,0), (1,1))
 //   299:   icon: map of states
 //   300:   the Wira Bandar wordmark of the main menu
+//   301-320: road markings on roads up a slope: all-day bus lane, peak bus lane, bus-only road, kerbed busway,
+//            expressway; each on SLOPE_NE, SLOPE_SE, SLOPE_SW, SLOPE_NW
 //
    -1 * 0\t 0C "City fork graphics"
    -1 * 5\t 05 1C FF %02X %02X

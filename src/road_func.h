@@ -146,6 +146,7 @@ bool UpdateNearestTownForRoadTiles(bool invalidate);
 struct TileInfo;
 enum class Roadside : uint8_t;
 void DrawRoadOverlays(const TileInfo *ti, PaletteID pal, const RoadTypeInfo *road_rti, const RoadTypeInfo *tram_rit, uint road_offset, uint tram_offset, bool draw_underlay = true);
+void DrawTramOverlay(const TileInfo *ti, PaletteID pal, const RoadTypeInfo *tram_rti, uint tram_offset);
 void DrawRoadGroundSprites(const TileInfo *ti, RoadBits road, RoadBits tram, const RoadTypeInfo *road_rti, const RoadTypeInfo *tram_rti, Roadside roadside, bool snow_or_desert);
 void DrawRoadDepotSprite(int x, int y, DiagDirection dir, RoadType rt);
 

@@ -40,7 +40,7 @@ static constexpr uint8_t TOLL_MAX_CUT = 54; ///< Toll cuts from extensions stop 
 static constexpr uint TOLL_FREEZE_YEARS = 5; ///< How long a toll freeze lasts.
 
 bool IsExpresswayRoad(TileIndex tile);
-void DrawExpressway(const TileInfo *ti);
+bool DrawExpressway(const TileInfo *ti);
 
 TollPlaza *GetTollPlaza(TileIndex tile);
 /**

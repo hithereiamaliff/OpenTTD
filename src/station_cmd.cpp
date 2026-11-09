@@ -3526,8 +3526,10 @@ static void DrawTile_Station(TileInfo *ti)
 		total_offset = 0;
 	}
 
-	/* Bus lanes, bus-only roads and give-way markings on the road through the stop. */
-	if (IsDriveThroughStopTile(ti->tile)) DrawBusPriorityStop(ti);
+	/* Bus lanes, bus-only roads and give-way markings on the road through the stop, and its tram track over them. */
+	if (IsDriveThroughStopTile(ti->tile) && DrawBusPriorityStop(ti) && HasTileRoadType(ti->tile, RoadTramType::Tram) && HasTileRoadType(ti->tile, RoadTramType::Road)) {
+		DrawTramOverlay(ti, PAL_NONE, GetRoadTypeInfo(GetRoadTypeTram(ti->tile)), GetDriveThroughStopAxis(ti->tile) == Axis::X ? 1 : 0);
+	}
 	/* A BRT station's platforms take the place of the stop's shelters. */
 	if (!IsDriveThroughStopTile(ti->tile) || !DrawBrtStation(ti)) DrawRailTileSeq(ti, t, TransparencyOption::Buildings, total_offset, relocation, palette);
 	/* Platform screen doors along the railway platforms. */

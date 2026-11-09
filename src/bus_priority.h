@@ -11,6 +11,9 @@
 #define BUS_PRIORITY_H
 
 #include "economy_type.h"
+#include "gfx_type.h"
+#include "road_type.h"
+#include "slope_type.h"
 #include "tile_type.h"
 
 struct TileInfo;
@@ -25,6 +28,17 @@ enum class BusLane : uint8_t {
 	End, ///< End marker.
 };
 
+/** Markings painted on a road, which come for roads up a slope too (see #SPR_SLOPED_ROAD_MARKINGS). */
+enum class RoadMarking : uint8_t {
+	BusLane, ///< An all-day bus lane.
+	PeakBusLane, ///< A bus lane for the peak hours.
+	BusOnlyRoad, ///< The red of a bus-only road.
+	Busway, ///< A kerbed busway.
+	Expressway, ///< The lanes and barrier of an expressway.
+};
+
+SpriteID GetRoadMarkingSprite(RoadMarking marking, SpriteID flat_x, Slope tileh, RoadBits bits);
+
 BusLane GetBusLane(TileIndex tile);
 bool HasGiveWayStop(TileIndex tile);
 bool IsBusOnlyRoad(TileIndex tile);
@@ -35,8 +49,8 @@ uint8_t GetCongestionLevelFor(TileIndex tile, bool bus);
 Money GetBusLaneCost(BusLane lane);
 Money GetGiveWayStopCost();
 
-void DrawBusPriorityRoad(const TileInfo *ti);
-void DrawBusPriorityStop(const TileInfo *ti);
+bool DrawBusPriorityRoad(const TileInfo *ti);
+bool DrawBusPriorityStop(const TileInfo *ti);
 void OnBusPriorityTileCleared(TileIndex tile);
 void RestoreBusLane(TileIndex tile, BusLane lane);
 void InitializeBusPriority();

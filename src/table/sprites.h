@@ -434,7 +434,8 @@ static constexpr SpriteID SPR_IMG_CIVIC_SERVICE_BASE = SPR_TRAFFIC_LIGHTS_BASE +
 /* Shops (city_houses.cpp) follow at +290, drawn as town buildings from SPR_CITY_HOUSE_BASE (sprite 37 on). */
 static constexpr SpriteID SPR_IMG_STATES_MAP = SPR_TRAFFIC_LIGHTS_BASE + 299; ///< Icon of the map of states.
 static constexpr SpriteID SPR_WIRA_BANDAR_LOGO = SPR_TRAFFIC_LIGHTS_BASE + 300; ///< The Wira Bandar wordmark of the main menu.
-static constexpr uint16_t TRAFFIC_LIGHTS_SPRITE_COUNT = 301;
+static constexpr SpriteID SPR_SLOPED_ROAD_MARKINGS = SPR_TRAFFIC_LIGHTS_BASE + 301; ///< Road markings on roads up a slope, by #RoadMarking: each on SLOPE_NE, SLOPE_SE, SLOPE_SW and SLOPE_NW (20 sprites).
+static constexpr uint16_t TRAFFIC_LIGHTS_SPRITE_COUNT = 321;
 
 static const SpriteID SPR_NEWGRFS_BASE = SPR_TRAFFIC_LIGHTS_BASE + TRAFFIC_LIGHTS_SPRITE_COUNT;
 

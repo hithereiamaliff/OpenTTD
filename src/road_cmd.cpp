@@ -1548,13 +1548,23 @@ void DrawRoadOverlays(const TileInfo *ti, PaletteID pal, const RoadTypeInfo *roa
 	}
 
 	/* Draw tram overlay */
-	if (tram_rti != nullptr) {
-		if (tram_rti->UsesOverlay()) {
-			SpriteID ground = GetCustomRoadSprite(tram_rti, ti->tile, RoadSpriteType::Overlay);
-			if (ground != 0) DrawGroundSprite(ground + tram_offset, pal);
-		} else if (road_rti != nullptr) {
-			DrawGroundSprite(SPR_TRAMWAY_OVERLAY + tram_offset, pal);
-		}
+	if (tram_rti != nullptr && (tram_rti->UsesOverlay() || road_rti != nullptr)) DrawTramOverlay(ti, pal, tram_rti, tram_offset);
+}
+
+/**
+ * Draw the tram track of a tile that has road too.
+ * @param ti TileInfo
+ * @param pal Palette to draw it in.
+ * @param tram_rti Tram road type information
+ * @param tram_offset Tram sprite offset
+ */
+void DrawTramOverlay(const TileInfo *ti, PaletteID pal, const RoadTypeInfo *tram_rti, uint tram_offset)
+{
+	if (tram_rti->UsesOverlay()) {
+		SpriteID ground = GetCustomRoadSprite(tram_rti, ti->tile, RoadSpriteType::Overlay);
+		if (ground != 0) DrawGroundSprite(ground + tram_offset, pal);
+	} else {
+		DrawGroundSprite(SPR_TRAMWAY_OVERLAY + tram_offset, pal);
 	}
 }
 
@@ -1752,10 +1762,16 @@ static void DrawRoadBits(TileInfo *ti)
 		}
 	}
 
-	/* Bus lanes and the red of bus-only roads; the lanes and barrier of expressways. */
+	/* Bus lanes and the red of bus-only roads; the lanes and barrier of expressways. Tram tracks run
+	 * in the outer lanes, where the paint goes: draw them again over it. */
 	if (!HasRoadWorks(ti->tile)) {
-		DrawBusPriorityRoad(ti);
-		DrawExpressway(ti);
+		bool painted = DrawBusPriorityRoad(ti);
+		painted |= DrawExpressway(ti);
+		if (painted && tram_rti != nullptr && road_rti != nullptr) {
+			PaletteID pal = PAL_NONE;
+			GetRoadGroundSprite(ti, GetRoadside(ti->tile), road_rti, 0, IsOnSnowOrDesert(ti->tile), &pal);
+			DrawTramOverlay(ti, pal, tram_rti, GetRoadSpriteOffset(ti->tileh, tram));
+		}
 	}
 
 	DrawRoadTrafficOverlay(ti);

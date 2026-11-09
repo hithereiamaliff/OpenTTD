@@ -40,9 +40,11 @@
 //            hypermarket (four parts: (0,0), (0,1), (1,0), (1,1))
 //   299:   icon: map of states
 //   300:   the Wira Bandar wordmark of the main menu
+//   301-320: road markings on roads up a slope: all-day bus lane, peak bus lane, bus-only road, kerbed busway,
+//            expressway; each on SLOPE_NE, SLOPE_SE, SLOPE_SW, SLOPE_NW
 //
    -1 * 0	 0C "City fork graphics"
-   -1 * 5	 05 1C FF 2D 01
+   -1 * 5	 05 1C FF 41 01
    -1 sprites/city.png 8bpp    4    4   4  17   -1  -16 normal
    -1 sprites/city.png 8bpp   12    4   4  17   -1  -16 normal
    -1 sprites/city.png 8bpp   20    4   4  17   -1  -16 normal
@@ -344,3 +346,23 @@
    -1 sprites/city.png 8bpp    4 2190  62  39  -30   -7 normal
    -1 sprites/city.png 8bpp  340  934  16  14    0    0 normal
    -1 sprites/city.png 8bpp    4 2240 175  25    0    0 normal
+   -1 sprites/city.png 8bpp    4 2280  48  32  -23   -4 normal
+   -1 sprites/city.png 8bpp   76 2280  48  16  -23    4 normal
+   -1 sprites/city.png 8bpp  148 2280  48  16  -23    4 normal
+   -1 sprites/city.png 8bpp  220 2280  48  32  -23   -4 normal
+   -1 sprites/city.png 8bpp  292 2280  48  32  -23   -4 normal
+   -1 sprites/city.png 8bpp  364 2280  48  16  -23    4 normal
+   -1 sprites/city.png 8bpp  436 2280  48  16  -23    4 normal
+   -1 sprites/city.png 8bpp    4 2330  48  32  -23   -4 normal
+   -1 sprites/city.png 8bpp   76 2330  48  32  -23   -4 normal
+   -1 sprites/city.png 8bpp  148 2330  48  16  -23    4 normal
+   -1 sprites/city.png 8bpp  220 2330  48  16  -23    4 normal
+   -1 sprites/city.png 8bpp  292 2330  48  32  -23   -4 normal
+   -1 sprites/city.png 8bpp  364 2330  46  30  -22   -3 normal
+   -1 sprites/city.png 8bpp  436 2330  46  14  -22    5 normal
+   -1 sprites/city.png 8bpp    4 2380  46  14  -22    5 normal
+   -1 sprites/city.png 8bpp   76 2380  46  30  -22   -3 normal
+   -1 sprites/city.png 8bpp  148 2380  48  32  -23   -4 normal
+   -1 sprites/city.png 8bpp  220 2380  46  16  -22    4 normal
+   -1 sprites/city.png 8bpp  292 2380  46  16  -22    4 normal
+   -1 sprites/city.png 8bpp  364 2380  48  32  -23   -4 normal

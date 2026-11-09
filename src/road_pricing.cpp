@@ -24,6 +24,7 @@
 #include "stdafx.h"
 #include "road_pricing.h"
 #include "road_pricing_cmd.h"
+#include "bus_priority.h"
 #include "cargotype.h"
 #include "command_func.h"
 #include "company_base.h"
@@ -94,15 +95,17 @@ bool IsExpresswayRoad(TileIndex tile)
 }
 
 /**
- * Draw the lanes and the barrier in the middle of an expressway; straight, flat roads only.
+ * Draw the lanes and the barrier in the middle of an expressway: straight roads, flat or up a slope.
  * @param ti The tile, after its ground and road were drawn.
+ * @return True if they were drawn, over any tram track there.
  */
-void DrawExpressway(const TileInfo *ti)
+bool DrawExpressway(const TileInfo *ti)
 {
-	if (ti->tileh != SLOPE_FLAT || !IsNormalRoad(ti->tile) || GetRoadTypeRoad(ti->tile) != ROADTYPE_EXPRESSWAY) return;
-	RoadBits bits = GetRoadBits(ti->tile, RoadTramType::Road);
-	if (bits != ROAD_X && bits != ROAD_Y) return;
-	DrawGroundSprite(SPR_EXPRESSWAY_X + (bits == ROAD_X ? 0 : 1), PAL_NONE);
+	if (!IsNormalRoad(ti->tile) || GetRoadTypeRoad(ti->tile) != ROADTYPE_EXPRESSWAY) return false;
+	const SpriteID sprite = GetRoadMarkingSprite(RoadMarking::Expressway, SPR_EXPRESSWAY_X, ti->tileh, GetRoadBits(ti->tile, RoadTramType::Road));
+	if (sprite == 0) return false;
+	DrawGroundSprite(sprite, PAL_NONE);
+	return true;
 }
 
 /* Toll plazas. */

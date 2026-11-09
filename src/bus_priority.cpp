@@ -310,46 +310,85 @@ enum BusPrioritySprite : uint8_t {
 };
 
 /**
- * Draw bus lanes and the red of bus-only roads on a plain road tile; straight, flat roads only.
- * @param ti The tile, after its ground and road were drawn.
+ * The sprite of a marking on a straight road, flat or up a slope along it.
+ * @param marking The marking.
+ * @param flat_x Its sprite on a flat road along X; along Y follows.
+ * @param tileh The slope of the road, after its foundation.
+ * @param bits The road's pieces.
+ * @return The sprite, or 0 if the road isn't straight or doesn't run up the slope.
  */
-void DrawBusPriorityRoad(const TileInfo *ti)
+SpriteID GetRoadMarkingSprite(RoadMarking marking, SpriteID flat_x, Slope tileh, RoadBits bits)
 {
-	if (ti->tileh != SLOPE_FLAT || !IsNormalRoad(ti->tile)) return;
-	RoadBits bits = GetRoadBits(ti->tile, RoadTramType::Road);
-	if (bits != ROAD_X && bits != ROAD_Y) return;
-	const uint axis = bits == ROAD_X ? 0 : 1;
-
-	if (IsBusOnlyRoad(ti->tile)) {
-		DrawGroundSprite(SPR_BUS_PRIORITY_BASE + BPS_BUS_ROAD_X + axis, PAL_NONE);
-		return;
-	}
-	switch (GetBusLane(ti->tile)) {
-		case BusLane::AllDay: DrawGroundSprite(SPR_BUS_PRIORITY_BASE + BPS_LANE_X + axis, PAL_NONE); break;
-		case BusLane::Peak: DrawGroundSprite(SPR_BUS_PRIORITY_BASE + BPS_PEAK_X + axis, PAL_NONE); break;
-		case BusLane::Busway: DrawGroundSprite(SPR_BUSWAY_X + axis, PAL_NONE); break;
-		default: break;
+	if (bits != ROAD_X && bits != ROAD_Y) return 0;
+	const bool along_x = bits == ROAD_X;
+	const SpriteID sloped = SPR_SLOPED_ROAD_MARKINGS + to_underlying(marking) * 4;
+	switch (tileh) {
+		case SLOPE_FLAT: return flat_x + (along_x ? 0 : 1);
+		/* Roads along X climb to the north-east or the south-west, along Y to the south-east or the north-west. */
+		case SLOPE_NE: return along_x ? sloped + 0 : 0;
+		case SLOPE_SE: return along_x ? 0 : sloped + 1;
+		case SLOPE_SW: return along_x ? sloped + 2 : 0;
+		case SLOPE_NW: return along_x ? 0 : sloped + 3;
+		default: return 0;
 	}
 }
 
 /**
- * Draw bus lanes and give-way markings on a drive-through bus stop.
- * @param ti The stop tile, after its ground and road were drawn.
+ * The marking of a tile's bus lane, or of its bus-only road.
+ * @param tile The tile.
+ * @param[out] flat_x The marking's sprite on a flat road along X.
+ * @return The marking, or std::nullopt if it has none.
  */
-void DrawBusPriorityStop(const TileInfo *ti)
+static std::optional<RoadMarking> GetBusPriorityMarking(TileIndex tile, SpriteID &flat_x)
 {
-	if (ti->tileh != SLOPE_FLAT || !IsDriveThroughStopTile(ti->tile)) return;
+	if (IsBusOnlyRoad(tile)) {
+		flat_x = SPR_BUS_PRIORITY_BASE + BPS_BUS_ROAD_X;
+		return RoadMarking::BusOnlyRoad;
+	}
+	switch (GetBusLane(tile)) {
+		case BusLane::AllDay: flat_x = SPR_BUS_PRIORITY_BASE + BPS_LANE_X; return RoadMarking::BusLane;
+		case BusLane::Peak: flat_x = SPR_BUS_PRIORITY_BASE + BPS_PEAK_X; return RoadMarking::PeakBusLane;
+		case BusLane::Busway: flat_x = SPR_BUSWAY_X; return RoadMarking::Busway;
+		default: return std::nullopt;
+	}
+}
+
+/**
+ * Draw bus lanes and the red of bus-only roads on a plain road tile: straight roads, flat or up a slope.
+ * @param ti The tile, after its ground and road were drawn.
+ * @return True if a marking was drawn, over any tram track there.
+ */
+bool DrawBusPriorityRoad(const TileInfo *ti)
+{
+	if (!IsNormalRoad(ti->tile)) return false;
+	SpriteID flat_x = 0;
+	const std::optional<RoadMarking> marking = GetBusPriorityMarking(ti->tile, flat_x);
+	if (!marking.has_value()) return false;
+	const SpriteID sprite = GetRoadMarkingSprite(*marking, flat_x, ti->tileh, GetRoadBits(ti->tile, RoadTramType::Road));
+	if (sprite == 0) return false;
+	DrawGroundSprite(sprite, PAL_NONE);
+	return true;
+}
+
+/**
+ * Draw bus lanes and give-way markings on a drive-through bus stop, which is always flat.
+ * @param ti The stop tile, after its ground and road were drawn.
+ * @return True if a marking was drawn, over any tram track there.
+ */
+bool DrawBusPriorityStop(const TileInfo *ti)
+{
+	if (ti->tileh != SLOPE_FLAT || !IsDriveThroughStopTile(ti->tile)) return false;
 	const uint axis = GetDriveThroughStopAxis(ti->tile) == Axis::X ? 0 : 1;
 
-	if (IsBusOnlyRoad(ti->tile)) {
-		DrawGroundSprite(SPR_BUS_PRIORITY_BASE + BPS_BUS_ROAD_X + axis, PAL_NONE);
-	} else {
-		switch (GetBusLane(ti->tile)) {
-			case BusLane::AllDay: DrawGroundSprite(SPR_BUS_PRIORITY_BASE + BPS_LANE_X + axis, PAL_NONE); break;
-			case BusLane::Peak: DrawGroundSprite(SPR_BUS_PRIORITY_BASE + BPS_PEAK_X + axis, PAL_NONE); break;
-			case BusLane::Busway: DrawGroundSprite(SPR_BUSWAY_X + axis, PAL_NONE); break;
-			default: break;
-		}
+	bool drawn = false;
+	SpriteID flat_x = 0;
+	if (GetBusPriorityMarking(ti->tile, flat_x).has_value()) {
+		DrawGroundSprite(flat_x + axis, PAL_NONE);
+		drawn = true;
 	}
-	if (HasGiveWayStop(ti->tile)) DrawGroundSprite(SPR_BUS_PRIORITY_BASE + BPS_GIVE_WAY_X + axis, PAL_NONE);
+	if (HasGiveWayStop(ti->tile)) {
+		DrawGroundSprite(SPR_BUS_PRIORITY_BASE + BPS_GIVE_WAY_X + axis, PAL_NONE);
+		drawn = true;
+	}
+	return drawn;
 }
